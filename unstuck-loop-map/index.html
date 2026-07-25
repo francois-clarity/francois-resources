@@ -69,12 +69,26 @@
   .fineprint{font-size:13px;color:rgba(255,255,255,.42);margin-top:16px;max-width:46ch;line-height:1.5}
   .msg{margin-top:18px;font-size:15px;min-height:22px;font-weight:500}
   .msg.error{color:#ff9d9d}
-  .preview{
-    border-radius:16px;overflow:hidden;
-    box-shadow:0 40px 100px rgba(0,0,0,.5),0 0 0 1px rgba(255,255,255,.09);
-    transform:rotate(-1.4deg);
+  .result{margin:0;text-align:center}
+  .result svg{width:100%;max-width:460px;height:auto}
+  .result .node circle{fill:var(--navy);stroke:rgba(255,255,255,.28);stroke-width:2}
+  .result .node text{
+    font-family:'Manrope',sans-serif;font-weight:600;font-size:17px;
+    fill:rgba(255,255,255,.55);text-anchor:middle;
   }
-  .preview img{display:block;width:100%;height:auto}
+  .result .lbl{
+    font-family:'Manrope',sans-serif;font-weight:700;font-size:16px;
+    letter-spacing:1.6px;fill:rgba(255,255,255,.52);
+  }
+  .result .out{
+    font-family:'Manrope',sans-serif;font-weight:800;font-size:19px;
+    letter-spacing:3px;fill:var(--teal);
+  }
+  .result .escape{filter:drop-shadow(0 0 14px rgba(24,192,192,.45))}
+  figcaption{
+    margin-top:26px;font-size:16px;line-height:1.6;font-weight:300;
+    color:var(--muted);max-width:34ch;margin-inline:auto;
+  }
   /* success state */
   .done{display:none}
   .done h2{font-weight:800;font-size:clamp(32px,4vw,46px);line-height:1.1;letter-spacing:-1px}
@@ -91,7 +105,7 @@
   body.sent .done{display:block}
   @media (max-width:880px){
     .wrap{grid-template-columns:1fr;gap:40px}
-    .preview{max-width:330px;order:-1;transform:none}
+    .result{max-width:330px;margin-inline:auto}
   }
 </style>
 </head>
@@ -125,9 +139,34 @@
     </div>
   </div>
 
-  <div class="preview">
-    <img src="/img/loop-map-preview.png" alt="Preview of the Unstuck Loop Map worksheet" width="620" height="877">
-  </div>
+  <figure class="result">
+    <svg viewBox="-40 -10 700 545" role="img" aria-label="A repeating loop with one point where it breaks open">
+      <!-- the path you keep taking -->
+      <path d="M410 260 A150 150 0 0 1 260 410" fill="none" stroke="rgba(255,255,255,.26)" stroke-width="3"/>
+      <path d="M260 410 A150 150 0 0 1 110 260" fill="none" stroke="rgba(255,255,255,.26)" stroke-width="3"/>
+      <path d="M110 260 A150 150 0 0 1 260 110" fill="none" stroke="rgba(255,255,255,.26)" stroke-width="3"/>
+      <!-- the arc you no longer have to take -->
+      <path d="M260 110 A150 150 0 0 1 410 260" fill="none" stroke="rgba(255,255,255,.13)"
+            stroke-width="3" stroke-dasharray="4 10"/>
+      <!-- the way out, from the moment discomfort arrives -->
+      <path class="escape" d="M292 122 Q430 96 540 92" fill="none"
+            stroke="var(--teal)" stroke-width="4" stroke-linecap="round"/>
+      <polygon class="escape" points="556,92 532,102 534,82" fill="var(--teal)"/>
+
+      <g class="node"><circle cx="260" cy="110" r="36"/><text x="260" y="117">01</text></g>
+      <g class="node"><circle cx="410" cy="260" r="36"/><text x="410" y="267">02</text></g>
+      <g class="node"><circle cx="260" cy="410" r="36"/><text x="260" y="417">03</text></g>
+      <g class="node"><circle cx="110" cy="260" r="36"/><text x="110" y="267">04</text></g>
+
+      <text class="lbl" x="260" y="52"  text-anchor="middle">DISCOMFORT</text>
+      <text class="lbl" x="458" y="266" text-anchor="start">AVOIDANCE</text>
+      <text class="lbl" x="260" y="472" text-anchor="middle">RELIEF</text>
+      <text class="lbl" x="62"  y="266" text-anchor="end">THE COST</text>
+      <text class="out" x="512" y="58"  text-anchor="middle">OUT</text>
+    </svg>
+    <figcaption>You leave knowing the one point where your loop breaks open — and the five-minute action that does it.</figcaption>
+  </figure>
+</div>
 </div>
 
 <script>
