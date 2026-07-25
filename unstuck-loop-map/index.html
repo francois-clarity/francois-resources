@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en-ZA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Unstuck Loop Map — Francois Esterhuizen</title>
+<meta name="description" content="A one-page map for the loop that keeps you stuck: discomfort, avoidance, relief, cost. Find the exact point where it can be interrupted.">
+<meta property="og:title" content="The Unstuck Loop Map">
+<meta property="og:description" content="Map your loop on one page and find the point where it can be interrupted.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;500;600;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#262E3B; --navy-deep:#1B222D; --teal:#18C0C0; --white:#fff;
+    --muted:rgba(255,255,255,.66);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:'Manrope',system-ui,-apple-system,sans-serif;
+    background:radial-gradient(ellipse at 26% 22%,#333E52 0%,var(--navy) 56%,var(--navy-deep) 100%);
+    color:var(--white);min-height:100vh;
+    -webkit-font-smoothing:antialiased;
+    display:flex;align-items:center;justify-content:center;padding:48px 24px;
+  }
+  body::before{
+    content:'';position:fixed;inset:0;pointer-events:none;
+    background-image:radial-gradient(rgba(255,255,255,.045) 1px,transparent 1px);
+    background-size:34px 34px;
+  }
+  .wrap{
+    position:relative;width:100%;max-width:1080px;
+    display:grid;grid-template-columns:1fr 420px;gap:64px;align-items:center;
+  }
+  .eyebrow{
+    font-weight:500;font-size:14px;letter-spacing:5px;text-transform:uppercase;
+    color:var(--teal);margin-bottom:20px;
+  }
+  h1{font-weight:800;font-size:clamp(38px,5vw,60px);line-height:1.08;letter-spacing:-1.4px}
+  h1 .teal{color:var(--teal)}
+  .lede{font-weight:300;font-size:19px;line-height:1.6;color:var(--muted);margin:24px 0 8px;max-width:46ch}
+  ul{list-style:none;margin:26px 0 34px}
+  li{
+    font-size:16px;color:var(--muted);padding:9px 0 9px 30px;position:relative;
+  }
+  li::before{
+    content:'';position:absolute;left:0;top:17px;width:9px;height:9px;
+    border-radius:50%;background:var(--teal);
+  }
+  form{display:flex;gap:12px;flex-wrap:wrap;max-width:520px}
+  input[type=email],input[type=text]{
+    flex:1 1 240px;min-width:0;padding:17px 20px;border-radius:14px;
+    border:1px solid rgba(255,255,255,.16);
+    background:rgba(255,255,255,.06);color:var(--white);
+    font-family:inherit;font-size:16px;font-weight:500;
+  }
+  input::placeholder{color:rgba(255,255,255,.42)}
+  input:focus{outline:none;border-color:var(--teal);background:rgba(255,255,255,.09)}
+  button{
+    padding:17px 30px;border-radius:14px;border:none;cursor:pointer;
+    background:var(--teal);color:var(--navy);
+    font-family:inherit;font-weight:800;font-size:16px;letter-spacing:.2px;
+    transition:transform .15s ease,filter .15s ease;
+  }
+  button:hover{filter:brightness(1.07)}
+  button:active{transform:translateY(1px)}
+  button[disabled]{opacity:.6;cursor:default}
+  .fineprint{font-size:13px;color:rgba(255,255,255,.42);margin-top:16px;max-width:46ch;line-height:1.5}
+  .msg{margin-top:18px;font-size:15px;min-height:22px;font-weight:500}
+  .msg.error{color:#ff9d9d}
+  .preview{
+    border-radius:16px;overflow:hidden;
+    box-shadow:0 40px 100px rgba(0,0,0,.5),0 0 0 1px rgba(255,255,255,.09);
+    transform:rotate(-1.4deg);
+  }
+  .preview img{display:block;width:100%;height:auto}
+  /* success state */
+  .done{display:none}
+  .done h2{font-weight:800;font-size:clamp(32px,4vw,46px);line-height:1.1;letter-spacing:-1px}
+  .done p{font-weight:300;font-size:18px;color:var(--muted);margin:18px 0 30px;max-width:44ch;line-height:1.6}
+  .download{
+    display:inline-block;padding:18px 34px;border-radius:14px;
+    background:var(--teal);color:var(--navy);text-decoration:none;
+    font-weight:800;font-size:17px;
+  }
+  .next{margin-top:34px;font-size:15px;color:var(--muted)}
+  .next a{color:var(--teal);text-decoration:none;font-weight:600}
+  .next a:hover{text-decoration:underline}
+  body.sent .start{display:none}
+  body.sent .done{display:block}
+  @media (max-width:880px){
+    .wrap{grid-template-columns:1fr;gap:40px}
+    .preview{max-width:330px;order:-1;transform:none}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div>
+    <div class="start">
+      <div class="eyebrow">Free download</div>
+      <h1>The Unstuck<br><span class="teal">Loop Map</span></h1>
+      <p class="lede">Stuckness is rarely one big problem. It is usually a loop: discomfort, avoidance, relief, cost — and a little less self-trust each time round.</p>
+      <ul>
+        <li>Map your own loop in five honest sentences</li>
+        <li>Name which of the five fuels is driving it</li>
+        <li>Find the exact point where it can be interrupted</li>
+      </ul>
+      <form id="f" novalidate>
+        <input type="text" id="fn" name="FNAME" placeholder="First name" autocomplete="given-name">
+        <input type="email" id="em" name="EMAIL" placeholder="Your email" required autocomplete="email">
+        <button type="submit" id="go">Send it to me</button>
+      </form>
+      <p class="fineprint">You will also get Fresh Perspective, my weekly letter on personal growth. Unsubscribe any time, no hard feelings.</p>
+      <div class="msg" id="msg" role="status" aria-live="polite"></div>
+    </div>
+
+    <div class="done">
+      <div class="eyebrow">Check your inbox too</div>
+      <h2>Here is your<br><span style="color:var(--teal)">Loop Map</span></h2>
+      <p>Print it, or fill it in on screen. Start with one area only — the one where you already feel the drag.</p>
+      <a class="download" href="/files/Unstuck_Loop_Map.pdf" download>Download the PDF</a>
+      <div class="next">Watch the full episode: <a href="https://www.youtube.com/@francoisesterhuizen" target="_blank" rel="noopener">Why You Feel Stuck</a></div>
+    </div>
+  </div>
+
+  <div class="preview">
+    <img src="/img/loop-map-preview.png" alt="Preview of the Unstuck Loop Map worksheet" width="620" height="877">
+  </div>
+</div>
+
+<script>
+// Mailchimp accepts a JSONP subscribe, so the page needs no backend.
+var MC = 'https://francoisesterhuizen.us5.list-manage.com/subscribe/post-json'
+       + '?u=097ed8fb3c6e3c943817d0d80&id=7a7438d8f4';
+
+var form = document.getElementById('f'),
+    msg  = document.getElementById('msg'),
+    go   = document.getElementById('go');
+
+function show(text, isError){
+  msg.textContent = text;
+  msg.className = isError ? 'msg error' : 'msg';
+}
+
+form.addEventListener('submit', function(e){
+  e.preventDefault();
+  var email = document.getElementById('em').value.trim(),
+      first = document.getElementById('fn').value.trim();
+  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
+    show('That email address does not look right.', true); return;
+  }
+  go.disabled = true; show('One moment…');
+
+  var cb = 'mc_' + Date.now();
+  window[cb] = function(res){
+    go.disabled = false;
+    var already = res && res.msg && /already subscribed/i.test(res.msg);
+    if (res && (res.result === 'success' || already)) {
+      document.body.classList.add('sent');
+      window.scrollTo({top:0, behavior:'smooth'});
+    } else {
+      show((res && res.msg ? res.msg.replace(/<[^>]*>/g,'') :
+            'Something went wrong. Please try again.'), true);
+    }
+    delete window[cb];
+  };
+
+  var s = document.createElement('script');
+  s.src = MC + '&EMAIL=' + encodeURIComponent(email)
+            + '&FNAME=' + encodeURIComponent(first)
+            + '&c=' + cb;
+  s.onerror = function(){
+    // never trap someone who gave a real address
+    go.disabled = false;
+    document.body.classList.add('sent');
+  };
+  document.body.appendChild(s);
+});
+</script>
+</body>
+</html>
