@@ -48,9 +48,9 @@
     content:'';position:absolute;left:0;top:17px;width:9px;height:9px;
     border-radius:50%;background:var(--teal);
   }
-  form{display:flex;gap:12px;flex-wrap:wrap;max-width:520px}
+  form{display:flex;gap:12px;flex-wrap:wrap;max-width:540px}
   input[type=email],input[type=text]{
-    flex:1 1 240px;min-width:0;padding:17px 20px;border-radius:14px;
+    flex:1 1 168px;min-width:0;padding:17px 20px;border-radius:14px;
     border:1px solid rgba(255,255,255,.16);
     background:rgba(255,255,255,.06);color:var(--white);
     font-family:inherit;font-size:16px;font-weight:500;
@@ -122,7 +122,8 @@
         <li>Find the exact point where it can be interrupted</li>
       </ul>
       <form id="f" novalidate>
-        <input type="text" id="fn" name="FNAME" placeholder="First name" autocomplete="given-name">
+        <input type="text" id="fn" name="FNAME" placeholder="First name" required autocomplete="given-name">
+        <input type="text" id="ln" name="LNAME" placeholder="Last name" required autocomplete="family-name">
         <input type="email" id="em" name="EMAIL" placeholder="Your email" required autocomplete="email">
         <button type="submit" id="go">Send it to me</button>
       </form>
@@ -186,7 +187,11 @@ function show(text, isError){
 form.addEventListener('submit', function(e){
   e.preventDefault();
   var email = document.getElementById('em').value.trim(),
-      first = document.getElementById('fn').value.trim();
+      first = document.getElementById('fn').value.trim(),
+      last  = document.getElementById('ln').value.trim();
+  if (!first || !last) {
+    show('Please add your first and last name.', true); return;
+  }
   if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
     show('That email address does not look right.', true); return;
   }
@@ -207,8 +212,13 @@ form.addEventListener('submit', function(e){
   };
 
   var s = document.createElement('script');
+  // this list requires first and last name; it names them MERGE3 / MERGE4
   s.src = MC + '&EMAIL=' + encodeURIComponent(email)
             + '&FNAME=' + encodeURIComponent(first)
+            + '&LNAME=' + encodeURIComponent(last)
+            + '&MERGE0=' + encodeURIComponent(email)
+            + '&MERGE3=' + encodeURIComponent(first)
+            + '&MERGE4=' + encodeURIComponent(last)
             + '&c=' + cb;
   s.onerror = function(){
     // never trap someone who gave a real address
