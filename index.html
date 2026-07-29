@@ -1,8 +1,110 @@
-<!DOCTYPE html><html lang="en-ZA"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<!DOCTYPE html>
+<html lang="en-ZA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Resources — Francois Esterhuizen</title>
-<meta name="robots" content="noindex">
-<style>body{font-family:system-ui,sans-serif;background:#262E3B;color:#fff;
-display:flex;align-items:center;justify-content:center;height:100vh;margin:0}
-a{color:#18C0C0}</style></head>
-<body><p>Free resources from <a href="https://www.francoisesterhuizen.com">francoisesterhuizen.com</a></p></body></html>
+<meta name="description" content="Maps and tools from the videos and classes. Each one is a page or two, built to be filled in, not just read.">
+<meta property="og:title" content="Resources — Francois Esterhuizen">
+<meta property="og:description" content="Maps and tools from the videos and classes. Built to be filled in, not just read.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;500;600;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#262E3B; --navy-deep:#1B222D; --teal:#18C0C0; --white:#fff;
+    --muted:rgba(255,255,255,.66);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:'Manrope',system-ui,-apple-system,sans-serif;
+    background:radial-gradient(ellipse at 26% 22%,#333E52 0%,var(--navy) 56%,var(--navy-deep) 100%);
+    color:var(--white);min-height:100vh;
+    -webkit-font-smoothing:antialiased;
+    padding:72px 24px 96px;
+  }
+  body::before{
+    content:'';position:fixed;inset:0;pointer-events:none;
+    background-image:radial-gradient(rgba(255,255,255,.045) 1px,transparent 1px);
+    background-size:34px 34px;
+  }
+  .wrap{position:relative;max-width:880px;margin:0 auto}
+  .eyebrow{
+    font-weight:500;font-size:14px;letter-spacing:5px;text-transform:uppercase;
+    color:var(--teal);margin-bottom:20px;
+  }
+  h1{font-weight:800;font-size:clamp(36px,5vw,56px);line-height:1.1;letter-spacing:-1.2px}
+  h1 .teal{color:var(--teal)}
+  .lede{font-weight:300;font-size:19px;line-height:1.6;color:var(--muted);
+    margin:22px 0 54px;max-width:52ch}
+
+  .card{
+    display:block;text-decoration:none;color:inherit;
+    background:linear-gradient(135deg,rgba(38,46,59,.66) 0%,rgba(30,37,48,.58) 100%);
+    -webkit-backdrop-filter:blur(16px) saturate(1.2);
+    backdrop-filter:blur(16px) saturate(1.2);
+    border:1px solid rgba(255,255,255,.10);
+    box-shadow:0 24px 60px rgba(0,0,0,.30);
+    border-radius:26px;padding:36px 40px;margin-bottom:26px;
+    transition:transform .18s ease,border-color .18s ease;
+  }
+  .card:hover{transform:translateY(-3px);border-color:rgba(24,192,192,.45)}
+  .tag{
+    display:inline-block;font-weight:700;font-size:12px;letter-spacing:3px;
+    text-transform:uppercase;padding:7px 14px;border-radius:100px;margin-bottom:18px;
+  }
+  .tag.free{background:rgba(24,192,192,.16);color:var(--teal)}
+  .tag.live{background:rgba(255,255,255,.10);color:rgba(255,255,255,.78)}
+  .card h2{font-weight:800;font-size:29px;letter-spacing:-.6px;margin-bottom:10px}
+  .card p{font-weight:300;font-size:16.5px;line-height:1.6;color:var(--muted);max-width:56ch}
+  .card .go{
+    display:inline-block;margin-top:22px;font-weight:800;font-size:16px;color:var(--teal);
+  }
+  .card .go::after{content:' →'}
+  .from{font-size:13.5px;color:rgba(255,255,255,.42);margin-top:14px;font-weight:500}
+
+  .foot{
+    margin-top:64px;padding-top:34px;border-top:1px solid rgba(255,255,255,.10);
+    display:flex;gap:28px;flex-wrap:wrap;font-size:15px;
+  }
+  .foot a{color:var(--muted);text-decoration:none;font-weight:500}
+  .foot a:hover{color:var(--teal)}
+  @media (max-width:640px){ .card{padding:28px 26px} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="eyebrow">Resources</div>
+  <h1>Tools for the actual work.<br><span class="teal">Not just more reading.</span></h1>
+  <p class="lede">Every resource here comes from a video or a class. Each one is a page or two, built to be filled in. The newest sits at the top.</p>
+
+  <!-- ============================================================
+       Each resource is one <a class="card"> block. To add one:
+       copy the block below, set the tag (free / live), title, copy,
+       the source line, and the link. Newest goes FIRST.
+       ============================================================ -->
+
+  <a class="card" href="/unstuck-loop-map/">
+    <span class="tag free">Free download</span>
+    <h2>The Unstuck Loop Map</h2>
+    <p>Your loop in five honest sentences, the fuel that is driving it, and the exact point where it can be interrupted. One page. Print it or fill it in on screen.</p>
+    <span class="go">Get the map</span>
+    <div class="from">From the video: You Are Not Lazy. You Are in a Loop.</div>
+  </a>
+
+  <a class="card" href="https://www.getclarity.co.za" target="_blank" rel="noopener">
+    <span class="tag live">Live classes</span>
+    <h2>Personal Growth Weekly</h2>
+    <p>A live class every week on the patterns that keep capable people stuck, and the beliefs underneath them. Taught live, recorded if you miss one.</p>
+    <span class="go">See the classes</span>
+  </a>
+
+  <div class="foot">
+    <a href="https://www.youtube.com/@francoisesterhuizen" target="_blank" rel="noopener">YouTube</a>
+    <a href="https://francoisesterhuizen.us5.list-manage.com/subscribe?u=097ed8fb3c6e3c943817d0d80&id=7a7438d8f4" target="_blank" rel="noopener">Fresh Perspective, the weekly letter</a>
+    <a href="https://www.francoisesterhuizen.com" target="_blank" rel="noopener">francoisesterhuizen.com</a>
+  </div>
+</div>
+</body>
+</html>
