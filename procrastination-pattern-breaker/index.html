@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en-ZA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Procrastination Pattern Breaker — Francois Esterhuizen</title>
+<meta name="description" content="One task, taken apart: the feeling under it, the payoff of avoiding, the cost, and your smallest next action, chosen before you close the page.">
+<meta property="og:title" content="The Procrastination Pattern Breaker">
+<meta property="og:description" content="Find the ache inside the task, and choose the smallest honest contact action.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;500;600;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#262E3B; --navy-deep:#1B222D; --teal:#18C0C0; --white:#fff;
+    --muted:rgba(255,255,255,.66);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:'Manrope',system-ui,-apple-system,sans-serif;
+    background:radial-gradient(ellipse at 26% 22%,#333E52 0%,var(--navy) 56%,var(--navy-deep) 100%);
+    color:var(--white);min-height:100vh;
+    -webkit-font-smoothing:antialiased;
+    display:flex;align-items:center;justify-content:center;padding:48px 24px;
+  }
+  body::before{
+    content:'';position:fixed;inset:0;pointer-events:none;
+    background-image:radial-gradient(rgba(255,255,255,.045) 1px,transparent 1px);
+    background-size:34px 34px;
+  }
+  .wrap{
+    position:relative;width:100%;max-width:1080px;
+    display:grid;grid-template-columns:1fr 420px;gap:64px;align-items:center;
+  }
+  .eyebrow{
+    font-weight:500;font-size:14px;letter-spacing:5px;text-transform:uppercase;
+    color:var(--teal);margin-bottom:20px;
+  }
+  h1{font-weight:800;font-size:clamp(38px,5vw,60px);line-height:1.08;letter-spacing:-1.4px}
+  h1 .teal{color:var(--teal)}
+  .lede{font-weight:300;font-size:19px;line-height:1.6;color:var(--muted);margin:24px 0 8px;max-width:46ch}
+  ul{list-style:none;margin:26px 0 34px}
+  li{
+    font-size:16px;color:var(--muted);padding:9px 0 9px 30px;position:relative;
+  }
+  li::before{
+    content:'';position:absolute;left:0;top:17px;width:9px;height:9px;
+    border-radius:50%;background:var(--teal);
+  }
+  form{display:flex;gap:12px;flex-wrap:wrap;max-width:540px}
+  input[type=email],input[type=text]{
+    flex:1 1 168px;min-width:0;padding:17px 20px;border-radius:14px;
+    border:1px solid rgba(255,255,255,.16);
+    background:rgba(255,255,255,.06);color:var(--white);
+    font-family:inherit;font-size:16px;font-weight:500;
+  }
+  input::placeholder{color:rgba(255,255,255,.42)}
+  input:focus{outline:none;border-color:var(--teal);background:rgba(255,255,255,.09)}
+  button{
+    padding:17px 30px;border-radius:14px;border:none;cursor:pointer;
+    background:var(--teal);color:var(--navy);
+    font-family:inherit;font-weight:800;font-size:16px;letter-spacing:.2px;
+    transition:transform .15s ease,filter .15s ease;
+  }
+  button:hover{filter:brightness(1.07)}
+  button:active{transform:translateY(1px)}
+  button[disabled]{opacity:.6;cursor:default}
+  .fineprint{font-size:13px;color:rgba(255,255,255,.42);margin-top:16px;max-width:46ch;line-height:1.5}
+  .msg{margin-top:18px;font-size:15px;min-height:22px;font-weight:500}
+  .msg.error{color:#ff9d9d}
+  .result{margin:0;text-align:center}
+  .result svg{width:100%;max-width:460px;height:auto}
+  .result .node circle{fill:var(--navy);stroke:rgba(255,255,255,.28);stroke-width:2}
+  .result .node text{
+    font-family:'Manrope',sans-serif;font-weight:600;font-size:17px;
+    fill:rgba(255,255,255,.55);text-anchor:middle;
+  }
+  .result .lbl{
+    font-family:'Manrope',sans-serif;font-weight:700;font-size:16px;
+    letter-spacing:1.6px;fill:rgba(255,255,255,.52);
+  }
+  .result .out{
+    font-family:'Manrope',sans-serif;font-weight:800;font-size:19px;
+    letter-spacing:3px;fill:var(--teal);
+  }
+  .result .escape{filter:drop-shadow(0 0 14px rgba(24,192,192,.45))}
+  figcaption{
+    margin-top:26px;font-size:16px;line-height:1.6;font-weight:300;
+    color:var(--muted);max-width:34ch;margin-inline:auto;
+  }
+  /* success state */
+  .done{display:none}
+  .done h2{font-weight:800;font-size:clamp(32px,4vw,46px);line-height:1.1;letter-spacing:-1px}
+  .done p{font-weight:300;font-size:18px;color:var(--muted);margin:18px 0 30px;max-width:44ch;line-height:1.6}
+  .download{
+    display:inline-block;padding:18px 34px;border-radius:14px;
+    background:var(--teal);color:var(--navy);text-decoration:none;
+    font-weight:800;font-size:17px;
+  }
+  .next{margin-top:34px;font-size:15px;color:var(--muted)}
+  .next a{color:var(--teal);text-decoration:none;font-weight:600}
+  .next a:hover{text-decoration:underline}
+  body.sent .start{display:none}
+  body.sent .done{display:block}
+  @media (max-width:880px){
+    .wrap{grid-template-columns:1fr;gap:40px}
+    .result{max-width:330px;margin-inline:auto}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div>
+    <div class="start">
+      <div class="eyebrow">Free download</div>
+      <h1>The Procrastination<br><span class="teal">Pattern Breaker</span></h1>
+      <p class="lede">You are not avoiding the task. You are avoiding the feeling that comes with the task. This workbook takes one task apart and gets you moving inside 24 hours.</p>
+      <ul>
+        <li>Name the feeling hiding inside the task</li>
+        <li>See the payoff of avoiding, and what it costs you</li>
+        <li>Choose a contact action of less than ten minutes</li>
+      </ul>
+      <form id="f" novalidate>
+        <input type="text" id="fn" name="FNAME" placeholder="First name" required autocomplete="given-name">
+        <input type="text" id="ln" name="LNAME" placeholder="Last name" required autocomplete="family-name">
+        <input type="email" id="em" name="EMAIL" placeholder="Your email" required autocomplete="email">
+        <button type="submit" id="go">Send it to me</button>
+      </form>
+      <p class="fineprint">You will also get Fresh Perspective, my weekly letter on personal growth. Unsubscribe any time, no hard feelings.</p>
+      <div class="msg" id="msg" role="status" aria-live="polite"></div>
+    </div>
+
+    <div class="done">
+      <div class="eyebrow">Check your inbox too</div>
+      <h2>Here is your<br><span style="color:var(--teal)">Pattern Breaker</span></h2>
+      <p>Print it, use a pen, and do one task only. The whole thing is designed to end with a contact action inside the next 24 hours.</p>
+      <a class="download" href="/files/Procrastination_Pattern_Breaker.pdf" download>Download the workbook</a>
+      <!-- RELINK when Video 2 goes live: point this at the episode watch URL -->
+      <div class="next">Start with the series: <a href="https://www.youtube.com/@francoisesterhuizen" target="_blank" rel="noopener">Getting Unstuck on YouTube</a></div>
+    </div>
+  </div>
+
+  <figure class="result">
+    <svg viewBox="0 0 640 545" role="img" aria-label="A task taken apart into feeling, payoff, cost and one small action">
+      <g font-family="Manrope,sans-serif">
+        <rect x="40" y="20" width="560" height="88" rx="16" fill="rgba(255,255,255,.06)" stroke="rgba(255,255,255,.22)" stroke-width="2"/>
+        <text x="70" y="56" font-size="15" font-weight="700" letter-spacing="2.5" fill="rgba(255,255,255,.5)">THE TASK</text>
+        <text x="70" y="86" font-size="21" font-weight="600" fill="rgba(255,255,255,.85)">"Send the proposal"</text>
+
+        <line x1="320" y1="108" x2="320" y2="140" stroke="rgba(255,255,255,.25)" stroke-width="2.5"/>
+
+        <rect x="40" y="140" width="270" height="80" rx="14" fill="rgba(255,255,255,.05)" stroke="rgba(255,255,255,.18)" stroke-width="2"/>
+        <text x="64" y="172" font-size="13.5" font-weight="700" letter-spacing="2" fill="rgba(255,255,255,.5)">THE FEELING</text>
+        <text x="64" y="200" font-size="19" font-weight="600" fill="rgba(255,255,255,.82)">Being judged</text>
+
+        <rect x="330" y="140" width="270" height="80" rx="14" fill="rgba(255,255,255,.05)" stroke="rgba(255,255,255,.18)" stroke-width="2"/>
+        <text x="354" y="172" font-size="13.5" font-weight="700" letter-spacing="2" fill="rgba(255,255,255,.5)">THE PAYOFF</text>
+        <text x="354" y="200" font-size="19" font-weight="600" fill="rgba(255,255,255,.82)">Safe for one more day</text>
+
+        <rect x="40" y="240" width="560" height="80" rx="14" fill="rgba(255,255,255,.05)" stroke="rgba(255,255,255,.18)" stroke-width="2"/>
+        <text x="64" y="272" font-size="13.5" font-weight="700" letter-spacing="2" fill="rgba(255,255,255,.5)">THE COST</text>
+        <text x="64" y="300" font-size="19" font-weight="600" fill="rgba(255,255,255,.82)">The task grows. Self-trust thins.</text>
+
+        <line x1="320" y1="320" x2="320" y2="354" stroke="#18C0C0" stroke-width="3.5"/>
+        <polygon points="320,364 311,348 329,348" fill="#18C0C0"/>
+
+        <rect x="40" y="372" width="560" height="104" rx="16" fill="rgba(24,192,192,.12)" stroke="#18C0C0" stroke-width="2.5" style="filter:drop-shadow(0 0 16px rgba(24,192,192,.35))"/>
+        <text x="70" y="410" font-size="15" font-weight="800" letter-spacing="3" fill="#18C0C0">CONTACT · UNDER 10 MINUTES</text>
+        <text x="70" y="444" font-size="20" font-weight="600" fill="#fff">"Open it. Write one bad paragraph. Today, 16:00."</text>
+      </g>
+    </svg>
+    <figcaption>You leave with the feeling named, the payoff seen, and one contact action chosen for the next 24 hours.</figcaption>
+  </figure>
+</div>
+</div>
+
+<script>
+// Mailchimp accepts a JSONP subscribe, so the page needs no backend.
+var MC = 'https://francoisesterhuizen.us5.list-manage.com/subscribe/post-json'
+       + '?u=097ed8fb3c6e3c943817d0d80&id=7a7438d8f4';
+
+var form = document.getElementById('f'),
+    msg  = document.getElementById('msg'),
+    go   = document.getElementById('go');
+
+function show(text, isError){
+  msg.textContent = text;
+  msg.className = isError ? 'msg error' : 'msg';
+}
+
+form.addEventListener('submit', function(e){
+  e.preventDefault();
+  var email = document.getElementById('em').value.trim(),
+      first = document.getElementById('fn').value.trim(),
+      last  = document.getElementById('ln').value.trim();
+  if (!first || !last) {
+    show('Please add your first and last name.', true); return;
+  }
+  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
+    show('That email address does not look right.', true); return;
+  }
+  go.disabled = true; show('One moment…');
+
+  var cb = 'mc_' + Date.now();
+  window[cb] = function(res){
+    go.disabled = false;
+    var already = res && res.msg && /already subscribed/i.test(res.msg);
+    if (res && (res.result === 'success' || already)) {
+      document.body.classList.add('sent');
+      window.scrollTo({top:0, behavior:'smooth'});
+    } else {
+      show((res && res.msg ? res.msg.replace(/<[^>]*>/g,'') :
+            'Something went wrong. Please try again.'), true);
+    }
+    delete window[cb];
+  };
+
+  var s = document.createElement('script');
+  // this list requires first and last name; it names them MERGE3 / MERGE4
+  s.src = MC + '&EMAIL=' + encodeURIComponent(email)
+            + '&FNAME=' + encodeURIComponent(first)
+            + '&LNAME=' + encodeURIComponent(last)
+            + '&MERGE0=' + encodeURIComponent(email)
+            + '&MERGE3=' + encodeURIComponent(first)
+            + '&MERGE4=' + encodeURIComponent(last)
+            + '&c=' + cb;
+  s.onerror = function(){
+    // never trap someone who gave a real address
+    go.disabled = false;
+    document.body.classList.add('sent');
+  };
+  document.body.appendChild(s);
+});
+</script>
+</body>
+</html>
