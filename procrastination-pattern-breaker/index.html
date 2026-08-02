@@ -224,6 +224,7 @@ form.addEventListener('submit', function(e){
             + '&MERGE0=' + encodeURIComponent(email)
             + '&MERGE3=' + encodeURIComponent(first)
             + '&MERGE4=' + encodeURIComponent(last)
+            + '&MMERGE2=pattern-breaker'   // Source: which gate this lead came from
             + '&c=' + cb;
   s.onerror = function(){
     // never trap someone who gave a real address
