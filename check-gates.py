@@ -11,6 +11,16 @@ happen."
 import pathlib, re, sys, urllib.request
 
 GATES = {
+    # "" is the hub page at the site root
+    "": {
+        "must": ["The Empowering Truth of Responsibility",
+                 "10 Habits of Happy Relationships",
+                 "francoisesterhuizen.com/own-it",
+                 "francoisesterhuizen.com/relationships-10-habits-intro",
+                 "Pattern Breaker", "Headlights", "Unstuck Loop Map",
+                 "Personal Growth Weekly"],
+        "must_not": ["Story of Us", "storyofus"],
+    },
     "unstuck-loop-map": {
         "must": ["Unstuck Loop Map", "MMERGE2=loop-map"],
         "must_not": ["Pattern Breaker", "Headlights"],
@@ -48,7 +58,7 @@ def main():
         all_ok &= check(name, html, "local")
         if live:
             try:
-                url = "https://resources.francoisesterhuizen.com/%s/" % name
+                url = "https://resources.francoisesterhuizen.com/" + (name + "/" if name else "")
                 req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (Macintosh) gate-check"})
                 h = urllib.request.urlopen(req, timeout=20).read().decode("utf-8", "ignore")
                 all_ok &= check(name, h, "live")

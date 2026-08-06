@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Resources — Francois Esterhuizen</title>
-<meta name="description" content="Maps and tools from the videos and classes. Each one is a page or two, built to be filled in, not just read.">
+<meta name="description" content="Free tools, workbooks and two full books from Francois Esterhuizen. Each one is built to be used, not just read.">
 <meta property="og:title" content="Resources — Francois Esterhuizen">
-<meta property="og:description" content="Maps and tools from the videos and classes. Built to be filled in, not just read.">
+<meta property="og:description" content="Free tools, workbooks and two full books. Built to be used, not just read.">
 <meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -23,13 +23,25 @@
     color:var(--white);min-height:100vh;
     -webkit-font-smoothing:antialiased;
     padding:72px 24px 96px;
+    overflow-x:hidden;
   }
   body::before{
     content:'';position:fixed;inset:0;pointer-events:none;
     background-image:radial-gradient(rgba(255,255,255,.045) 1px,transparent 1px);
     background-size:34px 34px;
   }
-  .wrap{position:relative;max-width:880px;margin:0 auto}
+  /* ambient: two slow teal glows drifting behind everything */
+  .orb{position:fixed;border-radius:50%;pointer-events:none;filter:blur(60px);z-index:0}
+  .orb.a{width:560px;height:560px;left:-220px;top:12%;
+    background:radial-gradient(circle,rgba(24,192,192,.10),rgba(24,192,192,0) 65%);
+    animation:orb-a 26s ease-in-out infinite alternate}
+  .orb.b{width:640px;height:640px;right:-260px;top:58%;
+    background:radial-gradient(circle,rgba(24,192,192,.08),rgba(24,192,192,0) 65%);
+    animation:orb-b 32s ease-in-out infinite alternate}
+  @keyframes orb-a{to{transform:translate(60px,40px)}}
+  @keyframes orb-b{to{transform:translate(-70px,-50px)}}
+
+  .wrap{position:relative;max-width:880px;margin:0 auto;z-index:1}
   .eyebrow{
     font-weight:500;font-size:14px;letter-spacing:5px;text-transform:uppercase;
     color:var(--teal);margin-bottom:20px;
@@ -39,6 +51,15 @@
   .lede{font-weight:300;font-size:19px;line-height:1.6;color:var(--muted);
     margin:22px 0 54px;max-width:52ch}
 
+  /* section headers: small eyebrow + hairline that draws in */
+  .sect{display:flex;align-items:center;gap:18px;margin:54px 0 22px}
+  .sect span{font-weight:700;font-size:13px;letter-spacing:4px;text-transform:uppercase;
+    color:rgba(255,255,255,.55);white-space:nowrap}
+  .sect::after{content:'';height:1px;flex:1;transform-origin:left;
+    background:linear-gradient(90deg,rgba(24,192,192,.5),rgba(255,255,255,.06))}
+  .m-seen.sect::after{animation:m-line .9s cubic-bezier(.16,1,.3,1) both}
+  @keyframes m-line{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+
   .card{
     display:block;text-decoration:none;color:inherit;
     background:linear-gradient(135deg,rgba(38,46,59,.66) 0%,rgba(30,37,48,.58) 100%);
@@ -47,9 +68,11 @@
     border:1px solid rgba(255,255,255,.10);
     box-shadow:0 24px 60px rgba(0,0,0,.30);
     border-radius:26px;padding:36px 40px;margin-bottom:26px;
-    transition:transform .18s ease,border-color .18s ease;
+    transition:transform .22s cubic-bezier(.16,1,.3,1),border-color .22s ease,box-shadow .22s ease;
   }
-  .card:hover{transform:translateY(-3px);border-color:rgba(24,192,192,.45)}
+  .card:hover{transform:translateY(-4px);border-color:rgba(24,192,192,.45);
+    box-shadow:0 30px 70px rgba(0,0,0,.36),0 0 40px rgba(24,192,192,.10)}
+  .card.hero{border-color:rgba(24,192,192,.30);padding:42px 44px}
   .tag{
     display:inline-block;font-weight:700;font-size:12px;letter-spacing:3px;
     text-transform:uppercase;padding:7px 14px;border-radius:100px;margin-bottom:18px;
@@ -58,34 +81,112 @@
   .tag.live{background:rgba(255,255,255,.10);color:rgba(255,255,255,.78)}
   .card h2{font-weight:800;font-size:29px;letter-spacing:-.6px;margin-bottom:10px}
   .card p{font-weight:300;font-size:16.5px;line-height:1.6;color:var(--muted);max-width:56ch}
-  .card .go{
-    display:inline-block;margin-top:22px;font-weight:800;font-size:16px;color:var(--teal);
-  }
-  .card .go::after{content:' →'}
+  .card .go{display:inline-block;margin-top:22px;font-weight:800;font-size:16px;color:var(--teal)}
+  .card .go::after{content:' →';display:inline-block;transition:transform .22s ease}
+  .card:hover .go::after{transform:translateX(5px)}
   .from{font-size:13.5px;color:rgba(255,255,255,.42);margin-top:14px;font-weight:500}
 
+  /* the two books: 2-up grid, tactile spine tiles */
+  .books{display:grid;grid-template-columns:1fr 1fr;gap:26px}
+  .books .card{margin-bottom:0;display:flex;flex-direction:column}
+  .books .card p{flex:1}
+  .spine{
+    width:106px;height:138px;border-radius:4px 10px 10px 4px;margin-bottom:22px;
+    background:linear-gradient(115deg,#33425c 0%,#2A3347 55%,#232B3A 100%);
+    border:1px solid rgba(255,255,255,.14);
+    border-left:7px solid rgba(24,192,192,.75);
+    box-shadow:14px 18px 34px rgba(0,0,0,.42),inset 0 1px 0 rgba(255,255,255,.10);
+    display:flex;align-items:center;justify-content:center;text-align:center;
+    padding:10px;transform:perspective(700px) rotateY(0);
+    transition:transform .3s cubic-bezier(.16,1,.3,1);
+  }
+  .card:hover .spine{transform:perspective(700px) rotateY(-9deg) translateY(-2px)}
+  .spine b{font-weight:800;font-size:11.5px;letter-spacing:.6px;line-height:1.35;
+    text-transform:uppercase;color:rgba(255,255,255,.92);
+    hyphens:auto;overflow-wrap:break-word;max-width:100%}
+
+  /* newsletter band */
+  .letter{
+    display:flex;align-items:center;justify-content:space-between;gap:26px;flex-wrap:wrap;
+    background:linear-gradient(135deg,rgba(24,192,192,.10),rgba(30,37,48,.6));
+    -webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);
+    border:1px solid rgba(24,192,192,.22);border-radius:26px;
+    padding:34px 40px;margin-top:60px;
+  }
+  .letter h3{font-weight:800;font-size:24px;letter-spacing:-.5px;margin-bottom:6px}
+  .letter p{font-weight:300;font-size:16px;color:var(--muted)}
+  .btn{
+    display:inline-block;text-decoration:none;font-weight:800;font-size:16px;
+    color:var(--navy-deep);background:var(--teal);border-radius:12px;
+    padding:15px 28px;white-space:nowrap;
+    transition:transform .2s ease,box-shadow .2s ease;
+  }
+  .btn:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(24,192,192,.35)}
+
   .foot{
-    margin-top:64px;padding-top:34px;border-top:1px solid rgba(255,255,255,.10);
+    margin-top:56px;padding-top:34px;border-top:1px solid rgba(255,255,255,.10);
     display:flex;gap:28px;flex-wrap:wrap;font-size:15px;
   }
   .foot a{color:var(--muted);text-decoration:none;font-weight:500}
   .foot a:hover{color:var(--teal)}
-  @media (max-width:640px){ .card{padding:28px 26px} }
+  @media (max-width:640px){
+    .card{padding:28px 26px}
+    .card.hero{padding:30px 28px}
+    .books{grid-template-columns:1fr}
+  }
+
+/*motion-v2: entrance on scroll, CTA light ring, ambient orbs. Teal only, restrained.*/
+@keyframes m-rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+@property --mang{syntax:'<angle>';initial-value:0deg;inherits:false}
+@keyframes m-ring{to{--mang:360deg}}
+.m-in{animation:m-rise .8s cubic-bezier(.16,1,.3,1) both}
+.eyebrow.m-in{animation-delay:.05s}
+h1.m-in{animation-delay:.16s}
+.lede.m-in{animation-delay:.3s}
+.m-wait{opacity:0}
+.m-seen{animation:m-rise .85s cubic-bezier(.16,1,.3,1) both}
+.cta-ring{position:relative;isolation:isolate}
+.cta-ring::before{content:'';position:absolute;inset:-3px;border-radius:14px;padding:3px;
+  background:conic-gradient(from var(--mang),rgba(24,192,192,0) 0 72%,rgba(24,192,192,.55) 84%,#7FF0EE 92%,rgba(24,192,192,0) 100%);
+  -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;
+  animation:m-ring 3.4s linear infinite;pointer-events:none;z-index:1}
+@media (prefers-reduced-motion:reduce){
+  .m-in,.m-seen{animation:none;opacity:1}
+  .m-wait{opacity:1}
+  .m-seen.sect::after{animation:none}
+  .cta-ring::before{animation:none;display:none}
+  .orb{animation:none}
+}
 </style>
 </head>
 <body>
+<div class="orb a"></div>
+<div class="orb b"></div>
 <div class="wrap">
   <div class="eyebrow">Resources</div>
   <h1>Tools for the actual work.<br><span class="teal">Not just more reading.</span></h1>
-  <p class="lede">Every resource here comes from a video or a class. Each one is a page or two, built to be filled in. The newest sits at the top.</p>
+  <p class="lede">Every resource here is free and built to be used. Start with the one that names where you are. The newest sits at the top.</p>
 
   <!-- ============================================================
-       Each resource is one <a class="card"> block. To add one:
-       copy the block below, set the tag (free / live), title, copy,
-       the source line, and the link. Newest goes FIRST.
+       Each resource is one <a class="card"> block inside a section.
+       To add one: copy a block, set the tag (free / live), title,
+       copy, source line and link. Newest goes FIRST in its section.
        ============================================================ -->
 
-  <a class="card" href="/headlights-system/">
+  <div class="sect m-wait"><span>Start here</span></div>
+
+  <a class="card hero m-wait" href="/procrastination-pattern-breaker/">
+    <span class="tag free">Free workbook · from the current series</span>
+    <h2>The Procrastination Pattern Breaker</h2>
+    <p>One task, taken apart: the feeling hiding inside it, the payoff of avoiding, the cost, and a contact action of less than ten minutes, chosen before you close the page.</p>
+    <span class="go">Break the pattern</span>
+    <div class="from">From the video: Why You Procrastinate on Things That Matter</div>
+  </a>
+
+  <div class="sect m-wait"><span>From the videos</span></div>
+
+  <a class="card m-wait" href="/headlights-system/">
     <span class="tag free">Free one-page card</span>
     <h2>The Headlights System</h2>
     <p>For when everything feels like too much. Name the thing, find the next visible move with the two-minute test, decide once, and let the started task pull you back. One page, one move.</p>
@@ -93,15 +194,7 @@
     <div class="from">From the video: How to Start When Everything Feels Too Much (coming soon)</div>
   </a>
 
-  <a class="card" href="/procrastination-pattern-breaker/">
-    <span class="tag free">Free workbook</span>
-    <h2>The Procrastination Pattern Breaker</h2>
-    <p>One task, taken apart: the feeling hiding inside it, the payoff of avoiding, the cost, and a contact action of less than ten minutes, chosen before you close the page.</p>
-    <span class="go">Break the pattern</span>
-    <div class="from">From the video: Why You Procrastinate on Things That Matter</div>
-  </a>
-
-  <a class="card" href="/unstuck-loop-map/">
+  <a class="card m-wait" href="/unstuck-loop-map/">
     <span class="tag free">Free download</span>
     <h2>The Unstuck Loop Map</h2>
     <p>Your loop in five honest sentences, the fuel that is driving it, and the exact point where it can be interrupted. One page. Print it or fill it in on screen.</p>
@@ -109,7 +202,29 @@
     <div class="from">From the video: How to Break the 4-Step Loop That Keeps You Stuck</div>
   </a>
 
-  <a class="card" href="https://innerhealing.francoisesterhuizen.com" target="_blank" rel="noopener">
+  <div class="sect m-wait"><span>The two books</span></div>
+
+  <div class="books">
+    <a class="card m-wait" href="https://www.francoisesterhuizen.com/own-it" target="_blank" rel="noopener">
+      <div class="spine"><b>The Empowering Truth of Respon&shy;sibility</b></div>
+      <span class="tag free">Full book · read free</span>
+      <h2>The Empowering Truth of Responsibility</h2>
+      <p>Responsibility, reclaimed. Not blame and not duty, but the truth that your life is yours to steer, and what changes the day you take the wheel.</p>
+      <span class="go">Read it free</span>
+    </a>
+
+    <a class="card m-wait" href="https://www.francoisesterhuizen.com/relationships-10-habits-intro" target="_blank" rel="noopener">
+      <div class="spine"><b>10 Habits of Happy Relation&shy;ships</b></div>
+      <span class="tag free">Full book · read free</span>
+      <h2>10 Habits of Happy Relationships</h2>
+      <p>Ten practical habits that happy couples keep, one chapter each, written for real relationships rather than perfect ones. All eleven parts are free to read.</p>
+      <span class="go">Start at the introduction</span>
+    </a>
+  </div>
+
+  <div class="sect m-wait"><span>Reflections and assessments</span></div>
+
+  <a class="card m-wait" href="https://innerhealing.francoisesterhuizen.com" target="_blank" rel="noopener">
     <span class="tag free">Free self-reflection</span>
     <h2>Where the Past Still Lives</h2>
     <p>A gentle self-reflection that maps where the past may still be shaping your present, across nine areas of life. You leave with a picture, not a verdict.</p>
@@ -117,39 +232,70 @@
     <div class="from">Companion to the Inner Healing series</div>
   </a>
 
-  <a class="card" href="https://storyofus.francoisesterhuizen.com" target="_blank" rel="noopener">
-    <span class="tag free">Free · for couples</span>
-    <h2>The Story of Us</h2>
-    <p>A guided reflection for couples. Work through it together and see the story the two of you are living, and the one you want to write next.</p>
-    <span class="go">Begin together</span>
-  </a>
-
-  <a class="card" href="https://survival-instinct-assessment.netlify.app" target="_blank" rel="noopener">
+  <a class="card m-wait" href="https://survival-instinct-assessment.netlify.app" target="_blank" rel="noopener">
     <span class="tag free">Free · for couples</span>
     <h2>The Survival Instinct Assessment</h2>
     <p>Discover your conflict style, Small Square or Big Jumbler, and the dance the two of you do when things get tense. Naming the dance is what changes it.</p>
     <span class="go">Find your style</span>
   </a>
 
-  <a class="card" href="https://bigdream.francoisesterhuizen.com" target="_blank" rel="noopener">
+  <a class="card m-wait" href="https://bigdream.francoisesterhuizen.com" target="_blank" rel="noopener">
     <span class="tag free">Free guides</span>
     <h2>Personal Growth Guides</h2>
     <p>Practical guides and reflections to help you see your life clearly and build a future worth moving towards. Start with the one that names where you are.</p>
     <span class="go">Browse the guides</span>
   </a>
 
-  <a class="card" href="https://www.getclarity.co.za" target="_blank" rel="noopener">
+  <div class="sect m-wait"><span>Live every week</span></div>
+
+  <a class="card m-wait" href="https://www.getclarity.co.za" target="_blank" rel="noopener">
     <span class="tag live">Live classes</span>
     <h2>Personal Growth Weekly</h2>
     <p>A live class every week on the patterns that keep capable people stuck, and the beliefs underneath them. Taught live, recorded if you miss one.</p>
     <span class="go">See the classes</span>
   </a>
 
+  <div class="letter m-wait">
+    <div>
+      <h3>Fresh Perspective</h3>
+      <p>One letter every week. A pattern taken apart, and something to do about it.</p>
+    </div>
+    <a class="btn" id="letter-btn" href="https://francoisesterhuizen.us5.list-manage.com/subscribe?u=097ed8fb3c6e3c943817d0d80&id=7a7438d8f4" target="_blank" rel="noopener">Get the letter</a>
+  </div>
+
   <div class="foot">
     <a href="https://www.youtube.com/@francoisesterhuizen" target="_blank" rel="noopener">YouTube</a>
-    <a href="https://francoisesterhuizen.us5.list-manage.com/subscribe?u=097ed8fb3c6e3c943817d0d80&id=7a7438d8f4" target="_blank" rel="noopener">Fresh Perspective, the weekly letter</a>
+    <a href="https://www.francoisesterhuizen.com/podcast" target="_blank" rel="noopener">The podcast</a>
     <a href="https://www.francoisesterhuizen.com" target="_blank" rel="noopener">francoisesterhuizen.com</a>
   </div>
 </div>
+
+<script>
+/*motion-v2: hero staggers at load, everything below reveals on scroll*/
+(function(){
+  ['.eyebrow','h1','.lede'].forEach(function(sel){
+    var el=document.querySelector(sel); if(el) el.classList.add('m-in');
+  });
+  var btn=document.getElementById('letter-btn'); if(btn) btn.classList.add('cta-ring');
+  var waits=document.querySelectorAll('.m-wait');
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(es){
+      es.forEach(function(e){
+        if(e.isIntersecting){
+          e.target.classList.remove('m-wait');
+          e.target.classList.add('m-seen');
+          io.unobserve(e.target);
+        }
+      });
+    },{threshold:.18,rootMargin:'0px 0px -40px 0px'});
+    waits.forEach(function(el,i){
+      el.style.animationDelay=(0.06+(i%3)*0.08)+'s';
+      io.observe(el);
+    });
+  } else {
+    waits.forEach(function(el){el.classList.remove('m-wait');el.classList.add('m-seen');});
+  }
+})();
+</script>
 </body>
 </html>
