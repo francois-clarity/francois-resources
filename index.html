@@ -8,6 +8,7 @@
 <meta property="og:title" content="Resources — Francois Esterhuizen">
 <meta property="og:description" content="Free tools, workbooks and two full books. Built to be used, not just read.">
 <meta property="og:type" content="website">
+<meta property="og:image" content="https://resources.francoisesterhuizen.com/assets/portrait.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;500;600;800&display=swap" rel="stylesheet">
@@ -53,7 +54,32 @@
   @keyframes teal-glow{0%,100%{text-shadow:0 0 0 rgba(24,192,192,0)}
     50%{text-shadow:0 0 36px rgba(24,192,192,.5)}}
   .lede{font-weight:300;font-size:19px;line-height:1.6;color:var(--muted);
-    margin:22px 0 54px;max-width:52ch}
+    margin:22px 0 0;max-width:52ch}
+
+  /* hero: words left, him right */
+  .hero{display:grid;grid-template-columns:1fr 320px;gap:48px;align-items:center;
+    margin-bottom:30px}
+  .port{position:relative;border-radius:28px;overflow:hidden;
+    border:1px solid rgba(24,192,192,.35);
+    box-shadow:0 30px 70px rgba(0,0,0,.45),0 0 60px rgba(24,192,192,.12);
+    animation:port-float 7s ease-in-out infinite alternate}
+  .port img{display:block;width:100%;height:auto;
+    filter:grayscale(1) contrast(1.05) brightness(.96)}
+  .port::after{content:'';position:absolute;inset:0;
+    background:linear-gradient(165deg,rgba(24,192,192,.35),rgba(38,46,59,.65));
+    mix-blend-mode:color}
+  .port .cap{position:absolute;left:14px;bottom:14px;z-index:1;
+    padding:8px 16px;border-radius:100px;
+    -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
+    background:rgba(16,20,28,.55);border:1px solid rgba(255,255,255,.18);
+    font-weight:600;font-size:13.5px;letter-spacing:1px;color:rgba(255,255,255,.9)}
+  @keyframes port-float{to{transform:translateY(-10px)}}
+  .port.m-in{animation:m-rise .8s cubic-bezier(.16,1,.3,1) both,
+    port-float 7s ease-in-out .9s infinite alternate}
+  @media (max-width:760px){
+    .hero{grid-template-columns:1fr;gap:34px}
+    .port{max-width:270px}
+  }
 
   /* section headers: small eyebrow + hairline that draws in */
   .sect{display:flex;align-items:center;gap:18px;margin:54px 0 22px}
@@ -76,11 +102,37 @@
   }
   .card:hover{transform:translateY(-4px);border-color:rgba(24,192,192,.45);
     box-shadow:0 30px 70px rgba(0,0,0,.36),0 0 40px rgba(24,192,192,.10)}
-  .card.hero{border-color:rgba(24,192,192,.30);padding:42px 44px}
-  .card.hero::before{content:'';position:absolute;inset:-1px;border-radius:26px;
+  .card.featured{border-color:rgba(24,192,192,.30);padding:42px 44px;
+    display:grid;grid-template-columns:1fr 250px;gap:36px;align-items:center}
+  .card.featured::before{content:'';position:absolute;inset:-1px;border-radius:26px;
     pointer-events:none;box-shadow:0 0 52px rgba(24,192,192,.22);
     animation:breathe 5.5s ease-in-out infinite}
   @keyframes breathe{0%,100%{opacity:0}50%{opacity:1}}
+  .card .pic{border-radius:18px;overflow:hidden;align-self:stretch;min-height:230px;
+    border:1px solid rgba(255,255,255,.12)}
+  .card .pic img{width:100%;height:100%;object-fit:cover;display:block;
+    transition:transform .6s cubic-bezier(.16,1,.3,1)}
+  .card:hover .pic img{transform:scale(1.05)}
+  @media (max-width:760px){
+    .card.featured{grid-template-columns:1fr;gap:22px}
+    .card .pic{min-height:0;height:170px;order:-1}
+  }
+
+  /* line glyphs that draw themselves in */
+  .glyph{display:block;margin-bottom:16px}
+  .glyph *{fill:none;stroke:var(--teal);stroke-width:2.6;stroke-linecap:round;
+    stroke-linejoin:round;stroke-dasharray:260;stroke-dashoffset:260}
+  .m-seen .glyph *{animation:draw 1.2s cubic-bezier(.16,1,.3,1) forwards .3s}
+  .m-seen .glyph *:nth-child(2){animation-delay:.45s}
+  .m-seen .glyph *:nth-child(3){animation-delay:.6s}
+  .m-seen .glyph *:nth-child(4){animation-delay:.75s}
+  @keyframes draw{to{stroke-dashoffset:0}}
+  .m-done .glyph *{stroke-dashoffset:0}
+
+  /* the real cover + its typographic twin */
+  .coverimg{width:118px;border-radius:8px;margin-bottom:22px;display:block;
+    border:1px solid rgba(255,255,255,.18);
+    box-shadow:14px 18px 34px rgba(0,0,0,.42)}
   .tag{
     display:inline-block;font-weight:700;font-size:12px;letter-spacing:3px;
     text-transform:uppercase;padding:7px 14px;border-radius:100px;margin-bottom:18px;
@@ -167,7 +219,8 @@ h1.m-in{animation-delay:.16s}
   .m-wait{opacity:1}
   .m-seen.sect::after{animation:none}
   .cta-ring::before{animation:none;display:none}
-  .orb,body::before,h1 .teal,.card.hero::before,.bob{animation:none}
+  .orb,body::before,h1 .teal,.card.featured::before,.bob,.port{animation:none}
+  .glyph *,.m-seen .glyph *{animation:none;stroke-dashoffset:0}
 }
 </style>
 </head>
@@ -175,9 +228,17 @@ h1.m-in{animation-delay:.16s}
 <div class="orb a"></div>
 <div class="orb b"></div>
 <div class="wrap">
-  <div class="eyebrow">Resources</div>
-  <h1>Tools for the actual work.<br><span class="teal">Not just more reading.</span></h1>
-  <p class="lede">Every resource here is free and built to be used. Start with the one that names where you are. The newest sits at the top.</p>
+  <div class="hero">
+    <div>
+      <div class="eyebrow">Resources</div>
+      <h1>Tools for the actual work.<br><span class="teal">Not just more reading.</span></h1>
+      <p class="lede">Every resource here is free and built to be used. Start with the one that names where you are. The newest sits at the top.</p>
+    </div>
+    <div class="port m-in">
+      <img src="/assets/portrait.jpg" alt="Francois Esterhuizen" width="800" height="864">
+      <div class="cap">Francois Esterhuizen</div>
+    </div>
+  </div>
 
   <!-- ============================================================
        Each resource is one <a class="card"> block inside a section.
@@ -187,17 +248,24 @@ h1.m-in{animation-delay:.16s}
 
   <div class="sect m-wait"><span>Start here</span></div>
 
-  <a class="card hero m-wait" href="/procrastination-pattern-breaker/">
-    <span class="tag free">Free workbook · from the current series</span>
-    <h2>The Procrastination Pattern Breaker</h2>
-    <p>One task, taken apart: the feeling hiding inside it, the payoff of avoiding, the cost, and a contact action of less than ten minutes, chosen before you close the page.</p>
-    <span class="go">Break the pattern</span>
-    <div class="from">From the video: How to Stop Procrastinating on What Matters Most</div>
+  <a class="card featured m-wait" href="/procrastination-pattern-breaker/">
+    <div>
+      <span class="tag free">Free workbook · from the current series</span>
+      <h2>The Procrastination Pattern Breaker</h2>
+      <p>One task, taken apart: the feeling hiding inside it, the payoff of avoiding, the cost, and a contact action of less than ten minutes, chosen before you close the page.</p>
+      <span class="go">Break the pattern</span>
+      <div class="from">From the video: How to Stop Procrastinating on What Matters Most</div>
+    </div>
+    <div class="pic"><img src="/assets/chair.jpg" alt="A quiet chair with a workbook, pen and tea" width="1100" height="1555" loading="lazy"></div>
   </a>
 
   <div class="sect m-wait"><span>From the videos</span></div>
 
   <a class="card m-wait" href="/headlights-system/">
+    <svg class="glyph" width="46" height="46" viewBox="0 0 46 46">
+      <circle cx="12" cy="23" r="7"/>
+      <path d="M19 17 40 9"/><path d="M20 23h20"/><path d="M19 29l21 8"/>
+    </svg>
     <span class="tag free">Free one-page card</span>
     <h2>The Headlights System</h2>
     <p>For when everything feels like too much. Name the thing, find the next visible move with the two-minute test, decide once, and let the started task pull you back. One page, one move.</p>
@@ -206,6 +274,10 @@ h1.m-in{animation-delay:.16s}
   </a>
 
   <a class="card m-wait" href="/unstuck-loop-map/">
+    <svg class="glyph" width="46" height="46" viewBox="0 0 46 46">
+      <path d="M23 6a17 17 0 1 1-12 5"/>
+      <path d="M11 4v8h8"/>
+    </svg>
     <span class="tag free">Free download</span>
     <h2>The Unstuck Loop Map</h2>
     <p>Your loop in five honest sentences, the fuel that is driving it, and the exact point where it can be interrupted. One page. Print it or fill it in on screen.</p>
@@ -217,7 +289,7 @@ h1.m-in{animation-delay:.16s}
 
   <div class="books">
     <a class="card m-wait" href="https://www.francoisesterhuizen.com/own-it" target="_blank" rel="noopener">
-      <div class="bob"><div class="spine"><b>The Empowering Truth of Respon&shy;sibility</b></div></div>
+      <div class="bob"><img class="coverimg" src="/assets/etor-cover.jpg" alt="The Empowering Truth of Responsibility book cover" width="480" height="480" loading="lazy"></div>
       <span class="tag free">Full book · read free</span>
       <h2>The Empowering Truth of Responsibility</h2>
       <p>Responsibility, reclaimed. Not blame and not duty, but the truth that your life is yours to steer, and what changes the day you take the wheel.</p>
@@ -236,6 +308,10 @@ h1.m-in{animation-delay:.16s}
   <div class="sect m-wait"><span>Reflections and assessments</span></div>
 
   <a class="card m-wait" href="https://innerhealing.francoisesterhuizen.com" target="_blank" rel="noopener">
+    <svg class="glyph" width="46" height="46" viewBox="0 0 46 46">
+      <circle cx="23" cy="23" r="17"/>
+      <path d="M23 13v10l7 5"/>
+    </svg>
     <span class="tag free">Free self-reflection</span>
     <h2>Where the Past Still Lives</h2>
     <p>A gentle self-reflection that maps where the past may still be shaping your present, across nine areas of life. You leave with a picture, not a verdict.</p>
@@ -244,6 +320,10 @@ h1.m-in{animation-delay:.16s}
   </a>
 
   <a class="card m-wait" href="https://survival-instinct-assessment.netlify.app" target="_blank" rel="noopener">
+    <svg class="glyph" width="46" height="46" viewBox="0 0 46 46">
+      <circle cx="17" cy="23" r="11"/>
+      <circle cx="29" cy="23" r="11"/>
+    </svg>
     <span class="tag free">Free · for couples</span>
     <h2>The Survival Instinct Assessment</h2>
     <p>Discover your conflict style, Small Square or Big Jumbler, and the dance the two of you do when things get tense. Naming the dance is what changes it.</p>
@@ -251,6 +331,10 @@ h1.m-in{animation-delay:.16s}
   </a>
 
   <a class="card m-wait" href="https://bigdream.francoisesterhuizen.com" target="_blank" rel="noopener">
+    <svg class="glyph" width="46" height="46" viewBox="0 0 46 46">
+      <circle cx="23" cy="23" r="17"/>
+      <path d="M29 17l-4 8-8 4 4-8z"/>
+    </svg>
     <span class="tag free">Free guides</span>
     <h2>Personal Growth Guides</h2>
     <p>Practical guides and reflections to help you see your life clearly and build a future worth moving towards. Start with the one that names where you are.</p>
@@ -260,6 +344,11 @@ h1.m-in{animation-delay:.16s}
   <div class="sect m-wait"><span>Live every week</span></div>
 
   <a class="card m-wait" href="https://www.getclarity.co.za" target="_blank" rel="noopener">
+    <svg class="glyph" width="46" height="46" viewBox="0 0 46 46">
+      <rect x="6" y="9" width="34" height="31" rx="6"/>
+      <path d="M6 19h34"/><path d="M15 5v8M31 5v8"/>
+      <path d="M16 29l5 5 9-9"/>
+    </svg>
     <span class="tag live">Live classes</span>
     <h2>Personal Growth Weekly</h2>
     <p>A live class every week on the patterns that keep capable people stuck, and the beliefs underneath them. Taught live, recorded if you miss one.</p>
@@ -282,12 +371,21 @@ h1.m-in{animation-delay:.16s}
 </div>
 
 <script>
-/*motion-v2: hero staggers at load, everything below reveals on scroll*/
+/*motion-v4: reveal on scroll, then hand transforms back to hover/tilt*/
 (function(){
   ['.eyebrow','h1','.lede'].forEach(function(sel){
     var el=document.querySelector(sel); if(el) el.classList.add('m-in');
   });
   var btn=document.getElementById('letter-btn'); if(btn) btn.classList.add('cta-ring');
+
+  // a finished fill-mode animation keeps overriding transform, which kills
+  // hover lift and tilt; swap to m-done (dormant class) once it has played
+  document.addEventListener('animationend',function(e){
+    if(e.animationName==='m-rise'&&e.target.classList.contains('m-seen')){
+      e.target.classList.remove('m-seen');e.target.classList.add('m-done');
+    }
+  });
+
   var waits=document.querySelectorAll('.m-wait');
   if('IntersectionObserver' in window){
     var io=new IntersectionObserver(function(es){
@@ -304,7 +402,30 @@ h1.m-in{animation-delay:.16s}
       io.observe(el);
     });
   } else {
-    waits.forEach(function(el){el.classList.remove('m-wait');el.classList.add('m-seen');});
+    waits.forEach(function(el){el.classList.remove('m-wait');el.classList.add('m-done');});
+  }
+
+  // safety net: nothing that reaches the viewport may stay invisible,
+  // even if the observer was throttled (background tab, odd embedder)
+  setInterval(function(){
+    document.querySelectorAll('.m-wait').forEach(function(el){
+      var r=el.getBoundingClientRect();
+      if(r.top<window.innerHeight-40&&r.bottom>0){
+        el.classList.remove('m-wait');el.classList.add('m-seen');
+      }
+    });
+  },700);
+
+  // pointer tilt: desktop, motion-friendly only
+  if(matchMedia('(hover:hover) and (prefers-reduced-motion:no-preference)').matches){
+    document.querySelectorAll('.card').forEach(function(c){
+      c.addEventListener('mousemove',function(e){
+        var r=c.getBoundingClientRect();
+        var x=(e.clientX-r.left)/r.width-.5, y=(e.clientY-r.top)/r.height-.5;
+        c.style.transform='translateY(-4px) perspective(900px) rotateX('+(-y*2.6)+'deg) rotateY('+(x*2.6)+'deg)';
+      });
+      c.addEventListener('mouseleave',function(){c.style.transform='';});
+    });
   }
 })();
 </script>
