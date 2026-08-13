@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+<html lang="en-ZA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Emotional Language Wheel — Francois Esterhuizen</title>
+<meta name="description" content="An interactive wheel for naming what you feel. Eight emotion families, 160 words, what each one means, where it lives in your body, and what it may be asking of you.">
+<meta property="og:title" content="The Emotional Language Wheel">
+<meta property="og:description" content="Find the exact word for what you are feeling. Eight families, 160 words, and what each one is trying to tell you.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;500;600;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#262E3B; --navy-deep:#1B222D; --teal:#18C0C0; --white:#fff;
+    --muted:rgba(255,255,255,.66);
+    --line:rgba(255,255,255,.10);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'Manrope',system-ui,-apple-system,sans-serif;
+    background:radial-gradient(ellipse at 26% 22%,#333E52 0%,var(--navy) 56%,var(--navy-deep) 100%);
+    color:var(--white);min-height:100vh;
+    -webkit-font-smoothing:antialiased;
+    padding:72px 24px 96px;
+    overflow-x:hidden;
+  }
+  body::before{
+    content:'';position:fixed;inset:0;pointer-events:none;
+    background-image:radial-gradient(rgba(255,255,255,.045) 1px,transparent 1px);
+    background-size:34px 34px;
+  }
+  .orb{position:fixed;border-radius:50%;pointer-events:none;filter:blur(60px);z-index:0}
+  .orb.a{width:560px;height:560px;left:-220px;top:12%;
+    background:radial-gradient(circle,rgba(24,192,192,.15),rgba(24,192,192,0) 65%)}
+  .orb.b{width:640px;height:640px;right:-260px;top:58%;
+    background:radial-gradient(circle,rgba(24,192,192,.12),rgba(24,192,192,0) 65%)}
+
+  .wrap{position:relative;max-width:1120px;margin:0 auto;z-index:1}
+  .eyebrow{
+    font-weight:500;font-size:14px;letter-spacing:5px;text-transform:uppercase;
+    color:var(--teal);margin-bottom:20px;
+  }
+  h1{font-weight:800;font-size:clamp(36px,5vw,58px);line-height:1.08;letter-spacing:-1.2px}
+  h1 .teal{color:var(--teal)}
+  .lede{font-weight:300;font-size:19px;line-height:1.65;color:var(--muted);
+    margin:24px 0 0;max-width:56ch}
+  .hero{max-width:760px;margin-bottom:26px}
+  .cta-row{display:flex;gap:14px;flex-wrap:wrap;margin-top:32px}
+  .btn{
+    display:inline-block;padding:16px 28px;border-radius:14px;cursor:pointer;
+    background:var(--teal);color:var(--navy);text-decoration:none;border:none;
+    font-family:inherit;font-weight:800;font-size:16px;
+    transition:transform .15s ease,filter .15s ease;
+  }
+  .btn:hover{filter:brightness(1.07)}
+  .btn:active{transform:translateY(1px)}
+  .btn.ghost{
+    background:rgba(255,255,255,.06);color:var(--white);
+    border:1px solid rgba(255,255,255,.18);font-weight:600;
+  }
+  .btn.ghost:hover{border-color:var(--teal);filter:none}
+
+  .sect{display:flex;align-items:center;gap:18px;margin:64px 0 26px}
+  .sect span{font-weight:700;font-size:13px;letter-spacing:4px;text-transform:uppercase;
+    color:rgba(255,255,255,.55);white-space:nowrap}
+  .sect::after{content:'';height:1px;flex:1;
+    background:linear-gradient(90deg,rgba(24,192,192,.5),rgba(255,255,255,.06))}
+
+  /* how to use */
+  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .step{
+    background:linear-gradient(135deg,rgba(38,46,59,.66),rgba(30,37,48,.58));
+    border:1px solid var(--line);border-radius:22px;padding:26px 28px;
+    -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);
+  }
+  .step .n{
+    font-weight:800;font-size:13px;letter-spacing:3px;color:var(--teal);
+    text-transform:uppercase;margin-bottom:10px;
+  }
+  .step h3{font-weight:800;font-size:19px;margin-bottom:8px}
+  .step p{font-weight:300;font-size:15.5px;line-height:1.6;color:var(--muted)}
+  @media (max-width:820px){.steps{grid-template-columns:1fr}}
+
+  /* search */
+  .searchbar{position:relative;max-width:440px;margin:0 0 26px}
+  .searchbar input{
+    width:100%;padding:15px 20px 15px 48px;border-radius:14px;
+    border:1px solid rgba(255,255,255,.16);
+    background:rgba(255,255,255,.06);color:var(--white);
+    font-family:inherit;font-size:16px;font-weight:500;
+  }
+  .searchbar input::placeholder{color:rgba(255,255,255,.42)}
+  .searchbar input:focus{outline:none;border-color:var(--teal);background:rgba(255,255,255,.09)}
+  .searchbar svg{position:absolute;left:16px;top:50%;transform:translateY(-50%);opacity:.5}
+  .search-results{
+    position:absolute;top:calc(100% + 8px);left:0;right:0;z-index:30;
+    background:#232B38;border:1px solid rgba(255,255,255,.14);border-radius:16px;
+    box-shadow:0 24px 60px rgba(0,0,0,.5);overflow:hidden;display:none;
+    max-height:320px;overflow-y:auto;
+  }
+  .search-results.open{display:block}
+  .search-results button{
+    display:flex;align-items:center;gap:12px;width:100%;padding:13px 18px;
+    background:none;border:none;cursor:pointer;text-align:left;
+    font-family:inherit;font-size:15px;color:var(--white);
+  }
+  .search-results button:hover,.search-results button.active{background:rgba(24,192,192,.12)}
+  .search-results .dot{width:10px;height:10px;border-radius:50%;flex:none}
+  .search-results .fam{margin-left:auto;font-size:12.5px;color:var(--muted);white-space:nowrap}
+  .search-results .none{padding:14px 18px;font-size:14.5px;color:var(--muted)}
+
+  /* wheel + panel layout */
+  .tool{display:grid;grid-template-columns:minmax(0,1.12fr) minmax(320px,.88fr);gap:44px;align-items:start}
+  @media (max-width:980px){.tool{grid-template-columns:1fr;gap:30px}}
+  .wheelbox{position:relative}
+  .wheelbox::before{
+    content:'';position:absolute;inset:6%;border-radius:50%;pointer-events:none;
+    background:radial-gradient(circle,rgba(24,192,192,.16),rgba(24,192,192,0) 70%);
+    filter:blur(40px);
+  }
+  .wheelbox svg{width:100%;height:auto;display:block;position:relative}
+  .wheel-hint{
+    text-align:center;font-size:14px;color:rgba(255,255,255,.5);
+    margin-top:14px;font-weight:500;letter-spacing:.3px;
+  }
+
+  /* svg wheel */
+  #wheel .fam-g{transition:opacity .45s ease}
+  #wheel.has-sel .fam-g:not(.sel){opacity:.18}
+  #wheel path.seg{cursor:pointer;transition:fill-opacity .25s ease}
+  #wheel path.base{cursor:pointer}
+  #wheel text{pointer-events:none;user-select:none;-webkit-user-select:none}
+  #wheel .base-lbl{font-weight:800;fill:#fff}
+  #wheel .ring-word{font-weight:600;fill:rgba(255,255,255,.88)}
+  #wheel .ring-word.strong{font-weight:800;fill:#fff}
+  #wheel .centre-top{font-weight:500;fill:rgba(255,255,255,.55);letter-spacing:3px;text-transform:uppercase}
+  #wheel .centre-main{font-weight:800;fill:#fff}
+  #wheel .seg.word-sel{stroke:#fff;stroke-width:2.5}
+  #wheel .fam-g:focus{outline:none}
+
+  /* panel */
+  .panel{
+    background:linear-gradient(135deg,rgba(38,46,59,.72),rgba(30,37,48,.62));
+    border:1px solid var(--line);border-radius:26px;padding:32px 34px;
+    -webkit-backdrop-filter:blur(16px) saturate(1.2);backdrop-filter:blur(16px) saturate(1.2);
+    box-shadow:0 24px 60px rgba(0,0,0,.30);
+    position:sticky;top:24px;
+  }
+  @media (max-width:980px){.panel{position:static}}
+  .panel .empty{color:var(--muted);font-weight:300;font-size:16.5px;line-height:1.65}
+  .panel .empty b{color:var(--white);font-weight:600}
+  .fam-head{display:flex;align-items:center;gap:14px;margin-bottom:6px}
+  .fam-head .dot{width:16px;height:16px;border-radius:50%;flex:none}
+  .fam-head h2{font-weight:800;font-size:28px;letter-spacing:-.5px}
+  .fam-kind{font-size:13px;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);
+    font-weight:600;margin-bottom:18px}
+  .panel p.blurb{font-weight:300;font-size:15.5px;line-height:1.65;color:var(--muted);margin-bottom:16px}
+  .asking{
+    border-left:3px solid var(--teal);padding:4px 0 4px 16px;margin:18px 0;
+    font-size:15px;line-height:1.6;color:rgba(255,255,255,.85);font-weight:500;
+  }
+  .asking b{display:block;font-size:12px;letter-spacing:2.5px;text-transform:uppercase;
+    color:var(--teal);margin-bottom:6px;font-weight:800}
+  .ph{
+    font-weight:800;font-size:12.5px;letter-spacing:2.5px;text-transform:uppercase;
+    color:rgba(255,255,255,.55);margin:22px 0 12px;
+  }
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chips.body-chips span{
+    font-size:13.5px;font-weight:500;color:var(--muted);
+    padding:7px 13px;border-radius:100px;border:1px solid rgba(255,255,255,.13);
+    background:rgba(255,255,255,.04);
+  }
+  .chips button{
+    font-family:inherit;font-size:14px;font-weight:600;color:var(--white);
+    padding:8px 15px;border-radius:100px;cursor:pointer;
+    border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.05);
+    transition:border-color .2s,background .2s,transform .12s;
+  }
+  .chips button:hover{border-color:rgba(255,255,255,.4)}
+  .chips button:active{transform:scale(.97)}
+  .chips button.on{border-color:var(--teal);background:rgba(24,192,192,.14);color:#9FEDEB}
+  .word-card{
+    margin-top:20px;border-radius:18px;padding:22px 24px;
+    background:rgba(24,192,192,.07);border:1px solid rgba(24,192,192,.28);
+    animation:m-rise .45s cubic-bezier(.16,1,.3,1) both;
+  }
+  .word-card .w{font-weight:800;font-size:23px;letter-spacing:-.3px}
+  .word-card .ring{font-size:12px;letter-spacing:2px;text-transform:uppercase;
+    font-weight:700;color:var(--teal);margin:4px 0 12px}
+  .word-card .d{font-weight:300;font-size:15.5px;line-height:1.62;color:rgba(255,255,255,.85)}
+  .word-card .say{
+    margin-top:14px;font-size:14.5px;color:var(--muted);font-weight:500;
+  }
+  .word-card .say i{color:var(--white);font-style:normal;font-weight:700}
+  .qs{list-style:none;margin-top:4px}
+  .qs li{
+    font-size:14.5px;line-height:1.55;color:var(--muted);font-weight:400;
+    padding:8px 0 8px 26px;position:relative;
+  }
+  .qs li::before{
+    content:'';position:absolute;left:2px;top:15px;width:7px;height:7px;
+    border-radius:50%;background:var(--teal);
+  }
+
+  /* guided flow */
+  .guide{
+    background:linear-gradient(135deg,rgba(38,46,59,.66),rgba(30,37,48,.58));
+    border:1px solid var(--line);border-radius:26px;padding:40px 42px;
+    -webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);
+    box-shadow:0 24px 60px rgba(0,0,0,.30);
+  }
+  @media (max-width:640px){.guide{padding:30px 22px}}
+  .guide-top{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:26px;flex-wrap:wrap}
+  .guide-q{font-weight:800;font-size:clamp(21px,2.6vw,27px);letter-spacing:-.4px;line-height:1.25}
+  .dots{display:flex;gap:8px;flex:none}
+  .dots i{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.18);transition:background .3s}
+  .dots i.on{background:var(--teal)}
+  .opts{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+  .opts.words{grid-template-columns:repeat(auto-fill,minmax(160px,1fr))}
+  .opt{
+    display:flex;align-items:center;gap:14px;text-align:left;
+    font-family:inherit;color:var(--white);cursor:pointer;
+    background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.13);
+    border-radius:16px;padding:17px 19px;
+    transition:border-color .2s,background .2s,transform .12s;
+  }
+  .opt:hover{border-color:rgba(255,255,255,.4);background:rgba(255,255,255,.08)}
+  .opt:active{transform:scale(.985)}
+  .opt .dot{width:13px;height:13px;border-radius:50%;flex:none}
+  .opt .t{font-weight:800;font-size:16px}
+  .opt .s{font-weight:400;font-size:13.5px;color:var(--muted);margin-top:3px;line-height:1.45}
+  .opt.big{flex-direction:column;align-items:flex-start;gap:6px;padding:22px}
+  .guide-back{
+    margin-top:22px;background:none;border:none;cursor:pointer;font-family:inherit;
+    color:var(--muted);font-size:14.5px;font-weight:600;padding:6px 2px;
+  }
+  .guide-back:hover{color:var(--white)}
+  .g-result{animation:m-rise .5s cubic-bezier(.16,1,.3,1) both}
+  .g-result .lead-line{font-size:15px;color:var(--muted);font-weight:500;margin-bottom:8px}
+  .g-result .big-word{font-weight:800;font-size:clamp(34px,5vw,52px);letter-spacing:-1px;line-height:1.05}
+  .g-result .fam-line{margin:14px 0 20px;font-size:14px;letter-spacing:2px;
+    text-transform:uppercase;font-weight:700}
+  .g-result .def{font-weight:300;font-size:17px;line-height:1.65;color:rgba(255,255,255,.88);max-width:56ch}
+  .g-result .blocks{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:26px}
+  @media (max-width:720px){.g-result .blocks{grid-template-columns:1fr}}
+  .g-block{
+    border:1px solid var(--line);border-radius:16px;padding:18px 20px;
+    background:rgba(255,255,255,.035);
+  }
+  .g-block b{display:block;font-size:12px;letter-spacing:2.5px;text-transform:uppercase;
+    color:var(--teal);margin-bottom:9px;font-weight:800}
+  .g-block p,.g-block li{font-size:14.5px;line-height:1.6;color:var(--muted);font-weight:400}
+  .g-block ul{list-style:none}
+  .g-block li{padding:2.5px 0}
+  .g-actions{display:flex;gap:12px;margin-top:28px;flex-wrap:wrap}
+
+  /* relations block in panel */
+  .rel{
+    margin:20px 0 4px;border:1px solid var(--line);border-radius:16px;
+    padding:16px 18px;background:rgba(255,255,255,.035);
+    font-size:14.5px;line-height:1.7;color:var(--muted);font-weight:400;
+  }
+  .rel b{display:block;font-size:12px;letter-spacing:2.5px;text-transform:uppercase;
+    color:rgba(255,255,255,.55);margin-bottom:8px;font-weight:800}
+  .rel-link{
+    background:none;border:none;padding:0;cursor:pointer;font-family:inherit;
+    font-size:inherit;font-weight:700;text-decoration:underline;
+    text-decoration-color:rgba(255,255,255,.25);text-underline-offset:3px;
+  }
+  .rel-link:hover{text-decoration-color:currentColor}
+
+  .g-hint{margin-top:20px;font-size:14.5px;color:var(--muted);font-weight:500}
+  .g-hint a{color:var(--teal);text-decoration:none;font-weight:700}
+  .g-hint a:hover{text-decoration:underline}
+
+  /* check-in log */
+  .log-box{
+    margin-top:18px;border:1px solid var(--line);border-radius:22px;
+    padding:24px 28px;background:rgba(255,255,255,.03);
+  }
+  .log-top{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:14px}
+  .log-top #log-clear{
+    background:none;border:none;cursor:pointer;font-family:inherit;
+    color:rgba(255,255,255,.4);font-size:13px;font-weight:600;padding:4px;
+  }
+  .log-top #log-clear:hover{color:#ff9d9d}
+  .log-chip{
+    display:inline-flex;align-items:center;gap:8px;
+    font-size:13.5px;font-weight:600;color:var(--white);
+    padding:7px 13px;border-radius:100px;border:1px solid rgba(255,255,255,.13);
+    background:rgba(255,255,255,.04);
+  }
+  .log-chip i{width:9px;height:9px;border-radius:50%}
+  .log-chip em{font-style:normal;font-weight:400;font-size:12px;color:rgba(255,255,255,.45)}
+  .log-note{margin-top:14px;font-size:13px;line-height:1.6;color:rgba(255,255,255,.42);max-width:64ch}
+
+  /* section lede */
+  .section-lede{
+    font-weight:300;font-size:16.5px;line-height:1.65;color:var(--muted);
+    max-width:62ch;margin:-6px 0 24px;
+  }
+
+  /* blends */
+  .blends{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+  .blend{
+    display:flex;flex-direction:column;gap:10px;
+    border:1px solid var(--line);border-radius:16px;padding:18px 20px;
+    background:linear-gradient(135deg,rgba(38,46,59,.6),rgba(30,37,48,.5));
+    transition:border-color .25s,transform .25s;
+  }
+  .blend:hover{border-color:rgba(255,255,255,.3);transform:translateY(-2px)}
+  .blend .pair{display:flex;align-items:center;gap:9px;font-size:13.5px;font-weight:600;color:var(--muted)}
+  .blend .pair i{width:11px;height:11px;border-radius:50%;flex:none}
+  .blend .makes{font-weight:800;font-size:21px;letter-spacing:-.3px}
+
+  /* science cards */
+  .science{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:34px}
+  @media (max-width:760px){.science{grid-template-columns:1fr}}
+  .sci{
+    border:1px solid var(--line);border-radius:18px;padding:22px 24px;
+    background:rgba(255,255,255,.03);
+  }
+  .sci h4{font-weight:800;font-size:16.5px;margin-bottom:8px}
+  .sci p{font-weight:300;font-size:14.5px;line-height:1.62;color:var(--muted);margin-bottom:12px}
+  .sci a{font-size:12.5px;color:rgba(255,255,255,.45);text-decoration:none;font-weight:600;
+    letter-spacing:.3px;border-bottom:1px solid rgba(255,255,255,.15);padding-bottom:1px}
+  .sci a:hover{color:var(--teal);border-color:var(--teal)}
+
+  .g-result .blocks.three{grid-template-columns:1fr 1fr 1fr}
+  @media (max-width:900px){.g-result .blocks.three{grid-template-columns:1fr}}
+
+  /* closing note */
+  .note{max-width:660px}
+  .note p{font-weight:300;font-size:17px;line-height:1.75;color:var(--muted);margin-bottom:18px}
+  .note p b{color:var(--white);font-weight:600}
+
+  footer{
+    margin-top:80px;padding-top:36px;border-top:1px solid var(--line);
+    display:flex;align-items:center;gap:20px;flex-wrap:wrap;
+  }
+  footer img{width:44px;height:44px;display:block}
+  footer .who{font-size:14px;color:var(--muted);line-height:1.5}
+  footer .who b{color:var(--white)}
+  footer nav{margin-left:auto;display:flex;gap:22px;flex-wrap:wrap}
+  footer nav a{color:var(--muted);text-decoration:none;font-size:14px;font-weight:500}
+  footer nav a:hover{color:var(--teal)}
+
+  /* motion */
+  @keyframes m-rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+  .m-in{animation:m-rise .8s cubic-bezier(.16,1,.3,1) both}
+  .eyebrow.m-in{animation-delay:.05s}
+  h1.m-in{animation-delay:.16s}
+  .lede.m-in{animation-delay:.3s}
+  .cta-row.m-in{animation-delay:.44s}
+  .m-wait{opacity:0}
+  .m-seen{animation:m-rise .8s cubic-bezier(.16,1,.3,1) both;opacity:1}
+  @keyframes wheel-in{from{opacity:0;transform:scale(.92) rotate(-6deg)}to{opacity:1;transform:scale(1) rotate(0)}}
+  .wheelbox.m-seen svg{animation:wheel-in 1.1s cubic-bezier(.16,1,.3,1) both}
+  @media (prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
+    .m-in,.m-seen,.wheelbox.m-seen svg,.word-card,.g-result{animation:none!important;opacity:1!important}
+    .m-wait{opacity:1}
+    #wheel .fam-g{transition:none}
+  }
+</style>
+</head>
+<body>
+<div class="orb a"></div><div class="orb b"></div>
+<div class="wrap">
+
+  <header class="hero">
+    <div class="eyebrow m-in">A tool for naming what you feel</div>
+    <h1 class="m-in">The Emotional<br><span class="teal">Language Wheel</span></h1>
+    <p class="lede m-in">Vague feelings run your day from the background. Named feelings become information you can work with. This wheel holds eight emotion families and 160 precise words. Find the one that fits, learn what it means, where it shows up in your body, and what it may be asking of you.</p>
+    <div class="cta-row m-in">
+      <a class="btn" href="#find">Help me find my word</a>
+      <a class="btn ghost" href="#wheel-tool">Explore the wheel</a>
+    </div>
+  </header>
+
+  <div class="sect m-wait"><span>How to use it</span></div>
+  <div class="steps">
+    <div class="step m-wait">
+      <div class="n">01 · Notice</div>
+      <h3>Catch the signal</h3>
+      <p>Pause and check your body first. Tight jaw, heavy chest, buzzing stomach. Your body usually knows before your mind has words for it.</p>
+    </div>
+    <div class="step m-wait">
+      <div class="n">02 · Name</div>
+      <h3>Find the exact word</h3>
+      <p>Start with the family in the centre, then move outward until a word lands. "Frustrated" and "resentful" are cousins, but they ask for very different things.</p>
+    </div>
+    <div class="step m-wait">
+      <div class="n">03 · Listen</div>
+      <h3>Hear what it wants</h3>
+      <p>Every emotion carries a message. Anger defends a line. Sadness honours a loss. Fear asks for safety. Once you hear the message, you can choose your response.</p>
+    </div>
+  </div>
+
+  <div class="sect m-wait" id="wheel-tool"><span>The wheel</span></div>
+
+  <div class="searchbar m-wait">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+    <input type="text" id="search" placeholder="Search a feeling, for example overwhelmed" autocomplete="off" aria-label="Search for a feeling word">
+    <div class="search-results" id="search-results" role="listbox"></div>
+  </div>
+
+  <div class="tool">
+    <div class="wheelbox m-wait">
+      <svg id="wheel" viewBox="0 0 1000 1000" role="img" aria-label="The Emotional Language Wheel. Eight emotion families with quieter words on the inner ring and stronger words on the outer ring."></svg>
+      <p class="wheel-hint">Tap a family to open it. Tap any word for its meaning. Quieter words sit on the inner ring, stronger words on the outer ring.</p>
+    </div>
+    <aside class="panel m-wait" id="panel" aria-live="polite">
+      <p class="empty">Tap one of the eight families on the wheel, or search for a word above.<br><br><b>Not sure where to start?</b> Scroll down and let the guided version walk you there in three steps.</p>
+    </aside>
+  </div>
+
+  <div class="sect m-wait" id="find"><span>Find your word</span></div>
+  <div class="guide m-wait" id="guide"></div>
+  <div class="log-box" id="log" style="display:none"></div>
+
+  <div class="sect m-wait" id="settle"><span>When it feels too big</span></div>
+  <p class="section-lede m-wait">Sometimes a feeling is too loud to name from inside it. That is not failure, it is physiology. These three practices turn the volume down far enough for words to reach you again.</p>
+  <div class="steps">
+    <div class="step m-wait">
+      <div class="n">Practice one</div>
+      <h3>The double breath</h3>
+      <p>Two short breaths in through the nose, then one long, slow breath out through the mouth. Repeat for a minute, or five. In a Stanford trial, five minutes a day of this sigh-led breathing lifted mood and calmed the body more than meditation did.</p>
+    </div>
+    <div class="step m-wait">
+      <div class="n">Practice two</div>
+      <h3>Say the word out loud</h3>
+      <p>Literally. "I feel furious." Brain imaging shows that putting a feeling into words quietens the amygdala, the brain's alarm centre. Naming is not wallowing. It is how the alarm learns that someone is at the controls.</p>
+    </div>
+    <div class="step m-wait">
+      <div class="n">Practice three</div>
+      <h3>Let the body finish it</h3>
+      <p>Find where the feeling sits, chest, jaw, stomach, and rest your attention there without the story. Feelings move like waves. If you stay with the sensation instead of the commentary, the wave usually passes sooner than you expect.</p>
+    </div>
+  </div>
+
+  <div class="sect m-wait"><span>How feelings combine</span></div>
+  <p class="section-lede m-wait">Feelings rarely arrive one at a time. On the wheel, neighbouring families blend into something new. If no single word quite fits, you may be holding a blend of two.</p>
+  <div class="blends">
+    <div class="blend m-wait"><span class="pair"><i style="background:#F2CE4B"></i>Joy + Trust<i class="d2" style="background:#63D07C"></i></span><span class="makes">Love</span></div>
+    <div class="blend m-wait"><span class="pair"><i style="background:#F0A055"></i>Anticipation + Joy<i class="d2" style="background:#F2CE4B"></i></span><span class="makes">Optimism</span></div>
+    <div class="blend m-wait"><span class="pair"><i style="background:#63D07C"></i>Trust + Fear<i class="d2" style="background:#3FCFA4"></i></span><span class="makes">Submission</span></div>
+    <div class="blend m-wait"><span class="pair"><i style="background:#3FCFA4"></i>Fear + Surprise<i class="d2" style="background:#4FC4EE"></i></span><span class="makes">Awe</span></div>
+    <div class="blend m-wait"><span class="pair"><i style="background:#4FC4EE"></i>Surprise + Sadness<i class="d2" style="background:#6D9EF2"></i></span><span class="makes">Disappointment</span></div>
+    <div class="blend m-wait"><span class="pair"><i style="background:#6D9EF2"></i>Sadness + Disgust<i class="d2" style="background:#D678E4"></i></span><span class="makes">Remorse</span></div>
+    <div class="blend m-wait"><span class="pair"><i style="background:#D678E4"></i>Disgust + Anger<i class="d2" style="background:#F0705F"></i></span><span class="makes">Contempt</span></div>
+    <div class="blend m-wait"><span class="pair"><i style="background:#F0705F"></i>Anger + Anticipation<i class="d2" style="background:#F0A055"></i></span><span class="makes">Aggression</span></div>
+  </div>
+
+  <div class="sect m-wait"><span>Why naming matters</span></div>
+  <div class="note">
+    <p class="m-wait"><b>Naming an emotion changes it.</b> The moment you move from "I feel bad" to "I feel resentful", the feeling loses some of its grip and gains a shape you can work with. Psychologists call this emotional granularity. I call it turning the lights on.</p>
+    <p class="m-wait">Feelings are information, not instructions. They tell you what matters, what hurts, what is missing and what needs protecting. You get to hear the message without obeying it blindly. That gap, between feeling something and acting on it, is where all your power lives.</p>
+    <p class="m-wait">So use this wheel slowly. Once a day is plenty. Ask yourself what you are feeling, find the word, save the check-in, and let the pattern teach you something over the weeks. Where attention goes, energy flows.</p>
+  </div>
+  <div class="science">
+    <div class="sci m-wait">
+      <h4>Naming calms the brain</h4>
+      <p>In brain imaging at UCLA, putting a feeling into words lowered activity in the amygdala, the brain's alarm system, and engaged the reasoning cortex instead.</p>
+      <a href="https://www.scn.ucla.edu/pdf/AL(2007).pdf" target="_blank" rel="noopener">Lieberman and colleagues, 2007</a>
+    </div>
+    <div class="sci m-wait">
+      <h4>Precision is a skill</h4>
+      <p>People who can tell frustrated from resentful from disappointed regulate their emotions better and act on them less impulsively. The skill grows with practice, like any vocabulary.</p>
+      <a href="https://en.wikipedia.org/wiki/Emotional_granularity" target="_blank" rel="noopener">Barrett and colleagues, on emotional granularity</a>
+    </div>
+    <div class="sci m-wait">
+      <h4>Feelings live in the body</h4>
+      <p>When more than 700 people mapped where they feel emotions, each basic emotion showed its own consistent pattern in the body. Your body is data, not noise.</p>
+      <a href="https://emotion.utu.fi/wp-content/uploads/2016/11/Nummenmaa_et_al_PNAS_2014.pdf" target="_blank" rel="noopener">Nummenmaa and colleagues, 2014</a>
+    </div>
+    <div class="sci m-wait">
+      <h4>Five minutes is enough</h4>
+      <p>In a Stanford study, five minutes a day of slow, sigh-led breathing improved mood and reduced anxiety within a month, outperforming mindfulness meditation.</p>
+      <a href="https://pubmed.ncbi.nlm.nih.gov/36630953/" target="_blank" rel="noopener">Balban and colleagues, 2023</a>
+    </div>
+  </div>
+
+  <footer>
+    <img src="/assets/fe-logo.png" alt="Francois Esterhuizen tree logo">
+    <div class="who"><b>Francois Esterhuizen</b><br>© The Emotional Language Wheel</div>
+    <nav>
+      <a href="/">All resources</a>
+      <a href="https://www.francoisesterhuizen.com" target="_blank" rel="noopener">francoisesterhuizen.com</a>
+    </nav>
+  </footer>
+
+</div>
+
+<script>
+// ========================== DATA ==========================
+// Word arrays run clockwise: index 0 sits at the family's anticlockwise edge.
+// Every word carries its own definition, written for this resource.
+var FAMILIES = [
+{ id:'joy', name:'Joy', colour:'#F2CE4B', start:315,
+  opposite:'sadness', blends:[['trust','love'],['anticipation','optimism']],
+  descriptor:'Something feels good, warm or alive',
+  blurb:'Joy is the signal that something matters to you and is going well. It opens you up: to people, to play, to possibility. It is not a reward you must earn by finishing your growth. It is fuel for it.',
+  asking:'Savour it. Share it with someone. Let it land properly before you rush on to the next thing.',
+  body:['A warm buzz','Energetic','Ready to take action','Light','Smiling','Humming or whistling','A bounce in your step'],
+  questions:['What exactly is good here, in one sentence?','Who could you share this with today?','What would it look like to let this last ten minutes longer?'],
+  mild:[
+    ['Curious','Drawn to look closer. Something here invites you in.'],
+    ['Hopeful','Quietly expecting that good is possible from here.'],
+    ['Satisfied','Something is complete, and it was enough.'],
+    ['Content','Nothing is missing right now. You are at ease with what is.'],
+    ['Happy','A light, warm lift. Life feels good in this moment.'],
+    ['Mellow','Soft and unhurried. The edges have gone quiet.'],
+    ['Thankful','Warmed by what you have received, and aware of it.'],
+    ['Peaceful','Still inside. Nothing needs defending or fixing.'],
+    ['Interested','Awake to this. Your attention wants to stay.'],
+    ['Serene','A deep, settled calm that does not depend on circumstances.']
+  ],
+  intense:[
+    ['Optimistic','Confident that the road ahead bends towards good.'],
+    ['Proud','Standing taller because of what you, or yours, have done.'],
+    ['Delighted','Bright, bubbling pleasure at something specific.'],
+    ['Enthusiastic','Full of energy for it and keen to begin.'],
+    ['Elated','Lifted high. Joy with altitude.'],
+    ['Ecstatic','Overflowing. Almost more joy than your body can hold.'],
+    ['Powerful','Capable and strong. You can act on your world.'],
+    ['Passionate','All of you is in it, heart first.'],
+    ['Courageous','Afraid, perhaps, and moving forward anyway.'],
+    ['Excited','Buzzing with energy for what is happening or coming.']
+  ]},
+{ id:'trust', name:'Trust', colour:'#63D07C', start:0,
+  opposite:'disgust', blends:[['joy','love'],['fear','submission']],
+  descriptor:'I feel safe with someone or something',
+  blurb:'Trust is the feeling of a lowered guard. It tells you that someone or something has proven safe enough to lean on. Connection is built here, one small deposit at a time.',
+  asking:'Notice who earned it, and tell them. Notice too where you hand it out too quickly, or hold it back where it has been earned.',
+  body:['Low heart rate','Loose muscles','Slower, deeper breathing','Attention narrowing onto who or what you trust','Less awareness of your surroundings'],
+  questions:['Who or what has quietly earned your trust lately?','Where are you waiting for certainty when trust is what is actually needed?','What small deposit could you make in someone else’s trust in you?'],
+  mild:[
+    ['Submissive','Willing to let someone else lead here.'],
+    ['Unconcerned','Relaxed about it. No alarm bells at all.'],
+    ['Sentimental','Tender towards a memory or a keepsake of connection.'],
+    ['Supported','Held up. Someone has your back.'],
+    ['Ambivalent','Pulled both ways at once about the same thing.'],
+    ['Dependant','Leaning on someone, and needing them to hold.'],
+    ['Condoning','Letting it pass, whether or not you fully approve.'],
+    ['Accepting','Taking it, or them, as they are.'],
+    ['Tolerant','Making room for what you would not choose yourself.'],
+    ['Safe','Guard down. Nothing here needs defending.']
+  ],
+  intense:[
+    ['Nostalgic','Aching fondly for a time that felt like home.'],
+    ['Convinced','Settled and sure. The question is closed for you.'],
+    ['Committed','All in. You have chosen, and you are staying.'],
+    ['Reliable','Steady in yourself. Others could build on you.'],
+    ['Confident','Sure of yourself and of your footing here.'],
+    ['Loving','Warmth flowing outward. You want their good.'],
+    ['Admiring','Looking up at someone with warmth and respect.'],
+    ['Reverent','Quiet awe before something greater than you.'],
+    ['Obsessed','Unable to put it down. It has taken the wheel.'],
+    ['Adoring','Devoted delight. They can do little wrong in your eyes.']
+  ]},
+{ id:'fear', name:'Fear', colour:'#3FCFA4', start:45,
+  opposite:'anger', blends:[['trust','submission'],['surprise','awe']],
+  descriptor:'Something feels unsafe or too big',
+  blurb:'Fear is your protection system. It narrows your attention onto what might hurt you, and it would rather be wrong a hundred times than miss one real danger. It is loyal, but it is not always accurate.',
+  asking:'Safety first, then perspective. Ask what would help you feel two steps safer. Then check the size of the story against the size of the facts.',
+  body:['Burning cold inside','Stuck or frozen in place','Sweaty hands','Tense muscles','Fast breathing','Feeling cold','Goosebumps','On high alert','An unsettled, windy stomach'],
+  questions:['What exactly feels at risk right now?','Honestly, out of a hundred, how likely is that outcome?','What is one thing that would make you feel two steps safer?'],
+  mild:[
+    ['Tense','Body tight, braced for something.'],
+    ['Uneasy','Something is off, though you cannot yet say what.'],
+    ['Concerned','Care with an edge. Something may need your attention.'],
+    ['Worried','Turning a possible bad outcome over and over.'],
+    ['Uncomfortable','Wanting to shift away from this, in body or in company.'],
+    ['Nervous','Jittery before something that matters.'],
+    ['Anxious','Wound tight about what might happen, body on alert.'],
+    ['Submissive','Making yourself small so the threat passes by.'],
+    ['Exposed','Seen without your cover. Nowhere to hide.'],
+    ['Apprehensive','Bracing quietly for what is coming.']
+  ],
+  intense:[
+    ['Horrified','Recoiling from something too awful to take in.'],
+    ['Humiliated','Made small in front of others, and burning with it.'],
+    ['Scared','Danger feels close, and your body knows it.'],
+    ['Helpless','Nothing you do seems able to change this.'],
+    ['Overwhelmed','More than you can hold. The wave is over your head.'],
+    ['Threatened','Something is coming for what you need to protect.'],
+    ['Hysterical','Fear has taken the controls, and you cannot steady yourself.'],
+    ['Panic','Alarm at full volume. Think later, escape now.'],
+    ['Dread','A heavy certainty that something bad is on its way.'],
+    ['Terrified','Fear at full force, body and mind flooded.']
+  ]},
+{ id:'surprise', name:'Surprise', colour:'#4FC4EE', start:90,
+  opposite:'anticipation', blends:[['fear','awe'],['sadness','disappointment']],
+  descriptor:'Something unexpected has just happened',
+  blurb:'Surprise is the reset button on your attention. Something did not fit your map of the world, and everything pauses while the map updates. It is the shortest emotion, and what follows it is your choice point.',
+  asking:'Pause before you respond. Let the new information land before you decide what it means.',
+  body:['Stuck or frozen in place','Eyes wide','Jaw dropped','Shallow, fast breathing','An uncontrolled physical response'],
+  questions:['What did you believe five minutes before this happened?','What does this new information change, and what does it not change?','What response would you be proud of tomorrow?'],
+  mild:[
+    ['Disconcerted','Knocked slightly off balance by what just happened.'],
+    ['Distracted','Pulled away from where your attention was.'],
+    ['Startled','Jolted for a moment by the unexpected.'],
+    ['Perplexed','Puzzling over something that will not add up.'],
+    ['Confused','The pieces do not fit together yet.'],
+    ['Wondering','Turning it over, open and curious about the answer.'],
+    ['Unnerved','Your calm has slipped and not yet returned.'],
+    ['Unsettled','Shaken out of steady, not yet back on the ground.'],
+    ['Incredulous','Struggling to believe this is real.'],
+    ['Baffled','Completely stumped. No thread to pull.']
+  ],
+  intense:[
+    ['Shocked','Hit hard by the unexpected. The ground moved.'],
+    ['Mortified','Wishing the floor would open. Embarrassment at full strength.'],
+    ['Astonished','Amazed beyond what you thought possible.'],
+    ['Speechless','No words arrive. It is too much to answer.'],
+    ['Astounded','Astonishment with force behind it. You can hardly believe it.'],
+    ['Confused','Thoroughly lost. Nothing is where you left it.'],
+    ['Bewildered','Lost in what is happening, with no map.'],
+    ['Dazed','Foggy and slowed. It has not landed yet.'],
+    ['Stunned','Stopped in your tracks, frozen mid thought.'],
+    ['Awestruck','Wonder so large it silences you.']
+  ]},
+{ id:'sadness', name:'Sadness', colour:'#6D9EF2', start:135,
+  opposite:'joy', blends:[['surprise','disappointment'],['disgust','remorse']],
+  descriptor:'Something is lost, missing or heavy',
+  blurb:'Sadness honours what you have lost or long for. It slows the whole system down so the loss can be digested, and it signals to others that you need gentleness. Tears are not a malfunction.',
+  asking:'Comfort, not fixing. Time, not pressure. Let someone see it if you can.',
+  body:['A heavy heart','Deep sighs','Crying, or the desire to cry','Slouched or closed posture','A hollow pit in the stomach','Physically weak'],
+  questions:['What have you lost, or what are you missing?','What did that person or thing mean to you?','Who is safe enough to see this with you?'],
+  mild:[
+    ['Tired','Worn down and low on fuel, in body or in heart.'],
+    ['Fragile','One small knock away from tears or breaking.'],
+    ['Down','The colour has drained a little from things.'],
+    ['Melancholy','A soft, lingering sadness, almost sweet.'],
+    ['Pensive','Deep in thought, tinged with sadness.'],
+    ['Apathetic','Unable to make yourself care. Flat.'],
+    ['Disappointed','What you hoped for did not come.'],
+    ['Critical','Finding fault, often with yourself, from a low place.'],
+    ['Distant','Pulled back behind glass. Present, but far away.'],
+    ['Regretful','Wishing you had chosen differently.']
+  ],
+  intense:[
+    ['Grief','The deep ache of real loss.'],
+    ['Powerless','Stripped of any handle on what is happening.'],
+    ['Ashamed','Feeling wrong in yourself, not just about what you did.'],
+    ['Abandoned','Left behind by someone you needed to stay.'],
+    ['Inconsolable','Comfort cannot reach where this hurts.'],
+    ['Despair','Hope has gone dark.'],
+    ['Anguish','Pain of the heart at full strength.'],
+    ['Hopeless','Unable to see a way this gets better.'],
+    ['Dismayed','Sunk by something you did not want to be true.'],
+    ['Remorseful','Carrying real sorrow for harm you caused.']
+  ]},
+{ id:'disgust', name:'Disgust', colour:'#D678E4', start:180,
+  opposite:'trust', blends:[['sadness','remorse'],['anger','contempt']],
+  descriptor:'Something feels wrong, off or beneath respect',
+  blurb:'Disgust is your gatekeeper. It began with food and grew up to guard your values: it turns you away from what would poison you, physically or morally. When it starts aiming at whole people, though, it needs examining.',
+  asking:'Name the value underneath the reaction. Then choose distance, or a conversation, on purpose.',
+  body:['Nausea','A wrinkled nose','A curled upper lip','Shuddering','Recoiling from the source','Tongue pushing out'],
+  questions:['What value of yours is this reaction protecting?','Is your no aimed at this action, or has it spread to the whole person?','What would honouring that value look like today?'],
+  mild:[
+    ['Embarrassed','Caught out and flushed in front of others.'],
+    ['Hesitant','Holding back. Something in you will not step forward.'],
+    ['Disapproving','It falls short of what you believe is right, and you feel the no.'],
+    ['Judgemental','Quick to measure others, and finding them short.'],
+    ['Contemptuous','Scorn with heat in it. You reject what they stand for.'],
+    ['Indifferent','It stirs nothing in you either way.'],
+    ['Bothered','Something is niggling at you and will not leave you be.'],
+    ['Disdain','Looking down on it. Beneath your respect.'],
+    ['Apathetic','Switched off from caring either way.'],
+    ['Bored','Nothing here holds you. Your attention is starving.']
+  ],
+  intense:[
+    ['Awful','Heavy with how bad this is, through and through.'],
+    ['Offended','A value of yours has been stepped on.'],
+    ['Repelled','Pushed back as if by force. You cannot stay near it.'],
+    ['Revolted','Everything in you turns away from it.'],
+    ['Nauseated','Physically turned. Your body says no.'],
+    ['Horrified','Repulsed and frightened at once by what you see.'],
+    ['Appalled','Struck by how far below decent this falls.'],
+    ['Sickened','Wrong enough that your stomach agrees.'],
+    ['Scandalised','Shocked at a line you hold sacred being crossed.'],
+    ['Loathing','A deep, settled hatred of what this is.']
+  ]},
+{ id:'anger', name:'Anger', colour:'#F0705F', start:225,
+  opposite:'fear', blends:[['disgust','contempt'],['anticipation','aggression']],
+  descriptor:'A line has been crossed, or my way is blocked',
+  blurb:'Anger is a boundary with energy behind it. It rises when something you care about is blocked, threatened or treated unfairly, and it hands you the fuel to do something about it. The feeling is information. The behaviour is a choice.',
+  asking:'Find the line that was crossed and name it. Ask for the change you actually want, at the volume you would want to be asked.',
+  body:['Feeling hot','A racing heart','Clenched fists or jaw','Eyes wide','Eyebrows drawn','A short fuse','Hyper alert','Tight muscles'],
+  questions:['What line was crossed, exactly?','What do you want to be different, in one sentence?','What would the calm, strong version of this conversation sound like?'],
+  mild:[
+    ['Peeved','Mildly put out about something small but real.'],
+    ['Distant','Anger gone cold. You have withdrawn behind it.'],
+    ['Sceptical','Unconvinced. You want proof before you extend trust.'],
+    ['Critical','A sharpened eye, hunting for what is wrong.'],
+    ['Vexed','Bothered by a problem that keeps poking at you.'],
+    ['Grumpy','A low grumble at everything within reach.'],
+    ['Agitated','Stirred up and restless. Hard to settle.'],
+    ['Annoyed','A small, sharp no towards something in your space.'],
+    ['Irritated','Rubbed the wrong way, again.'],
+    ['Frustrated','Blocked from what you are trying to do.']
+  ],
+  intense:[
+    ['Resentful','Carrying a wrong that was never put right, and keeping it warm.'],
+    ['Hateful','Wishing ill. Anger hardened towards someone.'],
+    ['Indignant','Angry on principle. This is not right, and you know it.'],
+    ['Enraged','Anger so hot it wants to take over completely.'],
+    ['Mad','Plainly angry, and not hiding it.'],
+    ['Violated','A line that protects you was crossed without your consent.'],
+    ['Aggressive','Ready to push back hard, and first if needed.'],
+    ['Furious','Anger at a rolling boil.'],
+    ['Hostile','Guard up and weapons out. They feel like the enemy.'],
+    ['Exasperated','Patience finished. You have had enough of this.']
+  ]},
+{ id:'anticipation', name:'Anticipation', colour:'#F0A055', start:270,
+  opposite:'surprise', blends:[['anger','aggression'],['joy','optimism']],
+  descriptor:'Something is coming, and my body is getting ready',
+  blurb:'Anticipation is your system rehearsing the future. It readies your body before anything has happened, which is useful before a race and exhausting before an inbox. It runs on imagination, so it is worth checking what film it is playing.',
+  asking:'Prepare what can be prepared, then come back to now. This moment is the only place anything can actually be done.',
+  body:['Tense muscles','A cold stomach','Buzzing inside','Unable to stop moving','Faster breathing','Wide eyes','Posture opening or closing'],
+  questions:['What are you rehearsing, and how does the film end?','What can you prepare in the next hour, and what is out of your hands?','What is true right now, in this room, before the future arrives?'],
+  mild:[
+    ['Interested','Attention caught by what might unfold.'],
+    ['Apprehensive','Uneasy about what is coming.'],
+    ['Hopeful','Holding a good outcome gently in mind.'],
+    ['Optimistic','Leaning towards it going well.'],
+    ['Pessimistic','Braced for it to go badly.'],
+    ['Concerned','Watching a possible problem take shape.'],
+    ['Expectant','Leaning forward. Something is about to happen.'],
+    ['Prepared','Ready. You have done what can be done.'],
+    ['Pensive','Lost in thought about what lies ahead.'],
+    ['Cautious','Moving forward, but testing each step.']
+  ],
+  intense:[
+    ['Cynical','Expecting the worst of people before they move.'],
+    ['Inflamed','Worked up and burning to respond.'],
+    ['Foreboding','A shadow ahead that you can feel but not name.'],
+    ['Vigilant','Eyes everywhere. Nothing will catch you off guard.'],
+    ['Aggressive','Braced to strike the moment it starts.'],
+    ['Agitated','Churned up. The waiting has become hard work.'],
+    ['Giddy','Fizzing and light headed with what is coming.'],
+    ['Anxious','What might happen has taken over your body.'],
+    ['Tense','Wound tight, waiting for the starting gun.'],
+    ['Dread','Certain something bad is coming, and counting down.']
+  ]}
+];
+
+// ========================== WHEEL ==========================
+var SVG = 'http://www.w3.org/2000/svg';
+var CX = 500, CY = 500;
+var R_HOLE = 92, R_BASE = 200, R_MILD = 345, R_INT = 490;
+var wheel = document.getElementById('wheel');
+var state = { fam:null, ring:null, word:null };
+
+function pt(r, deg){
+  var a = deg * Math.PI / 180;
+  return [CX + r * Math.sin(a), CY - r * Math.cos(a)];
+}
+function arcPath(r1, r2, a1, a2){
+  var large = (a2 - a1) > 180 ? 1 : 0;
+  var p1 = pt(r2, a1), p2 = pt(r2, a2), p3 = pt(r1, a2), p4 = pt(r1, a1);
+  return 'M' + p1[0].toFixed(2) + ' ' + p1[1].toFixed(2) +
+    ' A' + r2 + ' ' + r2 + ' 0 ' + large + ' 1 ' + p2[0].toFixed(2) + ' ' + p2[1].toFixed(2) +
+    ' L' + p3[0].toFixed(2) + ' ' + p3[1].toFixed(2) +
+    ' A' + r1 + ' ' + r1 + ' 0 ' + large + ' 0 ' + p4[0].toFixed(2) + ' ' + p4[1].toFixed(2) + ' Z';
+}
+function el(name, attrs, parent){
+  var n = document.createElementNS(SVG, name);
+  for (var k in attrs) n.setAttribute(k, attrs[k]);
+  if (parent) parent.appendChild(n);
+  return n;
+}
+
+function buildWheel(){
+  FAMILIES.forEach(function(fam){
+    var g = el('g', { 'class':'fam-g', 'data-fam':fam.id, tabindex:0, role:'button',
+      'aria-label':fam.name + ' family. Press to open.' }, wheel);
+    var s = fam.start;
+
+    // base sector
+    el('path', { 'class':'base', d:arcPath(R_HOLE, R_BASE, s, s+45),
+      fill:fam.colour, 'fill-opacity':.62, stroke:'#1B222D', 'stroke-width':2.5 }, g);
+
+    // ring bands and words
+    [['mild', R_BASE, R_MILD, .18, 21.5], ['intense', R_MILD, R_INT, .4, 23]].forEach(function(cfg){
+      var ring = cfg[0], r1 = cfg[1], r2 = cfg[2], op = cfg[3], fs = cfg[4];
+      fam[ring].forEach(function(pair, i){
+        var a1 = s + i * 4.5, a2 = a1 + 4.5, amid = a1 + 2.25;
+        var seg = el('path', { 'class':'seg', d:arcPath(r1, r2, a1, a2),
+          fill:fam.colour, 'fill-opacity':op, stroke:'rgba(27,34,45,.55)', 'stroke-width':1,
+          'data-fam':fam.id, 'data-ring':ring, 'data-i':i }, g);
+        el('title', {}, seg).textContent = pair[0] + ' · ' + fam.name;
+        var rmid = (r1 + r2) / 2;
+        var p = pt(rmid, amid);
+        var flip = ((amid % 360) + 360) % 360 > 180;
+        var rot = flip ? amid + 90 : amid - 90;
+        var t = el('text', { 'class':'ring-word' + (ring === 'intense' ? ' strong' : ''),
+          x:p[0].toFixed(1), y:p[1].toFixed(1), 'font-size':fs,
+          'text-anchor':'middle', 'dominant-baseline':'central',
+          transform:'rotate(' + rot.toFixed(1) + ' ' + p[0].toFixed(1) + ' ' + p[1].toFixed(1) + ')' }, g);
+        t.textContent = pair[0];
+        var approx = pair[0].length * fs * .58;
+        var max = (r2 - r1) - 22;
+        if (approx > max) t.setAttribute('textLength', max), t.setAttribute('lengthAdjust','spacingAndGlyphs');
+      });
+      // family boundary stroke over the band
+      el('path', { d:arcPath(r1, r2, s, s+45), fill:'none',
+        stroke:'#1B222D', 'stroke-width':2.5, 'pointer-events':'none' }, g);
+    });
+
+    // family label, horizontal like the printed wheel.
+    // The sector narrows towards the hub, so long names get sized to the chord they sit on.
+    var lr = (R_HOLE + R_BASE) / 2 + 6;
+    var lp = pt(lr, s + 22.5);
+    var avail = lr * (45 * Math.PI / 180) - 16;
+    var fs = Math.min(26, Math.max(17, avail / (fam.name.length * 0.56)));
+    var lbl = el('text', { 'class':'base-lbl', x:lp[0].toFixed(1), y:lp[1].toFixed(1),
+      'font-size':fs.toFixed(1), 'text-anchor':'middle',
+      'dominant-baseline':'central' }, g);
+    lbl.textContent = fam.name;
+    if (fam.name.length * fs * 0.56 > avail){
+      lbl.setAttribute('textLength', avail.toFixed(0));
+      lbl.setAttribute('lengthAdjust', 'spacingAndGlyphs');
+    }
+
+    g.addEventListener('click', function(e){
+      var seg = e.target.closest('path.seg');
+      if (seg) selectWord(fam.id, seg.getAttribute('data-ring'), +seg.getAttribute('data-i'));
+      else selectFamily(fam.id);
+    });
+    g.addEventListener('keydown', function(e){
+      if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); selectFamily(fam.id); }
+    });
+  });
+
+  // centre
+  el('circle', { cx:CX, cy:CY, r:R_HOLE - 4, fill:'#1B222D',
+    stroke:'rgba(255,255,255,.18)', 'stroke-width':1.5 }, wheel);
+  el('text', { id:'centre-top', 'class':'centre-top', x:CX, y:CY - 26,
+    'font-size':13, 'text-anchor':'middle' }, wheel).textContent = 'Start here';
+  var cm = el('text', { id:'centre-main', 'class':'centre-main', x:CX, y:CY + 8,
+    'font-size':30, 'text-anchor':'middle' }, wheel);
+  cm.textContent = 'How do';
+  el('text', { id:'centre-main2', 'class':'centre-main', x:CX, y:CY + 42,
+    'font-size':30, 'text-anchor':'middle' }, wheel).textContent = 'I feel?';
+}
+
+function famById(id){ return FAMILIES.filter(function(f){ return f.id === id; })[0]; }
+
+function setCentre(fam){
+  var top = document.getElementById('centre-top');
+  var m1 = document.getElementById('centre-main');
+  var m2 = document.getElementById('centre-main2');
+  if (!fam){ top.textContent = 'Start here'; m1.textContent = 'How do'; m2.textContent = 'I feel?';
+    m1.setAttribute('fill', '#fff'); return; }
+  top.textContent = 'The family of';
+  m1.textContent = fam.name; m1.setAttribute('fill', fam.colour);
+  m2.textContent = '';
+}
+
+function selectFamily(id, keepWord){
+  state.fam = id;
+  if (!keepWord){ state.ring = null; state.word = null; }
+  wheel.classList.add('has-sel');
+  var gs = wheel.querySelectorAll('.fam-g');
+  for (var i = 0; i < gs.length; i++) gs[i].classList.toggle('sel', gs[i].getAttribute('data-fam') === id);
+  var old = wheel.querySelector('.seg.word-sel');
+  if (old && !keepWord) old.classList.remove('word-sel');
+  setCentre(famById(id));
+  renderPanel();
+}
+
+function selectWord(famId, ring, i, scroll){
+  state.ring = ring; state.word = i;
+  selectFamily(famId, true);
+  var old = wheel.querySelector('.seg.word-sel');
+  if (old) old.classList.remove('word-sel');
+  var seg = wheel.querySelector('.seg[data-fam="' + famId + '"][data-ring="' + ring + '"][data-i="' + i + '"]');
+  if (seg) seg.classList.add('word-sel');
+  renderPanel();
+  if (scroll) document.getElementById('wheel-tool').scrollIntoView({ behavior:'smooth' });
+}
+
+// ========================== PANEL ==========================
+var panel = document.getElementById('panel');
+function esc(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
+
+function chipRow(fam, ring, label){
+  var h = '<div class="ph">' + label + '</div><div class="chips">';
+  fam[ring].forEach(function(pair, i){
+    var on = state.ring === ring && state.word === i;
+    h += '<button data-ring="' + ring + '" data-i="' + i + '"' + (on ? ' class="on"' : '') + '>' + esc(pair[0]) + '</button>';
+  });
+  return h + '</div>';
+}
+
+function relationsBlock(fam){
+  var opp = famById(fam.opposite);
+  var h = '<div class="rel"><b>On the wheel</b>Its opposite is <button class="rel-link" data-go="' + opp.id + '" style="color:' + opp.colour + '">' + opp.name + '</button>. ';
+  fam.blends.forEach(function(bl, i){
+    var other = famById(bl[0]);
+    h += 'Blended with <button class="rel-link" data-go="' + other.id + '" style="color:' + other.colour + '">' + other.name.toLowerCase() + '</button> it becomes ' + bl[1] + '.' + (i === 0 ? ' ' : '');
+  });
+  return h + '</div>';
+}
+
+function renderPanel(){
+  var fam = famById(state.fam);
+  if (!fam) return;
+  var h = '<div class="fam-head"><span class="dot" style="background:' + fam.colour + '"></span><h2>' + fam.name + '</h2></div>' +
+    '<div class="fam-kind">One of the eight basic emotions</div>' +
+    '<p class="blurb">' + fam.blurb + '</p>' +
+    '<div class="asking"><b>What it may be asking of you</b>' + fam.asking + '</div>' +
+    chipRow(fam, 'mild', 'Quieter words · inner ring') +
+    chipRow(fam, 'intense', 'Stronger words · outer ring');
+
+  if (state.ring !== null && state.word !== null){
+    var pair = fam[state.ring][state.word];
+    h += '<div class="word-card"><div class="w">' + esc(pair[0]) + '</div>' +
+      '<div class="ring">' + (state.ring === 'mild' ? 'A quieter form of ' : 'A stronger form of ') + fam.name + '</div>' +
+      '<div class="d">' + esc(pair[1]) + '</div>' +
+      '<div class="say">Try it out loud: <i>“I feel ' + esc(pair[0].toLowerCase()) + '.”</i></div></div>';
+  }
+
+  h += '<div class="ph">In your body, ' + fam.name.toLowerCase() + ' can feel like</div>' +
+    '<div class="chips body-chips">' + fam.body.map(function(b){ return '<span>' + esc(b) + '</span>'; }).join('') + '</div>' +
+    relationsBlock(fam) +
+    '<div class="ph">Questions worth sitting with</div>' +
+    '<ul class="qs">' + fam.questions.map(function(q){ return '<li>' + esc(q) + '</li>'; }).join('') + '</ul>';
+
+  panel.innerHTML = h;
+  panel.querySelectorAll('.chips button').forEach(function(b){
+    b.addEventListener('click', function(){
+      selectWord(state.fam, b.getAttribute('data-ring'), +b.getAttribute('data-i'));
+    });
+  });
+  panel.querySelectorAll('.rel-link').forEach(function(b){
+    b.addEventListener('click', function(){ selectFamily(b.getAttribute('data-go')); });
+  });
+}
+
+// ========================== SEARCH ==========================
+var searchInput = document.getElementById('search');
+var searchBox = document.getElementById('search-results');
+var INDEX = [];
+FAMILIES.forEach(function(f){
+  ['mild','intense'].forEach(function(ring){
+    f[ring].forEach(function(pair, i){
+      INDEX.push({ w:pair[0], fam:f, ring:ring, i:i });
+    });
+  });
+});
+
+function runSearch(){
+  var q = searchInput.value.trim().toLowerCase();
+  if (!q){ searchBox.classList.remove('open'); return; }
+  var hits = INDEX.filter(function(e){ return e.w.toLowerCase().indexOf(q) === 0; })
+    .concat(INDEX.filter(function(e){ return e.w.toLowerCase().indexOf(q) > 0; }))
+    .slice(0, 9);
+  if (!hits.length){
+    searchBox.innerHTML = '<div class="none">No word found. Try the guided version below.</div>';
+  } else {
+    searchBox.innerHTML = hits.map(function(e, n){
+      return '<button data-n="' + n + '"><span class="dot" style="background:' + e.fam.colour + '"></span>' +
+        esc(e.w) + '<span class="fam">' + e.fam.name + ' · ' + (e.ring === 'mild' ? 'quieter' : 'stronger') + '</span></button>';
+    }).join('');
+    searchBox.querySelectorAll('button').forEach(function(b, n){
+      b.addEventListener('click', function(){
+        var e = hits[n];
+        searchBox.classList.remove('open'); searchInput.value = e.w;
+        selectWord(e.fam.id, e.ring, e.i, true);
+      });
+    });
+  }
+  searchBox.classList.add('open');
+}
+searchInput.addEventListener('input', runSearch);
+searchInput.addEventListener('focus', runSearch);
+searchInput.addEventListener('keydown', function(e){
+  if (e.key === 'Enter'){
+    var first = searchBox.querySelector('button');
+    if (first) first.click();
+  }
+  if (e.key === 'Escape') searchBox.classList.remove('open');
+});
+document.addEventListener('click', function(e){
+  if (!e.target.closest('.searchbar')) searchBox.classList.remove('open');
+});
+
+// ========================== GUIDED FLOW ==========================
+var guide = document.getElementById('guide');
+var gState = { step:1, fam:null, ring:null };
+
+function dots(n){
+  var h = '<div class="dots">';
+  for (var i = 1; i <= 3; i++) h += '<i' + (i <= n ? ' class="on"' : '') + '></i>';
+  return h + '</div>';
+}
+
+function renderGuide(){
+  var h = '';
+  if (gState.step === 1){
+    h = '<div class="guide-top"><div class="guide-q">Which of these is closest to what you feel right now?</div>' + dots(1) + '</div><div class="opts">';
+    FAMILIES.forEach(function(f){
+      h += '<button class="opt" data-fam="' + f.id + '"><span class="dot" style="background:' + f.colour + '"></span>' +
+        '<span><span class="t">' + f.name + '</span><div class="s">' + f.descriptor + '</div></span></button>';
+    });
+    h += '</div>';
+  }
+  else if (gState.step === 2){
+    var f = famById(gState.fam);
+    h = '<div class="guide-top"><div class="guide-q">And how loud is it?</div>' + dots(2) + '</div><div class="opts">' +
+      '<button class="opt big" data-ring="mild"><span class="t">Quiet, in the background</span><div class="s">Present, but you can still think and work around it.</div></button>' +
+      '<button class="opt big" data-ring="intense"><span class="t">Loud, front and centre</span><div class="s">It fills the room. Hard to focus on anything else.</div></button>' +
+      '</div><button class="guide-back">Back</button>';
+  }
+  else if (gState.step === 3){
+    var f2 = famById(gState.fam);
+    h = '<div class="guide-top"><div class="guide-q">Which word lands closest?</div>' + dots(3) + '</div><div class="opts words">';
+    f2[gState.ring].forEach(function(pair, i){
+      h += '<button class="opt" data-i="' + i + '"><span class="dot" style="background:' + f2.colour + '"></span><span class="t" style="font-weight:700;font-size:15px">' + esc(pair[0]) + '</span></button>';
+    });
+    h += '</div><button class="guide-back">Back</button>';
+  }
+  else {
+    var f3 = famById(gState.fam);
+    var pair2 = f3[gState.ring][gState.word];
+    h = '<div class="g-result">' +
+      '<div class="lead-line">Say it to yourself and see if your body agrees:</div>' +
+      '<div class="big-word">“I feel ' + esc(pair2[0].toLowerCase()) + '.”</div>' +
+      '<div class="fam-line" style="color:' + f3.colour + '">' + (gState.ring === 'mild' ? 'A quieter form of ' : 'A stronger form of ') + f3.name + '</div>' +
+      '<p class="def">' + esc(pair2[1]) + '</p>' +
+      '<div class="blocks three">' +
+      '<div class="g-block"><b>Your body may agree by</b><ul>' +
+        f3.body.slice(0, 5).map(function(b){ return '<li>' + esc(b) + '</li>'; }).join('') + '</ul></div>' +
+      '<div class="g-block"><b>What it may be asking of you</b><p>' + esc(f3.asking) + '</p></div>' +
+      '<div class="g-block"><b>A question worth sitting with</b><p>' + esc(f3.questions[gState.ring === 'mild' ? 0 : 1]) + '</p></div>' +
+      '</div>' +
+      (gState.ring === 'intense' ? '<p class="g-hint">If it is loud in your body right now, the practices under <a href="#settle">When it feels too big</a> can help it pass through.</p>' : '') +
+      '<div class="g-actions"><button class="btn" id="g-save">Save this check-in</button>' +
+      '<button class="btn ghost" id="g-wheel">See it on the wheel</button>' +
+      '<button class="btn ghost" id="g-again">Start again</button></div></div>';
+  }
+  guide.innerHTML = h;
+
+  guide.querySelectorAll('.opt[data-fam]').forEach(function(b){
+    b.addEventListener('click', function(){ gState.fam = b.getAttribute('data-fam'); gState.step = 2; renderGuide(); });
+  });
+  guide.querySelectorAll('.opt[data-ring]').forEach(function(b){
+    b.addEventListener('click', function(){ gState.ring = b.getAttribute('data-ring'); gState.step = 3; renderGuide(); });
+  });
+  guide.querySelectorAll('.opt[data-i]').forEach(function(b){
+    b.addEventListener('click', function(){ gState.word = +b.getAttribute('data-i'); gState.step = 4; renderGuide(); });
+  });
+  var back = guide.querySelector('.guide-back');
+  if (back) back.addEventListener('click', function(){ gState.step--; renderGuide(); });
+  var again = document.getElementById('g-again');
+  if (again) again.addEventListener('click', function(){ gState = { step:1, fam:null, ring:null }; renderGuide(); });
+  var toWheel = document.getElementById('g-wheel');
+  if (toWheel) toWheel.addEventListener('click', function(){
+    selectWord(gState.fam, gState.ring, gState.word, true);
+  });
+  var save = document.getElementById('g-save');
+  if (save) save.addEventListener('click', function(){
+    var f4 = famById(gState.fam);
+    saveCheckin({ w:f4[gState.ring][gState.word][0], fam:f4.id, ring:gState.ring, t:Date.now() });
+    save.textContent = 'Saved'; save.disabled = true; save.style.opacity = .6;
+    renderLog();
+  });
+}
+
+// ========================== CHECK-IN LOG ==========================
+// Check-ins are stored in this browser only. Nothing leaves the device.
+var LOG_KEY = 'elw-checkins';
+function loadCheckins(){
+  try { return JSON.parse(localStorage.getItem(LOG_KEY)) || []; } catch(e){ return []; }
+}
+function saveCheckin(entry){
+  try {
+    var list = loadCheckins();
+    list.unshift(entry);
+    localStorage.setItem(LOG_KEY, JSON.stringify(list.slice(0, 60)));
+  } catch(e){}
+}
+function fmtDay(t){
+  var d = new Date(t);
+  var days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  return days[d.getDay()] + ' ' + d.getDate() + ' ' + months[d.getMonth()];
+}
+function renderLog(){
+  var box = document.getElementById('log');
+  var list = loadCheckins();
+  if (!list.length){ box.innerHTML = ''; box.style.display = 'none'; return; }
+  box.style.display = 'block';
+  var h = '<div class="log-top"><span class="ph" style="margin:0">Your recent check-ins</span>' +
+    '<button id="log-clear">Clear all</button></div><div class="chips">';
+  list.slice(0, 14).forEach(function(e){
+    var f = famById(e.fam);
+    if (!f) return;
+    h += '<span class="log-chip"><i style="background:' + f.colour + '"></i>' + esc(e.w) +
+      '<em>' + fmtDay(e.t) + '</em></span>';
+  });
+  h += '</div><p class="log-note">Check-ins are saved on this device only. No account, and nothing is sent anywhere. Patterns matter more than any single day: notice which families keep returning, and when.</p>';
+  box.innerHTML = h;
+  document.getElementById('log-clear').addEventListener('click', function(){
+    try { localStorage.removeItem(LOG_KEY); } catch(e){}
+    renderLog();
+  });
+}
+
+// ========================== MOTION ==========================
+buildWheel();
+renderGuide();
+renderLog();
+(function(){
+  if ('IntersectionObserver' in window){
+    var io = new IntersectionObserver(function(es){
+      es.forEach(function(e){
+        if (e.isIntersecting){ e.target.classList.add('m-seen'); io.unobserve(e.target); }
+      });
+    }, { threshold:.12 });
+    document.querySelectorAll('.m-wait').forEach(function(n){ io.observe(n); });
+  } else {
+    document.querySelectorAll('.m-wait').forEach(function(n){ n.classList.add('m-seen'); });
+  }
+})();
+</script>
+</body>
+</html>

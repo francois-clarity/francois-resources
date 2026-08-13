@@ -18,8 +18,14 @@ GATES = {
                  "francoisesterhuizen.com/own-it",
                  "francoisesterhuizen.com/relationships-10-habits-intro",
                  "Pattern Breaker", "Headlights", "Unstuck Loop Map",
-                 "Personal Growth Weekly"],
+                 "Emotional Language Wheel", "Personal Growth Weekly"],
         "must_not": ["Story of Us", "storyofus"],
+    },
+    "emotional-language-wheel": {
+        # No email gate on this one, so the markers are content, not MMERGE2.
+        "must": ["Emotional Language Wheel", "elw-checkins",
+                 "Which of these is closest", "emotional granularity"],
+        "must_not": ["Pattern Breaker", "Headlights", "Loop Map"],
     },
     "unstuck-loop-map": {
         "must": ["Unstuck Loop Map", "MMERGE2=loop-map"],
