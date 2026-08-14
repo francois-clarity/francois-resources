@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>The Belief Identifier — Francois Esterhuizen</title>
-<meta name="description" content="Start from one situation and descend the tree to the belief underneath it. Reaction, emotion, thought, belief, then name whether it stops you or excuses you.">
+<meta name="description" content="Take one situation all the way down to the belief underneath it, then build the other side: how you would rather feel, what you would do, and what you choose to believe instead.">
 <meta property="og:title" content="The Belief Identifier">
-<meta property="og:description" content="One situation, taken down to the belief at the root of it.">
+<meta property="og:description" content="One situation, taken down to the root and back up the other side.">
 <meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -152,13 +152,13 @@
   .verdict .b{font-weight:800;font-size:clamp(21px,3vw,28px);line-height:1.28;letter-spacing:-.4px}
   .verdict .meta{margin-top:14px;font-size:14px;color:var(--muted);font-weight:500}
   .chain{margin-top:26px;border:1px solid var(--line);border-radius:20px;overflow:hidden}
-  .chain .lnk{display:flex;gap:16px;padding:15px 20px;border-bottom:1px solid var(--line);align-items:baseline}
-  .chain .lnk:last-child{border-bottom:none}
-  .chain .k{font-size:11.5px;letter-spacing:2px;text-transform:uppercase;font-weight:800;
+  .lnk{display:flex;gap:16px;padding:15px 20px;border-bottom:1px solid var(--line);align-items:baseline}
+  .lnk:last-child{border-bottom:none}
+  .k{font-size:11.5px;letter-spacing:2px;text-transform:uppercase;font-weight:800;
     color:rgba(255,255,255,.4);width:88px;flex:none;padding-top:3px}
-  .chain .v{font-size:15.5px;line-height:1.55;color:rgba(255,255,255,.9);font-weight:500}
-  .chain .lnk.deep{background:rgba(24,192,192,.06)}
-  .chain .lnk.deep .v{font-weight:800}
+  .v{font-size:15.5px;line-height:1.55;color:rgba(255,255,255,.9);font-weight:500}
+  .lnk.deep{background:rgba(24,192,192,.06)}
+  .lnk.deep .v{font-weight:800}
 
   .test{margin-top:26px;border-left:3px solid var(--teal);padding:6px 0 6px 18px}
   .test b{display:block;font-size:12px;letter-spacing:2.5px;text-transform:uppercase;
@@ -189,6 +189,73 @@
   footer nav a{color:var(--muted);text-decoration:none;font-size:14px;font-weight:500}
   footer nav a:hover{color:var(--teal)}
 
+  /* ---- the green side ---- */
+  .rail i.old.on{background:var(--old)}
+  .rail i.new.on{background:var(--new)}
+  .step-n.new{color:var(--new)}
+  .picker.green button.on{border-color:var(--new);background:rgba(143,217,168,.16);color:#C6EFD4}
+  .voice.green b{color:var(--new)}
+  .shape.green.on{border-color:var(--new);background:rgba(143,217,168,.13)}
+
+  .fl{display:block;margin-top:24px;font-size:13px;font-weight:800;letter-spacing:1.6px;
+    text-transform:uppercase;color:rgba(255,255,255,.55)}
+  .fl + input,.fl + textarea{margin-top:10px}
+
+  .reframe{margin-top:22px;border:1px solid var(--line);border-radius:18px;padding:20px 22px;
+    background:rgba(255,255,255,.03)}
+  .reframe .was{display:block;font-size:16px;line-height:1.5;color:var(--old);font-weight:500}
+  .reframe textarea{margin-top:12px}
+  .stems.soft button{border-style:solid;border-color:rgba(255,255,255,.14);
+    font-weight:500;color:rgba(255,255,255,.62)}
+  .stems.soft button:hover{border-color:var(--new);color:var(--new)}
+  .nudge{margin-top:12px;font-size:14px;line-height:1.55;color:var(--teal);
+    background:rgba(24,192,192,.10);border-radius:12px;padding:10px 14px}
+  .orsep{margin:26px 0 4px;font-size:12.5px;letter-spacing:2px;text-transform:uppercase;
+    font-weight:800;color:rgba(255,255,255,.34)}
+
+  .sentence{margin-top:24px;padding:26px 0;border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);font-size:clamp(19px,2.6vw,24px);
+    line-height:1.5;font-weight:600;letter-spacing:-.4px;color:var(--white)}
+  .sentence .sl{color:var(--new)}
+  .sentence .sl.e{color:rgba(255,255,255,.28);font-weight:400}
+  .sentence.final{border-color:var(--new);background:rgba(143,217,168,.05);
+    border-radius:18px;padding:28px 26px;margin-top:28px}
+
+  .abgrid{display:grid;grid-template-columns:1fr 1fr;gap:0 20px;margin-top:6px}
+  @media (max-width:640px){.abgrid{grid-template-columns:1fr}}
+
+  .twin{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:26px}
+  @media (max-width:760px){.twin{grid-template-columns:1fr}}
+  .twin .col{border:1px solid var(--line);border-radius:20px;overflow:hidden;
+    background:rgba(255,255,255,.03)}
+  .twin .col.old{border-color:rgba(232,160,160,.28)}
+  .twin .col.new{border-color:rgba(143,217,168,.30)}
+  .colh{padding:14px 20px;font-size:12px;letter-spacing:2.5px;text-transform:uppercase;
+    font-weight:800;border-bottom:1px solid var(--line)}
+  .col.old .colh{color:var(--old);background:rgba(232,160,160,.07)}
+  .col.new .colh{color:var(--new);background:rgba(143,217,168,.07)}
+  .twin .lnk{gap:12px;padding:13px 20px}
+  .twin .k{width:74px;font-size:10.5px}
+  .twin .v{font-size:14.5px}
+  .col.old .lnk.deep{background:rgba(232,160,160,.09)}
+  .col.new .lnk.deep{background:rgba(143,217,168,.09)}
+  .fnote{padding:13px 20px;font-size:12px;font-weight:600;letter-spacing:.4px;
+    color:rgba(255,255,255,.42);border-top:1px solid var(--line)}
+  .chain.stick{margin-top:26px}
+
+  @media print{
+    body{background:#fff;color:#000;padding:0}
+    body::before,.orb,.cta-row,.nav,#saved,footer nav{display:none!important}
+    .stage{background:none;border:none;box-shadow:none;padding:0;backdrop-filter:none}
+    .rail{display:none}
+    h1,h2,.colh,.sentence,.twin .v{color:#000}
+    .say,.hint,.twin .k,.fnote{color:#333}
+    .twin{grid-template-columns:1fr 1fr}
+    .twin .col,.chain,.sentence.final{border:1px solid #bbb;background:none}
+    .sentence .sl{color:#000}
+    .test p,.test b{color:#000}
+  }
+
   @keyframes m-rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
   .m-in{animation:m-rise .7s cubic-bezier(.16,1,.3,1) both}
   @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.m-in{animation:none}}
@@ -199,12 +266,12 @@
 <div class="wrap">
 
   <header id="top">
-    <div class="eyebrow">Tree of Clarity · the deepest roots</div>
+    <div class="eyebrow">Tree of Clarity · the whole process</div>
     <h1>The Belief<br><span class="teal">Identifier</span></h1>
-    <p class="lede">One situation, taken all the way down. You already know the tree. This walks the red side with you, from what you did, through what you felt and thought, to the belief sitting underneath it. Then it asks the only question that matters about a belief: is it helping you show up the way you want to?</p>
+    <p class="lede">One situation, taken all the way down and all the way back up. You already know the tree. This walks the red side with you first, from what you did, through what you felt and thought, to the belief underneath it. Then it turns around and builds the other side: how you would rather feel in exactly the same situation, what you would do, what your coach says, and what you choose to believe instead. You finish with one sentence to carry out with you.</p>
     <div class="cta-row">
       <button class="btn" id="begin">Start with a situation</button>
-      <a class="btn ghost" href="https://tree.francoisesterhuizen.com" target="_blank" rel="noopener">Open the full tree</a>
+      <a class="btn ghost" href="/emotional-language-wheel/">Open the emotion wheel</a>
     </div>
   </header>
 
@@ -213,7 +280,7 @@
 
   <footer>
     <img src="/assets/fe-logo.png" alt="Francois Esterhuizen tree logo">
-    <div class="who"><b>Francois Esterhuizen</b><br>© The Belief Identifier</div>
+    <div class="who"><b>Francois Esterhuizen</b><br>The Belief Identifier</div>
     <nav>
       <a href="/emotional-language-wheel/">The wheel</a>
       <a href="/">All resources</a>
@@ -241,15 +308,100 @@ var STEMS = {
 };
 var SHAPE_LABEL = {identity:"Identity statement",formula:"Formula",definition:"Definition"};
 
+// how you would rather feel, if the situation stays exactly the same
+var GOALS = ["Calm","At peace","Grounded","Steady","Safe","Confident","Capable",
+             "Empowered","Clear","Curious","Open","Patient","Courageous","Free",
+             "Content","Hopeful","Connected","Respected","Compassionate","Playful",
+             "Energised","Present","Grateful","Proud"];
+
+// stems for the new side, built the way he builds them: opposite first, then upgrade
+var NEW_STEMS = {
+  identity:["I am...","I am the kind of person who...","I get to..."],
+  formula:["When... I know...","Even if... I still...","Because... I can..."],
+  definition:["My definition of love is...","My definition of success is...","My definition of enough is...","My definition of respect is..."]
+};
+
+var SOFTENERS = [
+  "but now I am starting to doubt that",
+  "but now I am learning another way",
+  "but I do not believe that as completely as I did"
+];
+
 var S = { step:0, trigger:"", reactions:["","",""], emotions:[], body:"",
-          judge:"", cheer:"", shape:null, belief:"", fn:null };
+          judge:"", cheer:"", shape:null, belief:"", fn:null,
+          goals:[], behaviours:["","",""], coachEnc:"", coachIns:"",
+          reframe:"", newShape:null, newBelief:"",
+          ab:{ doPart:"", feelPart:"", thinkPart:"", believePart:"" },
+          rehearse:"", reset:"Sorry, can I reset? Give me five minutes and we try that again." };
 var tool = document.getElementById("tool");
+var STEPS = 12;
 
 function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/"/g,"&quot;"); }
-function rail(n){ var h='<div class="rail">'; for(var i=1;i<=6;i++) h+='<i class="'+(i<=n?"on":"")+'"></i>'; return h+"</div>"; }
+function rail(n){
+  var h='<div class="rail">';
+  for(var i=1;i<=STEPS;i++){
+    var cls = i<=n ? (i<=6 ? "on old" : "on new") : "";
+    h += '<i class="'+cls+'"'+(i===7?' style="margin-left:10px"':'')+'></i>';
+  }
+  return h+"</div>";
+}
 function navBtns(nextLabel, canNext){
   return '<div class="nav"><button class="btn" id="next"'+(canNext?"":" disabled")+'>'+nextLabel+'</button>'+
          (S.step>1?'<button class="back" id="back">Back</button>':'')+'</div>';
+}
+
+/* ---- language helpers, so the sentence reads like a person wrote it ---- */
+function noStop(s){ return String(s||"").trim().replace(/[.…]+$/,""); }
+function noLeadI(s){ return String(s||"").trim().replace(/^I\s+/i,""); }
+function lcFirst(s){
+  s = String(s||"").trim(); if(!s) return s;
+  if (s.length>1 && s[1]===s[1].toUpperCase() && s[1]!==s[1].toLowerCase()) return s;
+  return s.charAt(0).toLowerCase()+s.slice(1);
+}
+function midSentence(s){
+  s = noStop(s);
+  if (/^i\b/i.test(s)) return s.replace(/^i\b/i,"I");
+  return lcFirst(s);
+}
+/* the coach speaks to you; the sentence needs you speaking to yourself */
+function firstPerson(s){
+  return String(s||"")
+    .replace(/\byou are\b/gi,"I am").replace(/\byou're\b/gi,"I am")
+    .replace(/\byou have\b/gi,"I have").replace(/\byou've\b/gi,"I have")
+    .replace(/\byou can\b/gi,"I can").replace(/\byou will\b/gi,"I will")
+    .replace(/\byou do\b/gi,"I do").replace(/\byourself\b/gi,"myself")
+    .replace(/\byour\b/gi,"my").replace(/\byou\b/gi,"I");
+}
+function lines(s){ return String(s||"").split(/\n+/).map(function(l){return l.trim();}).filter(Boolean); }
+
+/* nudges he gives out loud when someone writes a new belief */
+function nudge(t){
+  t = String(t||"").trim(); if(!t) return "";
+  if (/\b(will|must|should|shall|going to|need to|have to|one day)\b/i.test(t))
+    return "Not will, not must. Pull it into the present: I do.";
+  if (/\b(not|never|don.t|won.t|can.t|no longer|stop)\b/i.test(t))
+    return "Say who you are, rather than what you are leaving behind.";
+  if (t.length > 120) return "Shorter is stronger. Sharpen it until it points at the exact spot.";
+  return "";
+}
+
+function sentenceHtml(){
+  var a = S.ab;
+  function slot(v){ return v && v.trim()
+    ? '<span class="sl">'+esc(v)+'</span>'
+    : '<span class="sl e">…</span>'; }
+  return "At my best I "+slot(lcFirst(noLeadI(noStop(a.doPart))))+
+    ", because I feel "+slot(midSentence(a.feelPart))+
+    ", because I think "+slot(midSentence(a.thinkPart))+
+    ", and I believe "+slot(midSentence(a.believePart))+".";
+}
+function prefillSentence(){
+  var a = S.ab;
+  if (!a.doPart.trim()) a.doPart = S.behaviours.filter(function(b){return b.trim();})[0] || "";
+  if (!a.feelPart.trim()) a.feelPart = S.goals.join(", ").toLowerCase();
+  if (!a.thinkPart.trim()) a.thinkPart = firstPerson(lines(S.coachEnc)[0] || lines(S.coachIns)[0] || "");
+  if (!a.believePart.trim()) a.believePart = S.newBelief.trim() ||
+    String(S.reframe||"").replace(/^but now\s*/i,"");
 }
 
 function render(){
@@ -324,7 +476,96 @@ function render(){
       '<div class="fn">'+
       '<button data-fn="limiting"'+(S.fn==="limiting"?' class="on"':'')+'><span class="t">It stops me</span><span class="s">A limiting belief. It holds you back from acting. Your fears live in this one.</span></button>'+
       '<button data-fn="justifying"'+(S.fn==="justifying"?' class="on"':'')+'><span class="t">It excuses me</span><span class="s">A justifying belief. It lets you stay exactly as you are, and it usually sounds rational.</span></button>'+
-      '</div>'+ navBtns("See it whole", !!S.fn);
+      '</div>'+ navBtns("Now build the other side", !!S.fn);
+  }
+
+  /* ================= the green side ================= */
+
+  else if (S.step === 7){
+    h += '<div class="step-n new">Step seven · the turn</div><h2>Same situation. Nothing outside you changes.</h2>'+
+      '<p class="say">That is the rule, and it is the whole point. You cannot make the situation behave. You can decide who you are inside it. So: <b>if it happened again exactly as it does now, how would you rather feel?</b></p>'+
+      '<p class="hint">If something in you says "how am I supposed to feel any different?", notice who is speaking. That is the cheerleader. Feelings follow beliefs, and you are about to plant new ones.</p>'+
+      '<div class="picker green">';
+    GOALS.forEach(function(w){
+      h += '<button data-g="'+esc(w)+'"'+(S.goals.indexOf(w)>-1?' class="on"':'')+'>'+w+'</button>';
+    });
+    h += '</div><p class="hint">Pick up to three.</p>'+ navBtns("Next", S.goals.length > 0);
+  }
+
+  else if (S.step === 8){
+    var feel = S.goals.length ? S.goals.join(", ").toLowerCase() : "that way";
+    h += '<div class="step-n new">Step eight · the response</div><h2>What would the camera see now?</h2>'+
+      '<p class="say">Same trigger, same room, but you are feeling <b>'+esc(feel)+'</b>. Observable behaviour again. Not what you would think, what you would visibly do.</p>'+
+      '<div class="rows">';
+    S.behaviours.forEach(function(r,i){
+      h += '<div class="row"><span class="num">0'+(i+1)+'</span><input type="text" data-b="'+i+'" value="'+esc(r)+'" placeholder="'+
+        (i===0?"I stay in the room and keep my voice level":i===1?"I ask one question before I answer":"I let the silence sit")+'"></div>';
+    });
+    h += '</div>'+ navBtns("Next", S.behaviours.filter(function(r){return r.trim();}).length >= 1);
+  }
+
+  else if (S.step === 9){
+    h += '<div class="step-n new">Step nine · the third voice</div><h2>What does your coach say?</h2>'+
+      '<p class="say">There is a third voice, and in almost everyone it is underused. Unlike the other two it does two jobs: it <b>encourages</b> and it <b>instructs</b>. Give it words for both.</p>'+
+      '<div class="voice-tabs">'+
+      '<div class="voice green"><b>It encourages</b><p>Steadies you. "You can do this. You have handled harder than this."</p>'+
+      '<textarea id="cenc" rows="4" placeholder="You did the work well. Their silence is not a verdict.">'+esc(S.coachEnc)+'</textarea></div>'+
+      '<div class="voice green"><b>It instructs</b><p>Tells you the specific next move. Vague encouragement on its own changes nothing.</p>'+
+      '<textarea id="cins" rows="4" placeholder="Ask one question before you answer. Then wait.">'+esc(S.coachIns)+'</textarea></div>'+
+      '</div>'+ navBtns("Next", !!(S.coachEnc.trim() || S.coachIns.trim()));
+  }
+
+  else if (S.step === 10){
+    h += '<div class="step-n new">Step ten · the new root</div><h2>Rewrite what sits underneath</h2>'+
+      '<p class="say">Start with the opposite of the old one, then keep going until it sounds like you rather than like a poster. It does not have to be true, or fair, or impressive. <b>It has to be useful.</b></p>'+
+      '<div class="reframe"><span class="was">I used to believe that '+esc(midSentence(S.belief))+',</span>'+
+      '<textarea id="refr" rows="2" placeholder="but now...">'+esc(S.reframe)+'</textarea>'+
+      '<div class="nudge-slot" id="nudge-refr"></div>'+
+      '<div class="stems soft">'+ SOFTENERS.map(function(t){
+        return '<button data-soft="'+esc(t)+'">'+esc(t)+'</button>'; }).join("") +'</div>'+
+      '<p class="hint">If the full leap is too big to say honestly, take the smaller one. A 5% shift you actually believe beats a bold line you do not.</p></div>'+
+      '<div class="orsep">and, if you want one of your own</div>'+
+      '<div class="shapes">'+
+      newShapeBtn("identity","Identity statement","I am. Say who this version of you is.")+
+      newShapeBtn("formula","Formula","When this happens, I know that.")+
+      newShapeBtn("definition","Definition","Redefine the loaded word.")+
+      '</div>';
+    if (S.newShape){
+      h += '<div class="stems">'+ NEW_STEMS[S.newShape].map(function(st){
+        return '<button data-nstem="'+esc(st)+'">'+st+'</button>'; }).join("") +'</div>'+
+        '<textarea id="nbel" rows="2" placeholder="'+
+        (S.newShape==="identity"?"I am an acquired taste":S.newShape==="formula"?"When she is direct, I know she trusts me with the truth":"My definition of enough is what I choose to call enough")+
+        '">'+esc(S.newBelief)+'</textarea><div class="nudge-slot" id="nudge-nbel"></div>';
+    }
+    h += navBtns("Next", !!(S.reframe.trim() || S.newBelief.trim()));
+  }
+
+  else if (S.step === 11){
+    prefillSentence();
+    h += '<div class="step-n new">Step eleven · at my best</div><h2>One sentence to carry out of here</h2>'+
+      '<p class="say">The whole green side, folded into a line you can actually say. We have filled it in from your own answers. Edit each part until it sounds like you.</p>'+
+      '<div class="sentence" id="sent">'+sentenceHtml()+'</div>'+
+      '<div class="abgrid">'+
+      abField("doPart","At my best I…","stay in the room and ask a question")+
+      abField("feelPart","because I feel…","calm, steady and curious")+
+      abField("thinkPart","because I think…","I can handle this")+
+      abField("believePart","and I believe…","I am worth the same on a quiet week")+
+      '</div>'+
+      navBtns("Next", !!(S.ab.doPart.trim() && S.ab.feelPart.trim() && S.ab.thinkPart.trim() && S.ab.believePart.trim()));
+  }
+
+  else if (S.step === 12){
+    var bodyClue = S.body.trim() ? S.body.trim() : "your body";
+    var oldFeels = S.emotions.length ? S.emotions.join(", ").toLowerCase() : "the old feelings";
+    h += '<div class="step-n new">Step twelve · making it stick</div><h2>How you will actually catch it</h2>'+
+      '<p class="say">You said you feel it first in your <b>'+esc(bodyClue)+'</b>. From today that is not a symptom, it is an alarm you own. When '+esc(oldFeels)+' arrive, thank them: they are telling you the old system has started running and it is time to move across.</p>'+
+      '<label class="fl">When will you rehearse the new response?</label>'+
+      '<input type="text" id="reh" value="'+esc(S.rehearse)+'" placeholder="Tomorrow morning with my coffee, and before Friday\'s call">'+
+      '<p class="hint">Run the scene once in your head, feeling the way you chose, doing what you wrote. Your mind keeps a poor record of what was imagined and what was done, so rehearse the version you want.</p>'+
+      '<label class="fl">Your reset line, for the rounds the old pattern wins</label>'+
+      '<input type="text" id="rst" value="'+esc(S.reset)+'">'+
+      '<p class="hint">It will win sometimes. That is the process working, not proof that you failed.</p>'+
+      navBtns("See it whole", true);
   }
 
   h += "</div>";
@@ -336,6 +577,18 @@ function render(){
 
 function shapeBtn(k,t,s){
   return '<button class="shape'+(S.shape===k?" on":"")+'" data-shape="'+k+'"><span class="t">'+t+'</span><span class="s">'+s+'</span></button>';
+}
+function newShapeBtn(k,t,s){
+  return '<button class="shape green'+(S.newShape===k?" on":"")+'" data-nshape="'+k+'"><span class="t">'+t+'</span><span class="s">'+s+'</span></button>';
+}
+function abField(k,label,ph){
+  return '<div class="abf"><label class="fl">'+label+'</label>'+
+    '<input type="text" data-ab="'+k+'" value="'+esc(S.ab[k])+'" placeholder="'+esc(ph)+'"></div>';
+}
+function paintNudge(id,val){
+  var el = document.getElementById(id); if(!el) return;
+  var m = nudge(val);
+  el.innerHTML = m ? '<div class="nudge">'+esc(m)+'</div>' : "";
 }
 
 function wire(){
@@ -378,38 +631,121 @@ function wire(){
       el.classList.add("on"); toggleNext(true);
     };
   });
+  /* ---- green side ---- */
+  tool.querySelectorAll("button[data-g]").forEach(function(el){
+    el.onclick = function(){
+      var w = el.getAttribute("data-g"), i = S.goals.indexOf(w);
+      if (i > -1) S.goals.splice(i,1);
+      else { if (S.goals.length >= 3) return; S.goals.push(w); }
+      el.classList.toggle("on"); toggleNext(S.goals.length > 0);
+    };
+  });
+  tool.querySelectorAll("input[data-b]").forEach(function(el){
+    el.oninput = function(){ S.behaviours[+el.getAttribute("data-b")] = el.value;
+      toggleNext(S.behaviours.filter(function(r){return r.trim();}).length >= 1); };
+  });
+  [["cenc","coachEnc"],["cins","coachIns"]].forEach(function(p){
+    var el = document.getElementById(p[0]);
+    if (el) el.oninput = function(){ S[p[1]] = el.value;
+      toggleNext(!!(S.coachEnc.trim() || S.coachIns.trim())); };
+  });
+  var refr = document.getElementById("refr");
+  if (refr) refr.oninput = function(){ S.reframe = refr.value; paintNudge("nudge-refr", refr.value);
+    toggleNext(!!(S.reframe.trim() || S.newBelief.trim())); };
+  tool.querySelectorAll("button[data-soft]").forEach(function(el){
+    el.onclick = function(){ S.reframe = el.getAttribute("data-soft"); render(); };
+  });
+  tool.querySelectorAll("button[data-nshape]").forEach(function(el){
+    el.onclick = function(){ S.newShape = el.getAttribute("data-nshape"); render(); };
+  });
+  tool.querySelectorAll("button[data-nstem]").forEach(function(el){
+    el.onclick = function(){
+      var b = document.getElementById("nbel");
+      b.value = el.getAttribute("data-nstem").replace(/\.\.\.$/,"");
+      S.newBelief = b.value; b.focus();
+      toggleNext(!!(S.reframe.trim() || S.newBelief.trim()));
+    };
+  });
+  var nbel = document.getElementById("nbel");
+  if (nbel) nbel.oninput = function(){ S.newBelief = nbel.value; paintNudge("nudge-nbel", nbel.value);
+    toggleNext(!!(S.reframe.trim() || S.newBelief.trim())); };
+  tool.querySelectorAll("input[data-ab]").forEach(function(el){
+    el.oninput = function(){
+      S.ab[el.getAttribute("data-ab")] = el.value;
+      var s = document.getElementById("sent"); if (s) s.innerHTML = sentenceHtml();
+      var a = S.ab;
+      toggleNext(!!(a.doPart.trim() && a.feelPart.trim() && a.thinkPart.trim() && a.believePart.trim()));
+    };
+  });
+  var reh = document.getElementById("reh");
+  if (reh) reh.oninput = function(){ S.rehearse = reh.value; };
+  var rst = document.getElementById("rst");
+  if (rst) rst.oninput = function(){ S.reset = rst.value; };
+
   var nx = document.getElementById("next");
-  if (nx) nx.onclick = function(){ if (S.step === 6) finish(); else { S.step++; render(); } };
+  if (nx) nx.onclick = function(){ if (S.step === STEPS) finish(); else { S.step++; render(); } };
   var bk = document.getElementById("back");
   if (bk) bk.onclick = function(){ S.step--; render(); };
 }
 function toggleNext(ok){ var n = document.getElementById("next"); if (n) n.disabled = !ok; }
 
 function finish(){
-  var fnLabel = S.fn === "limiting" ? "It stops me · limiting" : "It excuses me · justifying";
+  prefillSentence();
+  var fnLabel = S.fn === "limiting" ? "It stopped me · limiting" : "It excused me · justifying";
+  var newBeliefs = [];
+  if (S.reframe.trim()) newBeliefs.push("I used to believe that "+midSentence(S.belief)+", "+noStop(S.reframe)+".");
+  if (S.newBelief.trim()) newBeliefs.push(noStop(S.newBelief)+".");
+
   var h = '<div class="stage m-in">'+
-    '<div class="step-n">The root</div><h2>Here is what is underneath it</h2>'+
-    '<div class="verdict"><div class="lab">'+SHAPE_LABEL[S.shape]+' · '+fnLabel+'</div>'+
-    '<div class="b">'+esc(S.belief)+'</div>'+
-    '<div class="meta">This is what is triggered. Not the reaction, not the emotion. The belief fires first, and everything above it follows.</div></div>'+
-    '<div class="chain">'+
-      link("Trigger", S.trigger)+
-      link("Reaction", S.reactions.filter(function(r){return r.trim()}).join(" · "))+
-      link("Emotions", S.emotions.join(", ") + (S.body.trim() ? "  (felt in the " + S.body.trim() + ")" : ""))+
-      link("Thoughts", [S.judge.trim(), S.cheer.trim()].filter(Boolean).join("  //  "))+
-      link("Belief", S.belief, true)+
+    '<div class="step-n">The whole tree</div><h2>One situation, both ways of meeting it</h2>'+
+    '<p class="say">The situation on the left has not changed and it is not going to. Everything else here is yours.</p>'+
+
+    '<div class="twin">'+
+      '<div class="col old"><div class="colh">How it goes now</div>'+
+        link("Trigger", S.trigger)+
+        link("I do", S.reactions.filter(function(r){return r.trim();}).join(" · "))+
+        link("I feel", S.emotions.join(", ") + (S.body.trim() ? " (in the "+S.body.trim()+")" : ""))+
+        link("I think", [S.judge.trim(), S.cheer.trim()].filter(Boolean).join("  //  "))+
+        link("I believe", S.belief, true)+
+        '<div class="fnote">'+SHAPE_LABEL[S.shape]+' · '+fnLabel+'</div>'+
+      '</div>'+
+      '<div class="col new"><div class="colh">How it could go</div>'+
+        link("Trigger", S.trigger + "  (unchanged)")+
+        link("I do", S.behaviours.filter(function(r){return r.trim();}).join(" · "))+
+        link("I feel", S.goals.join(", "))+
+        link("I think", [S.coachEnc.trim(), S.coachIns.trim()].filter(Boolean).join("  //  "))+
+        link("I believe", newBeliefs.join("  ") || "—", true)+
+        '<div class="fnote">The coach, instead of the judge and the cheerleader</div>'+
+      '</div>'+
     '</div>'+
-    '<div class="test"><b>The only test that counts</b><p>Not whether it is true. Not whether it is fair. A belief can be perfectly true and still be unhealthy. Ask instead: <b>does believing this help me show up the way I want to?</b> If the answer is no, it is unhealthy, and that is the whole argument.</p></div>'+
-    '<div class="nav"><button class="btn" id="save">Save this belief</button>'+
-    '<a class="btn ghost" href="https://tree.francoisesterhuizen.com" target="_blank" rel="noopener">Take it into the tree</a>'+
+
+    '<div class="sentence final">'+sentenceHtml()+'</div>'+
+
+    '<div class="test"><b>The only test that counts</b><p>Not whether a belief is true. Not whether it is fair. A belief can be perfectly true and still be unhealthy. Ask instead: <b>does believing this help me show up the way I want to?</b> If the answer is no, it is unhealthy, and that is the whole argument.</p></div>'+
+
+    '<div class="chain stick">'+
+      link("Earliest clue", S.body.trim() ? "The feeling in my "+S.body.trim() : "The feeling arriving in my body")+
+      link("I rehearse", S.rehearse)+
+      link("Reset line", S.reset)+
+    '</div>'+
+
+    '<div class="nav"><button class="btn" id="save">Save this</button>'+
+    '<button class="btn ghost" id="print">Print or save as PDF</button>'+
     '<button class="back" id="again">Another situation</button></div></div>';
+
   tool.innerHTML = h;
   document.getElementById("save").onclick = function(){
-    saveBelief({ b:S.belief, shape:S.shape, fn:S.fn, trig:S.trigger, t:Date.now() });
+    saveBelief({ b:S.belief, shape:S.shape, fn:S.fn, trig:S.trigger,
+                 nb:newBeliefs.join(" "), t:Date.now() });
     this.textContent = "Saved"; this.disabled = true; renderSaved();
   };
+  document.getElementById("print").onclick = function(){ window.print(); };
   document.getElementById("again").onclick = function(){
-    S = { step:1, trigger:"", reactions:["","",""], emotions:[], body:"", judge:"", cheer:"", shape:null, belief:"", fn:null };
+    S = { step:1, trigger:"", reactions:["","",""], emotions:[], body:"", judge:"", cheer:"",
+          shape:null, belief:"", fn:null, goals:[], behaviours:["","",""], coachEnc:"", coachIns:"",
+          reframe:"", newShape:null, newBelief:"",
+          ab:{ doPart:"", feelPart:"", thinkPart:"", believePart:"" },
+          rehearse:"", reset:"Sorry, can I reset? Give me five minutes and we try that again." };
     render();
   };
   renderSaved();
@@ -434,7 +770,7 @@ function renderSaved(){
     h += '<div class="bcard"><div class="bt">'+esc(e.b)+'</div><div class="bm">'+
       SHAPE_LABEL[e.shape]+' · '+(e.fn==="limiting"?"stops me":"excuses me")+'</div></div>';
   });
-  h += '<p class="note">Saved on this device only. No account, nothing sent anywhere. Bring these to a one-on-one, or carry them into the green side of the tree.</p>';
+  h += '<p class="note">Saved on this device only. No account, nothing sent anywhere. Bring these to a one-on-one.</p>';
   box.innerHTML = h;
   document.getElementById("clear").onclick = function(){
     try { localStorage.removeItem(KEY); } catch(e){} renderSaved();
