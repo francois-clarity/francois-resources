@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en-ZA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Three Voices — Francois Esterhuizen</title>
+<meta name="description" content="The thoughts layer of the Tree of Clarity. Catch the judge and the cheerleader in their own words, then build the coach, the voice that both encourages and instructs.">
+<meta property="og:title" content="The Three Voices">
+<meta property="og:description" content="The judge shames you inward. The cheerleader blames outward. The coach is the one you have to build.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;500;600;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#262E3B; --navy-deep:#1B222D; --teal:#18C0C0; --white:#fff;
+    --muted:rgba(255,255,255,.66);
+    --line:rgba(255,255,255,.10);
+    --judge:#E8A0A0; --cheer:#EFC98A; --coach:#8FD9A8;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'Manrope',system-ui,-apple-system,sans-serif;
+    background:radial-gradient(ellipse at 26% 22%,#333E52 0%,var(--navy) 56%,var(--navy-deep) 100%);
+    color:var(--white);min-height:100vh;-webkit-font-smoothing:antialiased;
+    padding:72px 24px 96px;overflow-x:hidden;
+  }
+  body::before{content:'';position:fixed;inset:0;pointer-events:none;
+    background-image:radial-gradient(rgba(255,255,255,.045) 1px,transparent 1px);
+    background-size:34px 34px}
+  .orb{position:fixed;border-radius:50%;pointer-events:none;filter:blur(60px);z-index:0}
+  .orb.a{width:560px;height:560px;left:-220px;top:12%;
+    background:radial-gradient(circle,rgba(24,192,192,.15),rgba(24,192,192,0) 65%)}
+  .orb.b{width:640px;height:640px;right:-260px;top:58%;
+    background:radial-gradient(circle,rgba(24,192,192,.12),rgba(24,192,192,0) 65%)}
+  .wrap{position:relative;max-width:860px;margin:0 auto;z-index:1}
+
+  .eyebrow{font-weight:500;font-size:14px;letter-spacing:5px;text-transform:uppercase;
+    color:var(--teal);margin-bottom:20px}
+  h1{font-weight:800;font-size:clamp(36px,5vw,56px);line-height:1.08;letter-spacing:-1.2px}
+  h1 .teal{color:var(--teal)}
+  .lede{font-weight:300;font-size:19px;line-height:1.65;color:var(--muted);margin:24px 0 0;max-width:58ch}
+  .btn{display:inline-block;padding:16px 28px;border-radius:14px;cursor:pointer;
+    background:var(--teal);color:var(--navy);text-decoration:none;border:none;
+    font-family:inherit;font-weight:800;font-size:16px;
+    transition:transform .15s ease,filter .15s ease}
+  .btn:hover{filter:brightness(1.07)}
+  .btn:active{transform:translateY(1px)}
+  .btn[disabled]{opacity:.4;cursor:default}
+  .btn.ghost{background:rgba(255,255,255,.06);color:var(--white);
+    border:1px solid rgba(255,255,255,.18);font-weight:600}
+  .btn.ghost:hover{border-color:var(--teal);filter:none}
+  .cta-row{display:flex;gap:14px;flex-wrap:wrap;margin-top:32px}
+
+  .stage{margin-top:40px;
+    background:linear-gradient(135deg,rgba(38,46,59,.7),rgba(30,37,48,.6));
+    border:1px solid var(--line);border-radius:26px;padding:40px 42px;
+    -webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);
+    box-shadow:0 24px 60px rgba(0,0,0,.30)}
+  @media (max-width:640px){.stage{padding:28px 22px}body{padding:44px 18px 72px}}
+  .rail{display:flex;gap:6px;margin-bottom:28px}
+  .rail i{height:3px;flex:1;border-radius:2px;background:rgba(255,255,255,.12);transition:background .4s}
+  .rail i.on{background:var(--teal)}
+  .step-n{font-weight:800;font-size:12px;letter-spacing:3px;text-transform:uppercase;
+    margin-bottom:12px;color:var(--teal)}
+  .step-n.judge{color:var(--judge)} .step-n.cheer{color:var(--cheer)} .step-n.coach{color:var(--coach)}
+  .stage h2{font-weight:800;font-size:clamp(22px,3.2vw,30px);letter-spacing:-.5px;line-height:1.2}
+  .say{font-weight:300;font-size:16.5px;line-height:1.65;color:var(--muted);margin-top:14px;max-width:60ch}
+  .say b{color:var(--white);font-weight:600}
+  .hint{font-size:14px;line-height:1.6;color:rgba(255,255,255,.45);margin-top:10px;max-width:58ch}
+  .quote{margin-top:18px;border-left:3px solid rgba(255,255,255,.18);padding:2px 0 2px 16px;
+    font-size:15px;line-height:1.6;color:rgba(255,255,255,.6);font-weight:300;font-style:normal}
+
+  textarea,input[type=text]{width:100%;margin-top:14px;padding:15px 17px;border-radius:14px;
+    border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.06);
+    color:var(--white);font-family:inherit;font-size:16px;font-weight:500;line-height:1.55;resize:vertical}
+  textarea::placeholder,input::placeholder{color:rgba(255,255,255,.34)}
+  textarea:focus,input:focus{outline:none;border-color:var(--teal);background:rgba(255,255,255,.09)}
+  .stems{display:flex;flex-wrap:wrap;gap:7px;margin-top:14px}
+  .stems button{font-family:inherit;font-size:13px;font-weight:600;color:rgba(255,255,255,.75);
+    padding:7px 13px;border-radius:100px;cursor:pointer;
+    border:1px dashed rgba(255,255,255,.22);background:none;transition:all .2s;text-align:left}
+  .stems button:hover{border-color:var(--teal);color:var(--teal);border-style:solid}
+
+  .item{border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-top:10px;
+    background:rgba(255,255,255,.035);display:flex;gap:12px;align-items:flex-start}
+  .item .txt{font-weight:600;font-size:15.5px;line-height:1.45;flex:1}
+  .item .del{background:none;border:none;color:rgba(255,255,255,.28);cursor:pointer;
+    font-size:19px;font-family:inherit;padding:0 4px;line-height:1}
+  .item .del:hover{color:#ff9d9d}
+  .item.dupe{border-color:rgba(239,201,138,.45);background:rgba(239,201,138,.07)}
+  .dupe-flag{font-size:11.5px;font-weight:800;letter-spacing:1px;text-transform:uppercase;
+    color:var(--cheer);white-space:nowrap;padding-top:2px}
+
+  /* unmask */
+  .unmask{border:1px solid var(--line);border-radius:16px;padding:16px 18px;margin-top:10px;
+    background:rgba(255,255,255,.035)}
+  .unmask .q{font-weight:700;font-size:15.5px;line-height:1.45}
+  .unmask .arrow{font-size:12px;letter-spacing:2px;text-transform:uppercase;font-weight:800;
+    color:var(--judge);margin:12px 0 0}
+  .unmask input{margin-top:8px}
+  .unmask .del{float:right;background:none;border:none;color:rgba(255,255,255,.28);
+    cursor:pointer;font-size:19px;font-family:inherit;padding:0 2px}
+  .unmask .del:hover{color:#ff9d9d}
+
+  /* audit */
+  .audit-stat{display:flex;gap:12px;margin-top:18px;flex-wrap:wrap}
+  .astat{border:1px solid var(--line);border-radius:14px;padding:14px 20px;background:rgba(255,255,255,.035);flex:1;min-width:130px}
+  .astat .n{font-weight:800;font-size:26px;letter-spacing:-.8px}
+  .astat .l{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);font-weight:700;margin-top:4px}
+  .verdict-line{margin-top:18px;border-left:3px solid var(--coach);padding:8px 0 8px 16px;
+    font-size:15.5px;line-height:1.62;color:rgba(255,255,255,.88)}
+  .verdict-line b{color:var(--coach);font-weight:800}
+
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px}
+  @media (max-width:640px){.two{grid-template-columns:1fr}}
+  .two .side b{display:block;font-size:12px;letter-spacing:2px;text-transform:uppercase;
+    color:var(--coach);font-weight:800;margin-bottom:2px}
+  .two .side p{font-size:13px;line-height:1.5;color:rgba(255,255,255,.45);margin-top:4px}
+
+  .nav{display:flex;gap:12px;margin-top:32px;align-items:center;flex-wrap:wrap}
+  .back{background:none;border:none;cursor:pointer;font-family:inherit;
+    color:var(--muted);font-size:14.5px;font-weight:600;padding:6px 2px}
+  .back:hover{color:var(--white)}
+
+  /* map */
+  .vcol{border:1px solid var(--line);border-radius:20px;overflow:hidden;margin-top:18px}
+  .vhead{padding:15px 20px;font-weight:800;font-size:16px;display:flex;justify-content:space-between;
+    gap:12px;align-items:baseline}
+  .vhead span{font-size:12px;font-weight:600;color:var(--muted);letter-spacing:.3px}
+  .vhead.judge{background:rgba(232,160,160,.12);color:var(--judge)}
+  .vhead.cheer{background:rgba(239,201,138,.12);color:var(--cheer)}
+  .vhead.coach{background:rgba(143,217,168,.12);color:var(--coach)}
+  .vrow{padding:13px 20px;border-top:1px solid var(--line);font-size:15px;line-height:1.5;font-weight:500}
+  .vrow small{display:block;font-size:12px;color:rgba(255,255,255,.42);margin-top:5px;font-weight:600;
+    letter-spacing:.4px;text-transform:uppercase}
+  .swap{margin-top:26px;border:1px solid rgba(24,192,192,.3);border-radius:20px;
+    padding:24px 26px;background:rgba(24,192,192,.06)}
+  .swap .k{font-size:12px;letter-spacing:2.5px;text-transform:uppercase;font-weight:800;
+    color:var(--teal);margin-bottom:12px}
+  .swap .pair{font-size:16px;line-height:1.65;font-weight:500}
+  .swap .pair em{font-style:normal;color:rgba(255,255,255,.5);font-weight:600}
+
+  .test{margin-top:30px;border-left:3px solid var(--teal);padding:6px 0 6px 18px}
+  .test b{display:block;font-size:12px;letter-spacing:2.5px;text-transform:uppercase;
+    color:var(--teal);margin-bottom:8px;font-weight:800}
+  .test p{font-size:15.5px;line-height:1.62;color:rgba(255,255,255,.85);font-weight:400}
+  .note{font-size:13px;line-height:1.6;color:rgba(255,255,255,.42);margin-top:16px;max-width:66ch}
+
+  footer{margin-top:80px;padding-top:36px;border-top:1px solid var(--line);
+    display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+  footer img{width:44px;height:44px;display:block}
+  footer .who{font-size:14px;color:var(--muted);line-height:1.5}
+  footer .who b{color:var(--white)}
+  footer nav{margin-left:auto;display:flex;gap:22px;flex-wrap:wrap}
+  footer nav a{color:var(--muted);text-decoration:none;font-size:14px;font-weight:500}
+  footer nav a:hover{color:var(--teal)}
+
+  @keyframes m-rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+  .m-in{animation:m-rise .7s cubic-bezier(.16,1,.3,1) both}
+  @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.m-in{animation:none}}
+
+  @media print{
+    body{background:#fff;color:#111;padding:0}
+    body::before,.orb,.cta-row,.nav,footer nav,.btn,.stems,.del{display:none!important}
+    .stage{background:#fff;border:1px solid #ccc;box-shadow:none;padding:0;margin-top:16px}
+    .say,.hint,.note{color:#444}
+    .vcol,.item,.astat,.swap{border-color:#ccc}
+    .vhead.judge,.vhead.cheer,.vhead.coach{background:#f2f2f2;color:#111}
+    h1,h2,.vrow,.item .txt,.swap .pair{color:#111}
+    .step-n,.test b,.swap .k,.verdict-line b{color:#0a6a6a}
+  }
+</style>
+</head>
+<body>
+<div class="orb a"></div><div class="orb b"></div>
+<div class="wrap">
+
+  <header id="top">
+    <div class="eyebrow">Tree of Clarity · the thoughts layer</div>
+    <h1>The Three<br><span class="teal">Voices</span></h1>
+    <p class="lede">Your thoughts are what turn a belief into a feeling. There are three voices doing the talking. The judge aims inward and shames you. The cheerleader aims outward and blames, and it sounds like loyalty. The coach both encourages and instructs, and in anyone who feels stuck it is the underdeveloped one. This catches the first two in their own words, then builds the third.</p>
+    <div class="cta-row">
+      <button class="btn" id="begin">Catch the voices</button>
+      <a class="btn ghost" href="/tree-of-clarity/">Run the whole tree</a>
+    </div>
+  </header>
+
+  <div id="tool"></div>
+
+  <footer>
+    <img src="/assets/fe-logo.png" alt="Francois Esterhuizen tree logo">
+    <div class="who"><b>Francois Esterhuizen</b><br>© The Three Voices</div>
+    <nav>
+      <a href="/belief-inventory/">The inventory</a>
+      <a href="/emotional-language-wheel/">The wheel</a>
+      <a href="/">All resources</a>
+    </nav>
+  </footer>
+</div>
+
+<script>
+var JUDGE_STEMS = ["I am stupid","I am useless","I am lazy","I am not good enough","I always mess this up"];
+var JUDGE_QS    = ["What is wrong with me?","Why can't I get this right?","Why do I struggle with this?","Why does everyone else find this easy?"];
+var CHEER_STEMS = ["Why can't they just...","Can you believe that they...","How am I supposed to... when...","If they would only..."];
+
+var KEY = "toc-voices", ID_KEY = "toc-beliefs";
+var S = { step:0, situation:"", jStat:[], jQs:[], cheer:[], tried:[], fresh:[], encourage:"", instruct:"" };
+var tool = document.getElementById("tool");
+var TOTAL = 8;
+
+function esc(s){ return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/"/g,"&quot;"); }
+function uid(){ return "v"+Math.random().toString(36).slice(2,9); }
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
+function load(){ try{ var o=JSON.parse(localStorage.getItem(KEY)); if(o&&o.situation!==undefined){ S=o; } }catch(e){} }
+function norm(s){ return String(s).toLowerCase().replace(/[^a-z0-9 ]/g,"").replace(/\s+/g," ").trim(); }
+
+function rail(n){ var h='<div class="rail">'; for(var i=1;i<=TOTAL;i++) h+='<i class="'+(i<=n?"on":"")+'"></i>'; return h+"</div>"; }
+function nav(label, ok, extra){
+  return '<div class="nav"><button class="btn" id="next"'+(ok?"":" disabled")+'>'+label+'</button>'+
+    (S.step>1?'<button class="back" id="back">Back</button>':'')+(extra||"")+'</div>';
+}
+function listHTML(arr, key, flagDupes){
+  var counts = {};
+  if (flagDupes) arr.forEach(function(it){ var n=norm(it.text); counts[n]=(counts[n]||0)+1; });
+  return arr.map(function(it){
+    var dupe = flagDupes && counts[norm(it.text)] > 1;
+    return '<div class="item'+(dupe?" dupe":"")+'"><span class="txt">'+esc(it.text)+'</span>'+
+      (dupe?'<span class="dupe-flag">repeat</span>':'')+
+      '<button class="del" data-del="'+it.id+'" data-key="'+key+'" aria-label="Remove">&times;</button></div>';
+  }).join("");
+}
+
+function render(){
+  if (S.step === 0){ tool.innerHTML=""; return; }
+  if (S.step > TOTAL) return renderMap();
+  var h = '<div class="stage m-in">' + rail(S.step);
+
+  if (S.step === 1){
+    h += '<div class="step-n">Step one</div><h2>Which situation are we listening to?</h2>'+
+      '<p class="say">Pick one recurring situation where you do not show up the way you want to. The voices are loudest there, and they are easier to catch when you have a specific moment in mind.</p>'+
+      '<textarea id="sit" rows="3" placeholder="When my work is reviewed in front of other people...">'+esc(S.situation)+'</textarea>'+
+      nav("Next", !!S.situation.trim());
+  }
+
+  else if (S.step === 2){
+    h += '<div class="step-n judge">Step two · the judge</div><h2>What does it say to you straight?</h2>'+
+      '<p class="say">The judge aims inward and shames. Its first mode is blunt, and you are the one saying it. Write the lines as they actually sound, not tidied up.</p>'+
+      '<div class="stems">'+ JUDGE_STEMS.map(function(s){return '<button data-stem="jStat|'+esc(s)+'">'+esc(s)+'</button>';}).join("") +'</div>'+
+      '<input type="text" id="add-jStat" placeholder="Type a line and press enter">'+
+      listHTML(S.jStat,"jStat") + nav("Next", S.jStat.length > 0);
+  }
+
+  else if (S.step === 3){
+    h += '<div class="step-n judge">Step three · the judge again</div><h2>Now the sly ones</h2>'+
+      '<p class="say">Its second mode is a small innocent question. It does not feel like an attack, which is exactly why it lands. <b>Every one of these is a statement wearing a question mark.</b> Write the question, then say the flat statement underneath it out loud.</p>'+
+      '<div class="quote">"It can also be very subtle, and usually by asking little questions. Why can\'t you get this right? What\'s wrong with me? That\'s a very common one."</div>'+
+      '<div class="stems">'+ JUDGE_QS.map(function(s){return '<button data-stem="jQs|'+esc(s)+'">'+esc(s)+'</button>';}).join("") +'</div>'+
+      '<input type="text" id="add-jQs" placeholder="Type the question and press enter">';
+    S.jQs.forEach(function(it){
+      h += '<div class="unmask"><button class="del" data-del="'+it.id+'" data-key="jQs" aria-label="Remove">&times;</button>'+
+        '<div class="q">'+esc(it.text)+'</div>'+
+        '<div class="arrow">The statement underneath it</div>'+
+        '<input type="text" data-under="'+it.id+'" value="'+esc(it.under||"")+'" placeholder="Something is wrong with me"></div>';
+    });
+    h += nav("Next", S.jQs.length > 0);
+  }
+
+  else if (S.step === 4){
+    h += '<div class="step-n cheer">Step four · the cheerleader</div><h2>Who is it blaming?</h2>'+
+      '<p class="say">The cheerleader is always on your side. Nothing about you needs to change, so it points outward at people, at circumstances, at the country. It sounds like loyalty, and that is why it is hard to hear as a problem.</p>'+
+      '<p class="hint">Some people call this one the comforter. Same voice, gentler name.</p>'+
+      '<div class="stems">'+ CHEER_STEMS.map(function(s){return '<button data-stem="cheer|'+esc(s)+'">'+esc(s)+'</button>';}).join("") +'</div>'+
+      '<input type="text" id="add-cheer" placeholder="Type a line and press enter">'+
+      listHTML(S.cheer,"cheer") + nav("Now the coach", S.cheer.length > 0);
+  }
+
+  else if (S.step === 5){
+    h += '<div class="step-n coach">Step five · the audit</div><h2>"I have tried everything"</h2>'+
+      '<p class="say">Have you? List it. Everything you have actually tried in this situation, one line at a time. Be generous with yourself and put down all of it.</p>'+
+      '<div class="quote">"I\'ve tried everything. Really? Did you? Let\'s list them. It seldom gets longer than two."</div>'+
+      '<input type="text" id="add-tried" placeholder="I ignored it. I sent an email. Press enter after each">'+
+      listHTML(S.tried,"tried",true) + nav("Count it", S.tried.length > 0);
+  }
+
+  else if (S.step === 6){
+    var uniq = {}; S.tried.forEach(function(it){ uniq[norm(it.text)] = 1; });
+    var u = Object.keys(uniq).length, repeats = S.tried.length - u;
+    h += '<div class="step-n coach">Step six · what the list shows</div><h2>That is the whole list</h2>'+
+      '<div class="audit-stat">'+
+      '<div class="astat"><div class="n">'+S.tried.length+'</div><div class="l">Things listed</div></div>'+
+      '<div class="astat"><div class="n">'+u+'</div><div class="l">Actually different</div></div>'+
+      '<div class="astat"><div class="n">'+repeats+'</div><div class="l">Repeats</div></div></div>';
+    if (u <= 4){
+      h += '<div class="verdict-line"><b>'+u+' different thing'+(u===1?"":"s")+'.</b> Not everything. That is not a criticism, it is the old system doing its job: the same few moves, over and over, in the same situation, expecting a different result. The fourth thing is the one you have not tried yet.</div>';
+    } else {
+      h += '<div class="verdict-line"><b>'+u+' genuinely different things.</b> That is more than the usual two or three, so you have been working at this. The question is still the same one: what is on the list you have not written yet?</div>';
+    }
+    h += '<p class="say" style="margin-top:22px">Now generate new ones. Not better versions of what is above. <b>Different.</b> Three at least, and they are allowed to feel uncomfortable or slightly ridiculous.</p>'+
+      '<p class="hint">This is what the coach actually does. It does not only cheer you on, it hands you specific things to try.</p>'+
+      '<input type="text" id="add-fresh" placeholder="Something genuinely new. Press enter">'+
+      listHTML(S.fresh,"fresh") + nav("Next", S.fresh.length >= 1);
+  }
+
+  else if (S.step === 7){
+    h += '<div class="step-n coach">Step seven · the coach</div><h2>It has two jobs</h2>'+
+      '<p class="say">Encouragement is the obvious one and it is not enough on its own. Instruction is the half people forget, and it is the half that changes what happens next time.</p>'+
+      '<div class="two">'+
+      '<div class="side"><b>Encourage</b><p>Surface level, and it should sound like someone who is on your side. "You can do this. Go for it."</p>'+
+      '<textarea id="encourage" rows="3" placeholder="You have handled harder than this. Go.">'+esc(S.encourage)+'</textarea></div>'+
+      '<div class="side"><b>Instruct</b><p>Specific and actionable. "Try this exact thing next time." Borrow from the list you just made.</p>'+
+      '<textarea id="instruct" rows="3" placeholder="Next time, say the thing in the room instead of in the car afterwards.">'+esc(S.instruct)+'</textarea></div>'+
+      '</div>'+ nav("See all three", !!(S.encourage.trim() && S.instruct.trim()));
+  }
+
+  else if (S.step === 8){
+    h += '<div class="step-n">Step eight</div><h2>One line to carry</h2>'+
+      '<p class="say">When the judge or the cheerleader starts up, you are not going to win an argument with them. You are going to answer with the coach. Pick the line you will actually reach for.</p>'+
+      '<p class="hint">Your instruction is usually the stronger answer, because it gives you somewhere to put your hands.</p>'+
+      '<textarea id="carry" rows="3" placeholder="'+esc(S.instruct || "The line you will use in the moment")+'">'+esc(S.carry||"")+'</textarea>'+
+      nav("Finish", true);
+  }
+
+  h += "</div>";
+  tool.innerHTML = h;
+  wire();
+  if (S.step > 1) tool.scrollIntoView({block:"start"});
+}
+
+function addTo(key, val){
+  if (!val.trim()) return;
+  S[key].push({ id:uid(), text:val.trim() });
+  save(); render();
+}
+
+function wire(){
+  var sit = document.getElementById("sit");
+  if (sit) sit.oninput = function(){ S.situation = sit.value; save();
+    document.getElementById("next").disabled = !sit.value.trim(); };
+
+  ["jStat","jQs","cheer","tried","fresh"].forEach(function(key){
+    var inp = document.getElementById("add-"+key);
+    if (!inp) return;
+    inp.onkeydown = function(e){ if (e.key === "Enter"){ e.preventDefault(); addTo(key, inp.value); } };
+    inp.onblur = function(){ if (inp.value.trim()) addTo(key, inp.value); };
+  });
+  tool.querySelectorAll("button[data-stem]").forEach(function(el){
+    el.onclick = function(){
+      var p = el.getAttribute("data-stem").split("|");
+      var inp = document.getElementById("add-"+p[0]);
+      inp.value = p[1]; inp.focus();
+    };
+  });
+  tool.querySelectorAll("button[data-del]").forEach(function(el){
+    el.onclick = function(){
+      var k = el.getAttribute("data-key");
+      S[k] = S[k].filter(function(x){ return x.id !== el.getAttribute("data-del"); });
+      save(); render();
+    };
+  });
+  tool.querySelectorAll("input[data-under]").forEach(function(el){
+    el.onblur = function(){
+      var it = S.jQs.filter(function(x){ return x.id === el.getAttribute("data-under"); })[0];
+      if (it){ it.under = el.value; save(); }
+    };
+  });
+  ["encourage","instruct"].forEach(function(k){
+    var el = document.getElementById(k);
+    if (el) el.oninput = function(){ S[k] = el.value; save();
+      var n = document.getElementById("next");
+      if (n) n.disabled = !(S.encourage.trim() && S.instruct.trim()); };
+  });
+  var carry = document.getElementById("carry");
+  if (carry) carry.oninput = function(){ S.carry = carry.value; save(); };
+
+  var nx = document.getElementById("next");
+  if (nx) nx.onclick = function(){ S.step++; save(); render(); };
+  var bk = document.getElementById("back");
+  if (bk) bk.onclick = function(){ S.step--; save(); render(); };
+}
+
+function renderMap(){
+  var carry = (S.carry && S.carry.trim()) || S.instruct || "";
+  var h = '<div class="stage m-in"><div class="step-n">Your three voices</div>'+
+    '<h2>Who is doing the talking</h2>'+
+    '<p class="say">Same situation, three commentaries. Two of them you already had. The third one you just wrote, and that is the one worth practising, because <b>it is underdeveloped in anyone who feels stuck</b>.</p>';
+
+  if (S.situation.trim()){
+    h += '<div class="quote">'+esc(S.situation)+'</div>';
+  }
+
+  h += '<div class="vcol"><div class="vhead judge">The judge<span>aims inward, shames</span></div>';
+  S.jStat.forEach(function(it){ h += '<div class="vrow">'+esc(it.text)+'</div>'; });
+  S.jQs.forEach(function(it){
+    h += '<div class="vrow">'+esc(it.text)+
+      (it.under && it.under.trim() ? '<small>really saying: '+esc(it.under)+'</small>' : '')+'</div>';
+  });
+  h += '</div>';
+
+  h += '<div class="vcol"><div class="vhead cheer">The cheerleader<span>aims outward, blames</span></div>';
+  S.cheer.forEach(function(it){ h += '<div class="vrow">'+esc(it.text)+'</div>'; });
+  h += '</div>';
+
+  h += '<div class="vcol"><div class="vhead coach">The coach<span>encourages and instructs</span></div>';
+  if (S.encourage.trim()) h += '<div class="vrow">'+esc(S.encourage)+'<small>encouragement</small></div>';
+  if (S.instruct.trim())  h += '<div class="vrow">'+esc(S.instruct)+'<small>instruction</small></div>';
+  S.fresh.forEach(function(it){ h += '<div class="vrow">'+esc(it.text)+'<small>something new to try</small></div>'; });
+  h += '</div>';
+
+  if (carry.trim()){
+    h += '<div class="swap"><div class="k">The swap</div><div class="pair">'+
+      '<em>When you hear</em> the judge or the cheerleader start up in this situation, <em>you answer with</em><br>'+
+      '<strong style="font-weight:800">'+esc(carry)+'</strong></div></div>';
+  }
+
+  h += '<div class="test"><b>Why this layer matters</b><p>Thoughts are what turn a belief into a feeling, so this is where you can interrupt the chain most quickly. But the voices keep coming back while the belief underneath stays intact. When you have the patience for it, take one of the judge lines down to the root it grew from.</p></div>'+
+    '<p class="note">Saved on this device only. No account, and nothing is sent anywhere.</p>'+
+    '<div class="nav"><button class="btn" onclick="window.print()">Print or save as PDF</button>'+
+    '<a class="btn ghost" href="/tree-of-clarity/">Take a line down to the belief</a>'+
+    '<button class="back" id="again">Start again</button></div></div>';
+
+  tool.innerHTML = h;
+  document.getElementById("again").onclick = function(){
+    try { localStorage.removeItem(KEY); } catch(e){}
+    S = { step:1, situation:"", jStat:[], jQs:[], cheer:[], tried:[], fresh:[], encourage:"", instruct:"" };
+    render();
+  };
+  tool.scrollIntoView({block:"start"});
+}
+
+load();
+document.getElementById("begin").onclick = function(){ if (!S.step) S.step = 1; render(); };
+if (S.step) render();
+</script>
+</body>
+</html>

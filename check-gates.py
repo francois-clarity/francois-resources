@@ -19,8 +19,14 @@ GATES = {
                  "francoisesterhuizen.com/relationships-10-habits-intro",
                  "Pattern Breaker", "Headlights", "Unstuck Loop Map",
                  "Emotional Language Wheel", "The Tree of Clarity",
-                 "Belief Inventory", "Personal Growth Weekly"],
+                 "Belief Inventory", "Three Voices", "Personal Growth Weekly"],
         "must_not": ["Story of Us", "storyofus"],
+    },
+    "three-voices": {
+        # Thoughts layer. No email gate; markers are content.
+        "must": ["Three Voices", "toc-voices", "The judge", "The cheerleader",
+                 "The coach", "tried everything"],
+        "must_not": ["Pattern Breaker", "Headlights", "Loop Map"],
     },
     "belief-inventory": {
         # Guided sweep by life domain. No email gate; markers are content.
@@ -28,11 +34,12 @@ GATES = {
                  "What you live", "Identity statements"],
         "must_not": ["Pattern Breaker", "Headlights", "Loop Map"],
     },
-    "belief-identifier": {
+    "tree-of-clarity": {
         # Companion tool, no email gate. Markers are content.
         "must": ["The Belief System Model", "toc-beliefs", "Identity statement",
                  "It excuses me", "badly outdated", "the belief system model",
-                 "Three thoughts in total", "At least one of each"],
+                 "Three thoughts in total", "At least one of each",
+                 "The comforter", "Between people", "toc-progress"],
         "must_not": ["Pattern Breaker", "Headlights", "Loop Map"],
     },
     "emotional-language-wheel": {
