@@ -18,8 +18,15 @@ GATES = {
                  "francoisesterhuizen.com/own-it",
                  "francoisesterhuizen.com/relationships-10-habits-intro",
                  "Pattern Breaker", "Headlights", "Unstuck Loop Map",
-                 "Emotional Language Wheel", "Personal Growth Weekly"],
+                 "Emotional Language Wheel", "Belief Identifier",
+                 "Personal Growth Weekly"],
         "must_not": ["Story of Us", "storyofus"],
+    },
+    "belief-identifier": {
+        # Companion tool, no email gate. Markers are content.
+        "must": ["Belief Identifier", "toc-beliefs", "Identity statement",
+                 "It excuses me", "badly outdated"],
+        "must_not": ["Pattern Breaker", "Headlights", "Loop Map"],
     },
     "emotional-language-wheel": {
         # No email gate on this one, so the markers are content, not MMERGE2.

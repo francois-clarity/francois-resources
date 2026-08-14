@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en-ZA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Belief Identifier — Francois Esterhuizen</title>
+<meta name="description" content="Start from one situation and descend the tree to the belief underneath it. Reaction, emotion, thought, belief, then name whether it stops you or excuses you.">
+<meta property="og:title" content="The Belief Identifier">
+<meta property="og:description" content="One situation, taken down to the belief at the root of it.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;500;600;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#262E3B; --navy-deep:#1B222D; --teal:#18C0C0; --white:#fff;
+    --muted:rgba(255,255,255,.66);
+    --line:rgba(255,255,255,.10);
+    --old:#E8A0A0; --new:#8FD9A8;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'Manrope',system-ui,-apple-system,sans-serif;
+    background:radial-gradient(ellipse at 26% 22%,#333E52 0%,var(--navy) 56%,var(--navy-deep) 100%);
+    color:var(--white);min-height:100vh;
+    -webkit-font-smoothing:antialiased;
+    padding:72px 24px 96px;overflow-x:hidden;
+  }
+  body::before{
+    content:'';position:fixed;inset:0;pointer-events:none;
+    background-image:radial-gradient(rgba(255,255,255,.045) 1px,transparent 1px);
+    background-size:34px 34px;
+  }
+  .orb{position:fixed;border-radius:50%;pointer-events:none;filter:blur(60px);z-index:0}
+  .orb.a{width:560px;height:560px;left:-220px;top:12%;
+    background:radial-gradient(circle,rgba(24,192,192,.15),rgba(24,192,192,0) 65%)}
+  .orb.b{width:640px;height:640px;right:-260px;top:58%;
+    background:radial-gradient(circle,rgba(24,192,192,.12),rgba(24,192,192,0) 65%)}
+  .wrap{position:relative;max-width:820px;margin:0 auto;z-index:1}
+
+  .eyebrow{font-weight:500;font-size:14px;letter-spacing:5px;text-transform:uppercase;
+    color:var(--teal);margin-bottom:20px}
+  h1{font-weight:800;font-size:clamp(36px,5vw,56px);line-height:1.08;letter-spacing:-1.2px}
+  h1 .teal{color:var(--teal)}
+  .lede{font-weight:300;font-size:19px;line-height:1.65;color:var(--muted);margin:24px 0 0;max-width:56ch}
+  .btn{display:inline-block;padding:16px 28px;border-radius:14px;cursor:pointer;
+    background:var(--teal);color:var(--navy);text-decoration:none;border:none;
+    font-family:inherit;font-weight:800;font-size:16px;
+    transition:transform .15s ease,filter .15s ease}
+  .btn:hover{filter:brightness(1.07)}
+  .btn:active{transform:translateY(1px)}
+  .btn[disabled]{opacity:.4;cursor:default}
+  .btn.ghost{background:rgba(255,255,255,.06);color:var(--white);
+    border:1px solid rgba(255,255,255,.18);font-weight:600}
+  .btn.ghost:hover{border-color:var(--teal);filter:none}
+  .cta-row{display:flex;gap:14px;flex-wrap:wrap;margin-top:32px}
+
+  /* stepper */
+  .stage{
+    margin-top:40px;
+    background:linear-gradient(135deg,rgba(38,46,59,.7),rgba(30,37,48,.6));
+    border:1px solid var(--line);border-radius:26px;padding:40px 42px;
+    -webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);
+    box-shadow:0 24px 60px rgba(0,0,0,.30);
+  }
+  @media (max-width:640px){.stage{padding:28px 22px}body{padding:44px 18px 72px}}
+  .rail{display:flex;gap:6px;margin-bottom:28px}
+  .rail i{height:3px;flex:1;border-radius:2px;background:rgba(255,255,255,.12);transition:background .4s}
+  .rail i.on{background:var(--teal)}
+  .step-n{font-weight:800;font-size:12px;letter-spacing:3px;text-transform:uppercase;
+    color:var(--teal);margin-bottom:12px}
+  .stage h2{font-weight:800;font-size:clamp(22px,3.2vw,30px);letter-spacing:-.5px;line-height:1.2}
+  .stage .say{font-weight:300;font-size:16.5px;line-height:1.65;color:var(--muted);margin-top:14px;max-width:58ch}
+  .stage .say b{color:var(--white);font-weight:600}
+  .hint{font-size:14px;line-height:1.6;color:rgba(255,255,255,.45);margin-top:10px;max-width:56ch}
+
+  textarea,input[type=text]{
+    width:100%;margin-top:22px;padding:16px 18px;border-radius:14px;
+    border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.06);
+    color:var(--white);font-family:inherit;font-size:16.5px;font-weight:500;line-height:1.55;
+    resize:vertical;
+  }
+  textarea::placeholder,input::placeholder{color:rgba(255,255,255,.36)}
+  textarea:focus,input:focus{outline:none;border-color:var(--teal);background:rgba(255,255,255,.09)}
+
+  .rows{margin-top:20px;display:flex;flex-direction:column;gap:10px}
+  .row{display:flex;gap:10px;align-items:center}
+  .row input{margin-top:0}
+  .row .num{width:26px;flex:none;font-weight:800;font-size:13px;color:rgba(255,255,255,.35)}
+  .row button{background:none;border:none;color:rgba(255,255,255,.3);cursor:pointer;
+    font-size:20px;padding:4px 8px;font-family:inherit}
+  .row button:hover{color:#ff9d9d}
+
+  .picker{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+  .picker button{
+    font-family:inherit;font-size:14.5px;font-weight:600;color:var(--white);
+    padding:9px 16px;border-radius:100px;cursor:pointer;
+    border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.05);
+    transition:border-color .2s,background .2s}
+  .picker button:hover{border-color:rgba(255,255,255,.4)}
+  .picker button.on{border-color:var(--teal);background:rgba(24,192,192,.16);color:#9FEDEB}
+  .picker .fam{opacity:.55;font-weight:400;font-size:12.5px;margin-left:6px}
+
+  .voice-tabs{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:22px}
+  @media (max-width:560px){.voice-tabs{grid-template-columns:1fr}}
+  .voice{border:1px solid var(--line);border-radius:18px;padding:20px;background:rgba(255,255,255,.035)}
+  .voice b{display:block;font-size:12px;letter-spacing:2.5px;text-transform:uppercase;
+    color:var(--teal);margin-bottom:6px;font-weight:800}
+  .voice p{font-size:14px;line-height:1.55;color:var(--muted);margin-bottom:12px}
+  .voice textarea{margin-top:0;font-size:15.5px}
+
+  /* belief builder */
+  .shapes{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:22px}
+  @media (max-width:640px){.shapes{grid-template-columns:1fr}}
+  .shape{
+    text-align:left;font-family:inherit;color:var(--white);cursor:pointer;
+    background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.14);
+    border-radius:16px;padding:16px 18px;transition:border-color .2s,background .2s}
+  .shape:hover{border-color:rgba(255,255,255,.42);background:rgba(255,255,255,.08)}
+  .shape.on{border-color:var(--teal);background:rgba(24,192,192,.13)}
+  .shape .t{font-weight:800;font-size:15.5px;display:block}
+  .shape .s{font-weight:400;font-size:13px;color:var(--muted);margin-top:4px;display:block;line-height:1.45}
+
+  .stems{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+  .stems button{font-family:inherit;font-size:13.5px;font-weight:600;
+    color:rgba(255,255,255,.8);padding:8px 14px;border-radius:100px;cursor:pointer;
+    border:1px dashed rgba(255,255,255,.22);background:none;transition:all .2s}
+  .stems button:hover{border-color:var(--teal);color:var(--teal);border-style:solid}
+
+  .fn{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:20px}
+  @media (max-width:560px){.fn{grid-template-columns:1fr}}
+  .fn button{
+    text-align:left;font-family:inherit;color:var(--white);cursor:pointer;
+    background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.14);
+    border-radius:16px;padding:18px 20px;transition:border-color .2s,background .2s}
+  .fn button:hover{border-color:rgba(255,255,255,.42)}
+  .fn button.on{border-color:var(--teal);background:rgba(24,192,192,.13)}
+  .fn .t{font-weight:800;font-size:16px;display:block}
+  .fn .s{font-weight:400;font-size:13.5px;color:var(--muted);margin-top:5px;display:block;line-height:1.5}
+
+  .nav{display:flex;gap:12px;margin-top:30px;align-items:center;flex-wrap:wrap}
+  .back{background:none;border:none;cursor:pointer;font-family:inherit;
+    color:var(--muted);font-size:14.5px;font-weight:600;padding:6px 2px}
+  .back:hover{color:var(--white)}
+
+  /* result */
+  .verdict{border-radius:20px;padding:26px 28px;margin-top:24px;
+    background:rgba(24,192,192,.07);border:1px solid rgba(24,192,192,.3)}
+  .verdict .lab{font-size:12px;letter-spacing:2.5px;text-transform:uppercase;
+    font-weight:800;color:var(--teal);margin-bottom:10px}
+  .verdict .b{font-weight:800;font-size:clamp(21px,3vw,28px);line-height:1.28;letter-spacing:-.4px}
+  .verdict .meta{margin-top:14px;font-size:14px;color:var(--muted);font-weight:500}
+  .chain{margin-top:26px;border:1px solid var(--line);border-radius:20px;overflow:hidden}
+  .chain .lnk{display:flex;gap:16px;padding:15px 20px;border-bottom:1px solid var(--line);align-items:baseline}
+  .chain .lnk:last-child{border-bottom:none}
+  .chain .k{font-size:11.5px;letter-spacing:2px;text-transform:uppercase;font-weight:800;
+    color:rgba(255,255,255,.4);width:88px;flex:none;padding-top:3px}
+  .chain .v{font-size:15.5px;line-height:1.55;color:rgba(255,255,255,.9);font-weight:500}
+  .chain .lnk.deep{background:rgba(24,192,192,.06)}
+  .chain .lnk.deep .v{font-weight:800}
+
+  .test{margin-top:26px;border-left:3px solid var(--teal);padding:6px 0 6px 18px}
+  .test b{display:block;font-size:12px;letter-spacing:2.5px;text-transform:uppercase;
+    color:var(--teal);margin-bottom:8px;font-weight:800}
+  .test p{font-size:15.5px;line-height:1.62;color:rgba(255,255,255,.85);font-weight:400}
+
+  .saved{margin-top:44px;border:1px solid var(--line);border-radius:22px;padding:26px 28px;
+    background:rgba(255,255,255,.03)}
+  .saved-top{display:flex;justify-content:space-between;align-items:center;gap:14px;margin-bottom:16px;flex-wrap:wrap}
+  .ph{font-weight:800;font-size:12.5px;letter-spacing:2.5px;text-transform:uppercase;
+    color:rgba(255,255,255,.55)}
+  #clear{background:none;border:none;cursor:pointer;color:rgba(255,255,255,.4);
+    font-family:inherit;font-size:13px;font-weight:600}
+  #clear:hover{color:#ff9d9d}
+  .bcard{border:1px solid var(--line);border-radius:16px;padding:16px 18px;margin-bottom:10px;
+    background:rgba(255,255,255,.03)}
+  .bcard .bt{font-weight:700;font-size:15.5px;line-height:1.45}
+  .bcard .bm{margin-top:7px;font-size:12.5px;color:rgba(255,255,255,.45);font-weight:600;
+    letter-spacing:.4px;text-transform:uppercase}
+  .note{font-size:13px;line-height:1.6;color:rgba(255,255,255,.42);margin-top:14px;max-width:64ch}
+
+  footer{margin-top:80px;padding-top:36px;border-top:1px solid var(--line);
+    display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+  footer img{width:44px;height:44px;display:block}
+  footer .who{font-size:14px;color:var(--muted);line-height:1.5}
+  footer .who b{color:var(--white)}
+  footer nav{margin-left:auto;display:flex;gap:22px;flex-wrap:wrap}
+  footer nav a{color:var(--muted);text-decoration:none;font-size:14px;font-weight:500}
+  footer nav a:hover{color:var(--teal)}
+
+  @keyframes m-rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+  .m-in{animation:m-rise .7s cubic-bezier(.16,1,.3,1) both}
+  @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.m-in{animation:none}}
+</style>
+</head>
+<body>
+<div class="orb a"></div><div class="orb b"></div>
+<div class="wrap">
+
+  <header id="top">
+    <div class="eyebrow">Tree of Clarity · the deepest roots</div>
+    <h1>The Belief<br><span class="teal">Identifier</span></h1>
+    <p class="lede">One situation, taken all the way down. You already know the tree. This walks the red side with you, from what you did, through what you felt and thought, to the belief sitting underneath it. Then it asks the only question that matters about a belief: is it helping you show up the way you want to?</p>
+    <div class="cta-row">
+      <button class="btn" id="begin">Start with a situation</button>
+      <a class="btn ghost" href="https://tree.francoisesterhuizen.com" target="_blank" rel="noopener">Open the full tree</a>
+    </div>
+  </header>
+
+  <div id="tool"></div>
+  <div class="saved" id="saved" style="display:none"></div>
+
+  <footer>
+    <img src="/assets/fe-logo.png" alt="Francois Esterhuizen tree logo">
+    <div class="who"><b>Francois Esterhuizen</b><br>© The Belief Identifier</div>
+    <nav>
+      <a href="/emotional-language-wheel/">The wheel</a>
+      <a href="/">All resources</a>
+    </nav>
+  </footer>
+</div>
+
+<script>
+// ===== emotion vocabulary, shared with the Emotional Language Wheel =====
+var EMO = {
+  Anger:["Frustrated","Irritated","Annoyed","Resentful","Indignant","Violated","Exasperated","Hostile"],
+  Fear:["Anxious","Uneasy","Worried","Exposed","Threatened","Helpless","Overwhelmed","Apprehensive"],
+  Sadness:["Disappointed","Fragile","Melancholy","Powerless","Ashamed","Abandoned","Regretful","Hopeless"],
+  Disgust:["Bothered","Disapproving","Contemptuous","Offended","Judgemental","Indifferent","Hesitant"],
+  Surprise:["Disconcerted","Unsettled","Perplexed","Startled","Bewildered","Incredulous"],
+  Anticipation:["Apprehensive","Pessimistic","Dread","Vigilant","Cynical","Foreboding","Tense"],
+  Trust:["Dependant","Submissive","Ambivalent","Condoning","Tolerant"],
+  Joy:["Hopeful","Content","Satisfied","Curious"]
+};
+// stems by belief shape, drawn from his three constructions
+var STEMS = {
+  identity:["I am...","I am not...","I can't...","I always...","I never..."],
+  formula:["If... then...","Only if... then I can...","...because...","When... I have to..."],
+  definition:["My definition of love is...","My definition of success is...","My definition of enough is...","My definition of respect is...","My definition of failure is..."]
+};
+var SHAPE_LABEL = {identity:"Identity statement",formula:"Formula",definition:"Definition"};
+
+var S = { step:0, trigger:"", reactions:["","",""], emotions:[], body:"",
+          judge:"", cheer:"", shape:null, belief:"", fn:null };
+var tool = document.getElementById("tool");
+
+function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/"/g,"&quot;"); }
+function rail(n){ var h='<div class="rail">'; for(var i=1;i<=6;i++) h+='<i class="'+(i<=n?"on":"")+'"></i>'; return h+"</div>"; }
+function navBtns(nextLabel, canNext){
+  return '<div class="nav"><button class="btn" id="next"'+(canNext?"":" disabled")+'>'+nextLabel+'</button>'+
+         (S.step>1?'<button class="back" id="back">Back</button>':'')+'</div>';
+}
+
+function render(){
+  if (S.step === 0){ tool.innerHTML = ""; renderSaved(); return; }
+  var h = '<div class="stage m-in">' + rail(S.step);
+
+  if (S.step === 1){
+    h += '<div class="step-n">Step one · the trigger</div><h2>What is the situation?</h2>'+
+      '<p class="say">One recurring situation that <b>causes you to show up differently than you want to</b>. A person, a moment, a kind of conversation. The situation itself will not change here. That is the point.</p>'+
+      '<textarea id="f" rows="3" placeholder="When my partner brings up the state of our relationship...">'+esc(S.trigger)+'</textarea>'+
+      navBtns("Next", !!S.trigger.trim());
+  }
+
+  else if (S.step === 2){
+    h += '<div class="step-n">Step two · the reaction</div><h2>What do you actually do?</h2>'+
+      '<p class="say">Observable behaviour only. If someone filmed you, what would they see? Facial expression, tone, body language, what you do or refuse to do. <b>Not feelings, not thoughts.</b> Quickly and cryptically is fine.</p>'+
+      '<div class="rows">';
+    S.reactions.forEach(function(r,i){
+      h += '<div class="row"><span class="num">0'+(i+1)+'</span><input type="text" data-r="'+i+'" value="'+esc(r)+'" placeholder="'+(i===0?"I go quiet and leave the room":i===1?"I get sarcastic":"Later, I avoid them for days")+'"></div>';
+    });
+    h += '</div><p class="hint">Three is the number he asks for. Two is enough to continue.</p>'+
+      navBtns("Next", S.reactions.filter(function(r){return r.trim()}).length >= 2);
+  }
+
+  else if (S.step === 3){
+    h += '<div class="step-n">Step three · the emotions</div><h2>What is driving that?</h2>'+
+      '<p class="say">The deeper emotions underneath the behaviour. <b>Mad and sad do not count.</b> Under anger there is usually something like disrespected or unimportant. Pick up to three.</p><div class="picker">';
+    Object.keys(EMO).forEach(function(fam){
+      EMO[fam].forEach(function(w){
+        var on = S.emotions.indexOf(w) > -1;
+        h += '<button data-e="'+esc(w)+'"'+(on?' class="on"':'')+'>'+w+'<span class="fam">'+fam.toLowerCase()+'</span></button>';
+      });
+    });
+    h += '</div><p class="hint">Not here? The <a href="/emotional-language-wheel/" target="_blank" rel="noopener" style="color:var(--teal)">full wheel</a> has 160 words.</p>'+
+      '<input type="text" id="body" value="'+esc(S.body)+'" placeholder="Where do you feel it in your body? Stomach, chest, throat, head, hands">'+
+      navBtns("Next", S.emotions.length > 0);
+  }
+
+  else if (S.step === 4){
+    h += '<div class="step-n">Step four · the thoughts</div><h2>Which voice is talking?</h2>'+
+      '<p class="say">Two voices sit above the belief. Write the sentences as they actually sound in your head, not tidied up.</p>'+
+      '<div class="voice-tabs">'+
+      '<div class="voice"><b>The judge</b><p>Aims inward and shames. Direct ("I am useless") or a sly little question ("What is wrong with me?").</p>'+
+      '<textarea id="judge" rows="4" placeholder="What is wrong with me? Why can I never handle this?">'+esc(S.judge)+'</textarea></div>'+
+      '<div class="voice"><b>The cheerleader</b><p>Always on your side, so it blames outward at people and circumstances. Sounds like loyalty.</p>'+
+      '<textarea id="cheer" rows="4" placeholder="She always does this. Who could stay calm with that?">'+esc(S.cheer)+'</textarea></div>'+
+      '</div>'+ navBtns("Go deeper", !!(S.judge.trim() || S.cheer.trim()));
+  }
+
+  else if (S.step === 5){
+    h += '<div class="step-n">Step five · the belief</div><h2>What has to be true underneath?</h2>'+
+      '<p class="say">This is the hardest part, and coming up blank is normal. You built this system to survive and it is not stupid. Some of it is simply <b>badly outdated</b>. Pick the shape it takes.</p>'+
+      '<div class="shapes">'+
+      shapeBtn("identity","Identity statement","I am, I am not, I can't. Your fears live here too.")+
+      shapeBtn("formula","Formula","Cause and effect. If this, then that.")+
+      shapeBtn("definition","Definition","What a loaded word secretly means to you.")+
+      '</div>';
+    if (S.shape){
+      h += '<div class="stems">'+ STEMS[S.shape].map(function(st){
+        return '<button data-stem="'+esc(st)+'">'+st+'</button>'; }).join("") +'</div>'+
+        '<textarea id="belief" rows="3" placeholder="'+
+        (S.shape==="identity"?"I am a people pleaser":S.shape==="formula"?"If I say no to people, they will not like me":"My definition of love is never being a burden")+
+        '">'+esc(S.belief)+'</textarea>';
+    }
+    h += navBtns("Name what it does", !!(S.shape && S.belief.trim()));
+  }
+
+  else if (S.step === 6){
+    h += '<div class="step-n">Step six · what it does to you</div><h2>Does it stop you, or excuse you?</h2>'+
+      '<p class="say">Same belief, two possible jobs. Read yours back and choose the one that fits.</p>'+
+      '<div class="verdict"><div class="lab">'+SHAPE_LABEL[S.shape]+'</div><div class="b">'+esc(S.belief)+'</div></div>'+
+      '<div class="fn">'+
+      '<button data-fn="limiting"'+(S.fn==="limiting"?' class="on"':'')+'><span class="t">It stops me</span><span class="s">A limiting belief. It holds you back from acting. Your fears live in this one.</span></button>'+
+      '<button data-fn="justifying"'+(S.fn==="justifying"?' class="on"':'')+'><span class="t">It excuses me</span><span class="s">A justifying belief. It lets you stay exactly as you are, and it usually sounds rational.</span></button>'+
+      '</div>'+ navBtns("See it whole", !!S.fn);
+  }
+
+  h += "</div>";
+  tool.innerHTML = h;
+  wire();
+  renderSaved();
+  if (S.step > 1) tool.scrollIntoView({block:"start"});
+}
+
+function shapeBtn(k,t,s){
+  return '<button class="shape'+(S.shape===k?" on":"")+'" data-shape="'+k+'"><span class="t">'+t+'</span><span class="s">'+s+'</span></button>';
+}
+
+function wire(){
+  var f = document.getElementById("f");
+  if (f) f.oninput = function(){ S.trigger = f.value; toggleNext(!!f.value.trim()); };
+  tool.querySelectorAll("input[data-r]").forEach(function(el){
+    el.oninput = function(){ S.reactions[+el.getAttribute("data-r")] = el.value;
+      toggleNext(S.reactions.filter(function(r){return r.trim()}).length >= 2); };
+  });
+  tool.querySelectorAll("button[data-e]").forEach(function(el){
+    el.onclick = function(){
+      var w = el.getAttribute("data-e"), i = S.emotions.indexOf(w);
+      if (i > -1) S.emotions.splice(i,1);
+      else { if (S.emotions.length >= 3) return; S.emotions.push(w); }
+      el.classList.toggle("on"); toggleNext(S.emotions.length > 0);
+    };
+  });
+  var body = document.getElementById("body"); if (body) body.oninput = function(){ S.body = body.value; };
+  ["judge","cheer"].forEach(function(k){
+    var el = document.getElementById(k);
+    if (el) el.oninput = function(){ S[k] = el.value; toggleNext(!!(S.judge.trim()||S.cheer.trim())); };
+  });
+  tool.querySelectorAll("button[data-shape]").forEach(function(el){
+    el.onclick = function(){ S.shape = el.getAttribute("data-shape"); render(); };
+  });
+  tool.querySelectorAll("button[data-stem]").forEach(function(el){
+    el.onclick = function(){
+      var b = document.getElementById("belief");
+      var stem = el.getAttribute("data-stem").replace(/\.\.\.$/,"");
+      b.value = stem; S.belief = b.value; b.focus();
+      toggleNext(!!b.value.trim());
+    };
+  });
+  var bel = document.getElementById("belief");
+  if (bel) bel.oninput = function(){ S.belief = bel.value; toggleNext(!!bel.value.trim()); };
+  tool.querySelectorAll("button[data-fn]").forEach(function(el){
+    el.onclick = function(){
+      S.fn = el.getAttribute("data-fn");
+      tool.querySelectorAll("button[data-fn]").forEach(function(x){ x.classList.remove("on"); });
+      el.classList.add("on"); toggleNext(true);
+    };
+  });
+  var nx = document.getElementById("next");
+  if (nx) nx.onclick = function(){ if (S.step === 6) finish(); else { S.step++; render(); } };
+  var bk = document.getElementById("back");
+  if (bk) bk.onclick = function(){ S.step--; render(); };
+}
+function toggleNext(ok){ var n = document.getElementById("next"); if (n) n.disabled = !ok; }
+
+function finish(){
+  var fnLabel = S.fn === "limiting" ? "It stops me · limiting" : "It excuses me · justifying";
+  var h = '<div class="stage m-in">'+
+    '<div class="step-n">The root</div><h2>Here is what is underneath it</h2>'+
+    '<div class="verdict"><div class="lab">'+SHAPE_LABEL[S.shape]+' · '+fnLabel+'</div>'+
+    '<div class="b">'+esc(S.belief)+'</div>'+
+    '<div class="meta">This is what is triggered. Not the reaction, not the emotion. The belief fires first, and everything above it follows.</div></div>'+
+    '<div class="chain">'+
+      link("Trigger", S.trigger)+
+      link("Reaction", S.reactions.filter(function(r){return r.trim()}).join(" · "))+
+      link("Emotions", S.emotions.join(", ") + (S.body.trim() ? "  (felt in the " + S.body.trim() + ")" : ""))+
+      link("Thoughts", [S.judge.trim(), S.cheer.trim()].filter(Boolean).join("  //  "))+
+      link("Belief", S.belief, true)+
+    '</div>'+
+    '<div class="test"><b>The only test that counts</b><p>Not whether it is true. Not whether it is fair. A belief can be perfectly true and still be unhealthy. Ask instead: <b>does believing this help me show up the way I want to?</b> If the answer is no, it is unhealthy, and that is the whole argument.</p></div>'+
+    '<div class="nav"><button class="btn" id="save">Save this belief</button>'+
+    '<a class="btn ghost" href="https://tree.francoisesterhuizen.com" target="_blank" rel="noopener">Take it into the tree</a>'+
+    '<button class="back" id="again">Another situation</button></div></div>';
+  tool.innerHTML = h;
+  document.getElementById("save").onclick = function(){
+    saveBelief({ b:S.belief, shape:S.shape, fn:S.fn, trig:S.trigger, t:Date.now() });
+    this.textContent = "Saved"; this.disabled = true; renderSaved();
+  };
+  document.getElementById("again").onclick = function(){
+    S = { step:1, trigger:"", reactions:["","",""], emotions:[], body:"", judge:"", cheer:"", shape:null, belief:"", fn:null };
+    render();
+  };
+  renderSaved();
+  tool.scrollIntoView({block:"start"});
+}
+function link(k,v,deep){
+  return '<div class="lnk'+(deep?" deep":"")+'"><span class="k">'+k+'</span><span class="v">'+esc(v||"—")+'</span></div>';
+}
+
+// ===== saved beliefs, this device only =====
+var KEY = "toc-beliefs";
+function loadBeliefs(){ try { return JSON.parse(localStorage.getItem(KEY)) || []; } catch(e){ return []; } }
+function saveBelief(o){
+  try { var l = loadBeliefs(); l.unshift(o); localStorage.setItem(KEY, JSON.stringify(l.slice(0,80))); } catch(e){}
+}
+function renderSaved(){
+  var box = document.getElementById("saved"), list = loadBeliefs();
+  if (!list.length){ box.style.display = "none"; box.innerHTML = ""; return; }
+  box.style.display = "block";
+  var h = '<div class="saved-top"><span class="ph">Beliefs you have named</span><button id="clear">Clear all</button></div>';
+  list.forEach(function(e){
+    h += '<div class="bcard"><div class="bt">'+esc(e.b)+'</div><div class="bm">'+
+      SHAPE_LABEL[e.shape]+' · '+(e.fn==="limiting"?"stops me":"excuses me")+'</div></div>';
+  });
+  h += '<p class="note">Saved on this device only. No account, nothing sent anywhere. Bring these to a one-on-one, or carry them into the green side of the tree.</p>';
+  box.innerHTML = h;
+  document.getElementById("clear").onclick = function(){
+    try { localStorage.removeItem(KEY); } catch(e){} renderSaved();
+  };
+}
+
+document.getElementById("begin").onclick = function(){ S.step = 1; render(); };
+renderSaved();
+</script>
+</body>
+</html>
