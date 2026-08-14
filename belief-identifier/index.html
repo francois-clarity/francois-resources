@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>The Belief Identifier — Francois Esterhuizen</title>
+<title>The Tree of Clarity / The Belief System Model — Francois Esterhuizen</title>
 <meta name="description" content="Take one situation all the way down to the belief underneath it, then build the other side: how you would rather feel, what you would do, and what you choose to believe instead.">
-<meta property="og:title" content="The Belief Identifier">
+<meta property="og:title" content="The Tree of Clarity / The Belief System Model">
 <meta property="og:description" content="One situation, taken down to the root and back up the other side.">
 <meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -189,6 +189,42 @@
   footer nav a{color:var(--muted);text-decoration:none;font-size:14px;font-weight:500}
   footer nav a:hover{color:var(--teal)}
 
+  /* ---- what is still needed on this step ---- */
+  .need{margin-top:12px;font-size:14px;font-weight:600;color:rgba(255,255,255,.5);min-height:1px}
+  .need:empty{margin-top:0}
+
+  /* ---- beliefs, grouped by shape ---- */
+  .bgroup{margin-top:26px;padding-top:22px;border-top:1px solid var(--line)}
+  .bgroup:first-of-type{border-top:none;padding-top:6px}
+  .bghead{display:flex;flex-wrap:wrap;align-items:baseline;gap:10px}
+  .bgt{font-weight:800;font-size:15.5px}
+  .bgs{font-weight:400;font-size:13.5px;color:var(--muted)}
+  .bgroup .stems{margin-top:14px}
+  .brow{margin-top:12px}
+  .brow input{margin-top:0}
+  .bfn{display:flex;gap:8px;margin-top:9px}
+  .bfn.hide{display:none}
+  .bfn button{font-family:inherit;font-size:12.5px;font-weight:600;
+    color:rgba(255,255,255,.55);padding:6px 13px;border-radius:100px;cursor:pointer;
+    border:1px solid rgba(255,255,255,.14);background:none;transition:all .2s}
+  .bfn button:hover{border-color:rgba(255,255,255,.4);color:var(--white)}
+  .bfn button.on{border-color:var(--old);background:rgba(232,160,160,.14);color:#F3C9C9}
+
+  /* ---- choosing the deepest one ---- */
+  .pick-list{display:flex;flex-direction:column;gap:10px;margin-top:22px}
+  .pbelief{text-align:left;font-family:inherit;color:var(--white);cursor:pointer;width:100%;
+    background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.14);
+    border-radius:16px;padding:16px 18px;transition:border-color .2s,background .2s}
+  .pbelief:hover{border-color:rgba(255,255,255,.42);background:rgba(255,255,255,.08)}
+  .pbelief.on{border-color:var(--old);background:rgba(232,160,160,.13)}
+  .pbelief .pb{display:block;font-weight:700;font-size:16px;line-height:1.45}
+  .pbelief .pm{display:block;margin-top:6px;font-size:12px;font-weight:600;letter-spacing:.4px;
+    text-transform:uppercase;color:rgba(255,255,255,.42)}
+
+  .reframe.primary{border-color:rgba(143,217,168,.34);background:rgba(143,217,168,.05)}
+  .ptag{display:block;font-size:11.5px;letter-spacing:2.2px;text-transform:uppercase;
+    font-weight:800;color:var(--new);margin-bottom:10px}
+
   /* ---- the green side ---- */
   .rail i.old.on{background:var(--old)}
   .rail i.new.on{background:var(--new)}
@@ -266,8 +302,8 @@
 <div class="wrap">
 
   <header id="top">
-    <div class="eyebrow">Tree of Clarity · the whole process</div>
-    <h1>The Belief<br><span class="teal">Identifier</span></h1>
+    <div class="eyebrow">The belief system model</div>
+    <h1>The Tree of<br><span class="teal">Clarity</span></h1>
     <p class="lede">One situation, taken all the way down and all the way back up. You already know the tree. This walks the red side with you first, from what you did, through what you felt and thought, to the belief underneath it. Then it turns around and builds the other side: how you would rather feel in exactly the same situation, what you would do, what your coach says, and what you choose to believe instead. You finish with one sentence to carry out with you.</p>
     <div class="cta-row">
       <button class="btn" id="begin">Start with a situation</button>
@@ -280,7 +316,7 @@
 
   <footer>
     <img src="/assets/fe-logo.png" alt="Francois Esterhuizen tree logo">
-    <div class="who"><b>Francois Esterhuizen</b><br>The Belief Identifier</div>
+    <div class="who"><b>Francois Esterhuizen</b><br>The Tree of Clarity</div>
     <nav>
       <a href="/emotional-language-wheel/">The wheel</a>
       <a href="/">All resources</a>
@@ -327,14 +363,92 @@ var SOFTENERS = [
   "but I do not believe that as completely as I did"
 ];
 
-var S = { step:0, trigger:"", reactions:["","",""], emotions:[], body:"",
-          judge:"", cheer:"", shape:null, belief:"", fn:null,
-          goals:[], behaviours:["","",""], coachEnc:"", coachIns:"",
-          reframe:"", newShape:null, newBelief:"",
-          ab:{ doPart:"", feelPart:"", thinkPart:"", believePart:"" },
-          rehearse:"", reset:"Sorry, can I reset? Give me five minutes and we try that again." };
+/* Two slots per shape: the first is required, the second is the one that
+   usually turns up the more interesting belief. */
+var SHAPE_ORDER = ["identity","formula","definition"];
+function blankBeliefs(){
+  var out = [], n = 0;
+  SHAPE_ORDER.forEach(function(sh){
+    out.push({ id:"b"+(++n), shape:sh, text:"", fn:null });
+    out.push({ id:"b"+(++n), shape:sh, text:"", fn:null });
+  });
+  return out;
+}
+function firstOf(sh){
+  return S.beliefs.filter(function(b){ return b.shape === sh; })[0];
+}
+function blankState(step){
+  return { step:step||0, trigger:"", reactions:["","",""], emotions:[], body:"",
+    judge:"", cheer:"", beliefs:blankBeliefs(), primary:null,
+    goals:[], behaviours:["","",""], coachEnc:"", coachIns:"",
+    reframes:{}, newShape:null, newBelief:"",
+    ab:{ doPart:"", feelPart:"", thinkPart:"", believePart:"" },
+    rehearse:"", reset:"Sorry, can I reset? Give me five minutes and we try that again." };
+}
+var S = blankState(0);
 var tool = document.getElementById("tool");
 var STEPS = 12;
+
+/* ---- counting, so the rules are the same everywhere ---- */
+function filledCount(arr){ return arr.filter(function(v){ return String(v).trim(); }).length; }
+function lineCount(){
+  var n = 0;
+  for (var i=0;i<arguments.length;i++) n += lines(arguments[i]).length;
+  return n;
+}
+function filledBeliefs(){ return S.beliefs.filter(function(b){ return b.text.trim(); }); }
+function shapesCovered(){
+  var seen = {};
+  filledBeliefs().forEach(function(b){ seen[b.shape] = true; });
+  return SHAPE_ORDER.filter(function(sh){ return seen[sh]; });
+}
+function primaryBelief(){
+  return filledBeliefs().filter(function(b){ return b.id === S.primary; })[0] || null;
+}
+
+/* What is still missing on this step. Empty string means ready to move on.
+   Every step reports, so the button never just sits there doing nothing. */
+function missing(step){
+  switch(step){
+    case 1: return S.trigger.trim() ? "" : "Write the situation first.";
+    case 2:
+      var r = filledCount(S.reactions);
+      return r >= 3 ? "" : "Three behaviours. You have " + r + ".";
+    case 3:
+      if (S.emotions.length < 3) return "Three emotions. You have " + S.emotions.length + ".";
+      return "";
+    case 4:
+      var t = lineCount(S.judge, S.cheer);
+      return t >= 3 ? "" : "Three thoughts in total, split between the two however they fall. You have " + t + ".";
+    case 5:
+      var have = shapesCovered();
+      if (have.length < 3){
+        var want = SHAPE_ORDER.filter(function(sh){ return have.indexOf(sh) < 0; })
+                    .map(function(sh){ return SHAPE_LABEL[sh].toLowerCase(); });
+        return "At least one of each. Still to go: " + want.join(", ") + ".";
+      }
+      return "";
+    case 6: return S.primary ? "" : "Choose the one that sits deepest.";
+    case 7: return S.goals.length >= 3 ? "" : "Three emotions. You have " + S.goals.length + ".";
+    case 8:
+      var b = filledCount(S.behaviours);
+      return b >= 3 ? "" : "Three behaviours. You have " + b + ".";
+    case 9:
+      var c = lineCount(S.coachEnc, S.coachIns);
+      return c >= 3 ? "" : "Three lines in total, across the two boxes. You have " + c + ".";
+    case 10:
+      var p = primaryBelief();
+      if (p && !String(S.reframes[p.id]||"").trim() && !S.newBelief.trim())
+        return "Rewrite the deepest one, or plant one of your own.";
+      return "";
+    case 11:
+      var a = S.ab;
+      return (a.doPart.trim() && a.feelPart.trim() && a.thinkPart.trim() && a.believePart.trim())
+        ? "" : "All four parts, even if they are short.";
+    case 12: return "";
+    default: return "";
+  }
+}
 
 function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/"/g,"&quot;"); }
 function rail(n){
@@ -345,9 +459,19 @@ function rail(n){
   }
   return h+"</div>";
 }
-function navBtns(nextLabel, canNext){
-  return '<div class="nav"><button class="btn" id="next"'+(canNext?"":" disabled")+'>'+nextLabel+'</button>'+
-         (S.step>1?'<button class="back" id="back">Back</button>':'')+'</div>';
+function navBtns(nextLabel){
+  var need = missing(S.step);
+  return '<div class="nav"><button class="btn" id="next"'+(need?" disabled":"")+'>'+nextLabel+'</button>'+
+         (S.step>1?'<button class="back" id="back">Back</button>':'')+'</div>'+
+         '<div class="need" id="need">'+(need?esc(need):"")+'</div>';
+}
+/* re-check the current step and keep the button and its reason in sync */
+function refresh(){
+  var need = missing(S.step);
+  var n = document.getElementById("next");
+  var m = document.getElementById("need");
+  if (n) n.disabled = !!need;
+  if (m) m.textContent = need;
 }
 
 /* ---- language helpers, so the sentence reads like a person wrote it ---- */
@@ -400,8 +524,12 @@ function prefillSentence(){
   if (!a.doPart.trim()) a.doPart = S.behaviours.filter(function(b){return b.trim();})[0] || "";
   if (!a.feelPart.trim()) a.feelPart = S.goals.join(", ").toLowerCase();
   if (!a.thinkPart.trim()) a.thinkPart = firstPerson(lines(S.coachEnc)[0] || lines(S.coachIns)[0] || "");
-  if (!a.believePart.trim()) a.believePart = S.newBelief.trim() ||
-    String(S.reframe||"").replace(/^but now\s*/i,"");
+  if (!a.believePart.trim()){
+    var p = primaryBelief();
+    var r = p ? String(S.reframes[p.id]||"") : "";
+    if (!r) { for (var k in S.reframes){ if (String(S.reframes[k]).trim()){ r = S.reframes[k]; break; } } }
+    a.believePart = S.newBelief.trim() || String(r).replace(/^but now\s*/i,"");
+  }
 }
 
 function render(){
@@ -410,7 +538,7 @@ function render(){
 
   if (S.step === 1){
     h += '<div class="step-n">Step one · the trigger</div><h2>What is the situation?</h2>'+
-      '<p class="say">One recurring situation that <b>causes you to show up differently than you want to</b>. A person, a moment, a kind of conversation. The situation itself will not change here. That is the point.</p>'+
+      '<p class="say">One situation that keeps coming back, where you <b>end up acting like someone you would rather not be</b>. A particular person, a moment, a kind of conversation. The situation itself does not change here. That is the point.</p>'+
       '<textarea id="f" rows="3" placeholder="When my partner brings up the state of our relationship...">'+esc(S.trigger)+'</textarea>'+
       navBtns("Next", !!S.trigger.trim());
   }
@@ -452,31 +580,49 @@ function render(){
   }
 
   else if (S.step === 5){
-    h += '<div class="step-n">Step five · the belief</div><h2>What has to be true underneath?</h2>'+
-      '<p class="say">This is the hardest part, and coming up blank is normal. You built this system to survive and it is not stupid. Some of it is simply <b>badly outdated</b>. Pick the shape it takes.</p>'+
-      '<div class="shapes">'+
-      shapeBtn("identity","Identity statement","I am, I am not, I can't. Your fears live here too.")+
-      shapeBtn("formula","Formula","Cause and effect. If this, then that.")+
-      shapeBtn("definition","Definition","What a loaded word secretly means to you.")+
-      '</div>';
-    if (S.shape){
-      h += '<div class="stems">'+ STEMS[S.shape].map(function(st){
-        return '<button data-stem="'+esc(st)+'">'+st+'</button>'; }).join("") +'</div>'+
-        '<textarea id="belief" rows="3" placeholder="'+
-        (S.shape==="identity"?"I am a people pleaser":S.shape==="formula"?"If I say no to people, they will not like me":"My definition of love is never being a burden")+
-        '">'+esc(S.belief)+'</textarea>';
-    }
-    h += navBtns("Name what it does", !!(S.shape && S.belief.trim()));
+    h += '<div class="step-n">Step five · the beliefs</div><h2>What has to be true underneath?</h2>'+
+      '<p class="say">This is the hardest part, and coming up blank is normal. You built this system to survive and it is not stupid. Some of it is simply <b>badly outdated</b>. Beliefs come in three shapes, and you want <b>at least one of each</b>. Two of each is where it gets interesting.</p>';
+
+    SHAPE_ORDER.forEach(function(sh){
+      h += '<div class="bgroup"><div class="bghead"><span class="bgt">'+SHAPE_LABEL[sh]+'</span>'+
+        '<span class="bgs">'+
+        (sh==="identity"?"I am, I am not, I can't. Your fears live here too."
+         :sh==="formula"?"Cause and effect. If this, then that."
+         :"A loaded word, and what it secretly means to you.")+'</span></div>'+
+        '<div class="stems">'+ STEMS[sh].map(function(st){
+          return '<button data-stem="'+esc(st)+'" data-shape="'+sh+'">'+st+'</button>'; }).join("") +'</div>';
+      S.beliefs.forEach(function(b,i){
+        if (b.shape !== sh) return;
+        var ph = sh==="identity" ? (b === firstOf(sh) ? "I am a people pleaser" : "I can't ask for what I need")
+               : sh==="formula" ? (b === firstOf(sh) ? "If I say no to people, they will not like me" : "Only if I am useful do I get to stay")
+               : (b === firstOf(sh) ? "My definition of love is never being a burden" : "My definition of success is never dropping anything");
+        h += '<div class="brow"><input type="text" data-bi="'+i+'" value="'+esc(b.text)+'" placeholder="'+esc(ph)+'">'+
+          '<div class="bfn'+(b.text.trim()?"":" hide")+'">'+
+          '<button data-bfn="limiting" data-bi="'+i+'"'+(b.fn==="limiting"?' class="on"':'')+'>It stops me</button>'+
+          '<button data-bfn="justifying" data-bi="'+i+'"'+(b.fn==="justifying"?' class="on"':'')+'>It excuses me</button>'+
+          '</div></div>';
+      });
+      h += '</div>';
+    });
+
+    h += '<p class="hint">A limiting belief holds you back from acting. A justifying one lets you stay exactly as you are, and it usually sounds rational. Tag them as you go.</p>'+
+      navBtns("Find the deepest one");
   }
 
   else if (S.step === 6){
-    h += '<div class="step-n">Step six · what it does to you</div><h2>Does it stop you, or excuse you?</h2>'+
-      '<p class="say">Same belief, two possible jobs. Read yours back and choose the one that fits.</p>'+
-      '<div class="verdict"><div class="lab">'+SHAPE_LABEL[S.shape]+'</div><div class="b">'+esc(S.belief)+'</div></div>'+
-      '<div class="fn">'+
-      '<button data-fn="limiting"'+(S.fn==="limiting"?' class="on"':'')+'><span class="t">It stops me</span><span class="s">A limiting belief. It holds you back from acting. Your fears live in this one.</span></button>'+
-      '<button data-fn="justifying"'+(S.fn==="justifying"?' class="on"':'')+'><span class="t">It excuses me</span><span class="s">A justifying belief. It lets you stay exactly as you are, and it usually sounds rational.</span></button>'+
-      '</div>'+ navBtns("Now build the other side", !!S.fn);
+    var list = filledBeliefs();
+    h += '<div class="step-n">Step six · the deepest root</div><h2>Which one is really running this?</h2>'+
+      '<p class="say">They are all true of you or you would not have written them. But one of them sits under the others, and that is the one worth rebuilding first. Read them back and <b>pick the one that, if it changed, would move the rest</b>.</p>'+
+      '<div class="pick-list">';
+    list.forEach(function(b){
+      h += '<button class="pbelief'+(S.primary===b.id?" on":"")+'" data-prim="'+b.id+'">'+
+        '<span class="pb">'+esc(b.text)+'</span>'+
+        '<span class="pm">'+SHAPE_LABEL[b.shape]+
+        (b.fn ? ' · '+(b.fn==="limiting"?"stops me":"excuses me") : '')+'</span></button>';
+    });
+    h += '</div>'+
+      '<div class="test"><b>The only test that counts</b><p>Not whether it is true. Not whether it is fair. A belief can be perfectly true and still be unhealthy. Ask instead: <b>does believing this help me show up the way I want to?</b> If the answer is no, it is unhealthy, and that is the whole argument.</p></div>'+
+      navBtns("Now build the other side");
   }
 
   /* ================= the green side ================= */
@@ -516,15 +662,31 @@ function render(){
   }
 
   else if (S.step === 10){
-    h += '<div class="step-n new">Step ten · the new root</div><h2>Rewrite what sits underneath</h2>'+
-      '<p class="say">Start with the opposite of the old one, then keep going until it sounds like you rather than like a poster. It does not have to be true, or fair, or impressive. <b>It has to be useful.</b></p>'+
-      '<div class="reframe"><span class="was">I used to believe that '+esc(midSentence(S.belief))+',</span>'+
-      '<textarea id="refr" rows="2" placeholder="but now...">'+esc(S.reframe)+'</textarea>'+
-      '<div class="nudge-slot" id="nudge-refr"></div>'+
-      '<div class="stems soft">'+ SOFTENERS.map(function(t){
-        return '<button data-soft="'+esc(t)+'">'+esc(t)+'</button>'; }).join("") +'</div>'+
-      '<p class="hint">If the full leap is too big to say honestly, take the smaller one. A 5% shift you actually believe beats a bold line you do not.</p></div>'+
-      '<div class="orsep">and, if you want one of your own</div>'+
+    var prim = primaryBelief();
+    var rest = filledBeliefs().filter(function(b){ return b.id !== S.primary; });
+    h += '<div class="step-n new">Step ten · the new roots</div><h2>Rewrite what sits underneath</h2>'+
+      '<p class="say">Start with the opposite of the old one, then keep going until it sounds like you rather than like a poster. It does not have to be true, or fair, or impressive. <b>It has to be useful.</b></p>';
+
+    if (prim){
+      h += '<div class="reframe primary"><span class="ptag">The deepest one</span>'+
+        '<span class="was">I used to believe that '+esc(midSentence(prim.text))+',</span>'+
+        '<textarea data-refr="'+prim.id+'" rows="2" placeholder="but now...">'+esc(S.reframes[prim.id]||"")+'</textarea>'+
+        '<div class="nudge-slot" id="nudge-'+prim.id+'"></div>'+
+        '<div class="stems soft">'+ SOFTENERS.map(function(t){
+          return '<button data-soft="'+esc(t)+'" data-for="'+prim.id+'">'+esc(t)+'</button>'; }).join("") +'</div>'+
+        '<p class="hint">If the full leap is too big to say honestly, take the smaller one. A 5% shift you actually believe beats a bold line you do not.</p></div>';
+    }
+
+    if (rest.length){
+      h += '<div class="orsep">the rest of them, while they are in front of you</div>';
+      rest.forEach(function(b){
+        h += '<div class="reframe"><span class="was">I used to believe that '+esc(midSentence(b.text))+',</span>'+
+          '<textarea data-refr="'+b.id+'" rows="2" placeholder="but now... (optional)">'+esc(S.reframes[b.id]||"")+'</textarea>'+
+          '<div class="nudge-slot" id="nudge-'+b.id+'"></div></div>';
+      });
+    }
+
+    h += '<div class="orsep">and, if you want one of your own</div>'+
       '<div class="shapes">'+
       newShapeBtn("identity","Identity statement","I am. Say who this version of you is.")+
       newShapeBtn("formula","Formula","When this happens, I know that.")+
@@ -537,7 +699,7 @@ function render(){
         (S.newShape==="identity"?"I am an acquired taste":S.newShape==="formula"?"When she is direct, I know she trusts me with the truth":"My definition of enough is what I choose to call enough")+
         '">'+esc(S.newBelief)+'</textarea><div class="nudge-slot" id="nudge-nbel"></div>';
     }
-    h += navBtns("Next", !!(S.reframe.trim() || S.newBelief.trim()));
+    h += navBtns("Next");
   }
 
   else if (S.step === 11){
@@ -575,9 +737,6 @@ function render(){
   if (S.step > 1) tool.scrollIntoView({block:"start"});
 }
 
-function shapeBtn(k,t,s){
-  return '<button class="shape'+(S.shape===k?" on":"")+'" data-shape="'+k+'"><span class="t">'+t+'</span><span class="s">'+s+'</span></button>';
-}
 function newShapeBtn(k,t,s){
   return '<button class="shape green'+(S.newShape===k?" on":"")+'" data-nshape="'+k+'"><span class="t">'+t+'</span><span class="s">'+s+'</span></button>';
 }
@@ -593,42 +752,61 @@ function paintNudge(id,val){
 
 function wire(){
   var f = document.getElementById("f");
-  if (f) f.oninput = function(){ S.trigger = f.value; toggleNext(!!f.value.trim()); };
+  if (f) f.oninput = function(){ S.trigger = f.value; refresh(); };
   tool.querySelectorAll("input[data-r]").forEach(function(el){
-    el.oninput = function(){ S.reactions[+el.getAttribute("data-r")] = el.value;
-      toggleNext(S.reactions.filter(function(r){return r.trim()}).length >= 2); };
+    el.oninput = function(){ S.reactions[+el.getAttribute("data-r")] = el.value; refresh(); };
   });
   tool.querySelectorAll("button[data-e]").forEach(function(el){
     el.onclick = function(){
       var w = el.getAttribute("data-e"), i = S.emotions.indexOf(w);
       if (i > -1) S.emotions.splice(i,1);
       else { if (S.emotions.length >= 3) return; S.emotions.push(w); }
-      el.classList.toggle("on"); toggleNext(S.emotions.length > 0);
+      el.classList.toggle("on"); refresh();
     };
   });
   var body = document.getElementById("body"); if (body) body.oninput = function(){ S.body = body.value; };
   ["judge","cheer"].forEach(function(k){
     var el = document.getElementById(k);
-    if (el) el.oninput = function(){ S[k] = el.value; toggleNext(!!(S.judge.trim()||S.cheer.trim())); };
+    if (el) el.oninput = function(){ S[k] = el.value; refresh(); };
   });
-  tool.querySelectorAll("button[data-shape]").forEach(function(el){
-    el.onclick = function(){ S.shape = el.getAttribute("data-shape"); render(); };
+  /* belief rows: text, the stems that fill the first empty slot, and the tags */
+  tool.querySelectorAll("input[data-bi]").forEach(function(el){
+    el.oninput = function(){
+      var i = +el.getAttribute("data-bi");
+      S.beliefs[i].text = el.value;
+      var tags = el.parentNode.querySelector(".bfn");
+      if (tags) tags.classList.toggle("hide", !el.value.trim());
+      if (!el.value.trim()) S.beliefs[i].fn = null;
+      refresh();
+    };
   });
   tool.querySelectorAll("button[data-stem]").forEach(function(el){
     el.onclick = function(){
-      var b = document.getElementById("belief");
+      var sh = el.getAttribute("data-shape");
       var stem = el.getAttribute("data-stem").replace(/\.\.\.$/,"");
-      b.value = stem; S.belief = b.value; b.focus();
-      toggleNext(!!b.value.trim());
+      var idx = -1;
+      S.beliefs.forEach(function(b,i){ if (idx<0 && b.shape===sh && !b.text.trim()) idx = i; });
+      if (idx < 0) S.beliefs.forEach(function(b,i){ if (b.shape===sh) idx = i; });
+      S.beliefs[idx].text = stem;
+      render();
+      var f = tool.querySelector('input[data-bi="'+idx+'"]');
+      if (f){ f.focus(); f.setSelectionRange(f.value.length, f.value.length); }
     };
   });
-  var bel = document.getElementById("belief");
-  if (bel) bel.oninput = function(){ S.belief = bel.value; toggleNext(!!bel.value.trim()); };
-  tool.querySelectorAll("button[data-fn]").forEach(function(el){
+  tool.querySelectorAll("button[data-bfn]").forEach(function(el){
     el.onclick = function(){
-      S.fn = el.getAttribute("data-fn");
-      tool.querySelectorAll("button[data-fn]").forEach(function(x){ x.classList.remove("on"); });
-      el.classList.add("on"); toggleNext(true);
+      var i = +el.getAttribute("data-bi"), v = el.getAttribute("data-bfn");
+      S.beliefs[i].fn = (S.beliefs[i].fn === v) ? null : v;
+      el.parentNode.querySelectorAll("button").forEach(function(x){ x.classList.remove("on"); });
+      if (S.beliefs[i].fn) el.classList.add("on");
+      refresh();
+    };
+  });
+  tool.querySelectorAll("button[data-prim]").forEach(function(el){
+    el.onclick = function(){
+      S.primary = el.getAttribute("data-prim");
+      tool.querySelectorAll("button[data-prim]").forEach(function(x){ x.classList.remove("on"); });
+      el.classList.add("on"); refresh();
     };
   });
   /* ---- green side ---- */
@@ -637,23 +815,29 @@ function wire(){
       var w = el.getAttribute("data-g"), i = S.goals.indexOf(w);
       if (i > -1) S.goals.splice(i,1);
       else { if (S.goals.length >= 3) return; S.goals.push(w); }
-      el.classList.toggle("on"); toggleNext(S.goals.length > 0);
+      el.classList.toggle("on"); refresh();
     };
   });
   tool.querySelectorAll("input[data-b]").forEach(function(el){
-    el.oninput = function(){ S.behaviours[+el.getAttribute("data-b")] = el.value;
-      toggleNext(S.behaviours.filter(function(r){return r.trim();}).length >= 1); };
+    el.oninput = function(){ S.behaviours[+el.getAttribute("data-b")] = el.value; refresh(); };
   });
   [["cenc","coachEnc"],["cins","coachIns"]].forEach(function(p){
     var el = document.getElementById(p[0]);
-    if (el) el.oninput = function(){ S[p[1]] = el.value;
-      toggleNext(!!(S.coachEnc.trim() || S.coachIns.trim())); };
+    if (el) el.oninput = function(){ S[p[1]] = el.value; refresh(); };
   });
-  var refr = document.getElementById("refr");
-  if (refr) refr.oninput = function(){ S.reframe = refr.value; paintNudge("nudge-refr", refr.value);
-    toggleNext(!!(S.reframe.trim() || S.newBelief.trim())); };
+  tool.querySelectorAll("textarea[data-refr]").forEach(function(el){
+    el.oninput = function(){
+      var id = el.getAttribute("data-refr");
+      S.reframes[id] = el.value;
+      paintNudge("nudge-"+id, el.value);
+      refresh();
+    };
+  });
   tool.querySelectorAll("button[data-soft]").forEach(function(el){
-    el.onclick = function(){ S.reframe = el.getAttribute("data-soft"); render(); };
+    el.onclick = function(){
+      S.reframes[el.getAttribute("data-for")] = el.getAttribute("data-soft");
+      render();
+    };
   });
   tool.querySelectorAll("button[data-nshape]").forEach(function(el){
     el.onclick = function(){ S.newShape = el.getAttribute("data-nshape"); render(); };
@@ -662,19 +846,16 @@ function wire(){
     el.onclick = function(){
       var b = document.getElementById("nbel");
       b.value = el.getAttribute("data-nstem").replace(/\.\.\.$/,"");
-      S.newBelief = b.value; b.focus();
-      toggleNext(!!(S.reframe.trim() || S.newBelief.trim()));
+      S.newBelief = b.value; b.focus(); refresh();
     };
   });
   var nbel = document.getElementById("nbel");
-  if (nbel) nbel.oninput = function(){ S.newBelief = nbel.value; paintNudge("nudge-nbel", nbel.value);
-    toggleNext(!!(S.reframe.trim() || S.newBelief.trim())); };
+  if (nbel) nbel.oninput = function(){ S.newBelief = nbel.value; paintNudge("nudge-nbel", nbel.value); refresh(); };
   tool.querySelectorAll("input[data-ab]").forEach(function(el){
     el.oninput = function(){
       S.ab[el.getAttribute("data-ab")] = el.value;
       var s = document.getElementById("sent"); if (s) s.innerHTML = sentenceHtml();
-      var a = S.ab;
-      toggleNext(!!(a.doPart.trim() && a.feelPart.trim() && a.thinkPart.trim() && a.believePart.trim()));
+      refresh();
     };
   });
   var reh = document.getElementById("reh");
@@ -687,13 +868,23 @@ function wire(){
   var bk = document.getElementById("back");
   if (bk) bk.onclick = function(){ S.step--; render(); };
 }
-function toggleNext(ok){ var n = document.getElementById("next"); if (n) n.disabled = !ok; }
+
 
 function finish(){
   prefillSentence();
-  var fnLabel = S.fn === "limiting" ? "It stopped me · limiting" : "It excused me · justifying";
+  var prim = primaryBelief();
+  var oldList = filledBeliefs().map(function(b){
+    return b.text + (b.id === S.primary ? "  (the deepest one)" : "");
+  });
+  var stops = filledBeliefs().filter(function(b){ return b.fn === "limiting"; }).length;
+  var excuses = filledBeliefs().filter(function(b){ return b.fn === "justifying"; }).length;
+  var fnote = [stops ? stops+" that stop me" : "", excuses ? excuses+" that excuse me" : ""]
+                .filter(Boolean).join(" · ") || "The old belief system";
   var newBeliefs = [];
-  if (S.reframe.trim()) newBeliefs.push("I used to believe that "+midSentence(S.belief)+", "+noStop(S.reframe)+".");
+  filledBeliefs().forEach(function(b){
+    var r = String(S.reframes[b.id]||"").trim();
+    if (r) newBeliefs.push("I used to believe that "+midSentence(b.text)+", "+noStop(r)+".");
+  });
   if (S.newBelief.trim()) newBeliefs.push(noStop(S.newBelief)+".");
 
   var h = '<div class="stage m-in">'+
@@ -706,8 +897,8 @@ function finish(){
         link("I do", S.reactions.filter(function(r){return r.trim();}).join(" · "))+
         link("I feel", S.emotions.join(", ") + (S.body.trim() ? " (in the "+S.body.trim()+")" : ""))+
         link("I think", [S.judge.trim(), S.cheer.trim()].filter(Boolean).join("  //  "))+
-        link("I believe", S.belief, true)+
-        '<div class="fnote">'+SHAPE_LABEL[S.shape]+' · '+fnLabel+'</div>'+
+        link("I believe", oldList.join("   ·   "), true)+
+        '<div class="fnote">'+fnote+'</div>'+
       '</div>'+
       '<div class="col new"><div class="colh">How it could go</div>'+
         link("Trigger", S.trigger + "  (unchanged)")+
@@ -735,24 +926,23 @@ function finish(){
 
   tool.innerHTML = h;
   document.getElementById("save").onclick = function(){
-    saveBelief({ b:S.belief, shape:S.shape, fn:S.fn, trig:S.trigger,
-                 nb:newBeliefs.join(" "), t:Date.now() });
+    filledBeliefs().forEach(function(b){
+      saveBelief({ b:b.text, shape:b.shape, fn:b.fn, trig:S.trigger,
+                   nb:String(S.reframes[b.id]||""), t:Date.now() });
+    });
     this.textContent = "Saved"; this.disabled = true; renderSaved();
   };
   document.getElementById("print").onclick = function(){ window.print(); };
   document.getElementById("again").onclick = function(){
-    S = { step:1, trigger:"", reactions:["","",""], emotions:[], body:"", judge:"", cheer:"",
-          shape:null, belief:"", fn:null, goals:[], behaviours:["","",""], coachEnc:"", coachIns:"",
-          reframe:"", newShape:null, newBelief:"",
-          ab:{ doPart:"", feelPart:"", thinkPart:"", believePart:"" },
-          rehearse:"", reset:"Sorry, can I reset? Give me five minutes and we try that again." };
+    S = blankState(1);
     render();
   };
   renderSaved();
   tool.scrollIntoView({block:"start"});
 }
 function link(k,v,deep){
-  return '<div class="lnk'+(deep?" deep":"")+'"><span class="k">'+k+'</span><span class="v">'+esc(v||"—")+'</span></div>';
+  if (!String(v||"").trim()) return "";   // never print an empty row
+  return '<div class="lnk'+(deep?" deep":"")+'"><span class="k">'+k+'</span><span class="v">'+esc(v)+'</span></div>';
 }
 
 // ===== saved beliefs, this device only =====
