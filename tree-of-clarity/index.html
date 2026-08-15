@@ -180,11 +180,32 @@
     letter-spacing:.4px;text-transform:uppercase}
   .note{font-size:13px;line-height:1.6;color:rgba(255,255,255,.42);margin-top:14px;max-width:64ch}
 
-  .facil-note{margin-top:64px;font-size:14px;line-height:1.65;color:rgba(255,255,255,.45);
-    max-width:64ch}
-  .facil-note a{color:var(--teal);text-decoration:none;font-weight:600}
-  .facil-note a:hover{text-decoration:underline}
-  footer{margin-top:36px;padding-top:36px;border-top:1px solid var(--line);
+  .how-box{margin-top:30px;border:1px solid var(--line);border-radius:20px;padding:24px 26px;
+    background:rgba(255,255,255,.03);max-width:62ch}
+  .how-box .hb-k{font-size:12px;letter-spacing:2.5px;text-transform:uppercase;font-weight:800;
+    color:var(--teal);margin-bottom:11px}
+  .how-box p{font-size:15.5px;line-height:1.65;color:var(--muted);font-weight:300;margin-bottom:12px}
+  .how-box p:last-child{margin-bottom:0}
+
+  /* the guidance layer: everything opens in place, nothing navigates away */
+  .help{margin-top:26px;border-top:1px solid var(--line);padding-top:20px}
+  .help-t{display:block;width:100%;text-align:left;font-family:inherit;cursor:pointer;
+    background:none;border:none;padding:11px 0 11px 26px;position:relative;
+    color:var(--teal);font-size:14.5px;font-weight:700;letter-spacing:.2px}
+  .help-t::before{content:'+';position:absolute;left:4px;top:10px;font-size:17px;
+    font-weight:800;line-height:1.2;transition:transform .25s ease}
+  .help-t.open::before{content:'–'}
+  .help-t:hover{color:#7FE9E7}
+  .help-b{display:none;padding:4px 0 14px 26px;max-width:64ch}
+  .help-b.open{display:block;animation:m-rise .4s cubic-bezier(.16,1,.3,1) both}
+  .help-b p{font-size:15.5px;line-height:1.68;color:rgba(255,255,255,.72);
+    font-weight:300;margin-bottom:13px}
+  .help-b p:last-child{margin-bottom:0}
+  .qa{margin-bottom:16px;padding-left:15px;border-left:2px solid rgba(255,255,255,.13)}
+  .qa:last-child{margin-bottom:0}
+  .qa .q{font-size:14.5px;font-weight:800;color:rgba(255,255,255,.92);margin-bottom:6px;line-height:1.45}
+  .qa p{font-size:14.5px;line-height:1.62;margin-bottom:0}
+  footer{margin-top:64px;padding-top:36px;border-top:1px solid var(--line);
     display:flex;align-items:center;gap:20px;flex-wrap:wrap}
   footer img{width:44px;height:44px;display:block}
   footer .who{font-size:14px;color:var(--muted);line-height:1.5}
@@ -387,7 +408,13 @@
   <header id="top">
     <div class="eyebrow">The belief system model</div>
     <h1>The Tree of<br><span class="teal">Clarity</span></h1>
-    <p class="lede">One situation, taken all the way down and all the way back up. You already know the tree. This walks the red side with you first, from what you did, through what you felt and thought, to the belief underneath it. Then it turns around and builds the other side: how you would rather feel in exactly the same situation, what you would do, what your coach says, and what you choose to believe instead. You finish with one sentence to carry out with you.</p>
+    <p class="lede">There is a situation in your life where you do not show up the way you want to. You have probably tried to change how you behave in it, and found that it does not hold. That is because behaviour is the top of a tree, and the roots are somewhere else.</p>
+    <p class="lede">This walks you down to those roots, one step at a time, and then back up the other side. You need to know nothing before you start. Every step explains itself, and if a step is unclear there is more help on the step itself. Twelve steps, about half an hour, and you finish with one sentence to carry out with you.</p>
+    <div class="how-box">
+      <div class="hb-k">How it works</div>
+      <p>You will start with what you do, then go underneath it: what you feel, what you think, and finally what you believe. Beliefs are the deepest roots, and they are what actually fire first. Then, with the situation left exactly as it is, you build the other side of the tree deliberately.</p>
+      <p>Nothing you write leaves this device, there is no account, and nothing here links away. It is one path, and you can stop and come back to it.</p>
+    </div>
     <div class="who-box" id="who">
       <label class="fl">Your name</label>
       <input type="text" id="wname" placeholder="So the tool can talk to you properly">
@@ -396,27 +423,16 @@
       <p class="note">Both stay on this device with everything else you write. Nothing is sent anywhere, and there is no account to make.</p>
     </div>
     <div class="cta-row">
-      <button class="btn" id="begin">Start with a situation</button>
-      <a class="btn ghost" href="/emotional-language-wheel/">Open the emotion wheel</a>
+      <button class="btn" id="begin">Begin</button>
     </div>
   </header>
 
   <div id="tool"></div>
   <div class="saved" id="saved" style="display:none"></div>
 
-  <p class="facil-note">This is the version to work through on your own, in your own time.
-    Running it with a group? There is a facilitated version with a run sheet and a room code at
-    <a href="https://tree.francoisesterhuizen.com" target="_blank" rel="noopener">tree.francoisesterhuizen.com</a>.</p>
-
   <footer>
     <img src="/assets/fe-logo.png" alt="Francois Esterhuizen tree logo">
     <div class="who"><b>Francois Esterhuizen</b><br>The Tree of Clarity</div>
-    <nav>
-      <a href="/three-voices/">The voices</a>
-      <a href="/belief-inventory/">The inventory</a>
-      <a href="/emotional-language-wheel/">The wheel</a>
-      <a href="/">All resources</a>
-    </nav>
   </footer>
 </div>
 
@@ -708,9 +724,88 @@ function rail(n){
   }
   return h+"</div>";
 }
+/* ===== the guidance layer =====
+   Written for someone who has never heard of the Tree of Clarity and has not
+   watched anything. Everything opens in place: there is nowhere to click away to.
+   Answers are Francois's own, from the teaching session and the group calls. */
+var HELP = {
+1:{ more:"A trigger is any situation that causes you to act or show up differently than you actually want to. It can be a person, a type of conversation, conflict, or something as ordinary as sitting down to do important work and going to Netflix instead.\n\nPick one that repeats. It does not have to be dramatic, and it should not be the hardest thing in your life. Start where you already feel the drag. The test is simple: afterwards, you think that is not who I want to be.\n\nWrite it in one line. You are naming the situation, not explaining or defending it.",
+    qs:[["It is a person, not an event. Does that count?","Yes. People are triggers as often as events are. Name the situation you are in with them, rather than listing what is wrong with them."],
+        ["It happened once, years ago. Can I use it?","If it still comes back to you now and then, it is live, and it counts."],
+        ["Should I pick the biggest thing in my life?","No. Something recurring and medium sized works better. You are learning the method here, and you can bring the big one through later."]] },
+
+2:{ more:"Behaviour only. If someone filmed you in that moment and played it back with the sound off, what would they see? Facial expression, tone of voice, body language, and what you do or refuse to do.\n\nThis is not how you feel and not what you think. \"I felt angry\" is not a reaction. \"I went quiet and left the room\" is. Look at the moment itself and then at afterwards, because the two often differ.\n\nWrite quickly and cryptically. Nobody is reading this.",
+    qs:[["Is withdrawing a feeling or a behaviour?","Withdrawing is a behaviour, and a very common one. Feeling rejected is the feeling underneath it, and that comes on the next step."],
+        ["What if I do nothing at all?","Doing nothing is a reaction. Avoiding, delaying and going silent are all behaviours that someone watching could describe."],
+        ["Why not just link the situation to how I react?","Because that is outsourcing, and it hands your power to whoever triggered you. It says: you decide how I behave. The whole point of going down the tree is that something sits in between, and that part belongs to you."]] },
+
+3:{ more:"Now the emotions underneath the behaviour. The rule is that mad and sad do not count. They are the surface, and they hide the ones that matter.\n\nUnderneath anger there is usually something like disrespected, rejected or unimportant. Underneath sadness there is often the same list. Other people only see the anger or the sadness, so you have to go looking for the rest yourself.\n\nThe whole wheel is here to widen your vocabulary. Search it, or open a family and read down. Three is the ask, because three forces you to be precise.",
+    qs:[["I can only come up with angry.","Then ask what the anger is protecting. Anger almost always sits on top of something more vulnerable, and that is the one driving the behaviour."],
+        ["Can I pick more than three?","Three is enough to work with. More usually means you have not chosen yet."],
+        ["Why does it matter where I feel it in my body?","Because the sensation arrives before the words do. Once you know that this situation lands in your chest or your stomach, that becomes your earliest warning, long before you have named anything."]] },
+
+4:{ more:"Your thoughts are what turn a belief into a feeling, and there are distinct voices doing the talking.\n\nThe judge aims inward and shames you. It works two ways: flatly (\"I am useless\", \"I am lazy\") and as a small innocent question (\"What is wrong with me?\", \"Why can I never get this right?\"). The question form is the sneaky one, because it does not feel like an attack.\n\nThe cheerleader is always on your side, so it points outward at people and circumstances. It sounds like loyalty, and that is exactly why it is hard to catch.\n\nWrite the lines as they actually sound in your head, not tidied up.",
+    qs:[["What if what I am thinking is simply true?","It might be. It changes nothing here. We are collecting what gets said in that moment, not holding a trial. Whether it helps you is a question for further down."],
+        ["I do not hear voices in my head.","Nothing literal is meant by it. These are your recurring automatic thoughts, the ones so familiar that they do not announce themselves."],
+        ["The blaming one feels justified.","It usually is, at least partly. That is what makes it effective. Notice that while the blame is pointing outward, nothing you can actually change is being looked at."]] },
+
+5:{ more:"This is the deepest layer and the hardest part of the work. Coming up blank here is normal and expected.\n\nYou built your belief system to navigate life and to survive. It is not a bad thing and it is not stupid. Some of it has simply become badly outdated, and some of it is being used in situations it was never meant for.\n\nBeliefs come in three shapes, and the shapes are there to give you somewhere to start:\n\nIdentity statements begin with I am, I am not, or I can't. Your fears live here too, because \"I am afraid of failing\" is an identity statement.\n\nFormulas have two parts, cause and effect. If this, then that. Only if this, then I can that.\n\nDefinitions are what a loaded word secretly means to you. Success, love, respect, enough.\n\nIf nothing comes, start with a formula. They are the easiest to catch.",
+    qs:[["Nothing is coming at all.","That is the normal experience the first time, and it is not a sign that you have no beliefs. Use the shapes as scaffolding rather than waiting for inspiration. Finish the sentence \"if I say no, then...\" and see what your mind puts there."],
+        ["What if the belief is actually true?","True does not matter here. A belief can be perfectly true, even a quote from the holy scriptures, and still be unhealthy if it causes you to think, feel and act in a way that is not who you want to be. The power of a belief comes from the fact that you believe it, nothing else."],
+        ["Where did these come from?","Usually a formula that made sense at the time and hardened over the years. \"If I say no to people, they will not like me\" is repeated often enough that it becomes \"I am a people pleaser\"."]] },
+
+6:{ more:"Every belief you have written does one of two jobs, and naming which one changes how you handle it.\n\nA limiting belief stops you. It is like a fear. I am not good enough. I am afraid of failing. If circumstances were different, then I would try.\n\nA justifying belief helps you stay exactly as you are and keeps you acting the way you act. How am I supposed to behave when they act like that. In the current economy I cannot go looking for new clients. I first have to finish this course before I start.\n\nJustifying beliefs are the dangerous ones, because on paper they sound rational and reasonable. If it keeps you showing up in a way you do not want, it is unhealthy, however sensible it sounds.",
+    qs:[["What is the actual difference between the two?","A limiting belief is like a fear and it obviously stops you. A justifying belief helps you stay the way you are, and it usually sounds like good sense rather than fear."],
+        ["Can one belief do both?","Often, yes. Choose the job it is mostly doing in this situation and move on."],
+        ["Is it good or bad, right or wrong?","None of those. The only measure is healthy or unhealthy, and the only test is whether believing it helps you show up the way you want to."]] },
+
+7:{ more:"Everything from here is built in reverse, and it starts with how you want to feel.\n\nThe situation does not change. That is the whole discipline of this step. You are not waiting for them to behave differently or for the circumstances to improve. If the situation stayed exactly as it is, how would you rather feel in it?\n\nSome emotions make complete sense at first. If you do not get a job you wanted, feeling disappointed and a bit rejected is honest. It is when those feelings linger and settle that the thoughts and beliefs underneath are sustaining them.\n\nThree healthy emotions. Calm, curious, empowered, at peace, open. Yours will be your own.",
+    qs:[["How am I supposed to feel any different in this situation?","That question is the cheerleader talking, and it is a belief in disguise: because of that, I cannot. Your emotions are created by your thoughts and beliefs, which means they are yours to build rather than something the situation hands you."],
+        ["Is this not just pretending?","No. You are not pretending to feel it now. You are naming the target so that the rest of the tree has something to aim at."],
+        ["What if I genuinely cannot imagine feeling different?","Then borrow. Think of someone who handles this kind of moment the way you would like to, and ask what they are feeling."]] },
+
+8:{ more:"If you actually felt those things in that same situation, what would you do?\n\nBack to observable behaviour, the same rule as before. Something the camera would catch. Not an intention, not an attitude, but an action someone could see.\n\nThen stress test it. When it happens again anyway, and it will, what do you do then?",
+    qs:[["This feels unrealistic.","It should feel like a stretch. It should not feel impossible. If it does, make it smaller until it is something you could actually do once."],
+        ["What if I do it and nothing changes?","Possible. You are not guaranteed a crop just because you planted. What changes first is who you are in the situation, and that is the part that was always yours."]] },
+
+9:{ more:"The third voice. The coach both encourages and instructs, and in anyone who feels stuck it is the underdeveloped one, which is why the other two are so loud.\n\nEncouragement is the obvious half. You can do this. Go for it.\n\nInstruction is the half people forget, and it is the one that changes what happens next time. Try this specific thing. Approach it like this. What other ideas can you generate?\n\nIf the phrase \"I have tried everything\" is anywhere near this situation, test it. Write down what you actually tried. The list is usually two or three things, repeated. That is not everything, that is the same move over and over, which is the old system doing its job.",
+    qs:[["I really have tried everything.","Then list it and count. It is almost always two or three genuinely different actions, done many times. The fourth thing, the one you have not tried yet, is where the change lives."],
+        ["Where is the coach supposed to get its wisdom from?","From the beliefs you are about to write on the next step. That is why this side is built in this order."]] },
+
+10:{ more:"Now the roots on this side. Start with the opposite of the old belief, then keep upgrading until it sounds like you rather than like a poster.\n\nDo not settle for the plain negation. If the old one is \"I am not good enough\", the new one is not \"I am good enough\". Upgrade it massively, to something like \"I am an acquired taste\".\n\nA few rules that make a new belief hold. Present tense, not will and not must. Positively framed rather than the negation of the old. Short. About your own agency, not about other people changing. And it has to plausibly produce the feelings you chose earlier.\n\nIf the leap is too big to swallow, soften it. Add \"yet\". Or write \"I am starting to doubt that\". Even a five per cent tweak counts.",
+    qs:[["It feels like lying to myself.","This is not about whether it is true. It is unlimited precisely because it is not a question of true, right or good. It is a question of what helps you show up the way you want to. Morals and ethics show up above the surface, from what you plant down here."],
+        ["How do I know if I have a good one?","Read it back and check how it sits with you. Keep it only if it helps. If it does nothing for you, let it go and write another."],
+        ["Can I borrow someone else's?","Yes. Pick someone who represents this and write yourself as their next version. It is a shortcut, not a cheat."]] },
+
+11:{ more:"One sentence that holds the whole green side together, filled in from what you have already written.\n\nAt my best I do this, because I feel that, because I think this, and I believe that.\n\nRead it out loud. If a part of it makes you wince, go back and change that part rather than talking yourself into it.",
+    qs:[["It sounds clumsy.","Then make it yours. The shape matters more than the wording, because it links the behaviour to the feeling to the thought to the belief in one line."]] },
+
+12:{ more:"How you actually catch this in real life, rather than only on this page.\n\nThe body sensation you named earlier becomes your first clue. When it shows up, that is the signal that the old system is running.\n\nWhich turns the unhealthy emotions into allies. They are no longer the enemy, they are the reminder to move your attention to the new beliefs.\n\nExpect to slide back. Everyone does. Have a reset line ready, something as simple as asking for five minutes and starting the conversation again. And watch for new justifying beliefs appearing to excuse the slide.",
+    qs:[["What if I forget in the moment?","You will, often, at first. The body clue is what shortens the gap. Noticing an hour later is progress on noticing a week later."],
+        ["How long does this take?","Some of it moves quickly. The bigger roots take seasons. You plant, and you plant again next season."]] }
+};
+
+function helpBlock(step){
+  var d = HELP[step];
+  if (!d) return "";
+  var h = '<div class="help">';
+  h += '<button class="help-t" data-help="more'+step+'">I need more help with this step</button>'+
+       '<div class="help-b" id="more'+step+'">'+
+       d.more.split("\n\n").map(function(p){ return "<p>"+esc(p)+"</p>"; }).join("")+'</div>';
+  if (d.qs && d.qs.length){
+    h += '<button class="help-t" data-help="qs'+step+'">Questions people ask here</button>'+
+         '<div class="help-b" id="qs'+step+'">'+
+         d.qs.map(function(qa){
+           return '<div class="qa"><div class="q">'+esc(qa[0])+'</div><p>'+esc(qa[1])+'</p></div>';
+         }).join("")+'</div>';
+  }
+  return h + '</div>';
+}
+
 function navBtns(nextLabel){
   var need = missing(S.step);
-  return '<div class="nav"><button class="btn" id="next"'+(need?" disabled":"")+'>'+nextLabel+'</button>'+
+  return helpBlock(S.step) +
+         '<div class="nav"><button class="btn" id="next"'+(need?" disabled":"")+'>'+nextLabel+'</button>'+
          (S.step>1?'<button class="back" id="back">Back</button>':'')+'</div>'+
          '<div class="need" id="need">'+(need?esc(need):"")+'</div>';
 }
@@ -1026,6 +1121,15 @@ function paintNudge(id,val){
 }
 
 function wire(){
+  /* help expanders: toggle in place, never re-render, so nothing typed is lost */
+  tool.querySelectorAll("button[data-help]").forEach(function(el){
+    el.onclick = function(){
+      var b = document.getElementById(el.getAttribute("data-help"));
+      if (!b) return;
+      var open = b.classList.toggle("open");
+      el.classList.toggle("open", open);
+    };
+  });
   var f = document.getElementById("f");
   if (f) f.oninput = function(){ S.trigger = f.value; refresh(); };
   tool.querySelectorAll("button[data-mode]").forEach(function(el){
