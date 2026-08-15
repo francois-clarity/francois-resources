@@ -367,6 +367,20 @@
   .stems.soft button:hover{border-color:var(--new);color:var(--new)}
   /* the nudge slot holds its height whether or not a nudge is showing, so the
      live coaching never pushes the next field down while someone is typing */
+  /* worked examples: fixed height so cycling never moves the page */
+  .ex{margin-top:14px;border:1px solid rgba(24,192,192,.22);border-radius:14px;
+    padding:13px 16px;background:rgba(24,192,192,.05);min-height:78px}
+  .ex-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:7px}
+  .ex-k{font-size:11px;letter-spacing:2.2px;text-transform:uppercase;font-weight:800;color:var(--teal)}
+  .ex-nav{display:flex;align-items:center;gap:9px}
+  .ex-nav button{background:none;border:none;cursor:pointer;font-family:inherit;
+    color:rgba(255,255,255,.42);font-size:19px;line-height:1;padding:2px 6px;border-radius:6px}
+  .ex-nav button:hover{color:var(--teal);background:rgba(24,192,192,.12)}
+  .ex-n{font-size:11.5px;color:rgba(255,255,255,.36);font-weight:700;
+    min-width:44px;text-align:center;letter-spacing:.4px}
+  .ex-b{font-size:15.5px;line-height:1.5;color:rgba(255,255,255,.86);font-weight:500;
+    transition:opacity .25s ease}
+  @media (prefers-reduced-motion:reduce){.ex-b{transition:none}}
   .nudge-slot{min-height:46px}
   .autosave{margin-top:16px;font-size:12.5px;color:rgba(255,255,255,.32);font-weight:500}
   .nudge{margin-top:12px;font-size:14px;line-height:1.55;color:var(--teal);
@@ -806,6 +820,125 @@ var HELP = {
         ["How long does this take?","Some of it moves quickly. The bigger roots take seasons. You plant, and you plant again next season."]] }
 };
 
+/* ===== worked examples =====
+   Deliberately spread across work, relationship, parenting, money and self, so
+   whoever is reading recognises their own life in at least one of them. They
+   cycle on their own while the box is still empty, and stop for good the moment
+   someone touches the field. */
+var EX = {
+  trigger:[
+    "When my partner brings up the state of our relationship",
+    "When I sit down to do the work that actually matters",
+    "When my work gets questioned in front of other people",
+    "When my mother comments on how I am raising my kids",
+    "When I look at the bank balance near the end of the month",
+    "When someone I respect goes quiet on me"
+  ],
+  reaction:[
+    "I go quiet and find a reason to leave the room",
+    "My voice goes flat and clipped",
+    "I open my phone and scroll without reading anything",
+    "I over-explain, and keep talking long after I should have stopped",
+    "I say it is fine, then avoid them for two days",
+    "I clean the kitchen instead of starting"
+  ],
+  deeper:[
+    "Angry on the outside. Dismissed underneath.",
+    "Sad on the outside. Unimportant underneath.",
+    "Fine on the outside. Exposed underneath.",
+    "Irritated on the outside. Powerless underneath.",
+    "Busy on the outside. Inadequate underneath."
+  ],
+  goals:[
+    "Calm, curious, steady",
+    "Confident, warm, unhurried",
+    "Grounded, open, willing",
+    "Settled, direct, kind"
+  ],
+  behaviour:[
+    "I stay in the room and ask one question",
+    "I say the thing in the meeting instead of in the car afterwards",
+    "I start badly, for ten minutes, and let that be enough",
+    "I say I need a night to think, and I come back the next day",
+    "I keep my voice level and finish the sentence I started"
+  ],
+  encourage:[
+    "You have handled harder than this",
+    "You are allowed to take up this much room",
+    "This is uncomfortable, not dangerous",
+    "You do not have to get this perfect to do it"
+  ],
+  instruct:[
+    "Ask one clarifying question before you answer",
+    "Say the first honest sentence, then stop talking",
+    "Set a timer for ten minutes and open the file",
+    "Name what you want, once, plainly"
+  ],
+  reframe:[
+    "I am an acquired taste",
+    "I am someone who says the hard thing kindly",
+    "I am allowed to be a beginner in public",
+    "My worth is not on the table in this conversation",
+    "I am starting to doubt that I have to earn my place"
+  ],
+  belief:[
+    "I am a people pleaser  ·  identity",
+    "I am not good enough at this  ·  identity",
+    "I can't ask for what I need  ·  identity",
+    "If I say no, then they will not like me  ·  formula",
+    "Only if I am useful do I get to stay  ·  formula",
+    "If I rest, then I am falling behind  ·  formula",
+    "My definition of success is never letting anyone down  ·  definition",
+    "My definition of love is never being a burden  ·  definition"
+  ],
+  practice:[
+    "When my chest tightens, that is the old system arriving",
+    "When my jaw sets, I take one breath before I speak",
+    "When I reach for my phone, that is the signal, not the solution"
+  ]
+};
+
+/* A fixed-height strip so cycling never moves anything below it. */
+function exampleStrip(key, label){
+  var list = EX[key]; if (!list) return "";
+  return '<div class="ex" data-ex="'+key+'">'+
+    '<div class="ex-top"><span class="ex-k">'+(label||"For example")+'</span>'+
+    '<span class="ex-nav"><button data-exp="'+key+'" aria-label="Previous example">&#8249;</button>'+
+    '<span class="ex-n" id="exn-'+key+'">1 of '+list.length+'</span>'+
+    '<button data-exn="'+key+'" aria-label="Next example">&#8250;</button></span></div>'+
+    '<div class="ex-b" id="exb-'+key+'">'+esc(list[0])+'</div></div>';
+}
+
+var exTimers = [];
+function wireExamples(){
+  exTimers.forEach(clearInterval); exTimers = [];
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  tool.querySelectorAll("[data-ex]").forEach(function(wrap){
+    var key = wrap.getAttribute("data-ex"), list = EX[key], i = 0, stopped = false;
+    var body = document.getElementById("exb-"+key), num = document.getElementById("exn-"+key);
+    function show(n){
+      i = (n + list.length) % list.length;
+      body.textContent = list[i];
+      num.textContent = (i+1) + " of " + list.length;
+    }
+    function stop(){ stopped = true; }
+    wrap.querySelector('[data-exn]').onclick = function(){ stop(); show(i+1); };
+    wrap.querySelector('[data-exp]').onclick = function(){ stop(); show(i-1); };
+    if (!reduce){
+      var t = setInterval(function(){
+        if (stopped) { clearInterval(t); return; }
+        show(i+1);
+      }, 5200);
+      exTimers.push(t);
+    }
+    /* touching any field on the step ends the rotation for good */
+    tool.querySelectorAll("input,textarea").forEach(function(el){
+      el.addEventListener("focus", stop, { once:true });
+      el.addEventListener("input", stop, { once:true });
+    });
+  });
+}
+
 function helpBlock(step){
   var d = HELP[step];
   if (!d) return "";
@@ -917,8 +1050,14 @@ function syncInputs(){
   });
 }
 
+/* Buttons that write a suggestion into a field set state first, so for those the
+   DOM is stale and must NOT be read back over the top of it. renderKeep skips
+   the harvest for exactly one render. */
+var _skipSync = false;
+function renderKeep(){ _skipSync = true; render(); }
+
 function render(){
-  syncInputs();
+  if (_skipSync) _skipSync = false; else syncInputs();
   /* on the path, the intro folds away so only the step is in front of them */
   document.body.classList.toggle("walking", S.step >= 1);
   /* the wheel's own browsing state is per step, so an open family or a leftover
@@ -930,7 +1069,8 @@ function render(){
   if (S.step === 1){
     h += '<div class="step-n">Step one · the trigger</div><h2>What is the situation?</h2>'+
       '<p class="say">One situation that keeps coming back, where you <b>end up acting like someone you would rather not be</b>. A particular person, a moment, a kind of conversation. The situation itself does not change here. That is the point.</p>'+
-      '<textarea id="f" rows="3" placeholder="When my partner brings up the state of our relationship...">'+esc(S.trigger)+'</textarea>'+
+      '<textarea id="f" rows="3" placeholder="Write it in one line">'+esc(S.trigger)+'</textarea>'+
+      exampleStrip("trigger","For example, from other people's answers")+
       navBtns("Next", !!S.trigger.trim());
   }
 
@@ -950,6 +1090,7 @@ function render(){
         M.eg.map(function(e){ return '<button data-bline="'+esc(e)+'">'+esc(e)+'</button>'; }).join("")+
         '</div></div>';
     }
+    h += exampleStrip("reaction","Examples of observable behaviour");
     h += '<div class="rows">';
     S.reactions.forEach(function(r,i){
       h += '<div class="row"><span class="num">0'+(i+1)+'</span><input type="text" data-r="'+i+'" value="'+esc(r)+'" placeholder="'+(i===0?"I go quiet and leave the room":i===1?"I get sarcastic":"Later, I avoid them for days")+'"></div>';
@@ -960,6 +1101,7 @@ function render(){
   else if (S.step === 3){
     h += '<div class="step-n">Step three · the emotions</div><h2>What is driving that?</h2>'+
       '<p class="say">The deeper emotions underneath the behaviour. <b>Mad and sad do not count.</b> Under anger there is usually something like disrespected or unimportant. The whole wheel is here, so you do not have to go looking for it. Pick three.</p>'+
+      exampleStrip("deeper","Going one layer under")+
       wheelPicker("emotions") +
       '<label class="fl">Where do you feel it in your body?</label>'+
       '<div class="picker body-picker">'+
@@ -996,6 +1138,7 @@ function render(){
     h += '<div class="step-n">Step five · the beliefs</div><h2>What has to be true underneath?</h2>'+
       '<p class="say">This is the hardest part, and coming up blank is normal. You built this system to survive and it is not stupid. Some of it is simply <b>badly outdated</b>. Beliefs come in three shapes, and you want <b>at least one of each</b>. Two of each is where it gets interesting.</p>';
 
+    h += exampleStrip("belief","Examples of all three shapes");
     SHAPE_ORDER.forEach(function(sh){
       h += '<div class="bgroup"><div class="bghead"><span class="bgt">'+SHAPE_LABEL[sh]+'</span>'+
         '<span class="bgs">'+
@@ -1044,6 +1187,7 @@ function render(){
     h += '<div class="step-n new">Step seven · the turn</div><h2>'+(S.name.trim()? esc(S.name.trim())+', same situation.' : 'Same situation.')+' Nothing outside you changes.</h2>'+
       '<p class="say">That is the rule, and it is the whole point. You cannot make the situation behave. You can decide who you are inside it. So: <b>if it happened again exactly as it does now, how would you rather feel?</b></p>'+
       '<p class="hint">If something in you says "how am I supposed to feel any different?", notice who is speaking. That is the cheerleader or the comforter. Feelings follow beliefs, and you are about to plant new ones.</p>'+
+      exampleStrip("goals","Examples of a healthy set")+
       wheelPicker("goals")+
       '<p class="hint">Same wheel, same 160 words. Pick three you would rather live in.</p>'+
       navBtns("Next");
@@ -1054,6 +1198,7 @@ function render(){
     h += '<div class="step-n new">Step eight · the response</div><h2>What would the camera see now?</h2>'+
       '<p class="say">Same trigger, same room, but you are feeling <b>'+esc(feel)+'</b>. This one is a <b>response</b>, not a reaction. Nobody is asking you to be perfect at it. The aim is to show up as a better version of yourself, <b>more often, and for longer</b>.</p>'+
       '<p class="hint">Observable again. Not what you would think, what you would visibly do.</p>'+
+      exampleStrip("behaviour","Examples of what someone would see")+
       '<div class="rows">';
     S.behaviours.forEach(function(r,i){
       h += '<div class="row"><span class="num">0'+(i+1)+'</span><input type="text" data-b="'+i+'" value="'+esc(r)+'" placeholder="'+
@@ -1067,9 +1212,11 @@ function render(){
       '<p class="say">There is a third voice, and in almost everyone it is underused. Unlike the other two it does two jobs: it <b>encourages</b> and it <b>instructs</b>. Give it words for both.</p>'+
       '<div class="voice-tabs">'+
       '<div class="voice green"><b>It encourages</b><p>Steadies you. "You can do this. You have handled harder than this."</p>'+
-      '<textarea id="cenc" rows="4" placeholder="You did the work well. Their silence is not a verdict.">'+esc(S.coachEnc)+'</textarea></div>'+
+      '<textarea id="cenc" rows="4" placeholder="You did the work well. Their silence is not a verdict.">'+esc(S.coachEnc)+'</textarea>'+
+      exampleStrip("encourage","Examples")+'</div>'+
       '<div class="voice green"><b>It instructs</b><p>Tells you the specific next move. Vague encouragement on its own changes nothing.</p>'+
-      '<textarea id="cins" rows="4" placeholder="Ask one question before you answer. Then wait.">'+esc(S.coachIns)+'</textarea></div>'+
+      '<textarea id="cins" rows="4" placeholder="Ask one question before you answer. Then wait.">'+esc(S.coachIns)+'</textarea>'+
+      exampleStrip("instruct","Examples")+'</div>'+
       '</div>'+ navBtns("Next", !!(S.coachEnc.trim() || S.coachIns.trim()));
   }
 
@@ -1087,6 +1234,7 @@ function render(){
       h += '<div class="reframe primary"><span class="ptag">The deepest one</span>'+
         '<span class="was">I used to believe that '+esc(midSentence(prim.text))+',</span>'+
         '<textarea data-refr="'+prim.id+'" rows="2" placeholder="but now...">'+esc(S.reframes[prim.id]||"")+'</textarea>'+
+        exampleStrip("reframe","Examples of an upgraded belief")+
         '<div class="nudge-slot" id="nudge-'+prim.id+'"></div>'+
         '<div class="stems soft">'+ SOFTENERS.map(function(t){
           return '<button data-soft="'+esc(t)+'" data-for="'+prim.id+'">'+esc(t)+'</button>'; }).join("") +'</div>'+
@@ -1138,6 +1286,7 @@ function render(){
     h += '<div class="step-n new">Step twelve · making it stick</div><h2>How you will actually catch it</h2>'+
       '<p class="say">You said you feel it first in your <b>'+esc(bodyClue)+'</b>. From today that is not a symptom, it is an alarm you own. When '+esc(oldFeels)+' arrive, thank them: they are telling you the old system has started running and it is time to move across.</p>'+
       '<label class="fl">When will you rehearse the new response?</label>'+
+      exampleStrip("practice","Examples of a body clue")+
       '<input type="text" id="reh" value="'+esc(S.rehearse)+'" placeholder="Tomorrow morning with my coffee, and before Friday\'s call">'+
       '<p class="hint">Run the scene once in your head, feeling the way you chose, doing what you wrote. Your mind keeps a poor record of what was imagined and what was done, so rehearse the version you want.</p>'+
       '<label class="fl">Your reset line, for the rounds the old pattern wins</label>'+
@@ -1168,6 +1317,7 @@ function paintNudge(id,val){
 }
 
 function wire(){
+  wireExamples();
   /* help expanders: toggle in place, never re-render, so nothing typed is lost */
   tool.querySelectorAll("button[data-help]").forEach(function(el){
     el.onclick = function(){
@@ -1192,7 +1342,7 @@ function wire(){
       S.reactions.forEach(function(r,i){ if (idx<0 && !r.trim()) idx = i; });
       if (idx < 0) idx = 2;
       S.reactions[idx] = line;
-      render();
+      renderKeep();
       var f = tool.querySelector('input[data-r="'+idx+'"]');
       if (f){ f.focus(); f.setSelectionRange(f.value.length, f.value.length); }
     };
@@ -1248,7 +1398,7 @@ function wire(){
       var cur = S[k].trim();
       if (cur.split(/\n/).indexOf(line) > -1) return;
       S[k] = cur ? cur + "\n" + line : line;
-      render();
+      renderKeep();
       var box = document.getElementById(k);
       if (box){ box.focus(); box.setSelectionRange(box.value.length, box.value.length); }
     };
@@ -1272,7 +1422,7 @@ function wire(){
       S.beliefs.forEach(function(b,i){ if (idx<0 && b.shape===sh && !b.text.trim()) idx = i; });
       if (idx < 0) S.beliefs.forEach(function(b,i){ if (b.shape===sh) idx = i; });
       S.beliefs[idx].text = stem;
-      render();
+      renderKeep();
       var f = tool.querySelector('input[data-bi="'+idx+'"]');
       if (f){ f.focus(); f.setSelectionRange(f.value.length, f.value.length); }
     };
@@ -1312,7 +1462,7 @@ function wire(){
   tool.querySelectorAll("button[data-soft]").forEach(function(el){
     el.onclick = function(){
       S.reframes[el.getAttribute("data-for")] = el.getAttribute("data-soft");
-      render();
+      renderKeep();
     };
   });
   tool.querySelectorAll("button[data-nshape]").forEach(function(el){
