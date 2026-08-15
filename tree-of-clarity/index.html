@@ -180,6 +180,21 @@
     letter-spacing:.4px;text-transform:uppercase}
   .note{font-size:13px;line-height:1.6;color:rgba(255,255,255,.42);margin-top:14px;max-width:64ch}
 
+  /* once they are walking, the intro gets out of the way: no name, email or
+     preamble sitting above every step */
+  body.walking .lede,body.walking .how-box,body.walking .who-box,
+  body.walking .cta-row,body.walking .eyebrow{display:none}
+  body.walking h1{font-size:clamp(23px,3vw,30px);opacity:.5;letter-spacing:-.5px}
+  body.walking header{margin-bottom:-14px}
+  .resumed{display:none;margin-top:22px;border:1px solid rgba(24,192,192,.32);
+    border-radius:16px;padding:15px 18px;background:rgba(24,192,192,.07);
+    font-size:14.5px;line-height:1.6;color:rgba(255,255,255,.85);font-weight:500}
+  .resumed.on{display:block}
+  .resumed b{color:var(--teal);font-weight:800}
+  .resumed button{background:none;border:none;cursor:pointer;font-family:inherit;
+    color:rgba(255,255,255,.45);font-size:13px;font-weight:600;padding:0;margin-left:6px;
+    text-decoration:underline}
+  .resumed button:hover{color:#ff9d9d}
   .how-box{margin-top:30px;border:1px solid var(--line);border-radius:20px;padding:24px 26px;
     background:rgba(255,255,255,.03);max-width:62ch}
   .how-box .hb-k{font-size:12px;letter-spacing:2.5px;text-transform:uppercase;font-weight:800;
@@ -187,8 +202,8 @@
   .how-box p{font-size:15.5px;line-height:1.65;color:var(--muted);font-weight:300;margin-bottom:12px}
   .how-box p:last-child{margin-bottom:0}
 
-  /* the guidance layer: everything opens in place, nothing navigates away */
-  .help{margin-top:26px;border-top:1px solid var(--line);padding-top:20px}
+  /* the guidance layer: sits at the top of each step, opens in place, never navigates */
+  .help{margin:0 0 24px;padding-bottom:18px;border-bottom:1px solid var(--line)}
   .help-t{display:block;width:100%;text-align:left;font-family:inherit;cursor:pointer;
     background:none;border:none;padding:11px 0 11px 26px;position:relative;
     color:var(--teal);font-size:14.5px;font-weight:700;letter-spacing:.2px}
@@ -306,8 +321,10 @@
   .bgroup .stems{margin-top:14px}
   .brow{margin-top:12px}
   .brow input{margin-top:0}
-  .bfn{display:flex;gap:8px;margin-top:9px}
-  .bfn.hide{display:none}
+  /* the tag row keeps its space even when empty, so typing never shifts what is
+     below it and a click aimed at the next field cannot land on the wrong thing */
+  .bfn{display:flex;gap:8px;margin-top:9px;min-height:31px}
+  .bfn.hide{visibility:hidden}
   .bfn button{font-family:inherit;font-size:12.5px;font-weight:600;
     color:rgba(255,255,255,.55);padding:6px 13px;border-radius:100px;cursor:pointer;
     border:1px solid rgba(255,255,255,.14);background:none;transition:all .2s}
@@ -348,6 +365,10 @@
   .stems.soft button{border-style:solid;border-color:rgba(255,255,255,.14);
     font-weight:500;color:rgba(255,255,255,.62)}
   .stems.soft button:hover{border-color:var(--new);color:var(--new)}
+  /* the nudge slot holds its height whether or not a nudge is showing, so the
+     live coaching never pushes the next field down while someone is typing */
+  .nudge-slot{min-height:46px}
+  .autosave{margin-top:16px;font-size:12.5px;color:rgba(255,255,255,.32);font-weight:500}
   .nudge{margin-top:12px;font-size:14px;line-height:1.55;color:var(--teal);
     background:rgba(24,192,192,.10);border-radius:12px;padding:10px 14px}
   .orsep{margin:26px 0 4px;font-size:12.5px;letter-spacing:2px;text-transform:uppercase;
@@ -804,10 +825,10 @@ function helpBlock(step){
 
 function navBtns(nextLabel){
   var need = missing(S.step);
-  return helpBlock(S.step) +
-         '<div class="nav"><button class="btn" id="next"'+(need?" disabled":"")+'>'+nextLabel+'</button>'+
+  return '<div class="nav"><button class="btn" id="next"'+(need?" disabled":"")+'>'+nextLabel+'</button>'+
          (S.step>1?'<button class="back" id="back">Back</button>':'')+'</div>'+
-         '<div class="need" id="need">'+(need?esc(need):"")+'</div>';
+         '<div class="need" id="need">'+(need?esc(need):"")+'</div>'+
+         '<p class="autosave">Saved on this device as you go. You can close this and pick it up where you left off.</p>';
 }
 /* re-check the current step and keep the button and its reason in sync */
 function refresh(){
@@ -876,9 +897,35 @@ function prefillSentence(){
   }
 }
 
+/* Harvest anything typed but not yet committed, so no re-render can drop it.
+   Belt and braces on top of the per-field oninput handlers. */
+function syncInputs(){
+  if (!tool) return;
+  var f;
+  f = document.getElementById("f");     if (f) S.trigger = f.value;
+  f = document.getElementById("body");  if (f && f.value.trim()) S.body = f.value;
+  f = document.getElementById("cenc");  if (f) S.coachEnc = f.value;
+  f = document.getElementById("cins");  if (f) S.coachIns = f.value;
+  tool.querySelectorAll("input[data-r]").forEach(function(el){
+    S.reactions[+el.getAttribute("data-r")] = el.value;
+  });
+  tool.querySelectorAll("input[data-bi]").forEach(function(el){
+    var i = +el.getAttribute("data-bi"); if (S.beliefs[i]) S.beliefs[i].text = el.value;
+  });
+  tool.querySelectorAll("textarea[data-refr]").forEach(function(el){
+    S.reframes[el.getAttribute("data-refr")] = el.value;
+  });
+}
+
 function render(){
+  syncInputs();
+  /* on the path, the intro folds away so only the step is in front of them */
+  document.body.classList.toggle("walking", S.step >= 1);
+  /* the wheel's own browsing state is per step, so an open family or a leftover
+     search from step three never appears pre-selected on step seven */
+  if (S.step !== S._lastStep){ S.wheelFam = ""; S.wheelQ = ""; S._lastStep = S.step; }
   if (S.step === 0){ tool.innerHTML = ""; renderSaved(); return; }
-  var h = '<div class="stage m-in">' + rail(S.step);
+  var h = '<div class="stage m-in">' + rail(S.step) + helpBlock(S.step);
 
   if (S.step === 1){
     h += '<div class="step-n">Step one · the trigger</div><h2>What is the situation?</h2>'+
