@@ -369,7 +369,7 @@
      live coaching never pushes the next field down while someone is typing */
   /* worked examples: fixed height so cycling never moves the page */
   .ex{margin-top:14px;border:1px solid rgba(24,192,192,.22);border-radius:14px;
-    padding:13px 16px;background:rgba(24,192,192,.05);min-height:78px}
+    padding:13px 16px;background:rgba(24,192,192,.05);min-height:104px}
   .ex-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:7px}
   .ex-k{font-size:11px;letter-spacing:2.2px;text-transform:uppercase;font-weight:800;color:var(--teal)}
   .ex-nav{display:flex;align-items:center;gap:9px}
@@ -380,6 +380,7 @@
     min-width:44px;text-align:center;letter-spacing:.4px}
   .ex-b{font-size:15.5px;line-height:1.5;color:rgba(255,255,255,.86);font-weight:500;
     transition:opacity .25s ease}
+  .ex-note{margin-top:9px;font-size:12px;color:rgba(255,255,255,.34);font-weight:600;letter-spacing:.2px}
   @media (prefers-reduced-motion:reduce){.ex-b{transition:none}}
   .nudge-slot{min-height:46px}
   .autosave{margin-top:16px;font-size:12.5px;color:rgba(255,255,255,.32);font-weight:500}
@@ -849,11 +850,13 @@ var EX = {
     "Irritated on the outside. Powerless underneath.",
     "Busy on the outside. Inadequate underneath."
   ],
+  /* every word here must exist in the wheel, or someone will search for it and
+     be told nothing matches */
   goals:[
-    "Calm, curious, steady",
-    "Confident, warm, unhurried",
-    "Grounded, open, willing",
-    "Settled, direct, kind"
+    "Curious, confident, safe",
+    "Peaceful, accepting, courageous",
+    "Content, supported, interested",
+    "Serene, powerful, thankful"
   ],
   behaviour:[
     "I stay in the room and ask one question",
@@ -898,15 +901,130 @@ var EX = {
   ]
 };
 
+/* ===== adaptive suggestions =====
+   Everything downstream leans on what they have already written. The situation
+   picks a theme, and the emotions they chose seed the thoughts and the beliefs.
+   No model and no server: it is keyword matching, which means it is sometimes
+   wrong, which is why every strip says these are suggestions and their own
+   words win. */
+var THEMES = [
+  { k:"work",
+    words:["work","boss","manager","meeting","review","feedback","colleague","team","presentation","client","mistake","criticis","office","deadline","job","career","email"],
+    reaction:["I go very still and my face stops moving","I explain myself for far too long","I agree in the room and complain afterwards","I say nothing and rewrite it three times that night"],
+    judge:["I should have caught that","Everyone can see I am out of my depth","I am going to be found out"],
+    cheer:["They never give context, then act surprised","Nobody else gets picked apart like this"],
+    comfort:["It is only work, let it go","You are tired, that is all it was"],
+    belief:["I am someone who has to get it right first time  ·  identity","If people see my mistakes, then they will trust me less  ·  formula","My definition of competence is never needing correction  ·  definition"],
+    behaviour:["I ask one question about the note instead of defending it","I say thank you, and fix it the next day without the speech","I stay in the room until the conversation actually ends"] },
+  { k:"partner",
+    words:["partner","wife","husband","spouse","relationship","marriage","boyfriend","girlfriend","she brings","he brings"],
+    reaction:["I go quiet and find a reason to leave the room","My voice goes flat and I answer in three words","I bring up something they did months ago","I say it is fine and then avoid them for a day"],
+    judge:["I am terrible at this","I always make it worse","Why can I never just talk about it"],
+    cheer:["They always start this at the worst time","If they were calmer I would be calmer"],
+    comfort:["It is not the right moment, leave it","You have both had a long week"],
+    belief:["I am someone who ruins conversations like this  ·  identity","If I say what I actually feel, then it becomes a fight  ·  formula","My definition of love is never being a burden  ·  definition"],
+    behaviour:["I stay sitting down and let them finish","I say the true sentence, once, without the speech afterwards","I ask for twenty minutes and I come back"] },
+  { k:"family",
+    words:["mother","mom","mum","father","dad","parent","family","sister","brother","in-law","son","daughter","kids","child"],
+    reaction:["I become very polite and very short","I change the subject","I laugh it off and then think about it all evening"],
+    judge:["I am still not good enough for them","I should be over this by now"],
+    cheer:["They have never once asked how I am","That is just how they are, nothing changes"],
+    comfort:["They mean well","Do not make a thing of it"],
+    belief:["I am the one who keeps the peace  ·  identity","If I disagree with them, then I am being difficult  ·  formula","My definition of a good son or daughter is never causing trouble  ·  definition"],
+    behaviour:["I say the sentence I usually swallow","I let the silence sit instead of filling it","I leave when I planned to, not when it feels allowed"] },
+  { k:"avoidance",
+    words:["procrastinat","avoid","put off","netflix","scroll","phone","start","admin","tax","paperwork","gym","exercise","deep work","important work"],
+    reaction:["I open my phone and read nothing","I clean the kitchen instead","I do the small easy tasks and call it a day","I tell myself I will start properly tomorrow"],
+    judge:["What is wrong with me","Everyone else can just start","I am lazy"],
+    cheer:["There is never enough time in this house","I would start if I had a proper run at it"],
+    comfort:["You have done enough today","Rest first, you can start fresh tomorrow"],
+    belief:["I am someone who cannot focus  ·  identity","If I start and it is bad, then I will know I cannot do it  ·  formula","My definition of ready is having no doubts left  ·  definition"],
+    behaviour:["I set a timer for ten minutes and open the file badly","I do the first ugly sentence and leave it ugly","I put the phone in the other room before I sit down"] },
+  { k:"money",
+    words:["money","invoice","bank","afford","price","charge","fee","salary","rate","debt","cost","pay","quote"],
+    reaction:["I undercharge and then resent it","I put off sending the invoice","I check the balance and then avoid looking again"],
+    judge:["I am bad with money","I should be further along than this by now"],
+    cheer:["Clients never want to pay what it is worth","The economy makes this impossible"],
+    comfort:["It will sort itself out","Now is not the time to raise it"],
+    belief:["I am not someone who is allowed to ask for more  ·  identity","If I charge properly, then they will go elsewhere  ·  formula","My definition of fair is that I take less  ·  definition"],
+    behaviour:["I send the invoice on the day, at the number I wrote down","I say the price and then stop talking","I look at the account on purpose, once, calmly"] },
+  { k:"boundaries",
+    words:["say no","saying no","favour","asked me","request","overcommit","yes to everything","boundary","boundaries","people please"],
+    reaction:["I say yes and feel my stomach drop","I say yes and then cancel later","I over-explain why I cannot, until they talk me round"],
+    judge:["I am so weak about this","I never hold the line"],
+    cheer:["They always ask me because they know I will do it","Nobody respects anyone's time here"],
+    comfort:["It is easier to just do it","It is only this once"],
+    belief:["I am a people pleaser  ·  identity","If I say no, then they will not like me  ·  formula","My definition of a good person is being available  ·  definition"],
+    behaviour:["I say I will come back to you, and I do","I say no once, plainly, with no reasons attached","I let the pause sit after I answer"] }
+];
+function detectTheme(){
+  var t = (S.trigger||"").toLowerCase();
+  if (!t.trim()) return null;
+  var best = null, score = 0;
+  THEMES.forEach(function(th){
+    var n = 0;
+    th.words.forEach(function(w){ if (t.indexOf(w) > -1) n++; });
+    if (n > score){ score = n; best = th; }
+  });
+  return best;
+}
+/* Emotions they actually chose seed the thoughts and the beliefs under them. */
+var EMO_SEED = {
+  "not good enough":{judge:["I am not good enough for this"],belief:["I am not good enough at this  ·  identity"]},
+  "inadequate":{judge:["I am out of my depth here"],belief:["I am someone who is about to be found out  ·  identity"]},
+  "belittled":{judge:["I let them make me small"],belief:["If I push back, then it gets worse  ·  formula"]},
+  "small":{judge:["I do not take up space well"],belief:["I am someone who should not need much room  ·  identity"]},
+  "exposed":{judge:["Everyone saw that"],belief:["If people see the unfinished version of me, then they think less of me  ·  formula"]},
+  "invisible":{judge:["Nobody actually notices what I do"],belief:["If I am not useful, then I am not wanted  ·  formula"]},
+  "unseen":{judge:["None of it registers with anyone"],belief:["My definition of worth is being noticed  ·  definition"]},
+  "dismissed":{judge:["What I said clearly did not count"],belief:["I have to earn the right to be listened to  ·  identity"]},
+  "disrespected":{judge:["They would not do that to someone else"],belief:["If I let it go, then I am agreeing with it  ·  formula"]},
+  "rejected":{judge:["I was not wanted there"],belief:["If I show what I need, then people leave  ·  formula"]},
+  "abandoned":{judge:["I am on my own with this again"],belief:["I am someone people eventually leave  ·  identity"]},
+  "helpless":{judge:["Nothing I do changes this"],belief:["If it is not in my control, then there is no point trying  ·  formula"]},
+  "powerless":{judge:["I have no say here"],belief:["I am not someone who gets a vote  ·  identity"]},
+  "overwhelmed":{judge:["I cannot hold all of this"],belief:["If I cannot do it properly, then I should not start  ·  formula"]},
+  "anxious":{judge:["Something is going to go wrong"],belief:["If I relax, then I miss the thing that matters  ·  formula"]},
+  "ashamed":{judge:["There is something wrong with me"],belief:["My definition of acceptable is never being a problem  ·  definition"]},
+  "misunderstood":{judge:["I never come out right"],belief:["If I explain properly enough, then they will finally get it  ·  formula"]}
+};
+function emoSeeds(key){
+  var out = [];
+  (S.emotions||[]).forEach(function(w){
+    var s = EMO_SEED[String(w).toLowerCase()];
+    if (s && s[key]) out = out.concat(s[key]);
+  });
+  return out;
+}
+/* theme first, then what their emotions imply, then the general set */
+function exList(key){
+  var th = detectTheme();
+  var list = [].concat(emoSeeds(key), (th && th[key]) || [], EX[key] || []);
+  var seen = {}, out = [];
+  list.forEach(function(x){ if (!seen[x]){ seen[x] = 1; out.push(x); } });
+  return out;
+}
+
+/* Their situation and their chosen emotions push the most likely lines to the
+   front of each voice, with the general ones kept behind them. */
+function voiceLines(v){
+  var th = detectTheme();
+  var list = [].concat(emoSeeds(v.k), (th && th[v.k]) || [], v.lines || []);
+  var seen = {}, out = [];
+  list.forEach(function(x){ if (!seen[x]){ seen[x]=1; out.push(x); } });
+  return out.slice(0, 7);
+}
+
 /* A fixed-height strip so cycling never moves anything below it. */
 function exampleStrip(key, label){
-  var list = EX[key]; if (!list) return "";
+  var list = exList(key); if (!list.length) return "";
   return '<div class="ex" data-ex="'+key+'">'+
     '<div class="ex-top"><span class="ex-k">'+(label||"For example")+'</span>'+
     '<span class="ex-nav"><button data-exp="'+key+'" aria-label="Previous example">&#8249;</button>'+
     '<span class="ex-n" id="exn-'+key+'">1 of '+list.length+'</span>'+
     '<button data-exn="'+key+'" aria-label="Next example">&#8250;</button></span></div>'+
-    '<div class="ex-b" id="exb-'+key+'">'+esc(list[0])+'</div></div>';
+    '<div class="ex-b" id="exb-'+key+'">'+esc(list[0])+'</div>'+
+    '<div class="ex-note">Suggestions only. Your own words always beat these.</div></div>';
 }
 
 var exTimers = [];
@@ -914,7 +1032,7 @@ function wireExamples(){
   exTimers.forEach(clearInterval); exTimers = [];
   var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   tool.querySelectorAll("[data-ex]").forEach(function(wrap){
-    var key = wrap.getAttribute("data-ex"), list = EX[key], i = 0, stopped = false;
+    var key = wrap.getAttribute("data-ex"), list = exList(key), i = 0, stopped = false;
     var body = document.getElementById("exb-"+key), num = document.getElementById("exn-"+key);
     function show(n){
       i = (n + list.length) % list.length;
@@ -1124,7 +1242,7 @@ function render(){
         '<b>'+v.name+'</b>'+
         '<p class="vaim">'+v.aim+'</p>'+
         '<p>'+v.d+'</p>'+
-        '<div class="say-like">'+ v.lines.map(function(l){
+        '<div class="say-like">'+ voiceLines(v).map(function(l){
           return '<button data-vline="'+esc(l)+'" data-vk="'+v.k+'">'+esc(l)+'</button>'; }).join("") +'</div>'+
         '<textarea id="'+v.k+'" rows="4" placeholder="'+esc(v.ph)+'">'+esc(S[v.k])+'</textarea>'+
         '</div>';

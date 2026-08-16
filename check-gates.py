@@ -76,10 +76,35 @@ def check(name, html, where):
     if ok: print("ok   %-32s [%s]" % (name, where))
     return ok
 
+
+def check_goal_words():
+    """Every emotion named in the goals examples must exist in the wheel, or a
+    reader will search for it and be told nothing matches. Born 15 Aug 2026:
+    the examples said "Calm, curious, steady" and the wheel had none of the
+    three except curious."""
+    import pathlib as _pl
+    html = (_pl.Path(__file__).parent / "tree-of-clarity" / "index.html").read_text()
+    # anchor on the examples array, not on blankState's empty goals:[]
+    m = re.search(r"goals:\[\s*\n(.*?)\n\s*\]", html, re.S)
+    if not m or '"' not in m.group(1):
+        print("FAIL goal-words                        [local] goals examples not found"); return False
+    words = set()
+    for line in re.findall(r'"([^"]+)"', m.group(1)):
+        for w in line.split(","):
+            w = w.strip()
+            if w: words.add(w)
+    wheel = set(w.lower() for w in re.findall(r'\["([A-Z][a-z]+)",\s*"', html))
+    missing = sorted(w for w in words if w.lower() not in wheel)
+    if missing:
+        print("FAIL goal-words                        [local] not in the wheel: %s" % ", ".join(missing))
+        return False
+    print("ok   goal-words                        [local] all %d in the wheel" % len(words))
+    return True
+
 def main():
     base = pathlib.Path(__file__).parent
     live = "--live" in sys.argv
-    all_ok = True
+    all_ok = check_goal_words()
     for name in GATES:
         html = (base / name / "index.html").read_text()
         all_ok &= check(name, html, "local")
