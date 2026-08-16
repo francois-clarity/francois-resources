@@ -203,6 +203,8 @@
   .how-box p:last-child{margin-bottom:0}
 
   /* the guidance layer: sits at the top of each step, opens in place, never navigates */
+  .colsub{font-size:12px;line-height:1.45;color:rgba(255,255,255,.45);font-weight:600;
+    margin-top:4px;letter-spacing:.2px}
   .help{margin:0 0 24px;padding-bottom:18px;border-bottom:1px solid var(--line)}
   .help-t{display:block;width:100%;text-align:left;font-family:inherit;cursor:pointer;
     background:none;border:none;padding:11px 0 11px 26px;position:relative;
@@ -1195,6 +1197,7 @@ function render(){
   else if (S.step === 2){
     h += '<div class="step-n">Step two · the reaction</div><h2>What do you actually do?</h2>'+
       '<p class="say">This is a <b>reaction</b>, not a response. It happens to you rather than being chosen by you, and that is exactly why it is worth writing down. Observable behaviour only: if someone filmed you, what would they see? Facial expression, tone, body language, what you do or pointedly refuse to do. <b>Not feelings, not thoughts.</b></p>'+
+      '<p class="hint">Joining the situation straight to the reaction is <b>outsourcing</b>: I behave like this because they do that. It hands your power to whoever triggered you. Everything you write from here is what actually sits in between.</p>'+
       '<p class="hint">Stuck? There are only three ways people handle a feeling they do not want. Open the one that sounds like you.</p>'+
       '<div class="modes">';
     MODES.forEach(function(m){
@@ -1254,7 +1257,7 @@ function render(){
 
   else if (S.step === 5){
     h += '<div class="step-n">Step five · the beliefs</div><h2>What has to be true underneath?</h2>'+
-      '<p class="say">This is the hardest part, and coming up blank is normal. You built this system to survive and it is not stupid. Some of it is simply <b>badly outdated</b>. Beliefs come in three shapes, and you want <b>at least one of each</b>. Two of each is where it gets interesting.</p>';
+      '<p class="say">This is the hardest part, and coming up blank is normal. You built this system to keep yourself <b>safe and comfortable</b>, and it is not stupid: it worked. Some of it is simply <b>badly outdated</b>, and now the same system that kept you safe is keeping you stuck. Beliefs come in three shapes, and you want <b>at least one of each</b>. Two of each is where it gets interesting.</p>';
 
     h += exampleStrip("belief","Examples of all three shapes");
     SHAPE_ORDER.forEach(function(sh){
@@ -1303,7 +1306,7 @@ function render(){
 
   else if (S.step === 7){
     h += '<div class="step-n new">Step seven · the turn</div><h2>'+(S.name.trim()? esc(S.name.trim())+', same situation.' : 'Same situation.')+' Nothing outside you changes.</h2>'+
-      '<p class="say">That is the rule, and it is the whole point. You cannot make the situation behave. You can decide who you are inside it. So: <b>if it happened again exactly as it does now, how would you rather feel?</b></p>'+
+      '<p class="say">That is the rule, and it is the whole point. You cannot make the situation behave. You can decide who you are inside it. These are your <b>emotional goals</b>, and the question is always the same one: <b>if it happened again exactly as it does now, how would I rather want to feel?</b></p>'+
       '<p class="hint">If something in you says "how am I supposed to feel any different?", notice who is speaking. That is the cheerleader or the comforter. Feelings follow beliefs, and you are about to plant new ones.</p>'+
       exampleStrip("goals","Examples of a healthy set")+
       wheelPicker("goals")+
@@ -1402,7 +1405,7 @@ function render(){
     var bodyClue = S.body.trim() ? S.body.trim() : "your body";
     var oldFeels = S.emotions.length ? S.emotions.join(", ").toLowerCase() : "the old feelings";
     h += '<div class="step-n new">Step twelve · making it stick</div><h2>How you will actually catch it</h2>'+
-      '<p class="say">You said you feel it first in your <b>'+esc(bodyClue)+'</b>. From today that is not a symptom, it is an alarm you own. When '+esc(oldFeels)+' arrive, thank them: they are telling you the old system has started running and it is time to move across.</p>'+
+      '<p class="say">You said you feel it first in your <b>'+esc(bodyClue)+'</b>. From today that is not a symptom, it is an alarm you own. When '+esc(oldFeels)+' arrive, thank them: they have become your <b>allies</b>. They are clues that you are operating from the old belief system, and a reminder to shift your focus to the new one. They are no longer the enemy, they are the signal to move across.</p>'+
       '<label class="fl">When will you rehearse the new response?</label>'+
       exampleStrip("practice","Examples of a body clue")+
       '<input type="text" id="reh" value="'+esc(S.rehearse)+'" placeholder="Tomorrow morning with my coffee, and before Friday\'s call">'+
@@ -1632,11 +1635,11 @@ function finish(){
   if (S.newBelief.trim()) newBeliefs.push(noStop(S.newBelief)+".");
 
   var h = '<div class="stage m-in">'+
-    '<div class="step-n">The whole tree</div><h2>One situation, both ways of meeting it</h2>'+
-    '<p class="say">The situation on the left has not changed and it is not going to. Everything else here is yours.</p>'+
+    '<div class="step-n">The whole tree</div><h2>The unhealthy side, and the healthy side</h2>'+
+    '<p class="say">The situation has not changed and it is not going to. Everything else here is yours. On the left is the old belief system, the one you built to keep you safe and comfortable, and it is doing its job. On the right is the new belief system you have just started to plant.</p>'+
 
     '<div class="twin">'+
-      '<div class="col old"><div class="colh">How it goes now</div>'+
+      '<div class="col old"><div class="colh">The unhealthy side</div><div class="colsub">Your old belief system, keeping you safe and comfortable</div>'+
         link("Trigger", S.trigger)+
         link("I do", S.reactions.filter(function(r){return r.trim();}).join(" · "))+
         link("I feel", S.emotions.join(", ") + (S.body.trim() ? " (in the "+S.body.trim()+")" : ""))+
@@ -1644,7 +1647,7 @@ function finish(){
         link("I believe", oldList.join("   ·   "), true)+
         '<div class="fnote">'+fnote+'</div>'+
       '</div>'+
-      '<div class="col new"><div class="colh">How it could go</div>'+
+      '<div class="col new"><div class="colh">The healthy side</div><div class="colsub">Your new belief system, the one you create</div>'+
         link("Trigger", S.trigger + "  (unchanged)")+
         link("I do", S.behaviours.filter(function(r){return r.trim();}).join(" · "))+
         link("I feel", S.goals.join(", "))+
