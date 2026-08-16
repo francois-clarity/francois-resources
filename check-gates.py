@@ -19,13 +19,13 @@ GATES = {
                  "francoisesterhuizen.com/relationships-10-habits-intro",
                  "Pattern Breaker", "Headlights", "Unstuck Loop Map",
                  "Emotional Language Wheel", "The Tree of Clarity",
-                 "Belief Inventory", "Three Voices", "Personal Growth Weekly"],
+                 "Belief Inventory", "Four Voices", "Personal Growth Weekly"],
         "must_not": ["Story of Us", "storyofus"],
     },
     "three-voices": {
         # Thoughts layer. No email gate; markers are content.
-        "must": ["Three Voices", "toc-voices", "The judge", "The cheerleader",
-                 "The coach", "tried everything"],
+        "must": ["Four Voices", "toc-voices", "The judge", "The cheerleader",
+                 "The comforter", "The coach", "tried everything"],
         "must_not": ["Pattern Breaker", "Headlights", "Loop Map"],
     },
     "belief-inventory": {

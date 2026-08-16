@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>The Three Voices — Francois Esterhuizen</title>
-<meta name="description" content="The thoughts layer of the Tree of Clarity. Catch the judge and the cheerleader in their own words, then build the coach, the voice that both encourages and instructs.">
-<meta property="og:title" content="The Three Voices">
-<meta property="og:description" content="The judge shames you inward. The cheerleader blames outward. The coach is the one you have to build.">
+<title>The Four Voices — Francois Esterhuizen</title>
+<meta name="description" content="The thoughts layer of the Tree of Clarity. Catch the judge, the cheerleader and the comforter in their own words, then build the coach, the voice that both encourages and instructs.">
+<meta property="og:title" content="The Four Voices">
+<meta property="og:description" content="The judge shames you inward. The cheerleader blames outward. The comforter lets you off. The coach is the one you have to build.">
 <meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,7 +16,7 @@
     --navy:#262E3B; --navy-deep:#1B222D; --teal:#18C0C0; --white:#fff;
     --muted:rgba(255,255,255,.66);
     --line:rgba(255,255,255,.10);
-    --judge:#E8A0A0; --cheer:#EFC98A; --coach:#8FD9A8;
+    --judge:#E8A0A0; --cheer:#EFC98A; --comf:#C9B8E8; --coach:#8FD9A8;
   }
   *{box-sizing:border-box;margin:0;padding:0}
   html{scroll-behavior:smooth}
@@ -64,7 +64,8 @@
   .rail i.on{background:var(--teal)}
   .step-n{font-weight:800;font-size:12px;letter-spacing:3px;text-transform:uppercase;
     margin-bottom:12px;color:var(--teal)}
-  .step-n.judge{color:var(--judge)} .step-n.cheer{color:var(--cheer)} .step-n.coach{color:var(--coach)}
+  .step-n.judge{color:var(--judge)} .step-n.cheer{color:var(--cheer)}
+  .step-n.comf{color:var(--comf)} .step-n.coach{color:var(--coach)}
   .stage h2{font-weight:800;font-size:clamp(22px,3.2vw,30px);letter-spacing:-.5px;line-height:1.2}
   .say{font-weight:300;font-size:16.5px;line-height:1.65;color:var(--muted);margin-top:14px;max-width:60ch}
   .say b{color:var(--white);font-weight:600}
@@ -131,6 +132,7 @@
   .vhead span{font-size:12px;font-weight:600;color:var(--muted);letter-spacing:.3px}
   .vhead.judge{background:rgba(232,160,160,.12);color:var(--judge)}
   .vhead.cheer{background:rgba(239,201,138,.12);color:var(--cheer)}
+  .vhead.comf{background:rgba(201,184,232,.12);color:var(--comf)}
   .vhead.coach{background:rgba(143,217,168,.12);color:var(--coach)}
   .vrow{padding:13px 20px;border-top:1px solid var(--line);font-size:15px;line-height:1.5;font-weight:500}
   .vrow small{display:block;font-size:12px;color:rgba(255,255,255,.42);margin-top:5px;font-weight:600;
@@ -179,8 +181,8 @@
 
   <header id="top">
     <div class="eyebrow">Tree of Clarity · the thoughts layer</div>
-    <h1>The Three<br><span class="teal">Voices</span></h1>
-    <p class="lede">Your thoughts are what turn a belief into a feeling. There are three voices doing the talking. The judge aims inward and shames you. The cheerleader aims outward and blames, and it sounds like loyalty. The coach both encourages and instructs, and in anyone who feels stuck it is the underdeveloped one. This catches the first two in their own words, then builds the third.</p>
+    <h1>The Four<br><span class="teal">Voices</span></h1>
+    <p class="lede">Your thoughts are what turn a belief into a feeling. There are four voices doing the talking. Three of them sit on the unhealthy side and all do the same job, which is to keep the responsibility away from you. The judge aims inward and shames you. The cheerleader aims outward and blames, and it sounds like loyalty. The comforter aims inward and lets you off, and it sounds like kindness. The fourth is the coach, on the healthy side, and in anyone who feels stuck it is the underdeveloped one. This catches the first three in their own words, then builds the fourth.</p>
     <div class="cta-row">
       <button class="btn" id="begin">Catch the voices</button>
       <a class="btn ghost" href="/tree-of-clarity/">Run the whole tree</a>
@@ -191,7 +193,7 @@
 
   <footer>
     <img src="/assets/fe-logo.png" alt="Francois Esterhuizen tree logo">
-    <div class="who"><b>Francois Esterhuizen</b><br>© The Three Voices</div>
+    <div class="who"><b>Francois Esterhuizen</b><br>© The Four Voices</div>
     <nav>
       <a href="/belief-inventory/">The inventory</a>
       <a href="/emotional-language-wheel/">The wheel</a>
@@ -203,12 +205,13 @@
 <script>
 var JUDGE_STEMS = ["I am stupid","I am useless","I am lazy","I am not good enough","I always mess this up"];
 var JUDGE_QS    = ["What is wrong with me?","Why can't I get this right?","Why do I struggle with this?","Why does everyone else find this easy?"];
+var COMFORT_STEMS = ["It is not that deep, let it go","You did your best","You have had a lot on","It is not worth the fight","Be grateful, it could be worse"];
 var CHEER_STEMS = ["Why can't they just...","Can you believe that they...","How am I supposed to... when...","If they would only..."];
 
 var KEY = "toc-voices", ID_KEY = "toc-beliefs";
-var S = { step:0, situation:"", jStat:[], jQs:[], cheer:[], tried:[], fresh:[], encourage:"", instruct:"" };
+var S = { step:0, situation:"", jStat:[], jQs:[], cheer:[], comfort:[], tried:[], fresh:[], encourage:"", instruct:"" };
 var tool = document.getElementById("tool");
-var TOTAL = 8;
+var TOTAL = 9;
 
 function esc(s){ return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/"/g,"&quot;"); }
 function uid(){ return "v"+Math.random().toString(36).slice(2,9); }
@@ -270,24 +273,33 @@ function render(){
   else if (S.step === 4){
     h += '<div class="step-n cheer">Step four · the cheerleader</div><h2>Who is it blaming?</h2>'+
       '<p class="say">The cheerleader is always on your side. Nothing about you needs to change, so it points outward at people, at circumstances, at the country. It sounds like loyalty, and that is why it is hard to hear as a problem.</p>'+
-      '<p class="hint">Some people call this one the comforter. Same voice, gentler name.</p>'+
+      '<p class="hint">It aims outward. The next one aims inward, and it is gentler, which makes it harder to catch.</p>'+
       '<div class="stems">'+ CHEER_STEMS.map(function(s){return '<button data-stem="cheer|'+esc(s)+'">'+esc(s)+'</button>';}).join("") +'</div>'+
       '<input type="text" id="add-cheer" placeholder="Type a line and press enter">'+
-      listHTML(S.cheer,"cheer") + nav("Now the coach", S.cheer.length > 0);
+      listHTML(S.cheer,"cheer") + nav("One more voice", S.cheer.length > 0);
   }
 
   else if (S.step === 5){
-    h += '<div class="step-n coach">Step five · the audit</div><h2>"I have tried everything"</h2>'+
+    h += '<div class="step-n comf">Step five · the comforter</div><h2>And the one that lets you off?</h2>'+
+      '<p class="say">The kindest sounding one, and the hardest to catch. It does not attack you and it does not blame anyone. It soothes. <b>It tells you that you did your best, that you have done enough, that you should be grateful and let it go.</b> It is not asking you to change anything, and that is the point.</p>'+
+      '<p class="hint">This is the voice that sits over the beliefs that excuse you. It is not the same as the cheerleader: that one points outward, this one turns inward and pats you on the head.</p>'+
+      '<div class="stems">'+ COMFORT_STEMS.map(function(s){return '<button data-stem="comfort|'+esc(s)+'">'+esc(s)+'</button>';}).join("") +'</div>'+
+      '<input type="text" id="add-comfort" placeholder="Type a line and press enter">'+
+      listHTML(S.comfort,"comfort") + nav("Now the coach", S.comfort.length > 0);
+  }
+
+  else if (S.step === 6){
+    h += '<div class="step-n coach">Step six · the audit</div><h2>"I have tried everything"</h2>'+
       '<p class="say">Have you? List it. Everything you have actually tried in this situation, one line at a time. Be generous with yourself and put down all of it.</p>'+
       '<div class="quote">"I\'ve tried everything. Really? Did you? Let\'s list them. It seldom gets longer than two."</div>'+
       '<input type="text" id="add-tried" placeholder="I ignored it. I sent an email. Press enter after each">'+
       listHTML(S.tried,"tried",true) + nav("Count it", S.tried.length > 0);
   }
 
-  else if (S.step === 6){
+  else if (S.step === 7){
     var uniq = {}; S.tried.forEach(function(it){ uniq[norm(it.text)] = 1; });
     var u = Object.keys(uniq).length, repeats = S.tried.length - u;
-    h += '<div class="step-n coach">Step six · what the list shows</div><h2>That is the whole list</h2>'+
+    h += '<div class="step-n coach">Step seven · what the list shows</div><h2>That is the whole list</h2>'+
       '<div class="audit-stat">'+
       '<div class="astat"><div class="n">'+S.tried.length+'</div><div class="l">Things listed</div></div>'+
       '<div class="astat"><div class="n">'+u+'</div><div class="l">Actually different</div></div>'+
@@ -303,8 +315,8 @@ function render(){
       listHTML(S.fresh,"fresh") + nav("Next", S.fresh.length >= 1);
   }
 
-  else if (S.step === 7){
-    h += '<div class="step-n coach">Step seven · the coach</div><h2>It has two jobs</h2>'+
+  else if (S.step === 8){
+    h += '<div class="step-n coach">Step eight · the coach</div><h2>It has two jobs</h2>'+
       '<p class="say">Encouragement is the obvious one and it is not enough on its own. Instruction is the half people forget, and it is the half that changes what happens next time.</p>'+
       '<div class="two">'+
       '<div class="side"><b>Encourage</b><p>Surface level, and it should sound like someone who is on your side. "You can do this. Go for it."</p>'+
@@ -314,8 +326,8 @@ function render(){
       '</div>'+ nav("See all three", !!(S.encourage.trim() && S.instruct.trim()));
   }
 
-  else if (S.step === 8){
-    h += '<div class="step-n">Step eight</div><h2>One line to carry</h2>'+
+  else if (S.step === 9){
+    h += '<div class="step-n">Step nine</div><h2>One line to carry</h2>'+
       '<p class="say">When the judge or the cheerleader starts up, you are not going to win an argument with them. You are going to answer with the coach. Pick the line you will actually reach for.</p>'+
       '<p class="hint">Your instruction is usually the stronger answer, because it gives you somewhere to put your hands.</p>'+
       '<textarea id="carry" rows="3" placeholder="'+esc(S.instruct || "The line you will use in the moment")+'">'+esc(S.carry||"")+'</textarea>'+
@@ -339,7 +351,7 @@ function wire(){
   if (sit) sit.oninput = function(){ S.situation = sit.value; save();
     document.getElementById("next").disabled = !sit.value.trim(); };
 
-  ["jStat","jQs","cheer","tried","fresh"].forEach(function(key){
+  ["jStat","jQs","cheer","comfort","tried","fresh"].forEach(function(key){
     var inp = document.getElementById("add-"+key);
     if (!inp) return;
     inp.onkeydown = function(e){ if (e.key === "Enter"){ e.preventDefault(); addTo(key, inp.value); } };
@@ -402,6 +414,10 @@ function renderMap(){
   S.cheer.forEach(function(it){ h += '<div class="vrow">'+esc(it.text)+'</div>'; });
   h += '</div>';
 
+  h += '<div class="vcol"><div class="vhead comf">The comforter<span>aims inward, lets you off</span></div>';
+  S.comfort.forEach(function(it){ h += '<div class="vrow">'+esc(it.text)+'</div>'; });
+  h += '</div>';
+
   h += '<div class="vcol"><div class="vhead coach">The coach<span>encourages and instructs</span></div>';
   if (S.encourage.trim()) h += '<div class="vrow">'+esc(S.encourage)+'<small>encouragement</small></div>';
   if (S.instruct.trim())  h += '<div class="vrow">'+esc(S.instruct)+'<small>instruction</small></div>';
@@ -410,7 +426,7 @@ function renderMap(){
 
   if (carry.trim()){
     h += '<div class="swap"><div class="k">The swap</div><div class="pair">'+
-      '<em>When you hear</em> the judge or the cheerleader start up in this situation, <em>you answer with</em><br>'+
+      '<em>When you hear</em> the judge, the cheerleader or the comforter start up in this situation, <em>you answer with</em><br>'+
       '<strong style="font-weight:800">'+esc(carry)+'</strong></div></div>';
   }
 

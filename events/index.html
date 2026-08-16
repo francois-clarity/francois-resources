@@ -96,9 +96,11 @@
     live and in the room with other people, which is where this work actually moves.</p>
 
   <!-- ============================================================
-       NEXT FREE CLASS. Update the date every week.
-       Source of truth: the Personal Growth Weekly event on his
-       Google Calendar (recurring, Wednesdays 08:00 SAST).
+       NEXT FREE CLASS - MACHINE MAINTAINED. Do not hand-edit the
+       three data-next-* spans below; launch/events.py rewrites them
+       from the Personal Growth Weekly event on his Google Calendar.
+       If no future class is found the script writes "To be confirmed"
+       rather than leaving a stale date on the page.
        ============================================================ -->
   <div class="sect"><span>Next free class</span></div>
 
@@ -108,9 +110,9 @@
     <p>Thirty minutes, every Wednesday morning. One idea worth carrying into the week,
       taught live, with room to ask the thing you actually came to ask.</p>
     <div class="when">
-      <div><svg width="17" height="17" viewBox="0 0 18 18"><rect x="2.5" y="3.5" width="13" height="12" rx="2"/><path d="M2.5 7h13M6 2v3M12 2v3"/></svg>Wednesday 19 August 2026</div>
-      <div><svg width="17" height="17" viewBox="0 0 18 18"><circle cx="9" cy="9" r="6.5"/><path d="M9 5.4V9l2.4 1.6"/></svg>08:00 SAST</div>
-      <div><svg width="17" height="17" viewBox="0 0 18 18"><rect x="1.8" y="4.2" width="10" height="9.6" rx="2"/><path d="M11.8 8l4.4-2.4v6.8L11.8 10z"/></svg>Online, on Zoom</div>
+      <div><svg width="17" height="17" viewBox="0 0 18 18"><rect x="2.5" y="3.5" width="13" height="12" rx="2"/><path d="M2.5 7h13M6 2v3M12 2v3"/></svg><span data-next-date>Wednesday 19 August 2026</span></div>
+      <div><svg width="17" height="17" viewBox="0 0 18 18"><circle cx="9" cy="9" r="6.5"/><path d="M9 5.4V9l2.4 1.6"/></svg><span data-next-time>08:00 SAST</span></div>
+      <div><svg width="17" height="17" viewBox="0 0 18 18"><rect x="1.8" y="4.2" width="10" height="9.6" rx="2"/><path d="M11.8 8l4.4-2.4v6.8L11.8 10z"/></svg><span data-next-where>Online, on Zoom</span></div>
     </div>
     <span class="go">Book your seat</span>
   </a>
