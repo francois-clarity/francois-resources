@@ -22,7 +22,7 @@ GATES = {
                  "Belief Inventory", "Four Voices", "Personal Growth Weekly"],
         "must_not": ["Story of Us", "storyofus"],
     },
-    "three-voices": {
+    "four-voices": {
         # Thoughts layer. No email gate; markers are content.
         "must": ["Four Voices", "toc-voices", "The judge", "The cheerleader",
                  "The comforter", "The coach", "tried everything"],
