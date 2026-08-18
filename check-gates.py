@@ -62,6 +62,11 @@ GATES = {
                  "Headlights_System_Card.pdf", "next visible move"],
         "must_not": ["Pattern Breaker", "avoiding the feeling", "Loop Map"],
     },
+    "ten-year-question": {
+        "must": ["Ten-Year", "MMERGE2=ten-year-question",
+                 "Ten_Year_Question_Card.pdf", "who you want to become"],
+        "must_not": ["Headlights", "two-minute test", "Pattern Breaker"],
+    },
 }
 
 def check(name, html, where):
