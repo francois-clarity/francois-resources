@@ -19,8 +19,16 @@ GATES = {
                  "francoisesterhuizen.com/relationships-10-habits-intro",
                  "Pattern Breaker", "Headlights", "Unstuck Loop Map",
                  "Emotional Language Wheel", "The Tree of Clarity",
-                 "Belief Inventory", "Four Voices", "Personal Growth Weekly"],
+                 "Belief Inventory", "Four Voices", "Invisible Contracts",
+                 "Personal Growth Weekly"],
         "must_not": ["Story of Us", "storyofus"],
+    },
+    "invisible-contracts": {
+        # Contracts you keep. No email gate; markers are content.
+        "must": ["Invisible Contracts", "ic-contracts", "then you should",
+                 "if you do not, it means", "Null and void", "Would you be willing",
+                 "underage when you signed"],
+        "must_not": ["Pattern Breaker", "Headlights", "Loop Map"],
     },
     "four-voices": {
         # Thoughts layer. No email gate; markers are content.

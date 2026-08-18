@@ -13,7 +13,7 @@ collided before, so:
 | Area | Owner |
 |---|---|
 | `index.html`, `assets/`, `events/` | the hub session |
-| `tree-of-clarity/`, `four-voices/`, `belief-inventory/`, `emotional-language-wheel/` | the tools session |
+| `tree-of-clarity/`, `four-voices/`, `belief-inventory/`, `invisible-contracts/`, `emotional-language-wheel/` | the tools session |
 | `check-gates.py`, `deploy.sh` | shared, so add to them rather than rewriting them |
 
 Before you start: `git status` and `git log --oneline -3`, to see what the other
