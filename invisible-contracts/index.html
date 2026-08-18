@@ -233,7 +233,7 @@
   <header id="top">
     <div class="eyebrow">Freeing yourself from friction · the contracts you keep</div>
     <h1>Invisible<br><span class="teal">Contracts</span></h1>
-    <p class="lede">Every relationship runs on agreements nobody wrote down. <b>If I do my part, you should do yours. If I keep the peace, you should not upset me. If I carry the load, you should appreciate me.</b> You may never have said it out loud. You may not even know you believe it. But the moment the other person does not deliver, you feel the breach, and you call it disrespect, being taken for granted, or betrayal. This process walks you from that feeling back to the contract underneath it, then helps you decide what to do with the contract: upgrade it into a clear request, or tear it up.</p>
+    <p class="lede">Every relationship runs on agreements nobody wrote down. <b>If I do my part, you should do yours. If I keep the peace, you should not upset me. If I carry the load, you should appreciate me.</b> You may never have said it out loud. You may not even know you believe it. But the moment the other person does not deliver, you feel the breach, and you call it disrespect, being taken for granted, or betrayal. I want to walk you from that feeling back to the contract underneath it, and then help you decide what to do with it: upgrade it into a clear request, or tear it up.</p>
     <div class="cta-row">
       <button class="btn" id="begin">Find your contracts</button>
     </div>
@@ -244,11 +244,6 @@
   <footer>
     <img src="/assets/fe-logo.png" alt="Francois Esterhuizen tree logo">
     <div class="who"><b>Francois Esterhuizen</b><br>© Invisible Contracts</div>
-    <nav>
-      <a href="/tree-of-clarity/">The tree</a>
-      <a href="/belief-inventory/">The inventory</a>
-      <a href="/">All resources</a>
-    </nav>
   </footer>
 </div>
 
@@ -267,6 +262,7 @@ var SIGNS = [
   "You feel guilty when you set a boundary."
 ];
 var RELS = ["My partner","A parent","A child","A sibling","A friend","At work","Myself","Someone else"];
+var PEOPLE = ["My mother","My father","Both my parents","My family as a whole","A brother","A sister","A grandparent","Someone else"];
 var MOTTOS = ["We don't cry","We don't talk about money","Don't speak unless spoken to","Be strong","Keep the peace","Don't make a fuss","We don't need anyone","Family comes first, always"];
 var EXAMPLES = [
   ["do my part","do yours","I am on my own in this"],
@@ -295,8 +291,12 @@ var SELF = [
 ];
 
 function fresh(){ return { step:0, signs:[], relType:"", relWho:"", moment:"",
-  origin:{obs:"",felt:"",motto:"",loved:""}, contracts:[newCon()], deep:"", cost:"", threat:[],
+  origin:{people:[newPerson()],motto:"",loved:""}, contracts:[newCon()], deep:"", cost:"", threat:[],
   want:"", willing:"", canAsk:"", fear:"", self:[], selfCustom:"", act:"", torn:false }; }
+function newPerson(){ return { id:uid(), who:"", name:"", obs:"", felt:"", deal:"" }; }
+function pron(who){ if (who==="My mother"||who==="A sister") return "her"; if (who==="My father"||who==="A brother") return "him"; return "them"; }
+function personLabel(p){ return (p.who || "them") + (p.name && p.name.trim() ? " ("+p.name.trim()+")" : ""); }
+function personDone(p){ return !!(p.who && (p.obs.trim()||p.felt.trim()||p.deal.trim())); }
 function newCon(){ return { id:uid(), ifI:"", youShould:"", means:"", kind:"", role:"", roleOther:"" }; }
 var S = fresh();
 var tool = document.getElementById("tool");
@@ -304,7 +304,9 @@ var tool = document.getElementById("tool");
 function esc(s){ return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/"/g,"&quot;"); }
 function uid(){ return "c"+Math.random().toString(36).slice(2,9); }
 function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
-function load(){ try{ var o=JSON.parse(localStorage.getItem(KEY)); if(o&&o.contracts){ S=o; } }catch(e){} }
+function load(){ try{ var o=JSON.parse(localStorage.getItem(KEY)); if(o&&o.contracts){ S=o;
+  if (!S.origin.people){ var p = newPerson(); p.who = "Both my parents"; p.obs = S.origin.obs||""; p.felt = S.origin.felt||""; S.origin.people = [p]; delete S.origin.obs; delete S.origin.felt; }
+} }catch(e){} }
 function full(c){ return !!(c.ifI.trim() && c.youShould.trim() && c.means.trim()); }
 function done(){ return S.contracts.filter(full); }
 function con(id){ return S.contracts.filter(function(c){return c.id===id;})[0]; }
@@ -327,7 +329,11 @@ function missLine(m){ return m.length ? "Still needed: "+esc(m.join(", "))+"." :
 function missingFor(step){
   var m = [];
   if (step === 2){ if (!S.relType) m.push("which relationship"); if (!S.moment.trim()) m.push("the moment"); }
-  else if (step === 3){ var o = S.origin; if (!(o.obs.trim()||o.felt.trim()||o.motto.trim()||o.loved.trim())) m.push("at least one of the four lines"); }
+  else if (step === 3){
+    var o = S.origin, half = o.people.filter(function(p){ return p.who && !personDone(p); }).length;
+    if (!o.people.filter(personDone).length) m.push("one person, with at least one line about them");
+    else if (half) m.push("a line for each person you named, or remove them");
+  }
   else if (step === 4){ if (done().length < 1) m.push("one complete contract, all three lines"); }
   else if (step === 6){ if (done().filter(function(c){ var r = roleOf(c); return !r || !r.trim(); }).length) m.push("a role for each contract"); }
   else if (step === 7){ if (!deepCon()) m.push("one contract to carry forward"); }
@@ -358,58 +364,71 @@ function render(){
 
   if (S.step === 1){
     h += '<div class="step-n">Step one · the self-check</div><h2>Is a contract running?</h2>'+
-      '<p class="say">Before you go looking for the contract, notice the symptoms. Tick whatever is true of you at the moment, in any relationship. Be honest rather than kind to yourself here.</p>'+
+      '<p class="say">Before we go looking for the contract, I want you to notice the symptoms. Tick whatever is true of you at the moment, in any relationship. Be honest with yourself here rather than kind.</p>'+
       '<div class="signs">'+SIGNS.map(function(s,i){
         var on = S.signs.indexOf(i)>-1;
         return '<div class="sign'+(on?" on":"")+'" data-sign="'+i+'"><span class="box">'+(on?"&#10003;":"")+'</span><span>'+esc(s)+'</span></div>';
       }).join("")+'</div>'+
       '<div class="count" id="count">'+countLine()+'</div>'+
-      room("From the room", [
+      room("In my words", [
         "The breach of that invisible contract creates resentment, disconnection, friction. If this, then that. <b>If you do that, I feel like this. If you do not do that, I feel like this. That is a contract.</b> And as long as you are not aware of the contract, you will keep feeling the same way every time someone does something you cannot control.",
         "This is one of the most common sources of friction I see. Because the process requires clarity, honesty, boundaries and responsibility. But invisible contracts rely on silence, hints, roles and resentment."
-      ], "Freeing Yourself From Friction, session five")+
+      ], "This is something I taught in the Freeing Yourself From Friction classes, session five.")+
       nav("Next");
   }
 
   else if (S.step === 2){
     h += '<div class="step-n">Step two · the moment</div><h2>Where is the drag right now?</h2>'+
-      '<p class="say">Pick the relationship where you most often feel the pull: taken for granted, disappointed, keeping score without saying so. Then describe one recent moment in it, plainly. What happened, what you did, and what you felt.</p>'+
+      '<p class="say">Pick the relationship where you most often feel the pull: taken for granted, disappointed, keeping score without saying so. Then describe one recent moment in it for me, plainly. What happened, what you did, and what you felt.</p>'+
       chips(RELS, S.relType, "rel", false)+
       '<input type="text" id="relWho" placeholder="Their name, or how you would describe them (optional)" value="'+esc(S.relWho)+'">'+
       '<label class="f" for="moment">The moment</label>'+
       '<textarea id="moment" rows="4" placeholder="Last Sunday I spent the whole afternoon sorting out the thing they asked for. They did not say a word about it. I went quiet for the rest of the evening and I am still annoyed.">'+esc(S.moment)+'</textarea>'+
-      room("From the room", [
+      room("In my words", [
         "Many fights are not about the event. <b>They are about the contract behind the event.</b> When the other person does not deliver on what you believe was promised, you experience a breach. And the emotional experience of that breach is what gets called betrayal, rejection, disrespect, or being taken for granted."
-      ], "Freeing Yourself From Friction, session five")+
+      ], "This is something I taught in the Freeing Yourself From Friction classes, session five.")+
       nav("Next");
   }
 
   else if (S.step === 3){
     var o = S.origin;
     h += '<div class="step-n">Step three · time travel</div><h2>Where was it signed?</h2>'+
-      '<p class="say">Contracts are usually signed early, in your family, long before you could read the fine print. You learned what earns love, what creates safety and what causes pain. Then you built a role, and a contract to protect the role. Go back and look. Fill in whichever of these come easily. One is enough to start.</p>'+
-      '<label class="f" for="obs">Watching my parents, or the adults who raised me, I observed...</label>'+
-      '<textarea id="obs" rows="2" placeholder="Money was always tight. Work was something you slogged through. My parents were in the same house but not together.">'+esc(o.obs)+'</textarea>'+
-      '<label class="f" for="felt">What I felt watching that, again and again, was...</label>'+
-      '<textarea id="felt" rows="2" placeholder="Disconnected. On edge. Like it was my job to keep things calm.">'+esc(o.felt)+'</textarea>'+
-      '<label class="f" for="motto">Our family motto could have been...</label>'+
+      '<p class="say">Contracts are usually signed early, in your family, long before you could read the fine print. So go back and look, <b>one person at a time</b>. Watching my mother. Watching my father. Watching a brother or sister. For each one: what did you observe, what did you feel, and what could your agreement with them have been? Add as many people as you need. Then the family motto, which is the contract you all signed together.</p>';
+    o.people.forEach(function(p, i){
+      var pr = pron(p.who);
+      h += '<div class="con"><div class="n">Person '+(i+1)+'</div>'+
+        (o.people.length>1?'<button class="del" data-pdel="'+p.id+'" aria-label="Remove">&times;</button>':'')+
+        '<div class="chips">'+PEOPLE.map(function(w){ return '<button type="button" class="chip'+(p.who===w?" on":"")+'" data-pwho="'+p.id+'" data-who="'+esc(w)+'">'+esc(w)+'</button>'; }).join("")+'</div>'+
+        (p.who==="Someone else"||p.who==="A brother"||p.who==="A sister"||p.who==="A grandparent" ? '<input type="text" data-pf="'+p.id+'" data-f="name" placeholder="Their name (optional)" value="'+esc(p.name)+'">' : '')+
+        '<label class="f">Watching '+esc(p.who ? p.who.toLowerCase().replace(/^a /,"my ").replace(/^both my/,"both my") : "them")+', I observed...</label>'+
+        '<textarea data-pf="'+p.id+'" data-f="obs" rows="2" placeholder="Always working, never satisfied. Went silent for days when upset. Gave everything to everyone else.">'+esc(p.obs)+'</textarea>'+
+        '<label class="f">What I felt, again and again, was...</label>'+
+        '<textarea data-pf="'+p.id+'" data-f="felt" rows="2" placeholder="Responsible for '+pr+'. On edge. Like I had to earn my place.">'+esc(p.felt)+'</textarea>'+
+        '<label class="f">My agreement or contract with '+pr+' could have been...</label>'+
+        '<textarea data-pf="'+p.id+'" data-f="deal" rows="2" placeholder="I will be the easy one who never needs anything, and in return I get to stay close.">'+esc(p.deal)+'</textarea>'+
+        '</div>';
+    });
+    if (o.people.length < 8) h += '<div class="addrow"><button id="addperson">+ Add another person</button></div>';
+    h += '<label class="f" for="motto">Our family motto could have been...</label>'+
       '<div class="chips">'+MOTTOS.map(function(m){return '<button type="button" class="chip stem" data-motto="'+esc(m)+'">'+esc(m)+'</button>';}).join("")+'</div>'+
       '<input type="text" id="motto" placeholder="We Smiths do not..." value="'+esc(o.motto)+'">'+
       '<label class="f" for="loved">I learned that to be loved, I had to...</label>'+
       '<textarea id="loved" rows="2" placeholder="Be useful. Not need anything. Keep everyone happy.">'+esc(o.loved)+'</textarea>'+
-      room("From the room", [
+      room("In my words", [
         "When I was a little boy we lived close together as a family. My parents were each one of eight children, so it was a lot of uncles, aunts and cousins, and we often congregated at my grandfather's place. What I observed there, even as a little boy: money is scarce. Work is horrible, something you slog through and then you do not get paid enough. And relationships mean disconnection. That one goes with that one. That affected my belief system, because <b>I signed contracts from what I saw</b>.",
-        "The motto matters. Whatever your surname is: we So-and-sos, we don't cry. That motto becomes a contract, something you agree to live by. And when you are in a relationship with someone whose motto clashes with yours, that becomes conflict. <b>If you do not understand your own motto, you cannot change it.</b>",
-        "One way to think about it: you were underage when you signed that contract. We make these commitments very young."
-      ], "The Relationship Course, session on defining love and breaking invisible contracts")+
+        "So here is how you identify some of yours. Watching my parents, what did I see? What was my recurring feeling? Now do the same with your mother on her own, your father on his own, your brothers and sisters. I observed this. I felt this. Whatever gives you something to start the discovery with. And then use this sentence: <b>my agreement or contract with him, or her, or them, could have been something like...</b>",
+        "The motto matters too. Whatever your surname is: we So-and-sos, we don't cry. That motto becomes a contract, something you agree to live by. When you are in a relationship with someone whose motto clashes with yours, that becomes conflict. <b>If you do not understand your own motto, you cannot change it.</b> And remember, you were underage when you signed all of this."
+      ], "I taught this in my Relationship Course, in the session on defining love and breaking invisible contracts.")+
       nav("Next");
   }
 
   else if (S.step === 4){
     var n = done().length;
     h += '<div class="step-n">Step four · the contract</div><h2>Write the hidden deal</h2>'+
-      '<p class="say">Now put words to it. Use the three lines exactly. The first two are the deal. <b>The third line is usually the real driver.</b> It reveals the meaning you give their behaviour, the fear, and the old role. Write one at least, three if you can, because the first one you find is seldom the deepest.</p>'+
-      '<div class="hint">Tap an example to load it, then change the words until it sounds like you.</div>'+
+      '<p class="say">Now put words to it. I want you to use the three lines exactly. The first two are the deal. <b>The third line is usually the real driver.</b> It reveals the meaning you give their behaviour, the fear, and the old role. Write one at least, three if you can, because in my experience the first one you find is seldom the deepest.</p>'+
+      (S.origin.people.filter(function(p){ return p.deal.trim(); }).length
+        ? '<div class="origin"><p><em>What you found in step three</em></p>'+S.origin.people.filter(function(p){ return p.deal.trim(); }).map(function(p){ return '<p><em>With '+esc(personLabel(p).toLowerCase())+':</em> '+esc(p.deal)+'</p>'; }).join("")+'<p class="hint">Those are the early versions. Now write the ones running in this relationship today, in the three-line form. Tap an example to load it, then change the words until it sounds like you.</p></div>'
+        : '<div class="hint">Tap an example to load it, then change the words until it sounds like you.</div>')+
       '<div class="chips">'+EXAMPLES.map(function(e,i){return '<button type="button" class="chip stem" data-ex="'+i+'">If I '+esc(e[0])+', you should '+esc(e[1])+'</button>';}).join("")+'</div>';
     S.contracts.forEach(function(c,i){
       h += '<div class="con"><div class="n">Contract '+(i+1)+'</div>'+
@@ -421,10 +440,10 @@ function render(){
     });
     if (S.contracts.length < 5) h += '<div class="addrow"><button id="addcon">+ Add another contract</button></div>';
     h += '<div class="count" id="count">'+(n===0?"No complete contract yet.":n+" complete. "+(n<3?"Aim for three if you can.":"Good."))+'</div>'+
-      room("From the room", [
+      room("In my words", [
         "So what do these contracts sound like? Something like: if I do this, you should feel like that. Or then you should do this. <b>I like the feel one more, because it is so common.</b> Well, I did this, so why don't you feel grateful? I did this thing for you, so why don't you react that way?",
         "And if you do not do the thing I expect, if you do not feel the way I expected you to, now the definitions come in. It means the following. Now you write a definition there. That is how we structure these contracts."
-      ], "Freeing Yourself From Friction, session five")+
+      ], "This is something I taught in the Freeing Yourself From Friction classes, session five.")+
       nav("Next");
   }
 
@@ -436,16 +455,16 @@ function render(){
         KINDS.map(function(k){ return '<button type="button" class="kind'+(c.kind===k[0]?" on":"")+'" data-kc="'+c.id+'" data-kind="'+k[0]+'"><b>'+k[1]+'</b><small>'+k[2]+'</small></button>'; }).join("")+
         '</div></div>';
     });
-    h += room("From the room", [
+    h += room("In my words", [
         "The covert contract is when you do something for someone with a hidden expectation of return. You give, you help, you keep quiet, you make it easy. You do not ask directly. You do not negotiate openly. You hope. <b>Covert contracts create resentment because the other person cannot agree to terms they never heard.</b>",
         "Listen to your spouse when they say: you were different when we were with your family. Be curious. What is the contract you are keeping there, the promise you are trying to honour?"
-      ], "Freeing Yourself From Friction, session five")+
+      ], "This is something I taught in the Freeing Yourself From Friction classes, session five.")+
       nav("Next");
   }
 
   else if (S.step === 6){
     h += '<div class="step-n">Step six · the role</div><h2>Which role is this contract protecting?</h2>'+
-      '<p class="say">A contract is almost always there to keep a role in place. A role is a consistent way you show up that says: this is who I am, this is what I do, this is what I am allowed to do, and this is what I am not allowed to do. Once a role is formed, your nervous system defends it, because roles feel like safety. Even when they cost you your freedom.</p>';
+      '<p class="say">In my experience a contract is almost always there to keep a role in place. A role is a consistent way you show up that says: this is who I am, this is what I do, this is what I am allowed to do, and this is what I am not allowed to do. Once a role is formed, your nervous system defends it, because roles feel like safety. Even when they cost you your freedom.</p>';
     done().forEach(function(c){
       h += '<div class="con"><div class="read">'+readCon(c)+'</div>'+
         '<div class="chips">'+ROLES.map(function(r){ return '<button type="button" class="chip'+(c.role===r?" on":"")+'" data-rc="'+c.id+'" data-role="'+esc(r)+'">'+esc(r)+'</button>'; }).join("")+
@@ -453,10 +472,10 @@ function render(){
         (c.role==="other"?'<input type="text" data-ro="'+c.id+'" placeholder="Name the role in your own words" value="'+esc(c.roleOther)+'">':'')+
         '</div>';
     });
-    h += room("From the room", [
+    h += room("In my words", [
         "My own contract with my mother, and I share this as my story, was to be her surrogate spouse. To be the one who tries to be perfect, the emotional support, the one who does not need anything from her but is always there for whatever she needs. That was my contract. It was part of my belief system, and <b>I had to tear that contract up and declare it null and void</b>.",
         "You are not the role. You are the one performing the role. So instead of: I am the strong one. Try: <b>I have been playing the strong one.</b> That shift creates space. Space creates choice. Choice creates change."
-      ], "Clarity Quest group coaching, and Freeing Yourself From Friction, session five")+
+      ], "I shared this in Clarity Quest group coaching, and taught it in the Freeing Yourself From Friction classes, session five.")+
       nav("Next");
   }
 
@@ -464,7 +483,7 @@ function render(){
     var d = deepCon();
     h += '<div class="step-n">Step seven · the deepest one</div><h2>Which one sits deepest?</h2>'+
       '<p class="say">'+(done().length>1
-        ? 'You have more than one. Pick the one that has been running the longest, or the one you least want to say out loud. That is the one we carry forward. The others stay on your record.'
+        ? 'You have more than one. Pick the one that has been running the longest, or the one you least want to say out loud. That is the one I want us to carry forward. The others stay on your record.'
         : 'You wrote one contract, so it carries forward. If you want to add more, go back to step four.')+'</p>';
     done().forEach(function(c){
       var on = d && d.id===c.id;
@@ -472,9 +491,9 @@ function render(){
         '<div class="read">'+readCon(c)+'</div>'+
         '<div class="tags">'+(kindOf(c)?'<span class="tag">'+esc(kindOf(c))+'</span>':'')+(roleOf(c)?'<span class="tag">'+esc(roleOf(c))+'</span>':'')+'</div></div>';
     });
-    h += room("From the room", [
+    h += room("In my words", [
         "If you feel stuck in a certain area of your life, maybe you have done a lot of work already, but there is one area where you just do not break through, in my experience that is often because of vows and contracts. <b>They are so powerful because we create them around a lot of emotion.</b> Something painful, something scary, something recurring. And like all beliefs in the old system, we created them to keep us safe and comfortable. So be very curious about that. That is where you can start looking for the thing that is stopping you."
-      ], "Clarity Quest group coaching")+
+      ], "I shared this in one of my Clarity Quest group coaching sessions.")+
       nav("Next");
   }
 
@@ -482,46 +501,46 @@ function render(){
     var d = deepCon();
     h += '<div class="step-n">Step eight · the cost</div><h2>What has this contract cost you?</h2>'+
       (d?'<div class="con"><div class="read">'+readCon(d)+'</div></div>':'')+
-      '<p class="say">Two questions. First, what has honouring this contract cost you so far: in energy, in honesty, in the version of you that stays small. Second, what would breaking it threaten. This is why people stay stuck. Not because they cannot see the contract, but because they can see the price of tearing it up.</p>'+
+      '<p class="say">Two questions. First, what has honouring this contract cost you so far: in energy, in honesty, in the version of you that stays small. Second, what would breaking it threaten. This is where I see people stall. Not because they cannot see the contract, but because they can see the price of tearing it up.</p>'+
       '<label class="f" for="cost">Honouring it has cost me...</label>'+
       '<textarea id="cost" rows="3" placeholder="Years of doing things I resented. Never actually asking. A relationship where nothing has ever really been negotiated.">'+esc(S.cost)+'</textarea>'+
       '<label class="f">Breaking it would threaten...</label>'+
       chips(THREATS, S.threat, "threat", true)+
-      room("From the room", [
+      room("In my words", [
         "Until you tear up the contract, until you break that promise, until you break that vow, you will stay loyal to it. You will honour that contract. And you will stay in the same place in life. Far away from the big dream, drifting gradually back toward the big dread.",
         "<b>It is okay to break a promise if it is unhealthy. Not only okay. It is necessary.</b> Some promises and vows must be broken if the process is to move forward. And it is painful. But it is also clean. And clean is what creates momentum."
-      ], "Freeing Yourself From Friction, session five")+
+      ], "This is something I taught in the Freeing Yourself From Friction classes, session five.")+
       nav("Next");
   }
 
   else if (S.step === 9){
     h += '<div class="step-n">Step nine · the upgrade</div><h2>Turn it into a request</h2>'+
-      '<p class="say">Invisible contracts fail because they are silent. So upgrade the deal into a request the other person can actually hear and answer. Two lines. Say what you want, then ask if they are willing. No hinting, no "you should just know".</p>'+
+      '<p class="say">Invisible contracts fail because they are silent. So I want you to upgrade the deal into a request the other person can actually hear and answer. Two lines. Say what you want, then ask if they are willing. No hinting, no "you should just know".</p>'+
       '<div class="two"><div><label class="f" for="want">What I want is...</label><input type="text" id="want" placeholder="to hear that you noticed" value="'+esc(S.want)+'"></div>'+
       '<div><label class="f" for="willing">Would you be willing to...</label><input type="text" id="willing" placeholder="tell me when something I did helped you" value="'+esc(S.willing)+'"></div></div>'+
       '<label class="f">Could you actually say this to them this week?</label>'+
       '<div class="yn"><button type="button" class="chip'+(S.canAsk==="yes"?" on":"")+'" data-ask="yes">Yes, I could</button>'+
       '<button type="button" class="chip'+(S.canAsk==="no"?" on":"")+'" data-ask="no">Not yet</button></div>'+
       (S.canAsk==="no"?'<label class="f" for="fear">If I asked, I am afraid that...</label><textarea id="fear" rows="2" placeholder="They would laugh it off, or say no, and then I would know for sure.">'+esc(S.fear)+'</textarea>':'')+
-      room("From the room", [
+      room("In my words", [
         "Use this stem: what I want is this. Would you be willing to do that? <b>If you cannot ask it, that is friction. That is your growth edge.</b>",
         "Then negotiate reality, not fantasy. Sometimes the other person says yes. Sometimes they say no. Either way, you now have truth. And truth gives you choices."
-      ], "Freeing Yourself From Friction, session five")+
+      ], "This is something I taught in the Freeing Yourself From Friction classes, session five.")+
       nav("Next");
   }
 
   else if (S.step === 10){
     h += '<div class="step-n">Step ten · the new agreement</div><h2>Make a new agreement with yourself</h2>'+
-      '<p class="say">Invisible contracts are not only about the other person. They are also about you abandoning yourself. So the contract you tear up gets replaced, not with a new deal for them to keep, but with one you keep. Choose the lines you mean, or write your own.</p>'+
+      '<p class="say">Invisible contracts are not only about the other person. They are also about you abandoning yourself. So the contract you tear up gets replaced, not with a new deal for them to keep, but with one you keep. Choose the lines you actually mean, or write your own.</p>'+
       chips(SELF, S.self, "self", true)+
       '<input type="text" id="selfCustom" placeholder="Or in your own words..." value="'+esc(S.selfCustom)+'">'+
       '<label class="f" for="act">One small act of integrity this week</label>'+
       '<div class="hint">One action that breaks the old role pattern. Not rebellion. Expansion.</div>'+
       '<textarea id="act" rows="2" placeholder="Ask my sister directly for the help instead of doing it all and going quiet.">'+esc(S.act)+'</textarea>'+
-      room("From the room", [
+      room("In my words", [
         "Sometimes we make promises, commitments, to ourselves, to other people, to the world. We create these little contracts. And as we go through life we discover the fine print. Either it challenges us to step up, or we realise: <b>I made a promise, I made a contract from it, but I no longer believe that.</b>",
         "This is how you move from roles to leadership. From protecting who you were to growing toward your Big Dream."
-      ], "Clarity Quest group coaching, and Freeing Yourself From Friction, session five")+
+      ], "I shared this in Clarity Quest group coaching, and taught it in the Freeing Yourself From Friction classes, session five.")+
       nav("See my contracts");
   }
 
@@ -533,7 +552,7 @@ function render(){
 
 function countLine(){
   var n = S.signs.length;
-  if (!n) return "Nothing ticked yet. Contracts are quieter in some seasons, carry on anyway.";
+  if (!n) return "Nothing ticked yet. Contracts run under the surface in some seasons, carry on anyway.";
   return "<b>"+n+" of 8</b> present. "+(n>=3?"There is very likely a contract running underneath.":"If any of these are present, there is likely a contract underneath.");
 }
 
@@ -559,8 +578,16 @@ function wire(){
   bindText("relWho", function(v){ S.relWho = v; });
   bindText("moment", function(v){ S.moment = v; }, true);
   // step 3
-  bindText("obs", function(v){ S.origin.obs = v; }, true);
-  bindText("felt", function(v){ S.origin.felt = v; }, true);
+  tool.querySelectorAll("[data-pwho]").forEach(function(el){ el.onclick = function(){
+    var p = S.origin.people.filter(function(x){ return x.id===el.getAttribute("data-pwho"); })[0];
+    p.who = el.getAttribute("data-who"); save(); render(); }; });
+  tool.querySelectorAll("[data-pf]").forEach(function(el){ el.oninput = function(){
+    var p = S.origin.people.filter(function(x){ return x.id===el.getAttribute("data-pf"); })[0];
+    if (p){ p[el.getAttribute("data-f")] = el.value; save(); liveNext(); } }; });
+  var addp = document.getElementById("addperson");
+  if (addp) addp.onclick = function(){ S.origin.people.push(newPerson()); save(); render(); };
+  tool.querySelectorAll("button[data-pdel]").forEach(function(el){ el.onclick = function(){
+    S.origin.people = S.origin.people.filter(function(x){ return x.id !== el.getAttribute("data-pdel"); }); save(); render(); }; });
   bindText("motto", function(v){ S.origin.motto = v; }, true);
   bindText("loved", function(v){ S.origin.loved = v; }, true);
   tool.querySelectorAll("[data-motto]").forEach(function(el){ el.onclick = function(){
@@ -625,7 +652,7 @@ function renderResult(){
   var who = S.relType ? S.relType + (S.relWho.trim() ? " · " + esc(S.relWho) : "") : "";
   var h = '<div class="stage m-in"><div class="step-n">Your invisible contracts</div>'+
     '<h2>The deals that were never spoken</h2>'+
-    '<p class="say">Here is what you found. The contracts as you wrote them, the roles they protect, and where they were signed. The one you chose as deepest is marked. When you are ready, tear it up. What replaces it is not a better deal for the other person to keep. It is an agreement you keep with yourself.</p>';
+    '<p class="say">Here is what you found. The contracts as you wrote them, the roles they protect, and where they were signed. The one you chose as deepest is marked. When you are ready, and only then, tear it up. What replaces it is not a better deal for the other person to keep. It is an agreement you keep with yourself.</p>';
 
   if (who || S.moment.trim()){
     h += '<div class="grid2">'+(who?'<div class="stat"><div class="l">The relationship</div><div class="v">'+who+'</div></div>':'')+
@@ -634,12 +661,17 @@ function renderResult(){
   if (S.signs.length){
     h += '<div class="stat" style="margin-top:12px"><div class="l">Signs present</div><div class="v">'+S.signs.length+' of 8<small>'+S.signs.map(function(i){return esc(SIGNS[i]);}).join(" ")+'</small></div></div>';
   }
-  var o = S.origin;
-  if (o.obs.trim()||o.felt.trim()||o.motto.trim()||o.loved.trim()){
-    h += '<div class="origin">'+
-      (o.obs.trim()?'<p><em>Watching my parents, I observed</em> '+esc(o.obs)+'</p>':'')+
-      (o.felt.trim()?'<p><em>What I felt was</em> '+esc(o.felt)+'</p>':'')+
-      (o.motto.trim()?'<p><em>Our family motto could have been</em> '+esc(o.motto)+'</p>':'')+
+  var o = S.origin, ppl = o.people.filter(personDone);
+  if (ppl.length || o.motto.trim() || o.loved.trim()){
+    h += '<div class="origin"><p><em>Where it was signed</em></p>';
+    ppl.forEach(function(p){
+      var pr = pron(p.who);
+      h += '<p><strong style="font-weight:700">'+esc(personLabel(p))+'.</strong> '+
+        (p.obs.trim()?'<em>I observed</em> '+esc(p.obs)+' ':'')+
+        (p.felt.trim()?'<em>I felt</em> '+esc(p.felt)+' ':'')+
+        (p.deal.trim()?'<em>My contract with '+pr+' could have been</em> '+esc(p.deal):'')+'</p>';
+    });
+    h += (o.motto.trim()?'<p><em>Our family motto could have been</em> '+esc(o.motto)+'</p>':'')+
       (o.loved.trim()?'<p><em>I learned that to be loved, I had to</em> '+esc(o.loved)+'</p>':'')+'</div>';
   }
 
@@ -678,10 +710,9 @@ function renderResult(){
         : 'When you tear it up, this is what you are choosing instead.')+'</div></div>';
   }
 
-  h += '<div class="test"><b>Why this matters</b><p>Friction is the drag between what the process requires and what you believe. The process requires direct communication, honest requests, boundaries, negotiation, courage and responsibility. The contract requires silence, mind-reading, hints, scorekeeping, resentment and role protection. So when you feel the drag, ask: which contract is running, which role is it protecting, and what would the process require if I stopped protecting it?</p></div>'+
-    '<p class="note">Saved on this device only. No account, and nothing is sent anywhere. Come back to it after the conversation and see whether the contract still reads true.</p>'+
+  h += '<div class="test"><b>Why this matters</b><p>Friction is the drag between what the process requires and what you believe. The process requires direct communication, honest requests, boundaries, negotiation, courage and responsibility. The contract requires silence, mind-reading, hints, scorekeeping, resentment and role protection. So when you feel the drag, ask yourself: which contract is running, which role is it protecting, and what would the process require if I stopped protecting it?</p></div>'+
+    '<p class="note">Saved on this device only. No account, and nothing is sent anywhere. Come back to it after you have had the conversation and see whether the contract still reads true.</p>'+
     '<div class="nav"><button class="btn" onclick="window.print()">Print or save as PDF</button>'+
-    '<a class="btn ghost" href="/tree-of-clarity/">Take the "it means" line down to the belief</a>'+
     '<button class="back" id="again">Start again</button></div>'+
     '<p class="signoff">Whatever you found, the contract only had power while it stayed invisible. Now it is on the page, in your own words, and that is already a different position to stand in. Much love, <b>Francois</b></p>'+
     '</div>';
