@@ -26,8 +26,16 @@ cd "$SITE" && npx wrangler pages deploy . --project-name=francois-resources --br
 # verify the LIVE bytes, not the local ones
 for f in "$@"; do
   n=$(basename "$f"); u="https://resources.francoisesterhuizen.com/media/shorts/$n"
-  curl -s -o /tmp/_live.mp4 "$u"
-  ffmpeg -v error -i /tmp/_live.mp4 -vn -ac 1 -ar 16000 -f wav /tmp/_ps.wav -y 2>/dev/null || { echo "LIVE FETCH FAILED $n"; exit 1; }
+  # Cloudflare takes a little while to serve fresh bytes on the custom
+  # domain; retry before calling it a failure (19 Aug 2026: a clean deploy
+  # read as "LIVE FETCH FAILED" on the first try, all six were fine).
+  ok=0
+  for try in 1 2 3 4 5 6; do
+    code=$(curl -s -o /tmp/_live.mp4 -w "%{http_code}" "$u")
+    if [ "$code" = 200 ] && ffmpeg -v error -i /tmp/_live.mp4 -vn -ac 1 -ar 16000 -f wav /tmp/_ps.wav -y 2>/dev/null; then ok=1; break; fi
+    sleep 10
+  done
+  [ "$ok" = 1 ] || { echo "LIVE FETCH FAILED $n (after 6 tries)"; exit 1; }
   rms=$(python3 -c "import wave,audioop;w=wave.open('/tmp/_ps.wav');print(audioop.rms(w.readframes(w.getnframes()),2))")
   [ "$rms" -ge 200 ] && echo "LIVE ok  $n  rms=$rms" || { echo "LIVE SILENT  $n"; exit 1; }
 done
