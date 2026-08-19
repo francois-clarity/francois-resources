@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en-ZA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Here you go — Resources — Francois Esterhuizen</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#1B222D">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/funnel.css">
+</head>
+<body>
+<div class="orb a"></div>
+<div class="orb b"></div>
+<div class="wrap" id="app">
+  <div class="eyebrow m-in">Here you go</div>
+  <h1 class="m-in" id="h1">One moment…</h1>
+</div>
+
+<script src="/assets/funnel.js"></script>
+<script>
+(function(){
+  const p = new URLSearchParams(location.search);
+  const path = p.get('p') === 'relational' ? 'relational' : 'personal';
+  const toolKey = p.get('t') || '';
+  const name = (p.get('n') || '').trim().slice(0, 60);
+  const tool = FUNNEL.TOOLS[toolKey];
+  const Q = FUNNEL.QUALIFIERS[path];
+  const deeper = Q.deeper;
+
+  function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+
+  if (!tool) { location.replace('/'); return; }
+
+  FUNNEL.track('thankyou_view_' + path, toolKey);
+
+  const greet = name ? `${esc(name)}, here` : 'Here';
+  const app = document.getElementById('app');
+  app.innerHTML = `
+    <div class="eyebrow m-in">Here you go</div>
+    <h1 class="m-in">${greet} is <span class="teal">the one that fits.</span></h1>
+    <p class="lede m-in">It is also in your inbox so you can come back to it. Open it now, take your time, and when you are done, the next step is below.</p>
+
+    <div class="deliver m-in">
+      <h2>${esc(tool.title)}</h2>
+      <p>${esc(tool.promise)}</p>
+      <a class="btn" href="${esc(tool.url)}" data-track="tool_open_${path}" ${/^https?:\/\//.test(tool.url) ? 'target="_blank" rel="noopener"' : ''}>${esc(tool.cta)} →</a>
+    </div>
+
+    <div class="deeper m-in">
+      <div class="kicker">${esc(deeper.kicker)}</div>
+      <h3>${esc(deeper.title)}</h3>
+      <p>${esc(deeper.body)}</p>
+      <div class="price">${esc(deeper.price)}</div>
+      <div class="acts">
+        <a class="btn ghost" href="${esc(deeper.url)}" data-track="paid_tease_click_${path}" target="_blank" rel="noopener">${esc(deeper.ctaLabel)} →</a>
+      </div>
+      <a class="whatsapp" href="https://wa.me/27824441831?text=${encodeURIComponent('Hi Francois, I just did the ' + tool.title + ' on your resources page and I have a question about ' + deeper.title + '.')}" target="_blank" rel="noopener">
+        Or message me on WhatsApp
+      </a>
+      ${deeper.alsoLabel ? `
+        <div class="also" style="margin-top:26px">
+          <span class="lbl">${esc(deeper.alsoLabel)}</span>
+          <p>${esc(deeper.alsoText)} <a href="${esc(deeper.alsoUrl)}" target="_blank" rel="noopener">Have a look</a>.</p>
+        </div>` : ''}
+    </div>
+
+    <div class="also">
+      <span class="lbl">Want to browse instead</span>
+      <p>Every tool and both books live in the <a href="/library/">full library</a>. Or <a href="/${path}/">pick a different answer</a>.</p>
+    </div>
+
+    <div class="foot">
+      <a href="https://www.francoisesterhuizen.com">francoisesterhuizen.com</a>
+      <a href="https://www.getclarity.co.za">getclarity.co.za</a>
+      <a href="/">Start again</a>
+    </div>
+  `;
+
+  app.querySelectorAll('[data-track]').forEach(el => {
+    el.addEventListener('click', () => FUNNEL.track(el.dataset.track, toolKey));
+  });
+})();
+</script>
+</body>
+</html>

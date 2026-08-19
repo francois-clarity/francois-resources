@@ -108,11 +108,14 @@
       ],
       deeper: {
         kicker: 'If you want to go deeper',
-        title: 'Personal Growth Weekly',
-        body: 'A live class every Wednesday morning, on Zoom, where we do this work together. One idea, applied, with a room of people doing the same. The recording and the resources land in your inbox afterwards. First month is on me.',
-        price: 'R320 a month after the first free month',
-        url: 'https://www.getclarity.co.za/personal-growth-weekly',
-        ctaLabel: 'Read about the class'
+        title: 'Clarity Quest',
+        body: 'Ten weeks, one-on-one with me, to get unstuck properly: not the latest symptom but the wall underneath it, whether that wall is routine, uncertainty, or the low hum of going through the motions. You leave with a clear picture of what you actually want and the first real moves toward it.',
+        price: 'Read the page for pricing and how it works',
+        url: 'https://clarityquest.francoisesterhuizen.com/',
+        ctaLabel: 'Read about Clarity Quest',
+        alsoLabel: 'Or, a gentler first step',
+        alsoText: 'Personal Growth Weekly is a live class on Wednesday mornings where we do this work in a room of people doing the same.',
+        alsoUrl: 'https://www.getclarity.co.za/'
       }
     },
     relational: {

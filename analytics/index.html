@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en-ZA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Funnel — private</title>
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#1B222D">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/funnel.css">
+<style>
+  .wrap{max-width:920px}
+  .tbl{width:100%;border-collapse:collapse;margin-top:22px;font-size:15px}
+  .tbl th,.tbl td{padding:12px 14px;text-align:left;border-bottom:1px solid var(--line)}
+  .tbl th{font-weight:700;font-size:11.5px;letter-spacing:3px;text-transform:uppercase;color:var(--muted-2)}
+  .tbl td.num{text-align:right;font-variant-numeric:tabular-nums;font-weight:700;color:var(--white)}
+  .tbl td.pct{text-align:right;font-variant-numeric:tabular-nums;color:var(--teal)}
+  .tbl tr.step td:first-child{padding-left:14px}
+  .tbl tr.sub td:first-child{padding-left:36px;color:var(--muted)}
+  .tbl tr.subsub td:first-child{padding-left:58px;color:var(--muted-2);font-size:14px}
+  .panel{background:linear-gradient(135deg,rgba(38,46,59,.66),rgba(30,37,48,.58));
+    border:1px solid var(--line);border-radius:22px;padding:26px 28px;margin-top:24px;
+    -webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px)}
+  .panel h3{font-weight:800;font-size:18px;margin-bottom:6px}
+  .ctrls{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:18px}
+  .ctrls input{font-family:inherit;font-size:14px;padding:10px 12px;border:1px solid var(--line-strong);
+    border-radius:10px;background:rgba(0,0,0,.2);color:var(--white);min-width:220px}
+  .ctrls select{font-family:inherit;font-size:14px;padding:10px 12px;border:1px solid var(--line-strong);
+    border-radius:10px;background:rgba(0,0,0,.2);color:var(--white)}
+  .note{font-size:13px;color:var(--muted-2);margin-top:10px}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+  @media (max-width:720px){.two{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="orb a"></div>
+<div class="orb b"></div>
+<div class="wrap">
+  <div class="eyebrow">Private</div>
+  <h1>Funnel <span class="teal">drop-off</span></h1>
+  <p class="lede">Where people land, which path they pick, where they stop. Counters only. No cookies, no names, no IPs.</p>
+
+  <div class="ctrls">
+    <input type="password" id="key" placeholder="Analytics key" autocomplete="off">
+    <select id="days">
+      <option value="7">Last 7 days</option>
+      <option value="14" selected>Last 14 days</option>
+      <option value="30">Last 30 days</option>
+      <option value="90">Last 90 days</option>
+    </select>
+    <button class="btn" id="load">Load</button>
+  </div>
+  <p class="note" id="status"></p>
+
+  <div id="out"></div>
+</div>
+
+<script>
+(function(){
+  const keyEl = document.getElementById('key');
+  const daysEl = document.getElementById('days');
+  const out = document.getElementById('out');
+  const status = document.getElementById('status');
+
+  // remember the key in this browser only
+  try { const k = sessionStorage.getItem('fk'); if (k) keyEl.value = k; } catch(_){}
+
+  document.getElementById('load').addEventListener('click', load);
+  keyEl.addEventListener('keydown', e => { if (e.key === 'Enter') load(); });
+
+  async function load(){
+    const key = keyEl.value.trim();
+    if (!key) { status.textContent = 'Enter the key.'; return; }
+    try { sessionStorage.setItem('fk', key); } catch(_){}
+    status.textContent = 'Loading…';
+    out.innerHTML = '';
+    let data;
+    try {
+      const r = await fetch(`/api/funnel-stats?key=${encodeURIComponent(key)}&days=${daysEl.value}`);
+      data = await r.json();
+      if (!data.ok) { status.textContent = data.error === 'unauthorised' ? 'Wrong key.' : ('Error: ' + data.error); return; }
+    } catch(e) { status.textContent = 'Could not load.'; return; }
+    status.textContent = `${data.days[0]} to ${data.days[data.days.length-1]}`;
+    render(data.events);
+  }
+
+  const n = (ev, v) => {
+    const e = ev || {};
+    if (v) return (e.byValue && e.byValue[v]) || 0;
+    return e.total || 0;
+  };
+  const pct = (a,b) => b ? Math.round(a/b*100) + '%' : '';
+
+  function render(E){
+    const land = n(E.landing_view);
+    const pers = n(E.landing_choice_personal);
+    const rel  = n(E.landing_choice_relational);
+    const lib  = n(E.landing_library_click);
+
+    const qvP = n(E.qualifier_view_personal), qvR = n(E.qualifier_view_relational);
+    const qaP = n(E.qualifier_answer_personal), qaR = n(E.qualifier_answer_relational);
+    const opP = n(E.optin_submit_personal), opR = n(E.optin_submit_relational);
+    const tyP = n(E.thankyou_view_personal), tyR = n(E.thankyou_view_relational);
+    const toP = n(E.tool_open_personal), toR = n(E.tool_open_relational);
+    const ptP = n(E.paid_tease_click_personal), ptR = n(E.paid_tease_click_relational);
+
+    const row = (cls, label, val, base) => `<tr class="${cls}"><td>${label}</td><td class="num">${val}</td><td class="pct">${pct(val, base)}</td></tr>`;
+
+    out.innerHTML = `
+      <div class="panel">
+        <h3>The whole funnel</h3>
+        <table class="tbl">
+          <thead><tr><th>Step</th><th style="text-align:right">Count</th><th style="text-align:right">Of prev</th></tr></thead>
+          <tbody>
+            ${row('step','Landing view', land, null)}
+            ${row('sub','→ chose Personal', pers, land)}
+            ${row('subsub','viewed qualifier', qvP, pers)}
+            ${row('subsub','answered', qaP, qvP)}
+            ${row('subsub','opted in (email)', opP, qaP)}
+            ${row('subsub','saw thank-you', tyP, opP)}
+            ${row('subsub','opened tool', toP, tyP)}
+            ${row('subsub','clicked paid tease', ptP, tyP)}
+            ${row('sub','→ chose Relational', rel, land)}
+            ${row('subsub','viewed qualifier', qvR, rel)}
+            ${row('subsub','answered', qaR, qvR)}
+            ${row('subsub','opted in (email)', opR, qaR)}
+            ${row('subsub','saw thank-you', tyR, opR)}
+            ${row('subsub','opened tool', toR, tyR)}
+            ${row('subsub','clicked paid tease', ptR, tyR)}
+            ${row('sub','→ went to library instead', lib, land)}
+          </tbody>
+        </table>
+        <p class="note">Of prev = share of the step directly above. Landing → choice is the first leak to watch; qualifier → opt-in is the second.</p>
+      </div>
+
+      <div class="two">
+        <div class="panel">
+          <h3>Personal: which answer</h3>
+          ${breakdown(E.qualifier_answer_personal, E.optin_submit_personal)}
+        </div>
+        <div class="panel">
+          <h3>Relational: which answer</h3>
+          ${breakdown(E.qualifier_answer_relational, E.optin_submit_relational)}
+        </div>
+      </div>
+    `;
+  }
+
+  function breakdown(ansEv, optEv){
+    const a = (ansEv && ansEv.byValue) || {};
+    const o = (optEv && optEv.byValue) || {};
+    const keys = Array.from(new Set([...Object.keys(a), ...Object.keys(o)]));
+    if (!keys.length) return '<p class="note">No answers yet.</p>';
+    keys.sort((x,y) => (a[y]||0) - (a[x]||0));
+    return `<table class="tbl"><thead><tr><th>Answer</th><th style="text-align:right">Chose</th><th style="text-align:right">Opted in</th></tr></thead><tbody>
+      ${keys.map(k => `<tr><td>${k}</td><td class="num">${a[k]||0}</td><td class="pct">${o[k]||0} ${pct(o[k]||0, a[k]||0) ? '(' + pct(o[k]||0, a[k]||0) + ')' : ''}</td></tr>`).join('')}
+    </tbody></table>`;
+  }
+})();
+</script>
+</body>
+</html>

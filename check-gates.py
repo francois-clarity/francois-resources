@@ -11,8 +11,17 @@ happen."
 import pathlib, re, sys, urllib.request
 
 GATES = {
-    # "" is the hub page at the site root
+    # "" is the funnel welcome at the site root (since 2026-08-19).
+    # It must split into Personal / Relational and link the full library.
     "": {
+        "must": ["Something for me", "Something for us",
+                 "/personal/", "/relational/", "/library/",
+                 "landing_choice_personal", "landing_choice_relational",
+                 "funnel.css", "funnel.js"],
+        "must_not": ["Story of Us", "storyofus", "Pattern Breaker"],
+    },
+    # The full catalogue, formerly the root.
+    "library": {
         "must": ["The Empowering Truth of Responsibility",
                  "10 Habits of Happy Relationships",
                  "francoisesterhuizen.com/own-it",
@@ -23,6 +32,19 @@ GATES = {
                  "Family Mobile",
                  "Personal Growth Weekly"],
         "must_not": ["Story of Us", "storyofus"],
+    },
+    # Funnel qualifier pages. Each must set its path and load the shared logic.
+    "personal": {
+        "must": ['data-path="personal"', "qualifier.js", "funnel.js", 'id="qualifier"'],
+        "must_not": ['data-path="relational"', "Story of Us"],
+    },
+    "relational": {
+        "must": ['data-path="relational"', "qualifier.js", "funnel.js", 'id="qualifier"'],
+        "must_not": ['data-path="personal"', "Story of Us"],
+    },
+    "thanks": {
+        "must": ["thankyou_view_", "tool_open_", "paid_tease_click_", "wa.me/27824441831"],
+        "must_not": ["Story of Us"],
     },
     "invisible-contracts": {
         # Contracts you keep. No email gate; markers are content.
