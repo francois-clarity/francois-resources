@@ -24,13 +24,6 @@ GATES = {
                  "Personal Growth Weekly"],
         "must_not": ["Story of Us", "storyofus"],
     },
-    "family-mobile": {
-        # Family-of-origin role reflection. No email gate; markers are content.
-        "must": ["The Family Mobile", "fm-mobile", "who was usually the one who",
-                 "Most like you", "The identified patient", "The lost child",
-                 "keep the mobile balanced", "Show me my position"],
-        "must_not": ["Pattern Breaker", "Headlights", "Loop Map"],
-    },
     "invisible-contracts": {
         # Contracts you keep. No email gate; markers are content.
         "must": ["Invisible Contracts", "ic-contracts", "then you should",

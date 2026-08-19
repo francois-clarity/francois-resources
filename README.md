@@ -13,7 +13,7 @@ collided before, so:
 | Area | Owner |
 |---|---|
 | `index.html`, `assets/`, `events/` | the hub session |
-| `tree-of-clarity/`, `four-voices/`, `belief-inventory/`, `invisible-contracts/`, `family-mobile/`, `emotional-language-wheel/` | the tools session |
+| `tree-of-clarity/`, `four-voices/`, `belief-inventory/`, `invisible-contracts/`, `emotional-language-wheel/` | the tools session |
 | `check-gates.py`, `deploy.sh` | shared, so add to them rather than rewriting them |
 
 Before you start: `git status` and `git log --oneline -3`, to see what the other
@@ -59,3 +59,10 @@ than markup.
 
 Cloudflare dashboard, Pages, `francois-resources`, Deployments. Every deploy is
 kept and any one can be promoted back to live.
+
+## Sites that moved off this project
+
+`family-mobile/` shipped here first on 2026-08-18, then moved the same day to its
+own repo (`~/family-mobile`, GitHub `francois-clarity/family-mobile`) and Pages
+project `family-mobile` at familymobile.francoisesterhuizen.com. `_redirects`
+carries the 301. Do not recreate the folder here.

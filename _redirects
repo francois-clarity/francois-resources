@@ -2,3 +2,5 @@
 /belief-identifier /tree-of-clarity/ 301
 /three-voices/* /four-voices/:splat 301
 /three-voices /four-voices/ 301
+/family-mobile/* https://familymobile.francoisesterhuizen.com/:splat 301
+/family-mobile https://familymobile.francoisesterhuizen.com/ 301
