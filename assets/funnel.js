@@ -129,11 +129,14 @@
       ],
       deeper: {
         kicker: 'If you want to go deeper',
-        title: 'The Get Close Couples Programme',
-        body: 'Eight sessions for the two of you, with me, working through the actual pattern rather than the latest argument. Built around the same assessments you just used, read together in the room.',
-        price: 'From R4 800 for the programme',
-        url: 'https://www.getclarity.co.za/get-close',
-        ctaLabel: 'Read about the programme'
+        title: 'Cracking the Conflict Code',
+        body: 'The course on what is actually happening between the two of you when it goes wrong, and how to do it differently. Where you are on the relationship map, what really goes on during conflict, what it means to communicate, and how your brain is in the room with you. Built around the assessment you just took.',
+        price: 'See the page for what is included',
+        url: 'https://www.francoisesterhuizen.com/defuse-conflict',
+        ctaLabel: 'Read about the course',
+        alsoLabel: 'Or, something to read together',
+        alsoText: '10 Habits of Happy Relationships is the book: ten practical habits that happy couples keep, one chapter each, free to read start to finish.',
+        alsoUrl: 'https://www.francoisesterhuizen.com/relationships-10-habits-intro'
       }
     }
   };

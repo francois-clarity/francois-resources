@@ -1,0 +1,113 @@
+/* Shared by the two book pages and the books index. Same house as the tools:
+   navy, teal, Manrope, hairlines, nothing shouting. */
+:root{
+  --navy:#262E3B; --navy-deep:#1B222D; --teal:#18C0C0; --white:#fff;
+  --muted:rgba(255,255,255,.66);
+  --line:rgba(255,255,255,.10);
+  --gold:#E5C07B;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Manrope',system-ui,-apple-system,sans-serif;
+  background:radial-gradient(ellipse at 26% 22%,#333E52 0%,var(--navy) 56%,var(--navy-deep) 100%);
+  color:var(--white);min-height:100vh;-webkit-font-smoothing:antialiased;
+  padding:72px 24px 96px;overflow-x:hidden;
+}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;
+  background-image:radial-gradient(rgba(255,255,255,.045) 1px,transparent 1px);
+  background-size:34px 34px}
+.orb{position:fixed;border-radius:50%;pointer-events:none;filter:blur(60px);z-index:0}
+.orb.a{width:560px;height:560px;left:-220px;top:12%;
+  background:radial-gradient(circle,rgba(24,192,192,.15),rgba(24,192,192,0) 65%)}
+.orb.b{width:640px;height:640px;right:-260px;top:58%;
+  background:radial-gradient(circle,rgba(24,192,192,.12),rgba(24,192,192,0) 65%)}
+.wrap{position:relative;max-width:900px;margin:0 auto;z-index:1}
+
+.eyebrow{font-weight:500;font-size:14px;letter-spacing:5px;text-transform:uppercase;
+  color:var(--teal);margin-bottom:20px}
+h1{font-weight:800;font-size:clamp(34px,5vw,54px);line-height:1.06;letter-spacing:-1.2px}
+h1 .teal{color:var(--teal)}
+.sub{font-weight:300;font-size:clamp(18px,2.4vw,22px);line-height:1.4;color:var(--muted);
+  margin-top:16px;letter-spacing:-.2px}
+
+/* hero: words left, cover right */
+.hero{display:grid;grid-template-columns:1fr 260px;gap:52px;align-items:start;margin-bottom:10px}
+@media (max-width:780px){.hero{grid-template-columns:1fr;gap:32px}}
+.cover{border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,.16);
+  box-shadow:0 30px 70px rgba(0,0,0,.5)}
+.cover img{display:block;width:100%;height:auto}
+.cover.type{background:linear-gradient(150deg,#2E3948,#1B222D);padding:38px 26px;
+  min-height:330px;display:flex;flex-direction:column;justify-content:center;gap:14px}
+.cover.type b{font-weight:800;font-size:24px;line-height:1.16;letter-spacing:-.6px}
+.cover.type span{font-size:12.5px;letter-spacing:2.6px;text-transform:uppercase;
+  color:var(--teal);font-weight:700}
+.cover.type i{font-style:normal;font-size:13px;color:rgba(255,255,255,.5);font-weight:600;margin-top:auto}
+
+.pull{margin:34px 0 0;border-left:3px solid var(--teal);padding:8px 0 8px 20px;
+  font-size:clamp(17px,2.2vw,20px);line-height:1.55;font-weight:300;color:rgba(255,255,255,.92);max-width:56ch}
+.pull b{font-weight:700;color:#fff}
+
+.say{font-weight:300;font-size:17px;line-height:1.7;color:var(--muted);margin-top:22px;max-width:60ch}
+.say b{color:var(--white);font-weight:600}
+
+/* the buy block */
+.buy{margin-top:44px;border:1px solid rgba(24,192,192,.3);border-radius:24px;
+  padding:32px 34px;background:rgba(24,192,192,.055);max-width:640px}
+@media (max-width:640px){.buy{padding:24px 22px}}
+.price{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+.price .amt{font-weight:800;font-size:42px;letter-spacing:-1.4px}
+.price .what{font-size:14.5px;color:var(--muted);font-weight:600}
+.gets{list-style:none;margin:22px 0 26px}
+.gets li{font-size:16px;line-height:1.5;color:rgba(255,255,255,.88);padding:9px 0 9px 30px;position:relative}
+.gets li::before{content:'';position:absolute;left:2px;top:16px;width:8px;height:8px;
+  border-radius:50%;background:var(--teal)}
+.gets li span{display:block;font-size:13.5px;color:rgba(255,255,255,.45);margin-top:3px;font-weight:500}
+.btn{display:inline-block;padding:17px 32px;border-radius:14px;cursor:pointer;
+  background:var(--teal);color:var(--navy);text-decoration:none;border:none;
+  font-family:inherit;font-weight:800;font-size:17px;
+  transition:transform .15s ease,filter .15s ease}
+.btn:hover{filter:brightness(1.07)}
+.btn:active{transform:translateY(1px)}
+.btn.ghost{background:rgba(255,255,255,.06);color:var(--white);
+  border:1px solid rgba(255,255,255,.18);font-weight:600;font-size:16px}
+.btn.ghost:hover{border-color:var(--teal);filter:none}
+.btn.pending{background:rgba(255,255,255,.12);color:rgba(255,255,255,.5);cursor:not-allowed}
+.fine{margin-top:16px;font-size:13px;line-height:1.6;color:rgba(255,255,255,.42);max-width:52ch}
+
+/* contents */
+.sect{display:flex;align-items:center;gap:18px;margin:64px 0 24px}
+.sect span{font-weight:700;font-size:13px;letter-spacing:4px;text-transform:uppercase;
+  color:rgba(255,255,255,.55);white-space:nowrap}
+.sect::after{content:'';height:1px;flex:1;
+  background:linear-gradient(90deg,rgba(24,192,192,.5),rgba(255,255,255,.06))}
+.toc{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:720px){.toc{grid-template-columns:1fr}}
+.ch{border:1px solid var(--line);border-radius:16px;padding:18px 20px;
+  background:rgba(255,255,255,.03)}
+.ch .n{font-size:11.5px;letter-spacing:2.4px;text-transform:uppercase;font-weight:800;
+  color:var(--teal);margin-bottom:7px}
+.ch .t{font-weight:700;font-size:16px;line-height:1.35;letter-spacing:-.2px}
+.ch .s{font-size:13.5px;color:rgba(255,255,255,.5);margin-top:5px;font-weight:500}
+
+.note{max-width:64ch}
+.note p{font-weight:300;font-size:17px;line-height:1.75;color:var(--muted);margin-bottom:18px}
+.note p b{color:var(--white);font-weight:600}
+.sign{margin-top:26px;font-size:16px;color:rgba(255,255,255,.8);font-weight:500}
+
+footer{margin-top:80px;padding-top:36px;border-top:1px solid var(--line);
+  display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+footer img{width:44px;height:44px;display:block}
+footer .who{font-size:14px;color:var(--muted);line-height:1.5}
+footer .who b{color:var(--white)}
+footer nav{margin-left:auto;display:flex;gap:22px;flex-wrap:wrap}
+footer nav a{color:var(--muted);text-decoration:none;font-size:14px;font-weight:500}
+footer nav a:hover{color:var(--teal)}
+
+@keyframes m-rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.m-in{animation:m-rise .8s cubic-bezier(.16,1,.3,1) both}
+.eyebrow.m-in{animation-delay:.05s}
+h1.m-in{animation-delay:.14s}
+.sub.m-in{animation-delay:.26s}
+.pull.m-in{animation-delay:.38s}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.m-in{animation:none}}
