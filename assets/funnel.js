@@ -131,7 +131,7 @@
         kicker: 'If you want to go deeper',
         title: 'Cracking the Conflict Code',
         body: 'The course on what is actually happening between the two of you when it goes wrong, and how to do it differently. Where you are on the relationship map, what really goes on during conflict, what it means to communicate, and how your brain is in the room with you. Built around the assessment you just took.',
-        price: 'See the page for what is included',
+        price: 'R1 200, once off',
         url: 'https://www.francoisesterhuizen.com/defuse-conflict',
         ctaLabel: 'Read about the course',
         alsoLabel: 'Or, something to read together',
