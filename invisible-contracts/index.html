@@ -262,7 +262,7 @@ var SIGNS = [
   "You feel guilty when you set a boundary."
 ];
 var RELS = ["My partner","A parent","A child","A sibling","A friend","At work","Myself","Someone else"];
-var PEOPLE = ["My mother","My father","Both my parents","My family as a whole","A brother","A sister","A grandparent","Someone else"];
+var SIBKIND = ["A brother","A sister"];
 var MOTTOS = ["We don't cry","We don't talk about money","Don't speak unless spoken to","Be strong","Keep the peace","Don't make a fuss","We don't need anyone","Family comes first, always"];
 var EXAMPLES = [
   ["do my part","do yours","I am on my own in this"],
@@ -291,12 +291,21 @@ var SELF = [
 ];
 
 function fresh(){ return { step:0, signs:[], relType:"", relWho:"", moment:"",
-  origin:{people:[newPerson()],motto:"",loved:""}, contracts:[newCon()], deep:"", cost:"", threat:[],
+  sub:0, origin:freshOrigin(), contracts:[newCon()], deep:"", cost:"", threat:[],
   want:"", willing:"", canAsk:"", fear:"", self:[], selfCustom:"", act:"", torn:false }; }
-function newPerson(){ return { id:uid(), who:"", name:"", obs:"", felt:"", deal:"" }; }
-function pron(who){ if (who==="My mother"||who==="A sister") return "her"; if (who==="My father"||who==="A brother") return "him"; return "them"; }
-function personLabel(p){ return (p.who || "them") + (p.name && p.name.trim() ? " ("+p.name.trim()+")" : ""); }
-function personDone(p){ return !!(p.who && (p.obs.trim()||p.felt.trim()||p.deal.trim())); }
+function freshOrigin(){ return { parents:{obs:"",felt:""}, motto:"", loved:"", father:{obs:"",felt:"",deal:"",skip:false}, mother:{obs:"",felt:"",deal:"",skip:false}, sibCount:null, sibs:[] }; }
+function newSib(){ return { id:uid(), kind:"", name:"", obs:"", felt:"", deal:"", skip:false }; }
+function hasLine(p){ return !!(p && ((p.obs||"").trim()||(p.felt||"").trim()||(p.deal||"").trim())); }
+function sibLabel(sb, i){ return (sb.kind ? sb.kind.replace(/^A /,"My ") : "Sibling "+(i+1)) + (sb.name && sb.name.trim() ? " ("+sb.name.trim()+")" : ""); }
+function sibPron(sb){ return sb.kind==="A sister" ? "her" : sb.kind==="A brother" ? "him" : "them"; }
+// the time-travel sequence: both parents, the motto, father, mother, then every sibling
+function originScreens(){
+  var list = ["parents","motto","father","mother","sibcount"];
+  var n = S.origin.sibCount || 0;
+  for (var i=0;i<n;i++) list.push("sib"+i);
+  return list;
+}
+function ensureSibs(){ var n = S.origin.sibCount || 0; while (S.origin.sibs.length < n) S.origin.sibs.push(newSib()); if (S.origin.sibs.length > n) S.origin.sibs = S.origin.sibs.slice(0, n); }
 function newCon(){ return { id:uid(), ifI:"", youShould:"", means:"", kind:"", role:"", roleOther:"" }; }
 var S = fresh();
 var tool = document.getElementById("tool");
@@ -305,8 +314,28 @@ function esc(s){ return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,
 function uid(){ return "c"+Math.random().toString(36).slice(2,9); }
 function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
 function load(){ try{ var o=JSON.parse(localStorage.getItem(KEY)); if(o&&o.contracts){ S=o;
-  if (!S.origin.people){ var p = newPerson(); p.who = "Both my parents"; p.obs = S.origin.obs||""; p.felt = S.origin.felt||""; S.origin.people = [p]; delete S.origin.obs; delete S.origin.felt; }
+  if (S.sub === undefined) S.sub = 0;
+  if (!S.origin.parents){
+    // older saves: one generic line, or a free list of people. Carry what maps, drop the rest.
+    var old = S.origin, no = freshOrigin(); no.motto = old.motto||""; no.loved = old.loved||"";
+    if (old.obs || old.felt){ no.parents.obs = old.obs||""; no.parents.felt = old.felt||""; }
+    (old.people||[]).forEach(function(p){
+      var t = {obs:p.obs||"",felt:p.felt||"",deal:p.deal||"",skip:false};
+      if (p.who==="Both my parents"||p.who==="My family as a whole"){ no.parents.obs = no.parents.obs||t.obs; no.parents.felt = no.parents.felt||t.felt; }
+      else if (p.who==="My father") no.father = t; else if (p.who==="My mother") no.mother = t;
+      else if (p.who==="A brother"||p.who==="A sister"){ var sb = newSib(); sb.kind = p.who; sb.name = p.name||""; sb.obs=t.obs; sb.felt=t.felt; sb.deal=t.deal; no.sibs.push(sb); }
+    });
+    if (no.sibs.length) no.sibCount = no.sibs.length;
+    S.origin = no; S.sub = 0;
+  }
 } }catch(e){} }
+function earlyDeals(){
+  var o = S.origin, out = [];
+  if (!o.father.skip && o.father.deal.trim()) out.push({who:"my father", deal:o.father.deal});
+  if (!o.mother.skip && o.mother.deal.trim()) out.push({who:"my mother", deal:o.mother.deal});
+  o.sibs.forEach(function(sb,i){ if (!sb.skip && sb.deal.trim()) out.push({who:(sb.kind ? sb.kind.replace(/^A /,"my ") : "sibling "+(i+1)) + (sb.name && sb.name.trim() ? " ("+sb.name.trim()+")" : ""), deal:sb.deal}); });
+  return out;
+}
 function full(c){ return !!(c.ifI.trim() && c.youShould.trim() && c.means.trim()); }
 function done(){ return S.contracts.filter(full); }
 function con(id){ return S.contracts.filter(function(c){return c.id===id;})[0]; }
@@ -330,9 +359,12 @@ function missingFor(step){
   var m = [];
   if (step === 2){ if (!S.relType) m.push("which relationship"); if (!S.moment.trim()) m.push("the moment"); }
   else if (step === 3){
-    var o = S.origin, half = o.people.filter(function(p){ return p.who && !personDone(p); }).length;
-    if (!o.people.filter(personDone).length) m.push("one person, with at least one line about them");
-    else if (half) m.push("a line for each person you named, or remove them");
+    var o = S.origin, sc = originScreens()[S.sub] || "parents";
+    if (sc === "parents"){ if (!hasLine(o.parents)) m.push("at least one of the two lines"); }
+    else if (sc === "father"){ if (!o.father.skip && !hasLine(o.father)) m.push("at least one line about him, or skip him"); }
+    else if (sc === "mother"){ if (!o.mother.skip && !hasLine(o.mother)) m.push("at least one line about her, or skip her"); }
+    else if (sc === "sibcount"){ if (o.sibCount === null) m.push("how many brothers and sisters"); }
+    else if (sc.indexOf("sib") === 0){ var sb = o.sibs[+sc.slice(3)]; if (sb && !sb.skip){ if (!sb.kind) m.push("brother or sister"); if (!hasLine(sb)) m.push("at least one line, or skip this one"); } }
   }
   else if (step === 4){ if (done().length < 1) m.push("one complete contract, all three lines"); }
   else if (step === 6){ if (done().filter(function(c){ var r = roleOf(c); return !r || !r.trim(); }).length) m.push("a role for each contract"); }
@@ -391,43 +423,83 @@ function render(){
   }
 
   else if (S.step === 3){
-    var o = S.origin;
-    h += '<div class="step-n">Step three · time travel</div><h2>Where was it signed?</h2>'+
-      '<p class="say">Contracts are usually signed early, in your family, long before you could read the fine print. So go back and look, <b>one person at a time</b>. Watching my mother. Watching my father. Watching a brother or sister. For each one: what did you observe, what did you feel, and what could your agreement with them have been? Add as many people as you need. Then the family motto, which is the contract you all signed together.</p>';
-    o.people.forEach(function(p, i){
-      var pr = pron(p.who);
-      h += '<div class="con"><div class="n">Person '+(i+1)+'</div>'+
-        (o.people.length>1?'<button class="del" data-pdel="'+p.id+'" aria-label="Remove">&times;</button>':'')+
-        '<div class="chips">'+PEOPLE.map(function(w){ return '<button type="button" class="chip'+(p.who===w?" on":"")+'" data-pwho="'+p.id+'" data-who="'+esc(w)+'">'+esc(w)+'</button>'; }).join("")+'</div>'+
-        (p.who==="Someone else"||p.who==="A brother"||p.who==="A sister"||p.who==="A grandparent" ? '<input type="text" data-pf="'+p.id+'" data-f="name" placeholder="Their name (optional)" value="'+esc(p.name)+'">' : '')+
-        '<label class="f">Watching '+esc(p.who ? p.who.toLowerCase().replace(/^a /,"my ").replace(/^both my/,"both my") : "them")+', I observed...</label>'+
-        '<textarea data-pf="'+p.id+'" data-f="obs" rows="2" placeholder="Always working, never satisfied. Went silent for days when upset. Gave everything to everyone else.">'+esc(p.obs)+'</textarea>'+
+    var o = S.origin, screens = originScreens(), sc = screens[S.sub] || "parents", pos = (S.sub+1)+" of "+screens.length;
+    h += '<div class="step-n">Step three · time travel · '+pos+'</div>';
+    if (sc === "parents"){
+      h += '<h2>Watching your parents</h2>'+
+        '<p class="say">Contracts are usually signed early, in your family, long before you could read the fine print. So we go back and look, one person at a time, in this order: both your parents together, the family motto, then your father on his own, your mother on her own, and then each brother and sister. This is a bit of time travel. Think back. What did you see?</p>'+
+        '<label class="f" for="p_obs">Watching my parents, or the adults who raised me, I observed...</label>'+
+        '<textarea id="p_obs" rows="2" placeholder="Money was always tight. Work was something you slogged through. They were in the same house but not together.">'+esc(o.parents.obs)+'</textarea>'+
+        '<label class="f" for="p_felt">My recurring feeling, watching that, was...</label>'+
+        '<textarea id="p_felt" rows="2" placeholder="Disconnected. On edge. Like it was my job to keep things calm.">'+esc(o.parents.felt)+'</textarea>'+
+        room("In my words", [
+          "When I was a little boy we lived close together as a family. My parents were each one of eight children, so it was a lot of uncles, aunts and cousins, and we often congregated at my grandfather's place. What I observed there, even as a little boy: money is scarce. Work is horrible, something you slog through and then you do not get paid enough. And relationships mean disconnection. That one goes with that one. That affected my belief system, because <b>I signed contracts from what I saw</b>.",
+          "So here is how you identify some of yours. Watching my parents, what did I see? What was my recurring feeling? Write that down first. It gives you something to start the discovery with."
+        ], "I taught this in my Relationship Course, in the session on defining love and breaking invisible contracts.");
+    }
+    else if (sc === "motto"){
+      h += '<h2>Your family motto</h2>'+
+        '<p class="say">Every family has a motto, even if nobody ever said it out loud. Whatever your surname is: we So-and-sos do not cry. We So-and-sos do not talk about money. It can be different for the men and the women. Put words to yours, and then to what it taught you about being loved.</p>'+
+        '<label class="f" for="motto">Our family motto could have been...</label>'+
+        '<div class="chips">'+MOTTOS.map(function(m){return '<button type="button" class="chip stem" data-motto="'+esc(m)+'">'+esc(m)+'</button>';}).join("")+'</div>'+
+        '<input type="text" id="motto" placeholder="We Smiths do not..." value="'+esc(o.motto)+'">'+
+        '<label class="f" for="loved">I learned that to be loved, I had to...</label>'+
+        '<textarea id="loved" rows="2" placeholder="Be useful. Not need anything. Keep everyone happy.">'+esc(o.loved)+'</textarea>'+
+        room("In my words", [
+          "That motto becomes a contract, something you agree to live by. It is like a sports team. A player gets signed, puts on the jersey, and that is it, he belongs, and the supporters do not reject him. He is wearing the jersey, so he has signed the contract. He is agreeing to the motto.",
+          "And now you can understand why, when you are in a relationship with someone whose motto clashes with yours, that becomes conflict. <b>If you do not understand your own motto, you cannot change it.</b>"
+        ], "I taught this in my Relationship Course, in the session on defining love and breaking invisible contracts.");
+    }
+    else if (sc === "father" || sc === "mother"){
+      var who = sc, P = o[who], him = who==="father" ? "him" : "her", his = who==="father" ? "his" : "her";
+      h += '<h2>Your '+who+', on '+his+' own</h2>'+
+        '<p class="say">Now the same three lines, but for your '+who+' alone. Not the pair, just '+him+'. What did you see when you watched '+him+', what did you feel, and what could your agreement with '+him+' have been? If there was no '+who+' in your story, or you would rather not go there, you can skip '+him+'.</p>'+
+        (P.skip ? '<div class="hint" style="color:var(--amber)">You have skipped your '+who+'. Tap below to undo that.</div>' : '')+
+        '<label class="f">Watching my '+who+', I observed...</label>'+
+        '<textarea data-pp="'+who+'" data-f="obs" rows="2" placeholder="Always working, never satisfied. Went silent for days when upset.">'+esc(P.obs)+'</textarea>'+
         '<label class="f">What I felt, again and again, was...</label>'+
-        '<textarea data-pf="'+p.id+'" data-f="felt" rows="2" placeholder="Responsible for '+pr+'. On edge. Like I had to earn my place.">'+esc(p.felt)+'</textarea>'+
-        '<label class="f">My agreement or contract with '+pr+' could have been...</label>'+
-        '<textarea data-pf="'+p.id+'" data-f="deal" rows="2" placeholder="I will be the easy one who never needs anything, and in return I get to stay close.">'+esc(p.deal)+'</textarea>'+
-        '</div>';
-    });
-    if (o.people.length < 8) h += '<div class="addrow"><button id="addperson">+ Add another person</button></div>';
-    h += '<label class="f" for="motto">Our family motto could have been...</label>'+
-      '<div class="chips">'+MOTTOS.map(function(m){return '<button type="button" class="chip stem" data-motto="'+esc(m)+'">'+esc(m)+'</button>';}).join("")+'</div>'+
-      '<input type="text" id="motto" placeholder="We Smiths do not..." value="'+esc(o.motto)+'">'+
-      '<label class="f" for="loved">I learned that to be loved, I had to...</label>'+
-      '<textarea id="loved" rows="2" placeholder="Be useful. Not need anything. Keep everyone happy.">'+esc(o.loved)+'</textarea>'+
-      room("In my words", [
-        "When I was a little boy we lived close together as a family. My parents were each one of eight children, so it was a lot of uncles, aunts and cousins, and we often congregated at my grandfather's place. What I observed there, even as a little boy: money is scarce. Work is horrible, something you slog through and then you do not get paid enough. And relationships mean disconnection. That one goes with that one. That affected my belief system, because <b>I signed contracts from what I saw</b>.",
-        "So here is how you identify some of yours. Watching my parents, what did I see? What was my recurring feeling? Now do the same with your mother on her own, your father on his own, your brothers and sisters. I observed this. I felt this. Whatever gives you something to start the discovery with. And then use this sentence: <b>my agreement or contract with him, or her, or them, could have been something like...</b>",
-        "The motto matters too. Whatever your surname is: we So-and-sos, we don't cry. That motto becomes a contract, something you agree to live by. When you are in a relationship with someone whose motto clashes with yours, that becomes conflict. <b>If you do not understand your own motto, you cannot change it.</b> And remember, you were underage when you signed all of this."
-      ], "I taught this in my Relationship Course, in the session on defining love and breaking invisible contracts.")+
-      nav("Next");
+        '<textarea data-pp="'+who+'" data-f="felt" rows="2" placeholder="Responsible for '+him+'. On edge. Like I had to earn my place.">'+esc(P.felt)+'</textarea>'+
+        '<label class="f">My agreement or contract with '+him+' could have been...</label>'+
+        '<textarea data-pp="'+who+'" data-f="deal" rows="2" placeholder="I will be the easy one who never needs anything, and in return I get to stay close.">'+esc(P.deal)+'</textarea>'+
+        '<div class="chips"><button type="button" class="chip'+(P.skip?" on":"")+'" data-pskip="'+who+'">'+(P.skip?"Skipped. Tap to undo":"Skip my "+who)+'</button></div>'+
+        (who==="father" ? room("In my words", [
+          "Now do the same with your father on his own, and then your mother on her own. Watching my father, I observed this. I felt this. And then use this sentence: <b>my agreement or contract with him could have been something like...</b>"
+        ], "I taught this in my Relationship Course, in the session on defining love and breaking invisible contracts.") : '');
+    }
+    else if (sc === "sibcount"){
+      h += '<h2>Your brothers and sisters</h2>'+
+        '<p class="say">And now your siblings, one at a time, until we have covered them all. Step-siblings and half-siblings count if they were part of the house. How many brothers and sisters do you have?</p>'+
+        '<div class="chips">'+[0,1,2,3,4,5,6,7,8].map(function(n){ return '<button type="button" class="chip'+(o.sibCount===n?" on":"")+'" data-sibcount="'+n+'">'+(n===0?"None, I was an only child":n===8?"8 or more":n)+'</button>'; }).join("")+'</div>'+
+        (o.sibCount===0 ? '<div class="hint">No siblings, so the next step is the contracts themselves.</div>' : '')+
+        room("In my words", [
+          "Now you can do the same with your siblings. Watching my brother, my sister. I observed this. I felt this. I thought this. Whatever gives you something to start that discovery with. And the same sentence at the end: my agreement or contract with him, or her, could have been something like..."
+        ], "I taught this in my Relationship Course, in the session on defining love and breaking invisible contracts.");
+    }
+    else {
+      ensureSibs();
+      var si = +sc.slice(3), sb = o.sibs[si], n = o.sibs.length, spr = sibPron(sb);
+      h += '<h2>'+(sb.kind ? sb.kind.replace(/^A /,"Your ") : "Sibling "+(si+1))+(n>1?' <span style="font-weight:300;color:var(--muted)">'+(si+1)+' of '+n+'</span>':'')+'</h2>'+
+        '<p class="say">'+(si===0?'First one. ':'Next one. ')+'Brother or sister, then the same three lines. You can skip any sibling you would rather not write about.</p>'+
+        '<div class="chips">'+SIBKIND.map(function(k){ return '<button type="button" class="chip'+(sb.kind===k?" on":"")+'" data-sibkind="'+si+'" data-k="'+esc(k)+'">'+esc(k)+'</button>'; }).join("")+'</div>'+
+        '<input type="text" data-sf="'+si+'" data-f="name" placeholder="Their name (optional)" value="'+esc(sb.name)+'">'+
+        '<label class="f">Watching my '+(sb.kind?sb.kind.replace(/^A /,""):"brother or sister")+', I observed...</label>'+
+        '<textarea data-sf="'+si+'" data-f="obs" rows="2" placeholder="Got away with everything. Or carried everything. Or was never home.">'+esc(sb.obs)+'</textarea>'+
+        '<label class="f">What I felt, again and again, was...</label>'+
+        '<textarea data-sf="'+si+'" data-f="felt" rows="2" placeholder="Second best. Protective. Invisible next to '+spr+'.">'+esc(sb.felt)+'</textarea>'+
+        '<label class="f">My agreement or contract with '+spr+' could have been...</label>'+
+        '<textarea data-sf="'+si+'" data-f="deal" rows="2" placeholder="I will look after you, and you will look up to me.">'+esc(sb.deal)+'</textarea>'+
+        '<div class="chips"><button type="button" class="chip'+(sb.skip?" on":"")+'" data-sibskip="'+si+'">'+(sb.skip?"Skipped. Tap to undo":"Skip this one")+'</button></div>';
+    }
+    var last = S.sub >= screens.length-1;
+    h += nav(last ? "Next" : "Next person");
   }
 
   else if (S.step === 4){
     var n = done().length;
     h += '<div class="step-n">Step four · the contract</div><h2>Write the hidden deal</h2>'+
       '<p class="say">Now put words to it. I want you to use the three lines exactly. The first two are the deal. <b>The third line is usually the real driver.</b> It reveals the meaning you give their behaviour, the fear, and the old role. Write one at least, three if you can, because in my experience the first one you find is seldom the deepest.</p>'+
-      (S.origin.people.filter(function(p){ return p.deal.trim(); }).length
-        ? '<div class="origin"><p><em>What you found in step three</em></p>'+S.origin.people.filter(function(p){ return p.deal.trim(); }).map(function(p){ return '<p><em>With '+esc(personLabel(p).toLowerCase())+':</em> '+esc(p.deal)+'</p>'; }).join("")+'<p class="hint">Those are the early versions. Now write the ones running in this relationship today, in the three-line form. Tap an example to load it, then change the words until it sounds like you.</p></div>'
+      (earlyDeals().length
+        ? '<div class="origin"><p><em>What you found in step three</em></p>'+earlyDeals().map(function(d){ return '<p><em>With '+esc(d.who)+':</em> '+esc(d.deal)+'</p>'; }).join("")+'<p class="hint">Those are the early versions. Now write the ones running in this relationship today, in the three-line form. Tap an example to load it, then change the words until it sounds like you.</p></div>'
         : '<div class="hint">Tap an example to load it, then change the words until it sounds like you.</div>')+
       '<div class="chips">'+EXAMPLES.map(function(e,i){return '<button type="button" class="chip stem" data-ex="'+i+'">If I '+esc(e[0])+', you should '+esc(e[1])+'</button>';}).join("")+'</div>';
     S.contracts.forEach(function(c,i){
@@ -561,9 +633,13 @@ function refreshNext(){ render(); }
 
 function wire(){
   var nx = document.getElementById("next");
-  if (nx) nx.onclick = function(){ S.step++; save(); render(); };
+  if (nx) nx.onclick = function(){
+    if (S.step === 3 && S.sub < originScreens().length-1){ S.sub++; } else { S.step++; S.sub = 0; }
+    save(); render(); };
   var bk = document.getElementById("back");
-  if (bk) bk.onclick = function(){ S.step--; save(); render(); };
+  if (bk) bk.onclick = function(){
+    if (S.step === 3 && S.sub > 0){ S.sub--; } else { S.step--; S.sub = (S.step === 3) ? originScreens().length-1 : 0; }
+    save(); render(); };
 
   // step 1 signs
   tool.querySelectorAll("[data-sign]").forEach(function(el){
@@ -578,16 +654,20 @@ function wire(){
   bindText("relWho", function(v){ S.relWho = v; });
   bindText("moment", function(v){ S.moment = v; }, true);
   // step 3
-  tool.querySelectorAll("[data-pwho]").forEach(function(el){ el.onclick = function(){
-    var p = S.origin.people.filter(function(x){ return x.id===el.getAttribute("data-pwho"); })[0];
-    p.who = el.getAttribute("data-who"); save(); render(); }; });
-  tool.querySelectorAll("[data-pf]").forEach(function(el){ el.oninput = function(){
-    var p = S.origin.people.filter(function(x){ return x.id===el.getAttribute("data-pf"); })[0];
-    if (p){ p[el.getAttribute("data-f")] = el.value; save(); liveNext(); } }; });
-  var addp = document.getElementById("addperson");
-  if (addp) addp.onclick = function(){ S.origin.people.push(newPerson()); save(); render(); };
-  tool.querySelectorAll("button[data-pdel]").forEach(function(el){ el.onclick = function(){
-    S.origin.people = S.origin.people.filter(function(x){ return x.id !== el.getAttribute("data-pdel"); }); save(); render(); }; });
+  bindText("p_obs", function(v){ S.origin.parents.obs = v; }, true);
+  bindText("p_felt", function(v){ S.origin.parents.felt = v; }, true);
+  tool.querySelectorAll("[data-pp]").forEach(function(el){ el.oninput = function(){
+    S.origin[el.getAttribute("data-pp")][el.getAttribute("data-f")] = el.value; save(); liveNext(); }; });
+  tool.querySelectorAll("[data-pskip]").forEach(function(el){ el.onclick = function(){
+    var P = S.origin[el.getAttribute("data-pskip")]; P.skip = !P.skip; save(); render(); }; });
+  tool.querySelectorAll("[data-sibcount]").forEach(function(el){ el.onclick = function(){
+    S.origin.sibCount = +el.getAttribute("data-sibcount"); ensureSibs(); save(); render(); }; });
+  tool.querySelectorAll("[data-sibkind]").forEach(function(el){ el.onclick = function(){
+    var sb = S.origin.sibs[+el.getAttribute("data-sibkind")]; if (sb){ sb.kind = el.getAttribute("data-k"); save(); render(); } }; });
+  tool.querySelectorAll("[data-sf]").forEach(function(el){ el.oninput = function(){
+    var sb = S.origin.sibs[+el.getAttribute("data-sf")]; if (sb){ sb[el.getAttribute("data-f")] = el.value; save(); liveNext(); } }; });
+  tool.querySelectorAll("[data-sibskip]").forEach(function(el){ el.onclick = function(){
+    var sb = S.origin.sibs[+el.getAttribute("data-sibskip")]; if (sb){ sb.skip = !sb.skip; save(); render(); } }; });
   bindText("motto", function(v){ S.origin.motto = v; }, true);
   bindText("loved", function(v){ S.origin.loved = v; }, true);
   tool.querySelectorAll("[data-motto]").forEach(function(el){ el.onclick = function(){
@@ -661,19 +741,20 @@ function renderResult(){
   if (S.signs.length){
     h += '<div class="stat" style="margin-top:12px"><div class="l">Signs present</div><div class="v">'+S.signs.length+' of 8<small>'+S.signs.map(function(i){return esc(SIGNS[i]);}).join(" ")+'</small></div></div>';
   }
-  var o = S.origin, ppl = o.people.filter(personDone);
-  if (ppl.length || o.motto.trim() || o.loved.trim()){
-    h += '<div class="origin"><p><em>Where it was signed</em></p>';
-    ppl.forEach(function(p){
-      var pr = pron(p.who);
-      h += '<p><strong style="font-weight:700">'+esc(personLabel(p))+'.</strong> '+
-        (p.obs.trim()?'<em>I observed</em> '+esc(p.obs)+' ':'')+
-        (p.felt.trim()?'<em>I felt</em> '+esc(p.felt)+' ':'')+
-        (p.deal.trim()?'<em>My contract with '+pr+' could have been</em> '+esc(p.deal):'')+'</p>';
-    });
-    h += (o.motto.trim()?'<p><em>Our family motto could have been</em> '+esc(o.motto)+'</p>':'')+
-      (o.loved.trim()?'<p><em>I learned that to be loved, I had to</em> '+esc(o.loved)+'</p>':'')+'</div>';
-  }
+  var o = S.origin;
+  var originRows = [];
+  if (hasLine(o.parents)) originRows.push('<p><strong style="font-weight:700">My parents.</strong> '+(o.parents.obs.trim()?'<em>I observed</em> '+esc(o.parents.obs)+' ':'')+(o.parents.felt.trim()?'<em>I felt</em> '+esc(o.parents.felt):'')+'</p>');
+  if (o.motto.trim()) originRows.push('<p><em>Our family motto could have been</em> '+esc(o.motto)+'</p>');
+  if (o.loved.trim()) originRows.push('<p><em>I learned that to be loved, I had to</em> '+esc(o.loved)+'</p>');
+  [["father","My father","him"],["mother","My mother","her"]].forEach(function(x){
+    var P = o[x[0]]; if (P.skip || !hasLine(P)) return;
+    originRows.push('<p><strong style="font-weight:700">'+x[1]+'.</strong> '+(P.obs.trim()?'<em>I observed</em> '+esc(P.obs)+' ':'')+(P.felt.trim()?'<em>I felt</em> '+esc(P.felt)+' ':'')+(P.deal.trim()?'<em>My contract with '+x[2]+' could have been</em> '+esc(P.deal):'')+'</p>');
+  });
+  o.sibs.forEach(function(sb,i){
+    if (sb.skip || !hasLine(sb)) return;
+    originRows.push('<p><strong style="font-weight:700">'+esc(sibLabel(sb,i))+'.</strong> '+(sb.obs.trim()?'<em>I observed</em> '+esc(sb.obs)+' ':'')+(sb.felt.trim()?'<em>I felt</em> '+esc(sb.felt)+' ':'')+(sb.deal.trim()?'<em>My contract with '+sibPron(sb)+' could have been</em> '+esc(sb.deal):'')+'</p>');
+  });
+  if (originRows.length) h += '<div class="origin"><p><em>Where it was signed</em></p>'+originRows.join("")+'</div>';
 
   done().forEach(function(c, i){
     var isDeep = d && c.id===d.id;
