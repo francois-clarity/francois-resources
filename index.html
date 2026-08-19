@@ -4,542 +4,66 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Resources — Francois Esterhuizen</title>
-<meta name="description" content="Free tools, workbooks and two full books from Francois Esterhuizen. Each one is built to be used, not just read.">
+<meta name="description" content="Free tools, workbooks and two full books from Francois Esterhuizen. Built to be used, not just read. Start by telling me what you are here for.">
 <meta property="og:title" content="Resources — Francois Esterhuizen">
 <meta property="og:description" content="Free tools, workbooks and two full books. Built to be used, not just read.">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://resources.francoisesterhuizen.com/assets/portrait.jpg">
+<meta name="theme-color" content="#1B222D">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;500;600;800&display=swap" rel="stylesheet">
-<style>
-  :root{
-    --navy:#262E3B; --navy-deep:#1B222D; --teal:#18C0C0; --white:#fff;
-    --muted:rgba(255,255,255,.66);
-  }
-  *{box-sizing:border-box;margin:0;padding:0}
-  body{
-    font-family:'Manrope',system-ui,-apple-system,sans-serif;
-    background:radial-gradient(ellipse at 26% 22%,#333E52 0%,var(--navy) 56%,var(--navy-deep) 100%);
-    color:var(--white);min-height:100vh;
-    -webkit-font-smoothing:antialiased;
-    padding:72px 24px 96px;
-    overflow-x:hidden;
-  }
-  body::before{
-    content:'';position:fixed;inset:0;pointer-events:none;
-    background-image:radial-gradient(rgba(255,255,255,.045) 1px,transparent 1px);
-    background-size:34px 34px;
-    animation:grid-drift 60s linear infinite;
-  }
-  @keyframes grid-drift{to{background-position:34px 34px}}
-  /* ambient: two slow teal glows drifting behind everything */
-  .orb{position:fixed;border-radius:50%;pointer-events:none;filter:blur(60px);z-index:0}
-  .orb.a{width:560px;height:560px;left:-220px;top:12%;
-    background:radial-gradient(circle,rgba(24,192,192,.17),rgba(24,192,192,0) 65%);
-    animation:orb-a 18s ease-in-out infinite alternate}
-  .orb.b{width:640px;height:640px;right:-260px;top:58%;
-    background:radial-gradient(circle,rgba(24,192,192,.14),rgba(24,192,192,0) 65%);
-    animation:orb-b 23s ease-in-out infinite alternate}
-  @keyframes orb-a{to{transform:translate(110px,70px)}}
-  @keyframes orb-b{to{transform:translate(-120px,-80px)}}
-
-  .wrap{position:relative;max-width:880px;margin:0 auto;z-index:1}
-  .eyebrow{
-    font-weight:500;font-size:14px;letter-spacing:5px;text-transform:uppercase;
-    color:var(--teal);margin-bottom:20px;
-  }
-  h1{font-weight:800;font-size:clamp(36px,5vw,56px);line-height:1.1;letter-spacing:-1.2px}
-  h1 .teal{color:var(--teal);animation:teal-glow 5s ease-in-out infinite}
-  @keyframes teal-glow{0%,100%{text-shadow:0 0 0 rgba(24,192,192,0)}
-    50%{text-shadow:0 0 36px rgba(24,192,192,.5)}}
-  .lede{font-weight:300;font-size:19px;line-height:1.6;color:var(--muted);
-    margin:22px 0 0;max-width:52ch}
-
-  /* hero: words left, him right */
-  .hero{display:grid;grid-template-columns:1fr 320px;gap:48px;align-items:center;
-    margin-bottom:30px}
-  .port{position:relative;border-radius:28px;overflow:hidden;
-    border:1px solid rgba(24,192,192,.35);
-    box-shadow:0 30px 70px rgba(0,0,0,.45),0 0 60px rgba(24,192,192,.12);
-    animation:port-float 7s ease-in-out infinite alternate}
-  /* no duotone: he wants the room's own colour and the laugh unfiltered */
-  .port img{display:block;width:100%;height:auto}
-  .port .cap{position:absolute;left:14px;bottom:14px;z-index:1;
-    padding:8px 16px;border-radius:100px;
-    -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
-    background:rgba(16,20,28,.55);border:1px solid rgba(255,255,255,.18);
-    font-weight:600;font-size:13.5px;letter-spacing:1px;color:rgba(255,255,255,.9)}
-  @keyframes port-float{to{transform:translateY(-10px)}}
-  .port.m-in{animation:m-rise .8s cubic-bezier(.16,1,.3,1) both,
-    port-float 7s ease-in-out .9s infinite alternate}
-  @media (max-width:760px){
-    .hero{grid-template-columns:1fr;gap:34px}
-    .port{max-width:270px}
-  }
-
-  /* section headers: small eyebrow + hairline that draws in */
-  .sect{display:flex;align-items:center;gap:18px;margin:54px 0 22px}
-  .sect span{font-weight:700;font-size:13px;letter-spacing:4px;text-transform:uppercase;
-    color:rgba(255,255,255,.55);white-space:nowrap}
-  .sect::after{content:'';height:1px;flex:1;transform-origin:left;
-    background:linear-gradient(90deg,rgba(24,192,192,.5),rgba(255,255,255,.06))}
-  .m-seen.sect::after{animation:m-line .9s cubic-bezier(.16,1,.3,1) both}
-  @keyframes m-line{from{transform:scaleX(0)}to{transform:scaleX(1)}}
-
-  .card{
-    display:block;text-decoration:none;color:inherit;position:relative;
-    background:linear-gradient(135deg,rgba(38,46,59,.66) 0%,rgba(30,37,48,.58) 100%);
-    -webkit-backdrop-filter:blur(16px) saturate(1.2);
-    backdrop-filter:blur(16px) saturate(1.2);
-    border:1px solid rgba(255,255,255,.10);
-    box-shadow:0 24px 60px rgba(0,0,0,.30);
-    border-radius:26px;padding:36px 40px;margin-bottom:26px;
-    transition:transform .22s cubic-bezier(.16,1,.3,1),border-color .22s ease,box-shadow .22s ease;
-  }
-  .card:hover{transform:translateY(-4px);border-color:rgba(24,192,192,.45);
-    box-shadow:0 30px 70px rgba(0,0,0,.36),0 0 40px rgba(24,192,192,.10)}
-  .card.featured{border-color:rgba(24,192,192,.30);padding:42px 44px;
-    display:grid;grid-template-columns:1fr 250px;gap:36px;align-items:center}
-  .card.featured::before{content:'';position:absolute;inset:-1px;border-radius:26px;
-    pointer-events:none;box-shadow:0 0 52px rgba(24,192,192,.22);
-    animation:breathe 5.5s ease-in-out infinite}
-  @keyframes breathe{0%,100%{opacity:0}50%{opacity:1}}
-  /* the room band: one wide photograph of the actual work, mid-page */
-  .room{position:relative;border-radius:26px;overflow:hidden;margin:30px 0 26px;
-    border:1px solid rgba(255,255,255,.10);
-    box-shadow:0 24px 60px rgba(0,0,0,.30)}
-  .room img{display:block;width:100%;height:330px;object-fit:cover;object-position:50% 34%;
-    filter:saturate(.92) contrast(1.03) brightness(.97)}
-  /* dark only where the words sit, so the room keeps its light */
-  .room::after{content:'';position:absolute;inset:0;pointer-events:none;
-    background:
-      linear-gradient(to top right,rgba(16,21,30,.94) 0%,rgba(16,21,30,.66) 26%,
-        rgba(16,21,30,.12) 52%,rgba(16,21,30,0) 68%),
-      linear-gradient(180deg,rgba(16,21,30,.30) 0%,rgba(16,21,30,0) 34%)}
-  .room .say{position:absolute;left:44px;bottom:38px;right:44px;z-index:1;max-width:440px}
-  .room .say span{display:block;font-weight:700;font-size:12px;letter-spacing:4px;
-    text-transform:uppercase;color:var(--teal);margin-bottom:12px}
-  .room .say p{font-size:20px;line-height:1.45;font-weight:300;color:rgba(255,255,255,.94)}
-  @media (max-width:760px){
-    .room img{height:260px}
-    .room .say{left:24px;right:24px;bottom:24px}
-    .room .say p{font-size:16.5px}
-  }
-
-  .card .pic{border-radius:18px;overflow:hidden;align-self:stretch;min-height:230px;
-    border:1px solid rgba(255,255,255,.12)}
-  .card .pic img{width:100%;height:100%;object-fit:cover;display:block;
-    transition:transform .6s cubic-bezier(.16,1,.3,1)}
-  .card:hover .pic img{transform:scale(1.05)}
-  @media (max-width:760px){
-    .card.featured{grid-template-columns:1fr;gap:22px}
-    .card .pic{min-height:0;height:170px;order:-1}
-  }
-
-  /* line glyphs that draw themselves in */
-  .glyph{display:block;margin-bottom:16px}
-  .glyph *{fill:none;stroke:var(--teal);stroke-width:2.6;stroke-linecap:round;
-    stroke-linejoin:round;stroke-dasharray:260;stroke-dashoffset:260}
-  .m-seen .glyph *{animation:draw 1.2s cubic-bezier(.16,1,.3,1) forwards .3s}
-  .m-seen .glyph *:nth-child(2){animation-delay:.45s}
-  .m-seen .glyph *:nth-child(3){animation-delay:.6s}
-  .m-seen .glyph *:nth-child(4){animation-delay:.75s}
-  @keyframes draw{to{stroke-dashoffset:0}}
-  .m-done .glyph *{stroke-dashoffset:0}
-
-  /* the real cover + its typographic twin */
-  .coverimg{width:118px;height:auto;border-radius:8px;margin-bottom:22px;display:block;
-    border:1px solid rgba(255,255,255,.18);
-    box-shadow:14px 18px 34px rgba(0,0,0,.42)}
-  .tag{
-    display:inline-block;font-weight:700;font-size:12px;letter-spacing:3px;
-    text-transform:uppercase;padding:7px 14px;border-radius:100px;margin-bottom:18px;
-  }
-  .tag.free{background:rgba(24,192,192,.16);color:var(--teal)}
-  .tag.live{background:rgba(255,255,255,.10);color:rgba(255,255,255,.78)}
-  .card h2{font-weight:800;font-size:29px;letter-spacing:-.6px;margin-bottom:10px}
-  .card p{font-weight:300;font-size:16.5px;line-height:1.6;color:var(--muted);max-width:56ch}
-  .card .go{display:inline-block;margin-top:22px;font-weight:800;font-size:16px;color:var(--teal)}
-  .card .go::after{content:' →';display:inline-block;transition:transform .22s ease}
-  .card:hover .go::after{transform:translateX(5px)}
-  .from{font-size:13.5px;color:rgba(255,255,255,.42);margin-top:14px;font-weight:500}
-
-  /* the two books: 2-up grid, tactile spine tiles */
-  .books{display:grid;grid-template-columns:1fr 1fr;gap:26px}
-  .books .card{margin-bottom:0;display:flex;flex-direction:column}
-  .books .card p{flex:1}
-  .spine{
-    width:106px;height:138px;border-radius:4px 10px 10px 4px;margin-bottom:22px;
-    background:linear-gradient(115deg,#33425c 0%,#2A3347 55%,#232B3A 100%);
-    border:1px solid rgba(255,255,255,.14);
-    border-left:7px solid rgba(24,192,192,.75);
-    box-shadow:14px 18px 34px rgba(0,0,0,.42),inset 0 1px 0 rgba(255,255,255,.10);
-    display:flex;align-items:center;justify-content:center;text-align:center;
-    padding:10px;transform:perspective(700px) rotateY(0);
-    transition:transform .3s cubic-bezier(.16,1,.3,1);
-  }
-  .card:hover .spine{transform:perspective(700px) rotateY(-9deg) translateY(-2px)}
-  .bob{animation:spine-bob 5.5s ease-in-out infinite alternate;width:106px}
-  .books .card:nth-child(2) .bob{animation-delay:1.4s}
-  @keyframes spine-bob{to{transform:translateY(-8px)}}
-  .spine b{font-weight:800;font-size:11.5px;letter-spacing:.6px;line-height:1.35;
-    text-transform:uppercase;color:rgba(255,255,255,.92);
-    hyphens:auto;overflow-wrap:break-word;max-width:100%}
-
-  /* newsletter band */
-  .letter{
-    display:flex;align-items:center;justify-content:space-between;gap:26px;flex-wrap:wrap;
-    background:linear-gradient(135deg,rgba(24,192,192,.10),rgba(30,37,48,.6));
-    -webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);
-    border:1px solid rgba(24,192,192,.22);border-radius:26px;
-    padding:34px 40px;margin-top:60px;
-  }
-  .letter h3{font-weight:800;font-size:24px;letter-spacing:-.5px;margin-bottom:6px}
-  .letter p{font-weight:300;font-size:16px;color:var(--muted)}
-  .btn{
-    display:inline-block;text-decoration:none;font-weight:800;font-size:16px;
-    color:var(--navy-deep);background:var(--teal);border-radius:12px;
-    padding:15px 28px;white-space:nowrap;
-    transition:transform .2s ease,box-shadow .2s ease;
-  }
-  .btn:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(24,192,192,.35)}
-
-  .foot{
-    margin-top:56px;padding-top:34px;border-top:1px solid rgba(255,255,255,.10);
-    display:flex;gap:28px;flex-wrap:wrap;font-size:15px;
-  }
-  .foot a{color:var(--muted);text-decoration:none;font-weight:500}
-  .foot a:hover{color:var(--teal)}
-  @media (max-width:640px){
-    .card{padding:28px 26px}
-    .card.hero{padding:30px 28px}
-    .books{grid-template-columns:1fr}
-  }
-
-/*motion-v2: entrance on scroll, CTA light ring, ambient orbs. Teal only, restrained.*/
-@keyframes m-rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
-@property --mang{syntax:'<angle>';initial-value:0deg;inherits:false}
-@keyframes m-ring{to{--mang:360deg}}
-.m-in{animation:m-rise .8s cubic-bezier(.16,1,.3,1) both}
-.eyebrow.m-in{animation-delay:.05s}
-h1.m-in{animation-delay:.16s}
-.lede.m-in{animation-delay:.3s}
-.m-wait{opacity:0}
-.m-seen{animation:m-rise .85s cubic-bezier(.16,1,.3,1) both}
-.cta-ring{position:relative;isolation:isolate}
-.cta-ring::before{content:'';position:absolute;inset:-3px;border-radius:14px;padding:3px;
-  background:conic-gradient(from var(--mang),rgba(24,192,192,0) 0 72%,rgba(24,192,192,.55) 84%,#7FF0EE 92%,rgba(24,192,192,0) 100%);
-  -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
-  -webkit-mask-composite:xor;mask-composite:exclude;
-  animation:m-ring 3.4s linear infinite;pointer-events:none;z-index:1}
-@media (prefers-reduced-motion:reduce){
-  .m-in,.m-seen{animation:none;opacity:1}
-  .m-wait{opacity:1}
-  .m-seen.sect::after{animation:none}
-  .cta-ring::before{animation:none;display:none}
-  .orb,body::before,h1 .teal,.card.featured::before,.bob,.port{animation:none}
-  .glyph *,.m-seen .glyph *{animation:none;stroke-dashoffset:0}
-}
-</style>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/funnel.css">
 </head>
 <body>
 <div class="orb a"></div>
 <div class="orb b"></div>
-<div class="wrap">
+<div class="wrap wide">
+
   <div class="hero">
     <div>
-      <div class="eyebrow">Resources</div>
-      <h1>Tools for the actual work.<br><span class="teal">Not just more reading.</span></h1>
-      <p class="lede">Every resource here is free and built to be used. Start with the one that names where you are. The newest sits at the top.</p>
+      <div class="eyebrow m-in">Resources</div>
+      <h1 class="m-in">I'm glad you came <span class="teal">looking.</span></h1>
+      <p class="lede m-in">Everything here is free, and everything here was built in a room with people doing the actual work, long before it became a page. Tell me what you're here for and I'll hand you the one that fits.</p>
     </div>
     <div class="port m-in">
       <img src="/assets/portrait.jpg" alt="Francois Esterhuizen" width="1200" height="1296">
-      <div class="cap">Francois Esterhuizen</div>
     </div>
   </div>
 
-  <!-- ============================================================
-       Each resource is one <a class="card"> block inside a section.
-       To add one: copy a block, set the tag (free / live), title,
-       copy, source line and link. Newest goes FIRST in its section.
-       ============================================================ -->
-
-  <div class="room m-wait">
-    <img src="/assets/room.jpg" alt="Francois teaching a workshop, participants seated around the table" width="2400" height="891" fetchpriority="high">
-    <div class="say">
-      <span>Where this comes from</span>
-      <p>Everything here was built in a room like this, with people doing the actual work, long before it became a download.</p>
-    </div>
-  </div>
-
-  <div class="sect m-wait"><span>Start here</span></div>
-
-  <a class="card featured m-wait" href="/ten-year-question/">
-    <div>
-      <span class="tag free">Free one-page card · from the latest video</span>
-      <h2>The Ten-Year Question</h2>
-      <p>For choosing when both roads could work. Stop asking which one is right. Ask which road takes you closer to the person you want to be, ten years from now, and take one move on it before Sunday.</p>
-      <span class="go">Get the card</span>
-      <div class="from">From the video: 'What If I Choose Wrong?' Is the Wrong Question</div>
-    </div>
-    <div class="pic"><img src="/assets/chair.jpg" alt="A quiet chair with a workbook, pen and tea" width="1100" height="1555" loading="lazy"></div>
-  </a>
-
-  <div class="sect m-wait"><span>From the videos</span></div>
-
-  <a class="card m-wait" href="/headlights-system/">
-    <svg class="glyph" width="46" height="46" viewBox="0 0 46 46">
-      <circle cx="12" cy="23" r="7"/>
-      <path d="M19 17 40 9"/><path d="M20 23h20"/><path d="M19 29l21 8"/>
-    </svg>
-    <span class="tag free">Free one-page card</span>
-    <h2>The Headlights System</h2>
-    <p>For when everything feels like too much. Name the thing, find the next visible move with the two-minute test, decide once, and let the started task pull you back. One page, one move.</p>
-    <span class="go">Get the card</span>
-    <div class="from">From the video: How to Start When Everything Feels Too Much</div>
-  </a>
-
-  <a class="card m-wait" href="/procrastination-pattern-breaker/">
-    <svg class="glyph" width="46" height="46" viewBox="0 0 46 46">
-      <circle cx="23" cy="23" r="15"/>
-      <path d="M23 12v11l8 5"/>
-    </svg>
-    <span class="tag free">Free workbook</span>
-    <h2>The Procrastination Pattern Breaker</h2>
-    <p>One task, taken apart: the feeling hiding inside it, the payoff of avoiding, the cost, and a contact action of less than ten minutes, chosen before you close the page.</p>
-    <span class="go">Break the pattern</span>
-    <div class="from">From the video: How to Stop Procrastinating on What Matters Most</div>
-  </a>
-
-  <a class="card m-wait" href="/unstuck-loop-map/">
-    <svg class="glyph" width="46" height="46" viewBox="0 0 46 46">
-      <path d="M23 6a17 17 0 1 1-12 5"/>
-      <path d="M11 4v8h8"/>
-    </svg>
-    <span class="tag free">Free download</span>
-    <h2>The Unstuck Loop Map</h2>
-    <p>Your loop in five honest sentences, the fuel that is driving it, and the exact point where it can be interrupted. One page. Print it or fill it in on screen.</p>
-    <span class="go">Get the map</span>
-    <div class="from">From the video: How to Break the 4-Step Loop That Keeps You Stuck</div>
-  </a>
-
-  <div class="sect m-wait"><span>The two books</span></div>
-
-  <div class="books">
-    <a class="card m-wait" href="https://www.francoisesterhuizen.com/own-it" target="_blank" rel="noopener">
-      <div class="bob"><img class="coverimg" src="/assets/etor-cover.jpg" alt="The Empowering Truth of Responsibility book cover" width="480" height="480" loading="lazy"></div>
-      <span class="tag free">Full book · read free</span>
-      <h2>The Empowering Truth of Responsibility</h2>
-      <p>Responsibility, reclaimed. Not blame and not duty, but the truth that your life is yours to steer, and what changes the day you take the wheel.</p>
-      <span class="go">Read it free</span>
+  <div class="choices m-in">
+    <a class="tile" href="/personal/" data-track="landing_choice_personal">
+      <div class="kicker">For you</div>
+      <h3>Something for me</h3>
+      <p>You're stuck, or running on empty, or you keep ending up in the same place and you can't see why. This is the personal work: patterns, beliefs, the next honest move.</p>
+      <span class="go">This is me</span>
     </a>
-
-    <a class="card m-wait" href="https://www.francoisesterhuizen.com/relationships-10-habits-intro" target="_blank" rel="noopener">
-      <div class="bob"><img class="coverimg" src="/assets/happy-relationships-cover.jpg" alt="10 Habits of Happy Relationships book cover" width="480" height="480" loading="lazy"></div>
-      <span class="tag free">Full book · read free</span>
-      <h2>10 Habits of Happy Relationships</h2>
-      <p>Ten practical habits that happy couples keep, one chapter each, written for real relationships rather than perfect ones. All eleven parts are free to read.</p>
-      <span class="go">Start at the introduction</span>
+    <a class="tile" href="/relational/" data-track="landing_choice_relational">
+      <div class="kicker">For the two of you</div>
+      <h3>Something for us</h3>
+      <p>You keep having the same fight, or you want different futures and neither of you has said it out loud, or it's just gone a bit flat. This is the couples work.</p>
+      <span class="go">This is us</span>
     </a>
   </div>
 
-  <div class="sect m-wait"><span>Reflections and assessments</span></div>
-
-  <a class="card m-wait" href="https://familymobile.francoisesterhuizen.com" target="_blank" rel="noopener">
-    <svg class="glyph" width="46" height="46" viewBox="0 0 46 46">
-      <path d="M8 12h30"/><path d="M23 6v6"/><path d="M13 12v12"/><path d="M23 12v18"/><path d="M33 12v10"/>
-      <circle cx="13" cy="28" r="4"/><circle cx="23" cy="34" r="4"/><circle cx="33" cy="26" r="4"/>
-    </svg>
-    <span class="tag free">Free reflection</span>
-    <h2>The Family Mobile</h2>
-    <p>Your family was a mobile. You were one of the pieces. Ten minutes of plain questions about the family you grew up in, what the house was like, and how you moved when things got tense. At the end I show you the position you learned to take, drawn as your own mobile, and whether it is still serving the person you want to become.</p>
-    <span class="go">Begin</span>
-    <div class="from">From the Personal Growth Weekly class on the role you learned to play</div>
-  </a>
-
-  <a class="card m-wait" href="/invisible-contracts/">
-    <svg class="glyph" width="46" height="46" viewBox="0 0 46 46">
-      <path d="M12 8h22v30H12z"/><path d="M17 16h12"/><path d="M17 22h12"/><path d="M17 28h7"/>
-      <path d="M8 36l30-26"/>
-    </svg>
-    <span class="tag free">Free interactive tool</span>
-    <h2>Invisible Contracts</h2>
-    <p>The unspoken deals that run your relationships. If I do my part, you should do yours. If I keep the peace, you should not upset me. This walks you from the resentment back to the contract underneath it, names the role it protects and where it was signed, then helps you upgrade it into a clear request or tear it up.</p>
-    <span class="go">Find your contracts</span>
-    <div class="from">From Freeing Yourself From Friction, session five</div>
-  </a>
-
-  <a class="card m-wait" href="/four-voices/">
-    <svg class="glyph" width="46" height="46" viewBox="0 0 46 46">
-      <path d="M10 30V16"/><path d="M18 34V12"/><path d="M26 30V16"/><path d="M34 36V10"/>
-    </svg>
-    <span class="tag free">Free interactive tool</span>
-    <h2>The Four Voices</h2>
-    <p>The thoughts layer. Catch the judge shaming you inward, the cheerleader blaming outward and the comforter letting you off, then build the coach. Includes the "I have tried everything" audit, which counts what you actually tried and shows you the repeats.</p>
-    <span class="go">Catch the voices</span>
-    <div class="from">Companion to the Tree of Clarity</div>
-  </a>
-
-  <a class="card m-wait" href="/belief-inventory/">
-    <svg class="glyph" width="46" height="46" viewBox="0 0 46 46">
-      <path d="M8 12h30"/><path d="M8 23h30"/><path d="M8 34h30"/>
-      <circle cx="15" cy="12" r="2.6"/><circle cx="27" cy="23" r="2.6"/><circle cx="19" cy="34" r="2.6"/>
-    </svg>
-    <span class="tag free">Free interactive tool</span>
-    <h2>The Belief Inventory</h2>
-    <p>A guided sweep through the areas of your life, surfacing the identity statements, formulas and definitions you run on. Each definition is asked twice, once for what you would say and once for what you live. The gap is usually the finding.</p>
-    <span class="go">Start the sweep</span>
-    <div class="from">Companion to the Tree of Clarity</div>
-  </a>
-
-  <a class="card m-wait" href="/tree-of-clarity/">
-    <svg class="glyph" width="46" height="46" viewBox="0 0 46 46">
-      <path d="M23 4v38"/>
-      <path d="M23 16c-5-6-12-5-15-9"/><path d="M23 26c5-6 12-5 15-9"/>
-      <path d="M23 34c-4-4-9-4-12-7"/>
-    </svg>
-    <span class="tag free">Free interactive tool</span>
-    <h2>The Tree of Clarity</h2>
-    <p>One situation, taken all the way down and all the way back up. From what you did, through what you felt and thought, to the beliefs underneath it. Then you build the other side: how you would rather feel in exactly the same situation, and what you choose to believe instead.</p>
-    <span class="go">Walk the tree</span>
-    <div class="from">The belief system model, step by step</div>
-  </a>
-
-  <a class="card m-wait" href="/emotional-language-wheel/">
-    <svg class="glyph" width="46" height="46" viewBox="0 0 46 46">
-      <circle cx="23" cy="23" r="17"/>
-      <circle cx="23" cy="23" r="6"/>
-      <path d="M23 6v11"/><path d="M23 29v11"/><path d="M6 23h11"/><path d="M29 23h11"/>
-      <path d="M11 11l7.8 7.8"/><path d="M27.2 27.2 35 35"/><path d="M35 11l-7.8 7.8"/><path d="M18.8 27.2 11 35"/>
-    </svg>
-    <span class="tag free">Free interactive tool</span>
-    <h2>The Emotional Language Wheel</h2>
-    <p>Eight emotion families and 160 precise words for what you feel. Tap the wheel, learn what each word means, where it lives in your body, and what it may be asking of you. Then check in daily and watch the pattern.</p>
-    <span class="go">Open the wheel</span>
-  </a>
-
-  <a class="card m-wait" href="https://innerhealing.francoisesterhuizen.com" target="_blank" rel="noopener">
-    <svg class="glyph" width="46" height="46" viewBox="0 0 46 46">
-      <circle cx="23" cy="23" r="17"/>
-      <path d="M23 13v10l7 5"/>
-    </svg>
-    <span class="tag free">Free self-reflection</span>
-    <h2>Where the Past Still Lives</h2>
-    <p>A gentle self-reflection that maps where the past may still be shaping your present, across nine areas of life. You leave with a picture, not a verdict.</p>
-    <span class="go">Start the reflection</span>
-    <div class="from">Companion to the Inner Healing series</div>
-  </a>
-
-  <a class="card m-wait" href="https://survival-instinct-assessment.netlify.app" target="_blank" rel="noopener">
-    <svg class="glyph" width="46" height="46" viewBox="0 0 46 46">
-      <circle cx="17" cy="23" r="11"/>
-      <circle cx="29" cy="23" r="11"/>
-    </svg>
-    <span class="tag free">Free · for couples</span>
-    <h2>The Survival Instinct Assessment</h2>
-    <p>Discover your conflict style, Small Square or Big Jumbler, and the dance the two of you do when things get tense. Naming the dance is what changes it.</p>
-    <span class="go">Find your style</span>
-  </a>
-
-  <a class="card m-wait" href="https://bigdream.francoisesterhuizen.com" target="_blank" rel="noopener">
-    <svg class="glyph" width="46" height="46" viewBox="0 0 46 46">
-      <circle cx="23" cy="23" r="17"/>
-      <path d="M29 17l-4 8-8 4 4-8z"/>
-    </svg>
-    <span class="tag free">Free guides</span>
-    <h2>Personal Growth Guides</h2>
-    <p>Practical guides and reflections to help you see your life clearly and build a future worth moving towards. Start with the one that names where you are.</p>
-    <span class="go">Browse the guides</span>
-  </a>
-
-  <div class="sect m-wait"><span>Live every week</span></div>
-
-  <a class="card m-wait" href="https://www.getclarity.co.za" target="_blank" rel="noopener">
-    <svg class="glyph" width="46" height="46" viewBox="0 0 46 46">
-      <rect x="6" y="9" width="34" height="31" rx="6"/>
-      <path d="M6 19h34"/><path d="M15 5v8M31 5v8"/>
-      <path d="M16 29l5 5 9-9"/>
-    </svg>
-    <span class="tag live">Live classes</span>
-    <h2>Personal Growth Weekly</h2>
-    <p>A live class every week on the patterns that keep capable people stuck, and the beliefs underneath them. Taught live, recorded if you miss one.</p>
-    <span class="go">See the classes</span>
-  </a>
-
-  <div class="letter m-wait">
-    <div>
-      <h3>Fresh Perspective</h3>
-      <p>One letter every week. A pattern taken apart, and something to do about it.</p>
-    </div>
-    <a class="btn" id="letter-btn" href="https://francoisesterhuizen.us5.list-manage.com/subscribe?u=097ed8fb3c6e3c943817d0d80&id=7a7438d8f4" target="_blank" rel="noopener">Get the letter</a>
+  <div class="also">
+    <span class="lbl">Or, if you'd rather browse</span>
+    <p>The <a href="/library/" data-track="landing_library_click">full library</a> has every tool, both books, and the weekly class, all in one place.</p>
   </div>
 
   <div class="foot">
-    <a href="https://www.youtube.com/@francoisesterhuizen" target="_blank" rel="noopener">YouTube</a>
-    <a href="https://www.francoisesterhuizen.com/podcast" target="_blank" rel="noopener">The podcast</a>
-    <a href="https://www.francoisesterhuizen.com" target="_blank" rel="noopener">francoisesterhuizen.com</a>
+    <a href="https://www.francoisesterhuizen.com">francoisesterhuizen.com</a>
+    <a href="https://www.getclarity.co.za">getclarity.co.za</a>
+    <a href="https://www.youtube.com/@francoisesterhuizen">YouTube</a>
   </div>
 </div>
 
+<script src="/assets/funnel.js"></script>
 <script>
-/*motion-v4: reveal on scroll, then hand transforms back to hover/tilt*/
-(function(){
-  ['.eyebrow','h1','.lede'].forEach(function(sel){
-    var el=document.querySelector(sel); if(el) el.classList.add('m-in');
+  FUNNEL.track('landing_view');
+  document.querySelectorAll('[data-track]').forEach(el => {
+    el.addEventListener('click', () => FUNNEL.track(el.dataset.track));
   });
-  var btn=document.getElementById('letter-btn'); if(btn) btn.classList.add('cta-ring');
-
-  // a finished fill-mode animation keeps overriding transform, which kills
-  // hover lift and tilt; swap to m-done (dormant class) once it has played
-  document.addEventListener('animationend',function(e){
-    if(e.animationName==='m-rise'&&e.target.classList.contains('m-seen')){
-      e.target.classList.remove('m-seen');e.target.classList.add('m-done');
-    }
-  });
-
-  var waits=document.querySelectorAll('.m-wait');
-  if('IntersectionObserver' in window){
-    var io=new IntersectionObserver(function(es){
-      es.forEach(function(e){
-        if(e.isIntersecting){
-          e.target.classList.remove('m-wait');
-          e.target.classList.add('m-seen');
-          io.unobserve(e.target);
-        }
-      });
-    },{threshold:.18,rootMargin:'0px 0px -40px 0px'});
-    waits.forEach(function(el,i){
-      el.style.animationDelay=(0.06+(i%3)*0.08)+'s';
-      io.observe(el);
-    });
-  } else {
-    waits.forEach(function(el){el.classList.remove('m-wait');el.classList.add('m-done');});
-  }
-
-  // safety net: nothing that reaches the viewport may stay invisible,
-  // even if the observer was throttled (background tab, odd embedder)
-  setInterval(function(){
-    document.querySelectorAll('.m-wait').forEach(function(el){
-      var r=el.getBoundingClientRect();
-      if(r.top<window.innerHeight-40&&r.bottom>0){
-        el.classList.remove('m-wait');el.classList.add('m-seen');
-      }
-    });
-  },700);
-
-  // pointer tilt: desktop, motion-friendly only
-  if(matchMedia('(hover:hover) and (prefers-reduced-motion:no-preference)').matches){
-    document.querySelectorAll('.card').forEach(function(c){
-      c.addEventListener('mousemove',function(e){
-        var r=c.getBoundingClientRect();
-        var x=(e.clientX-r.left)/r.width-.5, y=(e.clientY-r.top)/r.height-.5;
-        c.style.transform='translateY(-4px) perspective(900px) rotateX('+(-y*2.6)+'deg) rotateY('+(x*2.6)+'deg)';
-      });
-      c.addEventListener('mouseleave',function(){c.style.transform='';});
-    });
-  }
-})();
 </script>
 </body>
 </html>
