@@ -111,3 +111,10 @@ h1.m-in{animation-delay:.14s}
 .sub.m-in{animation-delay:.26s}
 .pull.m-in{animation-delay:.38s}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.m-in{animation:none}}
+
+/* look inside: the spread that proves the book is designed */
+.inside{margin-top:26px}
+.inside img{display:block;width:100%;height:auto;border-radius:16px;
+  border:1px solid rgba(255,255,255,.10);box-shadow:0 24px 60px rgba(0,0,0,.34)}
+.inside figcaption{margin-top:14px;font-size:14.5px;line-height:1.6;
+  color:rgba(255,255,255,.5);font-weight:500;max-width:60ch}
