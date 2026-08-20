@@ -12,13 +12,14 @@ import pathlib, re, sys, urllib.request
 
 GATES = {
     # "" is the funnel welcome at the site root (since 2026-08-19).
-    # It must split into Personal / Relational and link the full library.
+    # It must split into Personal / Relational. It must NOT offer the library:
+    # decided 2026-08-20, everyone goes through the gate rather than browsing.
     "": {
         "must": ["Something for me", "Something for us",
-                 "/personal/", "/relational/", "/library/",
+                 "/personal/", "/relational/",
                  "landing_choice_personal", "landing_choice_relational",
                  "funnel.css", "funnel.js"],
-        "must_not": ["Story of Us", "storyofus", "Pattern Breaker"],
+        "must_not": ["Story of Us", "storyofus", "Pattern Breaker", "/library/"],
     },
     # The full catalogue, formerly the root.
     "library": {
@@ -35,15 +36,15 @@ GATES = {
     # Funnel qualifier pages. Each must set its path and load the shared logic.
     "personal": {
         "must": ['data-path="personal"', "qualifier.js", "funnel.js", 'id="qualifier"'],
-        "must_not": ['data-path="relational"', "Story of Us"],
+        "must_not": ['data-path="relational"', "Story of Us", "/library/"],
     },
     "relational": {
         "must": ['data-path="relational"', "qualifier.js", "funnel.js", 'id="qualifier"'],
-        "must_not": ['data-path="personal"', "Story of Us"],
+        "must_not": ['data-path="personal"', "Story of Us", "/library/"],
     },
     "thanks": {
         "must": ["thankyou_view_", "tool_open_", "paid_tease_click_", "wa.me/27824441831"],
-        "must_not": ["Story of Us"],
+        "must_not": ["Story of Us", "/library/"],
     },
     "thanks/responsibility": {
         # Post-purchase delivery. Must hand over the right file and stay hidden.

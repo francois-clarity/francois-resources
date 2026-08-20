@@ -29,14 +29,14 @@
         <form class="gate" id="gate" novalidate>
           <span class="lbl">The one that fits</span>
           <p><strong>${esc(tool.title)}.</strong> ${esc(tool.promise)}</p>
-          <p>Where should I send it? One email, no drip campaign, and you can unsubscribe with one click.</p>
+          <p><strong>You get it on the very next page, straight away.</strong> Put your email in and I will send you a copy as well, so it is in your inbox when you want it again.</p>
           <div class="row">
             <input type="text"  id="name"  placeholder="First name" autocomplete="given-name" maxlength="60">
             <input type="email" id="email" placeholder="you@example.com" autocomplete="email" maxlength="120" required>
-            <button type="submit" class="btn" id="go">Send it to me</button>
+            <button type="submit" class="btn" id="go">Open it now</button>
           </div>
           <p class="err" id="err" role="alert"></p>
-          <p class="fine">Your email goes to me only. It stays in my list and nowhere else. POPIA-compliant, one-click unsubscribe.</p>
+          <p class="fine">No waiting for an email to arrive before you can start. Your address goes to me only, stays in my list and nowhere else, and one click unsubscribes. POPIA-compliant.</p>
         </form>` : ''}
     `;
 

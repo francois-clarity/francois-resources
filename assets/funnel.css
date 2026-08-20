@@ -185,3 +185,49 @@ h1.m-in{animation-delay:.16s}
   .m-in{animation:none;opacity:1}
   .orb,body::before,.port{animation:none}
 }
+
+/* ---- the movement the full library page had, brought across ----
+   The funnel pages kept the drifting grid, the orbs and the float, but lost
+   the glowing headline, the breathing card edge and the ring on the CTA.
+   Same timings as the library so the two feel like one site. */
+
+/* the teal word in a heading breathes light */
+h1 .teal{animation:teal-glow 5s ease-in-out infinite}
+@keyframes teal-glow{0%,100%{text-shadow:0 0 0 rgba(24,192,192,0)}
+  50%{text-shadow:0 0 36px rgba(24,192,192,.5)}}
+
+/* the choice tiles glow gently at the edge, and lift when pointed at */
+.tile{position:relative}
+.tile::before{content:'';position:absolute;inset:-1px;border-radius:inherit;
+  pointer-events:none;box-shadow:0 0 52px rgba(24,192,192,.20);
+  animation:breathe 5.5s ease-in-out infinite}
+.tile:nth-child(2)::before{animation-delay:2.75s}
+@keyframes breathe{0%,100%{opacity:0}50%{opacity:1}}
+.tile{transition:transform .22s cubic-bezier(.16,1,.3,1),border-color .22s ease,box-shadow .22s ease}
+.tile:hover{transform:translateY(-4px);border-color:rgba(24,192,192,.45);
+  box-shadow:0 30px 70px rgba(0,0,0,.36),0 0 40px rgba(24,192,192,.10)}
+
+/* a slow light travelling the edge of the primary action */
+@property --mang{syntax:'<angle>';initial-value:0deg;inherits:false}
+@keyframes m-ring{to{--mang:360deg}}
+.btn{position:relative;isolation:isolate}
+.btn::before{content:'';position:absolute;inset:-3px;border-radius:inherit;padding:3px;
+  background:conic-gradient(from var(--mang),rgba(24,192,192,0) 0 72%,
+    rgba(24,192,192,.55) 84%,#7FF0EE 92%,rgba(24,192,192,0) 100%);
+  -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;
+  animation:m-ring 3.4s linear infinite;pointer-events:none;z-index:1}
+
+/* the hairline under a small label draws itself in */
+.lbl{position:relative}
+.lbl::after{content:'';position:absolute;left:0;right:0;bottom:-6px;height:1px;
+  transform-origin:left;
+  background:linear-gradient(90deg,rgba(24,192,192,.5),rgba(255,255,255,.06));
+  animation:m-line .9s cubic-bezier(.16,1,.3,1) both}
+@keyframes m-line{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+
+@media (prefers-reduced-motion:reduce){
+  h1 .teal,.tile::before,.btn::before,.lbl::after{animation:none}
+  .btn::before{display:none}
+  .tile:hover{transform:none}
+}
