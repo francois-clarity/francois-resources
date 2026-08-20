@@ -1,0 +1,11 @@
+# Paid files must never be cached at the edge. Learned 20 Aug 2026: the ebooks
+# were briefly served from /files/d/, and deleting them did not help, because
+# Cloudflare kept serving the cached copy for seven days. Nothing paid should
+# ever sit under a public path again, but if it does, it will not be cached.
+/files/d/*
+  Cache-Control: private, no-store, max-age=0
+  X-Robots-Tag: noindex, nofollow
+
+/api/download*
+  Cache-Control: private, no-store, max-age=0
+  X-Robots-Tag: noindex, nofollow
