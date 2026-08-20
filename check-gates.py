@@ -24,8 +24,7 @@ GATES = {
     "library": {
         "must": ["The Empowering Truth of Responsibility",
                  "10 Habits of Happy Relationships",
-                 "francoisesterhuizen.com/own-it",
-                 "francoisesterhuizen.com/relationships-10-habits-intro",
+                 "/books/responsibility/", "/books/habits/",
                  "Pattern Breaker", "Headlights", "Unstuck Loop Map",
                  "Emotional Language Wheel", "The Tree of Clarity",
                  "Belief Inventory", "Four Voices", "Invisible Contracts",
@@ -45,6 +44,27 @@ GATES = {
     "thanks": {
         "must": ["thankyou_view_", "tool_open_", "paid_tease_click_", "wa.me/27824441831"],
         "must_not": ["Story of Us"],
+    },
+    "thanks/responsibility": {
+        # Post-purchase delivery. Must hand over the right file and stay hidden.
+        "must": ["Download the ebook", "empowering-truth-of-responsibility-b4e81d.pdf",
+                 "noindex", "Download your copy", "Save it somewhere"],
+        "must_not": ["10-habits", "Pattern Breaker"],
+    },
+    "thanks/habits": {
+        "must": ["Download the ebook", "10-habits-of-happy-relationships-a7f3c9.pdf",
+                 "noindex", "Download your copy", "Save it somewhere"],
+        "must_not": ["empowering-truth", "Pattern Breaker"],
+    },
+    "books/responsibility": {
+        "must": ["paystack.com/buy/the-empowering-truth-of-responsibility", "R270",
+                 "responsibility-inside.png"],
+        "must_not": ["noindex", "read free", "10-habits-of-happy"],
+    },
+    "books/habits": {
+        "must": ["paystack.com/buy/10-habits-of-happy-relationships", "R270",
+                 "habits-inside.png"],
+        "must_not": ["noindex", "read free", "the-empowering-truth"],
     },
     "invisible-contracts": {
         # Contracts you keep. No email gate; markers are content.
