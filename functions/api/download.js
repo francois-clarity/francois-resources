@@ -3,9 +3,9 @@
  * Hands over a paid ebook, and only against a payment Paystack confirms.
  *
  * Before this existed the PDFs sat at a public URL, so anyone with the link
- * could take the book without paying. Now the files live in a private R2
- * bucket that is not served by the site at all, and the only way out is
- * through this function.
+ * could take the book without paying. Now the files live in private KV storage
+ * that is not served by the site at all, and the only way out is through this
+ * function.
  *
  * What it checks, in order, refusing on the first failure:
  *   1. the book slug is one we sell
@@ -14,10 +14,13 @@
  *   4. the transaction is for THIS book, not the other one
  *   5. the amount actually paid is at least the list price
  *
- * Env (Cloudflare Pages → Settings → Environment variables, encrypted):
+ * Env (Pages → Settings → Variables and secrets, as a Secret):
  *   PAYSTACK_SECRET_KEY   the sk_live_... key from the Paystack dashboard
- * Bindings (Pages → Settings → Functions → R2 bucket bindings):
- *   BOOKS                 bound to the r2 bucket francois-books
+ * Bindings (Pages → Settings → Bindings → KV namespace):
+ *   BOOKS                 the KV namespace holding the two PDFs
+ *
+ * KV rather than R2 because R2 needs a paid subscription and KV does not.
+ * Both books sit under the 25 MiB per-value limit: 19.8 and 8.9.
  *
  * Deliberately vague to the caller on failure: a stranger poking at this
  * learns only that it did not work, never why, and never whether a given
@@ -61,9 +64,9 @@ export async function onRequestGet({ request, env }) {
       'https://api.paystack.co/transaction/verify/' + encodeURIComponent(ref),
       { headers: { Authorization: 'Bearer ' + env.PAYSTACK_SECRET_KEY } }
     );
-    const body = await res.json();
-    if (!res.ok || !body || body.status !== true || !body.data) return deny('Payment not found.');
-    tx = body.data;
+    const verify = await res.json();
+    if (!res.ok || !verify || verify.status !== true || !verify.data) return deny('Payment not found.');
+    tx = verify.data;
   } catch {
     return oops('Could not reach the payment provider.');
   }
@@ -87,18 +90,17 @@ export async function onRequestGet({ request, env }) {
   }
 
   // 4. release the file
-  const obj = await env.BOOKS.get(book.key);
-  if (!obj) return oops('The file is missing. Email francois@francoisesterhuizen.com and I will send it.');
+  const body = await env.BOOKS.get(book.key, { type: 'stream' });
+  if (!body) return oops('The file is missing. Email francois@francoisesterhuizen.com and I will send it.');
 
   const headers = new Headers();
-  obj.writeHttpMetadata(headers);
   headers.set('Content-Type', 'application/pdf');
   headers.set('Content-Disposition',
     'attachment; filename="' + book.filename.replace(/"/g, '') + '"');
   // never let a proxy or a browser keep a copy of a paid file
   headers.set('Cache-Control', 'private, no-store');
   headers.set('X-Robots-Tag', 'noindex, nofollow');
-  return new Response(obj.body, { headers });
+  return new Response(body, { headers });
 }
 
 function deny(msg) {
