@@ -46,7 +46,8 @@
   <div class="got">
     <div class="big">Download your copy</div>
     <p>It is a PDF, so it opens on anything: phone, tablet, laptop, or printed out if you are the kind who writes in the margins.</p>
-    <a class="btn" href="/files/d/10-habits-of-happy-relationships-a7f3c9.pdf" download>Download the ebook</a>
+    <a class="btn" id="dl" href="#" rel="nofollow">Download the ebook</a>
+    <p class="warn" id="warn"></p>
     <div class="meta">9 MB, 90 pages. Save it somewhere you will find it again.</div>
   </div>
 
@@ -66,5 +67,31 @@
     <nav><a href="https://www.francoisesterhuizen.com">francoisesterhuizen.com</a></nav>
   </footer>
 </div>
+
+<script>
+/* Paystack sends the buyer back with the transaction reference on the URL.
+   We hand that to /api/download, which asks Paystack whether it was really
+   paid before releasing the file. No reference, no book. */
+(function(){
+  var p = new URLSearchParams(location.search);
+  var ref = p.get('reference') || p.get('trxref') || p.get('ref') || '';
+  var a = document.getElementById('dl');
+  var warn = document.getElementById('warn');
+  if (ref) {
+    a.href = '/api/download?book=habits&ref=' + encodeURIComponent(ref);
+    a.setAttribute('download','');
+  } else {
+    a.classList.add('pending');
+    a.removeAttribute('href');
+    warn.textContent = 'This page opens your download straight after payment. If you have already paid and landed here without it, email francois@francoisesterhuizen.com with the name you paid under and I will send the book over.';
+  }
+  a.addEventListener('click', function(e){
+    if (!ref) { e.preventDefault(); return; }
+    setTimeout(function(){
+      warn.textContent = 'If the download did not start, email francois@francoisesterhuizen.com and I will send it directly.';
+    }, 6000);
+  });
+})();
+</script>
 </body>
 </html>

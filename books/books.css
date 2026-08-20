@@ -118,3 +118,6 @@ h1.m-in{animation-delay:.14s}
   border:1px solid rgba(255,255,255,.10);box-shadow:0 24px 60px rgba(0,0,0,.34)}
 .inside figcaption{margin-top:14px;font-size:14.5px;line-height:1.6;
   color:rgba(255,255,255,.5);font-weight:500;max-width:60ch}
+
+.warn{margin-top:14px;font-size:13.5px;line-height:1.6;color:rgba(255,255,255,.5);
+  font-weight:500;max-width:52ch}

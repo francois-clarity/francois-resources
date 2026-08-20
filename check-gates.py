@@ -47,14 +47,14 @@ GATES = {
     },
     "thanks/responsibility": {
         # Post-purchase delivery. Must hand over the right file and stay hidden.
-        "must": ["Download the ebook", "empowering-truth-of-responsibility-b4e81d.pdf",
+        "must": ["Download the ebook", "/api/download?book=responsibility",
                  "noindex", "Download your copy", "Save it somewhere"],
-        "must_not": ["10-habits", "Pattern Breaker"],
+        "must_not": ["files/d/", "Pattern Breaker"],
     },
     "thanks/habits": {
-        "must": ["Download the ebook", "10-habits-of-happy-relationships-a7f3c9.pdf",
+        "must": ["Download the ebook", "/api/download?book=habits",
                  "noindex", "Download your copy", "Save it somewhere"],
-        "must_not": ["empowering-truth", "Pattern Breaker"],
+        "must_not": ["files/d/", "Pattern Breaker"],
     },
     "books/responsibility": {
         "must": ["paystack.com/buy/the-empowering-truth-of-responsibility", "R270",
