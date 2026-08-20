@@ -3,3 +3,7 @@
 node_modules/
 .env
 media/
+
+# Paid books. This repo is PUBLIC, so the ebooks must never be committed.
+# They still deploy, because wrangler uploads from disk rather than from git.
+files/d/
