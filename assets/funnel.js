@@ -109,13 +109,10 @@
       deeper: {
         kicker: 'If you want to go deeper',
         title: 'Clarity Quest',
-        body: 'Ten weeks, one-on-one with me, to get unstuck properly: not the latest symptom but the wall underneath it, whether that wall is routine, uncertainty, or the low hum of going through the motions. You leave with a clear picture of what you actually want and the first real moves toward it.',
-        price: 'Read the page for pricing and how it works',
+        body: 'Get unstuck in ten weeks, or spend another year busy and going nowhere. The Clarity Quest is a guided process, built as step-by-step exercises, that gets you clear on exactly what you want and moving on it. Do it Solo at your own pace, join Basecamp and do it with weekly group coaching (the one I would point most people to), or go Solo Expedition with one-on-one coaching alongside the exercises.',
+        price: 'Read the page for the formats and pricing',
         url: 'https://clarityquest.francoisesterhuizen.com/',
-        ctaLabel: 'Read about Clarity Quest',
-        alsoLabel: 'Or, a gentler first step',
-        alsoText: 'Personal Growth Weekly is a live class on Wednesday mornings where we do this work in a room of people doing the same.',
-        alsoUrl: 'https://www.getclarity.co.za/'
+        ctaLabel: 'Read about Clarity Quest'
       }
     },
     relational: {
@@ -133,10 +130,7 @@
         body: 'The course on what is actually happening between the two of you when it goes wrong, and how to do it differently. Where you are on the relationship map, what really goes on during conflict, what it means to communicate, and how your brain is in the room with you. Built around the assessment you just took.',
         price: 'R1 200, once off',
         url: 'https://www.francoisesterhuizen.com/defuse-conflict',
-        ctaLabel: 'Read about the course',
-        alsoLabel: 'Or, something to read together',
-        alsoText: '10 Habits of Happy Relationships is the book: ten practical habits that happy couples keep, one chapter each, free to read start to finish.',
-        alsoUrl: 'https://www.francoisesterhuizen.com/relationships-10-habits-intro'
+        ctaLabel: 'Read about the course'
       }
     }
   };
