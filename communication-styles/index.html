@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en-ZA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Communication Styles · Francois Esterhuizen</title>
+<meta name="description" content="How you speak and how you listen on an ordinary day, and what it does to the person across from you. Sixteen questions, about four minutes.">
+<meta property="og:title" content="Communication Styles · Francois Esterhuizen">
+<meta property="og:description" content="How you speak and how you listen on an ordinary day, and what it does to the person across from you.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#1B222D">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --navy:#262E3B; --navy-deep:#1B222D; --teal:#18C0C0; --white:#fff;
+  --muted:rgba(255,255,255,.66); --muted-2:rgba(255,255,255,.42);
+  --line:rgba(255,255,255,.10); --line-strong:rgba(255,255,255,.18);
+  --teal-soft:rgba(24,192,192,.18); --teal-tint:rgba(24,192,192,.10);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  font-family:'Manrope',system-ui,-apple-system,sans-serif;
+  background:radial-gradient(ellipse at 26% 22%,#333E52 0%,var(--navy) 56%,var(--navy-deep) 100%);
+  background-attachment:fixed;
+  color:var(--white);min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+  padding:0 20px 80px;overflow-x:hidden;
+}
+body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:radial-gradient(rgba(255,255,255,.045) 1px,transparent 1px);
+  background-size:34px 34px;animation:drift 60s linear infinite;
+}
+@keyframes drift{to{background-position:34px 34px}}
+@media (prefers-reduced-motion:reduce){
+  body::before{animation:none}
+  *{animation-duration:.01ms !important;transition-duration:.01ms !important}
+}
+
+.wrap{position:relative;z-index:1;max-width:660px;margin:0 auto}
+
+/* ---- progress ---- */
+#bar{
+  position:fixed;top:0;left:0;right:0;height:3px;background:rgba(255,255,255,.07);z-index:5;
+}
+#bar i{display:block;height:100%;width:0;background:var(--teal);transition:width .35s cubic-bezier(.4,0,.2,1)}
+
+/* ---- shared ---- */
+.screen{display:none;padding-top:64px;animation:rise .45s cubic-bezier(.2,.7,.3,1) both}
+.screen.on{display:block}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+.eyebrow{
+  font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--teal);margin-bottom:14px;
+}
+h1{font-size:clamp(30px,7vw,44px);font-weight:800;letter-spacing:-.025em;line-height:1.08;text-wrap:balance}
+h2{font-size:clamp(23px,5vw,30px);font-weight:800;letter-spacing:-.02em;line-height:1.18;text-wrap:balance}
+p{color:var(--muted);font-weight:300;font-size:17px;line-height:1.65}
+.lede{font-size:18.5px;margin-top:18px}
+strong{color:var(--white);font-weight:600}
+
+.btn{
+  display:inline-flex;align-items:center;gap:10px;border:0;cursor:pointer;
+  background:var(--teal);color:#10202A;font-family:inherit;font-weight:700;font-size:16px;
+  padding:15px 30px;border-radius:999px;transition:transform .18s ease,box-shadow .18s ease;
+}
+.btn:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(24,192,192,.28)}
+.btn:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:none}
+.btn.ghost{background:transparent;color:var(--muted);border:1px solid var(--line-strong);font-weight:600}
+.btn.ghost:hover{color:var(--white);box-shadow:none}
+:focus-visible{outline:2px solid var(--teal);outline-offset:3px;border-radius:4px}
+
+.meta{display:flex;flex-wrap:wrap;gap:20px;margin-top:32px;padding-top:24px;border-top:1px solid var(--line)}
+.meta div{display:flex;flex-direction:column;gap:2px}
+.meta b{font-size:15px;font-weight:700}
+.meta span{font-size:12.5px;color:var(--muted-2)}
+
+/* ---- question ---- */
+.count{font-size:12px;color:var(--muted-2);letter-spacing:.1em;text-transform:uppercase;font-weight:600;margin-bottom:18px}
+.stmt{font-size:clamp(21px,4.6vw,27px);font-weight:700;line-height:1.32;letter-spacing:-.015em;text-wrap:balance}
+.scene{
+  margin-top:16px;padding:14px 18px;border-left:2px solid var(--teal-soft);
+  color:var(--muted);font-weight:300;font-size:15.5px;line-height:1.6;background:rgba(255,255,255,.025);
+  border-radius:0 8px 8px 0;
+}
+.opts{display:flex;flex-direction:column;gap:9px;margin-top:30px}
+.opt{
+  display:flex;align-items:center;gap:14px;width:100%;text-align:left;cursor:pointer;
+  background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:12px;
+  padding:15px 18px;color:var(--white);font-family:inherit;font-size:16px;font-weight:500;
+  transition:border-color .16s ease,background .16s ease,transform .16s ease;
+}
+.opt:hover{border-color:var(--line-strong);background:rgba(255,255,255,.07);transform:translateX(3px)}
+.opt[aria-pressed="true"]{border-color:var(--teal);background:var(--teal-tint)}
+.opt i{
+  width:16px;height:16px;border-radius:50%;border:2px solid var(--line-strong);flex:none;
+  transition:border-color .16s ease,box-shadow .16s ease;
+}
+.opt[aria-pressed="true"] i{border-color:var(--teal);box-shadow:inset 0 0 0 4px var(--teal)}
+.nav{display:flex;gap:12px;margin-top:26px;align-items:center}
+.nav .back{
+  background:none;border:0;color:var(--muted-2);font-family:inherit;font-size:14px;
+  cursor:pointer;padding:8px 4px;font-weight:600;
+}
+.nav .back:hover{color:var(--white)}
+
+/* ---- email ---- */
+.field{display:flex;flex-direction:column;gap:7px;margin-top:18px}
+.field label{font-size:13px;font-weight:600;color:var(--muted)}
+.field input{
+  background:rgba(255,255,255,.05);border:1px solid var(--line-strong);border-radius:10px;
+  padding:14px 16px;color:var(--white);font-family:inherit;font-size:16px;
+}
+.field input:focus{outline:none;border-color:var(--teal);background:rgba(255,255,255,.08)}
+.promise{
+  margin-top:22px;border:1px solid var(--teal-soft);background:var(--teal-tint);
+  border-radius:12px;padding:18px 20px;
+}
+.promise p{color:var(--white);font-size:15.5px;font-weight:500;line-height:1.6}
+.promise p + p{margin-top:8px;color:var(--muted);font-weight:300;font-size:14.5px}
+.err{color:#FF9A8B;font-size:14px;margin-top:12px;font-weight:500;display:none}
+.err.on{display:block}
+.fine{margin-top:18px;font-size:13px;color:var(--muted-2);font-weight:300}
+
+/* ---- result ---- */
+.badge{
+  display:inline-block;padding:6px 14px;border-radius:999px;border:1px solid var(--teal-soft);
+  background:var(--teal-tint);color:var(--teal);font-size:12px;font-weight:700;
+  letter-spacing:.12em;text-transform:uppercase;margin-bottom:16px;
+}
+.axis{margin-top:34px;display:flex;flex-direction:column;gap:22px}
+.axis-row{display:flex;flex-direction:column;gap:9px}
+.axis-lab{display:flex;justify-content:space-between;font-size:12.5px;font-weight:600;color:var(--muted-2)}
+.axis-lab b{color:var(--white);font-weight:700}
+.track{height:6px;background:rgba(255,255,255,.08);border-radius:99px;position:relative}
+.track i{
+  position:absolute;top:50%;width:15px;height:15px;border-radius:50%;background:var(--teal);
+  transform:translate(-50%,-50%);box-shadow:0 0 0 5px rgba(24,192,192,.18);
+  transition:left .8s cubic-bezier(.3,.8,.3,1);left:50%;
+}
+.axis-note{font-size:14px;color:var(--muted);font-weight:300}
+
+.card{
+  margin-top:22px;border:1px solid var(--line);border-radius:14px;
+  background:rgba(255,255,255,.035);padding:22px 24px;
+}
+.card h3{
+  font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--teal);margin-bottom:10px;
+}
+.card.warn h3{color:#F0A79C}
+.card p{font-size:16px;line-height:1.66}
+.card p + p{margin-top:10px}
+
+.next{
+  margin-top:44px;padding-top:30px;border-top:1px solid var(--line);
+}
+.next h3{font-size:20px;font-weight:800;letter-spacing:-.015em;margin-bottom:10px}
+.next .rows{display:flex;flex-direction:column;gap:10px;margin-top:20px}
+.next a{
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+  border:1px solid var(--line);border-radius:12px;padding:17px 20px;text-decoration:none;
+  color:var(--white);background:rgba(255,255,255,.03);transition:border-color .16s ease,background .16s ease;
+}
+.next a:hover{border-color:var(--teal);background:var(--teal-tint)}
+.next a b{font-size:16px;font-weight:700;display:block}
+.next a span{font-size:13.5px;color:var(--muted);font-weight:300;display:block;margin-top:3px}
+.next a em{font-style:normal;color:var(--teal);font-size:20px;flex:none}
+
+.foot{
+  margin-top:64px;padding-top:24px;border-top:1px solid var(--line);
+  display:flex;justify-content:center;
+}
+.foot a{color:var(--muted-2);font-size:13px;text-decoration:none;font-weight:500}
+.foot a:hover{color:var(--teal)}
+
+@media (max-width:520px){
+  .screen{padding-top:48px}
+  .opt{padding:14px 16px;font-size:15.5px}
+}
+</style>
+</head>
+<body>
+
+<div id="bar"><i></i></div>
+
+<div class="wrap">
+
+  <!-- ================= INTRO ================= -->
+  <div class="screen on" id="s-intro">
+    <div class="eyebrow">Start here</div>
+    <h1>How do you actually <span style="color:var(--teal)">talk</span> to the person you love?</h1>
+    <p class="lede">Not in a fight. On an ordinary Tuesday. When something small has landed wrong and you have to decide, in about two seconds, whether to say it.</p>
+    <p class="lede">That decision, made a thousand times, is your communication style. You have never chosen it. You learned it somewhere, it worked, and you kept it. This will show you which one you are running, what it is doing to the person across from you, and the one thing they have probably been waiting for you to say.</p>
+
+    <div class="meta">
+      <div><b>16 questions</b><span>About four minutes</span></div>
+      <div><b>No right answer</b><span>Only what is true for you</span></div>
+      <div><b>Your results, kept</b><span>On screen and in your inbox</span></div>
+    </div>
+
+    <div style="margin-top:34px"><button class="btn" id="go">Begin<em style="font-style:normal">&rarr;</em></button></div>
+  </div>
+
+  <!-- ================= QUESTION ================= -->
+  <div class="screen" id="s-q">
+    <div class="count" id="q-count">Question 1 of 16</div>
+    <div class="stmt" id="q-stmt"></div>
+    <div class="scene" id="q-scene"></div>
+    <div class="opts" id="q-opts"></div>
+    <div class="nav"><button class="back" id="q-back">&larr; Back</button></div>
+  </div>
+
+  <!-- ================= EMAIL ================= -->
+  <div class="screen" id="s-mail">
+    <div class="eyebrow">Last step</div>
+    <h2>That is all sixteen. Where should I send this?</h2>
+    <p class="lede">You have just told me something quite specific about how you handle the moments that matter. Let me make sure you can find it again in six months.</p>
+
+    <div class="field">
+      <label for="f-name">Your first name</label>
+      <input id="f-name" type="text" autocomplete="given-name" placeholder="Francois">
+    </div>
+    <div class="field">
+      <label for="f-mail">Your email</label>
+      <input id="f-mail" type="email" autocomplete="email" inputmode="email" placeholder="you@example.com">
+    </div>
+    <div class="err" id="f-err"></div>
+
+    <div class="promise">
+      <p>Your results open on the next screen, straight away.</p>
+      <p>They also land in your inbox, so that when this comes up again in a year you can go back and read what you said about yourself today.</p>
+    </div>
+
+    <div style="margin-top:26px"><button class="btn" id="f-go">Show me my style</button></div>
+    <p class="fine">One email with your results. You can leave at any time and I will not chase you.</p>
+  </div>
+
+  <!-- ================= RESULT ================= -->
+  <div class="screen" id="s-res">
+    <div class="badge">Your communication style</div>
+    <h1 id="r-name"></h1>
+    <p class="lede" id="r-hedge" style="display:none;color:var(--teal)"></p>
+    <p class="lede" id="r-line"></p>
+
+    <div class="axis">
+      <div class="axis-row">
+        <div class="axis-lab"><span>Kept inside</span><b id="a1-name"></b><span>Said out loud</span></div>
+        <div class="track"><i id="a1-dot"></i></div>
+        <div class="axis-note" id="a1-note"></div>
+      </div>
+      <div class="axis-row">
+        <div class="axis-lab"><span>The problem</span><b id="a2-name"></b><span>The us</span></div>
+        <div class="track"><i id="a2-dot"></i></div>
+        <div class="axis-note" id="a2-note"></div>
+      </div>
+    </div>
+
+    <div class="card"><h3>The healthy sign of it</h3><p id="r-good"></p></div>
+    <div class="card warn"><h3>The unhealthy sign of it</h3><p id="r-bad"></p></div>
+    <div class="card"><h3>What it does to the person across from you</h3><p id="r-them"></p></div>
+    <div class="card"><h3>The thing to ask for</h3><p id="r-ask"></p></div>
+
+    <div class="next">
+      <h3>This was the ordinary Tuesday. Conflict is a different question.</h3>
+      <p>What you have just read is how you communicate when nothing much is at stake. It changes the moment it gets heated. Under real conflict an older instinct takes over, one you did not choose and did not learn in this relationship, and it can look nothing like the style you have just read about. That is the next thing worth knowing about yourself.</p>
+      <div class="rows" id="r-next"></div>
+    </div>
+
+    <div class="foot"><a href="https://www.francoisesterhuizen.com">francoisesterhuizen.com</a></div>
+  </div>
+
+</div>
+
+<script>
+/* ------------------------------------------------------------------
+   Communication Styles.
+   Two axes, eight items each, half of them reverse keyed so that
+   agreeing with everything cannot produce a clean result.
+
+   axis A  held  <-> released   how much of it reaches the other person
+   axis B  fix   <-> connect    what you are reaching for when you speak
+
+   Item.k is which axis. Item.d is +1 when agreeing pushes towards
+   released / connect, and -1 when agreeing pushes the other way.
+------------------------------------------------------------------ */
+var ITEMS = [
+  { k:'A', d:-1,
+    t:"When something bothers me, I work it out on my own before I say anything.",
+    s:"The wet towel is on the bed again. You notice the irritation, decide it is not worth a whole conversation, and pick it up." },
+  { k:'B', d:+1,
+    t:"Before anything gets solved, I need to know that we are alright.",
+    s:"You cannot start talking about the money until someone has said, in some way, that this is not the end of us." },
+  { k:'A', d:+1,
+    t:"The people close to me can tell how I feel before I have said a word.",
+    s:"You walk in the door after a hard day. Nobody asks. Your face has already answered." },
+  { k:'B', d:-1,
+    t:"When someone tells me their problem, my mind goes straight to what would fix it.",
+    s:"She is halfway through the story about her sister and you have already worked out what she should do on Sunday." },
+  { k:'A', d:-1,
+    t:"I would rather say nothing than say it badly.",
+    s:"You have the sentence half formed, you can hear that it will come out wrong, and you let the moment go past." },
+  { k:'B', d:+1,
+    t:"A conversation feels finished to me when the warmth has come back.",
+    s:"Nothing was decided, but he made a joke and you laughed, and you went to bed feeling that it was handled." },
+  { k:'A', d:+1,
+    t:"I say the thing while I am still feeling it.",
+    s:"The thought arrives at nine at night, and it gets said at nine at night, in the version it arrived in." },
+  { k:'B', d:-1,
+    t:"I get impatient when a conversation goes round and round without landing anywhere.",
+    s:"Forty minutes in, you hear yourself say: so what are we actually going to do about it." },
+  { k:'A', d:-1,
+    t:"There are things I have felt for years that I have never said out loud.",
+    s:"An old hurt, a private hope, a resentment from year two. It is still in there and it has never been spoken." },
+  { k:'B', d:+1,
+    t:"I would rather be understood than be right.",
+    s:"You could win this. You have the better argument and you know it. What you actually want is for them to see why it hurt." },
+  { k:'A', d:+1,
+    t:"When something is wrong between us, I need to deal with it now.",
+    s:"It is late, you both have work in the morning, and you cannot let it go until it is sorted." },
+  { k:'B', d:-1,
+    t:"I would rather be told plainly than have someone protect my feelings.",
+    s:"You can feel them choosing the gentle version, and you would honestly rather they just said it." },
+  { k:'A', d:-1,
+    t:"I say I am fine more often than I am actually fine.",
+    s:"He asks if you are upset. You are at about a seven. You say no, all good." },
+  { k:'B', d:+1,
+    t:"If there is tension in the room, I cannot concentrate on anything else.",
+    s:"Nothing has been said, but something is off, and you have read the same paragraph four times." },
+  { k:'A', d:+1,
+    t:"I have been told that I said too much, or said it too soon.",
+    s:"Afterwards you replay it and think: I did not need to put all of that on the table tonight." },
+  { k:'B', d:-1,
+    t:"A conversation feels finished to me when we have agreed what happens next.",
+    s:"You are calm once there is a plan. Without one, it does not feel like the thing is actually over." }
+];
+
+var SCALE = [
+  { v:1, l:"Not like me at all" },
+  { v:2, l:"A little like me" },
+  { v:3, l:"Sometimes" },
+  { v:4, l:"Mostly like me" },
+  { v:5, l:"Exactly like me" }
+];
+
+var STYLES = {
+  'held-fix': {
+    name:"The Quiet Fixer",
+    line:"You handle it. Whatever it is, you would rather carry it to the workshop in your own head, sort it, and come back with it solved. Saying it out loud while it is still messy feels like making it someone else's problem, and you were raised not to do that.",
+    good:"You are steady. You do not flood the people around you with every passing feeling, you do not make a crisis out of a bad afternoon, and when you finally do say something, it has been thought about. People trust your word precisely because you do not spend it cheaply. In a hard season you are the one still functioning.",
+    bad:"The workshop door stays shut. What began as not wanting to burden anyone becomes a long private record of things they never got the chance to fix, and one day it comes out as a decision rather than a conversation. They did not get to help, because they were never told. From the inside it feels like maturity. From the outside it looks like a locked room.",
+    them:"They feel managed rather than known. You are kind, present and reliable, and they still cannot tell you what is actually going on in there. So they start guessing, and people who guess usually guess badly. Some read the silence as contentment and relax. Others read it as disappointment in them, and start working harder for a warmth they cannot seem to earn.",
+    ask:"Say it before it is solved. Not the finished version, the raw one: I am carrying something and I have not worked it out yet. That single sentence is the whole shift, because it lets them in during the part that actually matters instead of after it is over."
+  },
+  'held-connect': {
+    name:"The Long Way Round",
+    line:"You know exactly what you need. You just cannot make yourself ask for it plainly, so you signal instead. You go a bit quiet, you mention it sideways, you give them the opening and hope they walk through it. When they do not, it lands as proof of something.",
+    good:"You are attuned. You read a room before you have taken your coat off, you notice the shift in someone's voice, and you protect people from the blunt version of things because you know what blunt costs. You are the one who remembers what somebody said they were dreading, and asks about it a week later.",
+    bad:"The hint becomes a test they do not know they are sitting. You needed a hug and did not ask, and now their not offering means something about how they feel about you. Unspoken need turns into evidence, evidence turns into a story, and the story gets told years later in a conversation they thought was about the weekend.",
+    them:"They feel like they are failing a subject they were never enrolled in. They can sense there is a right answer and they cannot find it, so they either start over-checking, which exhausts them both, or they give up trying to read you and go slightly numb. Neither is what you wanted. What you wanted was to be seen without having to ask.",
+    ask:"Say the need as a sentence, not a signal. I would like a hug. I want you to ask me about today. It will feel unbearably direct the first few times and it will feel like it does not count if you had to ask for it. It counts. Getting it is the point, not being read correctly."
+  },
+  'released-fix': {
+    name:"The Straight Line",
+    line:"You say the thing. You do not see the value in circling it, softening it or waiting for a better moment, because the problem is sitting right there and it can be dealt with. Then you are genuinely finished with it, and slightly puzzled that nobody else is.",
+    good:"There is nothing behind your back. People know where they stand with you, they do not have to decode you, and you will name the thing everybody else in the room is politely pretending not to see. You do not hold grudges, because you dealt with it at the time. That is rarer and more valuable than you think it is.",
+    bad:"You arrive at the solution before they have finished being upset, and the speed itself becomes the injury. You were not being unkind, you were being useful, but useful landed as dismissive. Then their reaction seems disproportionate to you, which makes you plainer, which makes it worse, and now you are having a second argument about the first one.",
+    them:"They feel handled rather than heard. Bringing something to you starts to feel like filing a report: they will get an answer, they will not get company. So they stop bringing the small things, and because the small things are most of a life, you end up with a lot of efficiency and not much intimacy.",
+    ask:"Ask one question before you offer anything. Do you want me to help with this, or do you want me to just be here while you are in it. It costs you eight seconds. It will change what your closest relationships feel like from the inside, and you will not believe how often the answer is the second one."
+  },
+  'released-connect': {
+    name:"The Open Window",
+    line:"It is all visible. What you feel arrives on your face and in your voice at roughly the same moment it arrives in you, and until the connection between you is repaired you cannot really do anything else. Distance is not a mood to you, it is an emergency.",
+    good:"Nobody has to wonder about you. You bring warmth into a room and you bring it fast, you say the loving thing out loud instead of assuming it is understood, and you will not let a rift sit and harden for three weeks. Plenty of relationships are still alive because someone like you refused to let the silence become permanent.",
+    bad:"Everything gets expressed at full size, including the parts that were going to shrink on their own by morning. Because you cannot rest while it is unresolved, you pursue, and pursuit reads as pressure. The person who most needed to stay close ends up being the reason the other one steps back, which is the cruellest turn this style takes.",
+    them:"They feel flooded. Not unloved, flooded. They are still processing sentence one while you are on sentence nine, and their silence is not withdrawal, it is a slower machine. But you read the silence as leaving, so you come closer, and they need more room, and now you are both doing the exact thing that makes the other one worse.",
+    ask:"Ask for a time, not for now. I need to talk about this. Can we do it after supper. You get the certainty that it is not being buried, which is the thing you actually need, and they get the twenty minutes it takes them to know what they think. Same conversation, and it goes completely differently."
+  }
+};
+
+var NEXT = [
+  { href:"https://survival-instinct-assessment.netlify.app/",
+    t:"Your conflict style",
+    d:"The Survival Instinct Assessment. What you do when it stops being a conversation, where that instinct came from, and why it collides with theirs. 36 questions." },
+  { href:"/books/habits/",
+    t:"10 Habits of Happy Relationships",
+    d:"The book. What the couples who make it actually do differently, day to day." }
+];
+
+/* ------------------------- state ------------------------- */
+var i = 0;
+var answers = new Array(ITEMS.length).fill(null);
+
+var $ = function(id){ return document.getElementById(id); };
+function show(id){
+  var all = document.querySelectorAll('.screen');
+  for (var n = 0; n < all.length; n++) all[n].classList.remove('on');
+  $(id).classList.add('on');
+  window.scrollTo({ top:0, behavior:'instant' in window ? 'instant' : 'auto' });
+}
+function progress(p){ $('bar').firstElementChild.style.width = (p * 100) + '%'; }
+
+/* ------------------------- questions ------------------------- */
+function renderQ(){
+  var it = ITEMS[i];
+  $('q-count').textContent = 'Question ' + (i + 1) + ' of ' + ITEMS.length;
+  $('q-stmt').textContent = it.t;
+  $('q-scene').textContent = it.s;
+  $('q-back').style.visibility = i === 0 ? 'hidden' : 'visible';
+
+  var box = $('q-opts');
+  box.innerHTML = '';
+  for (var n = 0; n < SCALE.length; n++) {
+    (function(opt){
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'opt';
+      b.setAttribute('aria-pressed', answers[i] === opt.v ? 'true' : 'false');
+      b.innerHTML = '<i></i><span></span>';
+      b.querySelector('span').textContent = opt.l;
+      b.addEventListener('click', function(){ pick(opt.v); });
+      box.appendChild(b);
+    })(SCALE[n]);
+  }
+  progress(i / ITEMS.length);
+}
+
+function pick(v){
+  answers[i] = v;
+  var btns = $('q-opts').children;
+  for (var n = 0; n < btns.length; n++) {
+    btns[n].setAttribute('aria-pressed', SCALE[n].v === v ? 'true' : 'false');
+  }
+  setTimeout(function(){
+    if (i < ITEMS.length - 1) { i++; renderQ(); }
+    else { progress(1); show('s-mail'); }
+  }, 190);
+}
+
+$('go').addEventListener('click', function(){ show('s-q'); renderQ(); });
+$('q-back').addEventListener('click', function(){ if (i > 0) { i--; renderQ(); } });
+
+/* ------------------------- scoring ------------------------- */
+function score(){
+  // Each axis: 8 items, scale 1..5, half reverse keyed.
+  // Centre every answer on 0 (so 3 is neutral) and sign it by direction.
+  var A = 0, B = 0;
+  for (var n = 0; n < ITEMS.length; n++) {
+    var raw = answers[n] === null ? 3 : answers[n];
+    var val = (raw - 3) * ITEMS[n].d;          // -2 .. +2
+    if (ITEMS[n].k === 'A') A += val; else B += val;
+  }
+  // 8 items x max 2 = 16 either way. Normalise to -1 .. +1.
+  return { a: A / 16, b: B / 16 };
+}
+
+function styleKey(s){
+  return (s.a >= 0 ? 'released' : 'held') + '-' + (s.b >= 0 ? 'connect' : 'fix');
+}
+
+function strength(v){
+  var m = Math.abs(v);
+  if (m < 0.12) return 'balanced';
+  if (m < 0.34) return 'slight';
+  if (m < 0.60) return 'clear';
+  return 'strong';
+}
+
+var NOTE_A = {
+  balanced:"You sit near the middle here, which is genuinely unusual. You can hold something back and you can let it out, and which one you do seems to depend on the person rather than on you.",
+  slight:"You lean this way, but not far. Under pressure you will probably move further along this line than you do on a calm day.",
+  clear:"This is a real lean, and the people close to you will recognise it in you immediately, even if you have never named it.",
+  strong:"This is a strong pattern. It is almost certainly the single thing your partner would name first if someone asked them to describe how you handle difficulty."
+};
+var NOTE_B = {
+  balanced:"You sit near the middle here. You can go for the fix and you can go for the connection, which makes you unusually easy to talk to.",
+  slight:"A mild preference. You will reach for this first, but you are not stuck there.",
+  clear:"A real preference, and it is probably the thing that gets misread most often as not caring, when in fact it is just what caring looks like in your language.",
+  strong:"A strong preference. When this is not met, no amount of the other one will make the conversation feel finished to you."
+};
+
+/* ------------------------- email and results ------------------------- */
+function valid(e){ return /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e); }
+
+$('f-go').addEventListener('click', function(){
+  var name = $('f-name').value.trim();
+  var mail = $('f-mail').value.trim().toLowerCase();
+  var err  = $('f-err');
+
+  if (!name) { err.textContent = 'I need a first name so the email does not open with "Hi there".'; err.classList.add('on'); $('f-name').focus(); return; }
+  if (!valid(mail)) { err.textContent = 'That email does not look right. Check it and try again.'; err.classList.add('on'); $('f-mail').focus(); return; }
+  err.classList.remove('on');
+
+  var s = score();
+  var key = styleKey(s);
+  var st = STYLES[key];
+
+  this.disabled = true;
+  this.textContent = 'One moment';
+
+  // Never let a failed sync block someone from their own results.
+  var payload = {
+    tool: 'communication-styles',
+    name: name, email: mail,
+    resultKey: key,
+    resultName: st.name,
+    line: st.line.slice(0, 240),
+    axisA: Math.round(s.a * 100),
+    axisB: Math.round(s.b * 100)
+  };
+  var done = false;
+  var reveal = function(){ if (!done) { done = true; render(st, s); show('s-res'); } };
+  setTimeout(reveal, 4000);
+
+  fetch('/api/assessment', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  }).then(reveal).catch(reveal);
+});
+
+function render(st, s){
+  $('r-name').textContent = st.name;
+
+  // Somebody can land close to the middle on both axes, and asserting a style
+  // at them then would be dishonest. Say so instead of pretending.
+  var hedge = $('r-hedge');
+  if (strength(s.a) === 'balanced' && strength(s.b) === 'balanced') {
+    hedge.textContent = 'This one is the closest fit rather than a clear read. You sat near the middle on both questions, so take what follows as one of two or three descriptions that will partly fit you, and keep the parts you recognise.';
+    hedge.style.display = '';
+  } else {
+    hedge.style.display = 'none';
+  }
+
+  $('r-line').textContent = st.line;
+  $('r-good').textContent = st.good;
+  $('r-bad').textContent  = st.bad;
+  $('r-them').textContent = st.them;
+  $('r-ask').textContent  = st.ask;
+
+  $('a1-name').textContent = s.a >= 0 ? 'You let it out' : 'You hold it in';
+  $('a2-name').textContent = s.b >= 0 ? 'You go for the us' : 'You go for the fix';
+  $('a1-note').textContent = NOTE_A[strength(s.a)];
+  $('a2-note').textContent = NOTE_B[strength(s.b)];
+
+  // -1..+1 mapped onto 6%..94% so the dot never sits under the rounded end
+  setTimeout(function(){
+    $('a1-dot').style.left = (50 + s.a * 44) + '%';
+    $('a2-dot').style.left = (50 + s.b * 44) + '%';
+  }, 120);
+
+  var rows = $('r-next');
+  rows.innerHTML = '';
+  for (var n = 0; n < NEXT.length; n++) {
+    var a = document.createElement('a');
+    a.href = NEXT[n].href;
+    var b = document.createElement('b'); b.textContent = NEXT[n].t;
+    var sp = document.createElement('span'); sp.textContent = NEXT[n].d;
+    var wrapper = document.createElement('div');
+    wrapper.appendChild(b); wrapper.appendChild(sp);
+    var em = document.createElement('em'); em.textContent = '→';
+    a.appendChild(wrapper); a.appendChild(em);
+    rows.appendChild(a);
+  }
+}
+</script>
+</body>
+</html>

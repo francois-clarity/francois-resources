@@ -67,6 +67,16 @@ GATES = {
                  "habits-inside.png"],
         "must_not": ["noindex", "read free", "the-empowering-truth"],
     },
+    "communication-styles": {
+        # Free front door for the relational ladder. Email at the END, never
+        # the start, and it must point at the paid conflict-styles assessment.
+        "must": ["Communication Styles", "Question 1 of 16", "The Quiet Fixer",
+                 "The Long Way Round", "The Straight Line", "The Open Window",
+                 "The healthy sign of it", "The unhealthy sign of it",
+                 "/api/assessment", "Show me my style",
+                 "also land in your inbox", "survival-instinct"],
+        "must_not": ["Pattern Breaker", "Headlights", "Loop Map", "MMERGE2=communication"],
+    },
     "invisible-contracts": {
         # Contracts you keep. No email gate; markers are content.
         "must": ["Invisible Contracts", "ic-contracts", "then you should",
