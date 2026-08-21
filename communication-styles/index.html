@@ -18,13 +18,12 @@
 
 <style>
 :root{
-  --navy:#262E3B; --navy-deep:#1B222D; --navy-lift:#2E3849; --teal:#18C0C0; --white:#fff;
+  --navy:#262E3B; --navy-deep:#1B222D; --teal:#18C0C0; --white:#fff;
   --muted:rgba(255,255,255,.66); --muted-2:rgba(255,255,255,.42);
   --line:rgba(255,255,255,.10); --line-strong:rgba(255,255,255,.18);
   --teal-soft:rgba(24,192,192,.18); --teal-tint:rgba(24,192,192,.10);
   --green:#5FCB89; --amber:#E8B551; --red:#E38070;
-  /* Four identity colours, one per style. These are NOT semantic: no style is
-     the good one. Used only for the profile bars and the style badge. */
+  /* Four identity colours, one per style. NOT semantic: no style is the good one. */
   --c-ask:#18C0C0; --c-reach:#E38070; --c-round:#E8B551; --c-door:#8B9DE0;
 }
 *{box-sizing:border-box;margin:0;padding:0}
@@ -32,10 +31,8 @@ html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
 body{
   font-family:'Manrope',system-ui,-apple-system,sans-serif;
   background:radial-gradient(ellipse at 26% 22%,#333E52 0%,var(--navy) 56%,var(--navy-deep) 100%);
-  background-attachment:fixed;
-  color:var(--white);min-height:100vh;
-  -webkit-font-smoothing:antialiased;
-  padding:0 20px 90px;overflow-x:hidden;
+  background-attachment:fixed;color:var(--white);min-height:100vh;
+  -webkit-font-smoothing:antialiased;padding:0 20px 90px;overflow-x:hidden;
 }
 body::before{
   content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
@@ -52,11 +49,7 @@ body::before{
 }
 
 .wrap{position:relative;z-index:1;max-width:680px;margin:0 auto}
-
-#bar{position:fixed;top:0;left:0;right:0;height:3px;background:rgba(255,255,255,.07);z-index:5}
-#bar i{display:block;height:100%;width:0;background:var(--teal);box-shadow:0 0 12px rgba(24,192,192,.55);transition:width .35s cubic-bezier(.4,0,.2,1)}
-
-.screen{display:none;padding-top:64px;animation:rise .45s cubic-bezier(.2,.7,.3,1) both}
+.screen{display:none;padding-top:56px;animation:rise .45s cubic-bezier(.2,.7,.3,1) both}
 .screen.on{display:block}
 @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
 
@@ -66,7 +59,6 @@ h1 .teal{color:var(--teal)}
 h2{font-size:clamp(24px,5vw,32px);font-weight:800;letter-spacing:-.022em;line-height:1.16;text-wrap:balance}
 p{color:var(--muted);font-weight:300;font-size:17px;line-height:1.62}
 .lede{font-size:19px;line-height:1.65;margin-top:18px;max-width:56ch}
-strong{color:var(--white);font-weight:600}
 
 .btn{
   display:inline-flex;align-items:center;gap:10px;border:0;cursor:pointer;
@@ -76,16 +68,38 @@ strong{color:var(--white);font-weight:600}
 }
 .btn:hover{filter:brightness(1.08)}
 .btn:active{transform:translateY(1px)}
-.btn:disabled{opacity:.45;cursor:not-allowed}
-:focus-visible{outline:none;box-shadow:0 0 0 4px var(--teal-tint),0 0 0 1px var(--teal);border-radius:8px}
+.btn:disabled{opacity:.5;cursor:progress;filter:none}
+.btn .spin{
+  width:15px;height:15px;border:2px solid rgba(27,34,45,.3);border-top-color:var(--navy);
+  border-radius:50%;animation:spin .7s linear infinite;display:none;
+}
+.btn.busy .spin{display:block}
+@keyframes spin{to{transform:rotate(360deg)}}
+:focus-visible{outline:none;box-shadow:0 0 0 4px var(--teal-tint),0 0 0 2px var(--teal);border-radius:10px}
 
-.meta{display:flex;flex-wrap:wrap;gap:22px;margin-top:34px;padding-top:24px;border-top:1px solid var(--line)}
+.meta{display:flex;flex-wrap:wrap;gap:22px;margin-top:30px;padding-top:22px;border-top:1px solid var(--line)}
 .meta div{display:flex;flex-direction:column;gap:2px}
 .meta b{font-size:15px;font-weight:700}
 .meta span{font-size:12.5px;color:var(--muted-2)}
 
+/* ---- pronoun picker ---- */
+.pron{margin-top:30px;padding:20px 22px;border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.03)}
+.pron legend,.pron .q{font-size:15px;font-weight:600;color:var(--white);margin-bottom:4px;padding:0}
+.pron .why{font-size:13.5px;color:var(--muted-2);font-weight:300;margin-bottom:14px}
+.pron .row{display:flex;flex-wrap:wrap;gap:9px}
+.pron button{
+  cursor:pointer;font-family:inherit;font-size:15px;font-weight:600;padding:11px 20px;
+  border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--muted);
+  transition:.16s;
+}
+.pron button:hover{border-color:var(--line-strong);color:var(--white)}
+.pron button[aria-pressed="true"]{border-color:var(--teal);background:var(--teal-soft);color:var(--white)}
+
 /* ---- question ---- */
-.count{font-size:12px;color:var(--muted-2);letter-spacing:.1em;text-transform:uppercase;font-weight:600;margin-bottom:8px}
+.qhead{display:flex;align-items:center;gap:14px;margin-bottom:8px}
+.count{font-size:12px;color:var(--muted-2);letter-spacing:.1em;text-transform:uppercase;font-weight:700;white-space:nowrap}
+.qbar{flex:1;height:7px;background:rgba(255,255,255,.08);border-radius:99px;overflow:hidden}
+.qbar i{display:block;height:100%;width:0;background:var(--teal);border-radius:99px;box-shadow:0 0 10px rgba(24,192,192,.5);transition:width .35s cubic-bezier(.4,0,.2,1)}
 .part{font-size:12px;color:var(--teal);letter-spacing:.1em;text-transform:uppercase;font-weight:600;margin-bottom:18px}
 .stmt{font-size:clamp(21px,4.6vw,27px);font-weight:700;line-height:1.32;letter-spacing:-.015em;text-wrap:balance}
 .scene{
@@ -93,7 +107,7 @@ strong{color:var(--white);font-weight:600}
   color:var(--muted);font-weight:300;font-size:15.5px;line-height:1.6;
   background:rgba(255,255,255,.025);border-radius:0 8px 8px 0;
 }
-.opts{display:flex;flex-direction:column;gap:9px;margin-top:30px}
+.opts{display:flex;flex-direction:column;gap:9px;margin-top:28px}
 .opt{
   display:flex;align-items:center;gap:14px;width:100%;text-align:left;cursor:pointer;
   background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:12px;
@@ -101,21 +115,31 @@ strong{color:var(--white);font-weight:600}
   transition:border-color .16s ease,background .16s ease,color .16s ease;
 }
 .opt:hover{border-color:var(--line-strong);background:rgba(255,255,255,.07);color:var(--white)}
-.opt[aria-pressed="true"]{border-color:var(--teal);background:var(--teal-soft);color:var(--white)}
-.opt i{width:16px;height:16px;border-radius:50%;border:2px solid var(--line-strong);flex:none;transition:.16s}
-.opt[aria-pressed="true"] i{border-color:var(--teal);box-shadow:inset 0 0 0 4px var(--teal)}
-.nav{display:flex;gap:12px;margin-top:26px;align-items:center}
+.opt[aria-checked="true"]{border-color:var(--teal);background:var(--teal-soft);color:var(--white)}
+.opt .dot{width:16px;height:16px;border-radius:50%;border:2px solid var(--line-strong);flex:none;transition:.16s}
+.opt[aria-checked="true"] .dot{border-color:var(--teal);box-shadow:inset 0 0 0 4px var(--teal)}
+.opt .key{
+  margin-left:auto;font-size:11.5px;font-weight:700;color:var(--muted-2);
+  border:1px solid var(--line);border-radius:6px;padding:2px 7px;min-width:22px;text-align:center;
+}
+.opt[aria-checked="true"] .key{color:var(--teal);border-color:var(--teal-soft)}
+.nav{display:flex;gap:12px;margin-top:24px;align-items:center;justify-content:space-between}
 .nav .back{background:none;border:0;color:var(--muted-2);font-family:inherit;font-size:14px;cursor:pointer;padding:8px 4px;font-weight:600}
 .nav .back:hover{color:var(--white)}
+.hint{font-size:12.5px;color:var(--muted-2);font-weight:300}
+@media (max-width:560px){.hint{display:none}}
 
 /* ---- email ---- */
 .field{display:flex;flex-direction:column;gap:7px;margin-top:18px}
 .field label{font-size:13px;font-weight:600;color:var(--muted)}
 .field input{
   background:rgba(0,0,0,.2);border:1px solid var(--line-strong);border-radius:12px;
-  padding:14px 16px;color:var(--white);font-family:inherit;font-size:16px;
+  padding:14px 16px;color:var(--white);font-family:inherit;font-size:16px;width:100%;
 }
 .field input:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 4px var(--teal-tint)}
+.field input[aria-invalid="true"]{border-color:var(--red)}
+.fe{color:var(--red);font-size:13.5px;font-weight:500;min-height:0;display:none}
+.fe.on{display:block}
 .promise{
   margin-top:24px;border:1px solid var(--teal);border-radius:22px;padding:20px 22px;
   background:linear-gradient(180deg,rgba(24,192,192,.14),rgba(24,192,192,.04));
@@ -123,28 +147,22 @@ strong{color:var(--white);font-weight:600}
 }
 .promise p{color:var(--white);font-size:15.5px;font-weight:500}
 .promise p + p{margin-top:8px;color:var(--muted);font-weight:300;font-size:14.5px}
-.err{color:var(--red);font-size:14px;margin-top:12px;font-weight:500;display:none}
-.err.on{display:block}
 .fine{margin-top:18px;font-size:13px;color:var(--muted-2);font-weight:300}
 
 /* ---- result ---- */
-.badge{
-  display:inline-block;padding:7px 16px;border-radius:999px;font-size:12px;font-weight:700;
-  letter-spacing:.12em;text-transform:uppercase;margin-bottom:18px;
-}
+.badge{display:inline-block;padding:7px 16px;border-radius:999px;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-bottom:18px}
 .hedge{color:var(--teal);font-size:16.5px;font-weight:500;margin-top:14px;line-height:1.6}
-
-.profile{margin-top:36px;display:flex;flex-direction:column;gap:16px}
+.profile{margin-top:30px;display:flex;flex-direction:column;gap:16px}
 .prow{display:flex;flex-direction:column;gap:7px}
 .plab{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
 .plab b{font-size:15px;font-weight:700}
-.plab span{font-size:13px;color:var(--muted-2);font-weight:500;font-variant-numeric:tabular-nums}
+.plab span{font-size:13px;color:var(--muted-2);font-weight:600;font-variant-numeric:tabular-nums}
 .ptrack{height:8px;background:rgba(255,255,255,.07);border-radius:99px;overflow:hidden}
 .ptrack i{display:block;height:100%;width:0;border-radius:99px;transition:width .9s cubic-bezier(.3,.8,.3,1)}
 .psub{font-size:13.5px;color:var(--muted-2);font-weight:300}
 
 .card{margin-top:20px;border:1px solid var(--line);border-radius:22px;padding:24px 26px;
-  background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.01));backdrop-filter:blur(6px)}
+  background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.01))}
 .card h3{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;margin-bottom:12px;color:var(--teal)}
 .card.good h3{color:var(--green)}
 .card.cost h3{color:var(--red)}
@@ -152,14 +170,32 @@ strong{color:var(--white);font-weight:600}
 .card p{font-size:16.5px;line-height:1.66}
 .card p + p{margin-top:12px}
 
-.sect{margin-top:56px;padding-top:8px;display:flex;align-items:center;gap:14px}
+.sect{margin-top:52px;display:flex;align-items:center;gap:14px}
 .sect span{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted-2);white-space:nowrap}
 .sect::after{content:"";flex:1;height:1px;background:var(--line)}
 
-.dial{display:flex;align-items:center;gap:18px;margin-top:22px}
+.dial{display:flex;align-items:center;gap:20px;margin-top:22px;flex-wrap:wrap}
 .dial svg{flex:none}
-.dial div b{display:block;font-size:19px;font-weight:800;letter-spacing:-.015em;margin-bottom:5px}
-.dial div p{font-size:15.5px}
+.dial .dt{flex:1;min-width:220px}
+.dial .dt b{display:block;font-size:19px;font-weight:800;letter-spacing:-.015em;margin-bottom:5px}
+.dial .dt p{font-size:15.5px}
+
+.keep{
+  margin-top:22px;border:1px dashed var(--line-strong);border-radius:16px;padding:16px 18px;
+  display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;
+}
+.keep p{font-size:14px;margin:0}
+.keep button{
+  cursor:pointer;font-family:inherit;font-size:14px;font-weight:700;padding:10px 18px;
+  border-radius:10px;border:1px solid var(--teal);background:transparent;color:var(--teal);transition:.16s;
+}
+.keep button:hover{background:var(--teal-tint)}
+.warn{
+  margin-top:20px;border:1px solid rgba(232,181,81,.5);background:rgba(232,181,81,.08);
+  border-radius:16px;padding:16px 18px;display:none;
+}
+.warn.on{display:block}
+.warn p{font-size:14.5px;color:var(--white)}
 
 .next{margin-top:52px;padding-top:32px;border-top:1px solid var(--line)}
 .next h3{font-size:21px;font-weight:800;letter-spacing:-.018em;margin-bottom:10px}
@@ -177,7 +213,6 @@ strong{color:var(--white);font-weight:600}
 .signoff{margin-top:52px;padding-top:30px;border-top:1px solid var(--line)}
 .signoff p{font-size:16.5px}
 .signoff .name{margin-top:14px;font-size:17px;font-weight:700;color:var(--teal)}
-
 .refs{margin-top:44px;font-size:13px;color:var(--muted-2);font-weight:300;line-height:1.7}
 .refs b{display:block;color:var(--muted);font-weight:600;font-size:12px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px}
 .foot{margin-top:48px;padding-top:24px;border-top:1px solid var(--line);display:flex;justify-content:center}
@@ -185,21 +220,20 @@ strong{color:var(--white);font-weight:600}
 .foot a:hover{color:var(--teal)}
 
 @media (max-width:520px){
-  .screen{padding-top:48px}
+  .screen{padding-top:40px}
   .opt{padding:14px 16px;font-size:15.5px}
-  .card{padding:20px 20px}
+  .card{padding:20px}
 }
 @media print{
   body{background:#fff;color:#000}
-  .orb,#bar,body::before{display:none}
-  .card,.next a{border-color:#ccc;background:none}
+  .orb,body::before,.keep,.next{display:none}
+  .card{border-color:#ccc;background:none}
   p,.psub{color:#333}
 }
 </style>
 </head>
 <body>
 
-<div id="bar"><i></i></div>
 <div class="orb a"></div>
 <div class="orb b"></div>
 
@@ -210,27 +244,39 @@ strong{color:var(--white);font-weight:600}
     <div class="eyebrow">Start here</div>
     <h1>What do you do when you need <span class="teal">something?</span></h1>
     <p class="lede">Not in a fight. On an ordinary Tuesday, when something has gone wrong in your day and your partner is in the next room.</p>
-    <p class="lede">Maybe you walk in and say it straight out. Maybe you go and stand in the kitchen near your partner, doing nothing in particular, until you get asked. Maybe you say nothing at all, sort it out yourself, and she hears about it on Friday once it is over.</p>
-    <p class="lede">Whichever one you do, you learned it long before you met her. She learned a different one. Neither of you has ever discussed it, and it is running underneath every hard week the two of you have.</p>
-    <p class="lede">This shows you which one you run, what your partner is left holding because of it, and the one sentence that would change how the next hard week goes.</p>
+    <p class="lede">Maybe you walk in and say it straight out. Maybe you go and stand in the kitchen, doing nothing in particular, until you get asked. Maybe you say nothing at all, sort it out yourself, and your partner hears about it on Friday once it is over.</p>
+    <p class="lede">Whichever one you do, you learned it long before the two of you met. Your partner learned a different one. Neither of you has ever discussed it, and it is running underneath every hard week you have.</p>
+
+    <div class="pron" role="group" aria-labelledby="pron-q">
+      <div class="q" id="pron-q">When I write about your partner, which word should I use?</div>
+      <div class="why">So the whole thing reads like it is about your actual relationship.</div>
+      <div class="row" id="pron-row"></div>
+    </div>
 
     <div class="meta">
-      <div><b>20 questions</b><span>About five minutes</span></div>
+      <div><b>20 questions</b><span>Two to three minutes</span></div>
       <div><b>No right answer</b><span>Only what is true for you</span></div>
       <div><b>Built on the research</b><span>Not on personality types</span></div>
     </div>
 
-    <div style="margin-top:34px"><button class="btn" id="go">Begin</button></div>
+    <div style="margin-top:30px"><button class="btn" id="go">Begin</button></div>
+    <p class="fine" id="resume-note" style="display:none"></p>
   </div>
 
   <!-- ================= QUESTION ================= -->
   <div class="screen" id="s-q">
-    <div class="count" id="q-count">Question 1 of 20</div>
+    <div class="qhead">
+      <div class="count" id="q-count">Question 1 of 20</div>
+      <div class="qbar"><i id="q-fill"></i></div>
+    </div>
     <div class="part" id="q-part"></div>
     <div class="stmt" id="q-stmt"></div>
     <div class="scene" id="q-scene"></div>
-    <div class="opts" id="q-opts"></div>
-    <div class="nav"><button class="back" id="q-back">&larr; Back</button></div>
+    <div class="opts" id="q-opts" role="radiogroup" aria-labelledby="q-stmt"></div>
+    <div class="nav">
+      <button class="back" id="q-back">&larr; Back</button>
+      <span class="hint">Press 1 to 5, or use the arrow keys</span>
+    </div>
   </div>
 
   <!-- ================= EMAIL ================= -->
@@ -239,22 +285,27 @@ strong{color:var(--white);font-weight:600}
     <h2>That is all twenty. Where should I send this?</h2>
     <p class="lede">You have just told me something specific about how you ask for what you need. Let me make sure you can find it again in six months, when it matters.</p>
 
-    <div class="field">
-      <label for="f-name">Your first name</label>
-      <input id="f-name" type="text" autocomplete="given-name" placeholder="Francois">
-    </div>
-    <div class="field">
-      <label for="f-mail">Your email</label>
-      <input id="f-mail" type="email" autocomplete="email" inputmode="email" placeholder="you@example.com">
-    </div>
-    <div class="err" id="f-err"></div>
+    <form id="mail-form" novalidate>
+      <div class="field">
+        <label for="f-name">Your first name</label>
+        <input id="f-name" name="fname" type="text" autocomplete="given-name" placeholder="First name" aria-describedby="e-name">
+        <div class="fe" id="e-name"></div>
+      </div>
+      <div class="field">
+        <label for="f-mail">Your email</label>
+        <input id="f-mail" name="email" type="email" autocomplete="email" inputmode="email" placeholder="you@example.com" aria-describedby="e-mail">
+        <div class="fe" id="e-mail"></div>
+      </div>
 
-    <div class="promise">
-      <p>Your results open on the next screen, straight away.</p>
-      <p>They also land in your inbox, so that when this comes up again in a year you can go back and read what you said about yourself today.</p>
-    </div>
+      <div class="promise">
+        <p>Your results open on the next screen, straight away.</p>
+        <p>They also land in your inbox, so that when this comes up again in a year you can go back and read what you said about yourself today.</p>
+      </div>
 
-    <div style="margin-top:26px"><button class="btn" id="f-go">Show me my style</button></div>
+      <div style="margin-top:26px">
+        <button class="btn" id="f-go" type="submit"><span class="spin"></span><span id="f-go-t">Show me my style</span></button>
+      </div>
+    </form>
     <p class="fine">One email with your results. You can leave at any time and I will not chase you.</p>
   </div>
 
@@ -265,8 +316,10 @@ strong{color:var(--white);font-weight:600}
     <p class="hedge" id="r-hedge" style="display:none"></p>
     <p class="lede" id="r-line"></p>
 
+    <div class="warn" id="r-warn"><p id="r-warn-t"></p></div>
+
     <div class="sect"><span>All four, side by side</span></div>
-    <p class="psub" style="margin-top:16px">Nobody is only one of these. This is the mix you just described, strongest first.</p>
+    <p class="psub" style="margin-top:16px">How strongly each one showed up, scored out of 100. These do not add up to 100, because you are running all four of them, not dividing yourself between them.</p>
     <div class="profile" id="r-profile"></div>
 
     <div class="card good"><h3>What this gives your partner</h3><p id="r-good"></p></div>
@@ -279,20 +332,27 @@ strong{color:var(--white);font-weight:600}
 
     <div class="sect"><span>The part nobody expects</span></div>
     <div class="dial">
-      <svg width="92" height="92" viewBox="0 0 92 92" aria-hidden="true">
-        <circle cx="46" cy="46" r="38" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="9"></circle>
-        <circle id="r-dial" cx="46" cy="46" r="38" fill="none" stroke="#5FCB89" stroke-width="9"
-                stroke-linecap="round" stroke-dasharray="239" stroke-dashoffset="239"
-                transform="rotate(-90 46 46)" style="transition:stroke-dashoffset 1.1s cubic-bezier(.3,.8,.3,1)"></circle>
-        <text id="r-dial-n" x="46" y="52" text-anchor="middle" fill="#fff" font-family="Manrope" font-size="20" font-weight="800">0</text>
+      <svg width="104" height="104" viewBox="0 0 104 104" role="img" aria-labelledby="dial-t">
+        <title id="dial-t">Good news score</title>
+        <circle cx="52" cy="52" r="44" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="10"></circle>
+        <circle id="r-dial" cx="52" cy="52" r="44" fill="none" stroke="#5FCB89" stroke-width="10"
+                stroke-linecap="round" transform="rotate(-90 52 52)"
+                style="transition:stroke-dashoffset 1.1s cubic-bezier(.3,.8,.3,1)"></circle>
+        <text id="r-dial-n" x="52" y="52" text-anchor="middle" fill="#fff" font-family="Manrope" font-size="23" font-weight="800">0</text>
+        <text x="52" y="70" text-anchor="middle" fill="rgba(255,255,255,.42)" font-family="Manrope" font-size="11" font-weight="600">out of 100</text>
       </svg>
-      <div>
+      <div class="dt">
         <b>How you take your partner's good news</b>
         <p id="r-cap"></p>
       </div>
     </div>
 
     <div class="card"><h3>Say this in the next week</h3><p id="r-ask"></p></div>
+
+    <div class="keep">
+      <p>This link brings you straight back to this page, exactly as it is.</p>
+      <button type="button" id="copy-link">Copy my link</button>
+    </div>
 
     <div class="next">
       <h3>This was the ordinary Tuesday. Conflict is a different question.</h3>
@@ -321,91 +381,93 @@ strong{color:var(--white);font-weight:600}
 
    Part 1 maps onto the four subscales of the Romantic Support-Seeking
    scale: direct instrumental, direct emotional, indirect, and no support
-   wanted. Three items each. The highest subscale names the style.
+   wanted. Three items each, INTERLEAVED rather than grouped, because six
+   same-pole items in a row invite straight-lining.
 
-   Part 2 covers the receiving side: whether you hand over solutions or sit
-   with your partner, and how you take their good news (Gable's
-   capitalization, where active-constructive is the response tied to
-   satisfaction).
+   Part 2 covers the receiving side: whether you hand over solutions or get
+   close, and how you take your partner's good news (Gable's capitalization).
 
-   Every item and every result sentence names the two people in the room:
-   you, and your partner. Never a bare pronoun standing in for a human, and
-   never a description of a category of people. See the naming rule in the
-   francois-copywriter skill, hard rule 13.
+   Every displayed string names the two people in the room: you, and your
+   partner. Pronouns for the partner are templated from the reader's own
+   choice on the intro screen, so nobody's partner changes sex mid-report.
+   See the naming rule in the francois-copywriter skill, hard rule 13.
+
+   Tokens: {s} {S} subject, {o} object, {p} {P} possessive, {self} reflexive,
+   and {v:verb} for third-person agreement (knows -> know for they).
 ------------------------------------------------------------------ */
 
+var PRON = {
+  she:  { s:'she',  S:'She',  o:'her',  p:'her',   P:'Her',   self:'herself',    label:'She',  plural:false },
+  he:   { s:'he',   S:'He',   o:'him',  p:'his',   P:'His',   self:'himself',    label:'He',   plural:false },
+  they: { s:'they', S:'They', o:'them', p:'their', P:'Their', self:'themselves', label:'They', plural:true  }
+};
+var IRREGULAR = { is:'are', has:'have', does:'do', was:'were', goes:'go', 'is not':'are not' };
+
+function deS(verb){
+  /* third-person singular -> base form, for "they" */
+  if (IRREGULAR[verb]) return IRREGULAR[verb];
+  if (/ies$/.test(verb)) return verb.slice(0, -3) + 'y';         // tries -> try
+  if (/(ches|shes|sses|xes|zes)$/.test(verb)) return verb.slice(0, -2); // watches -> watch
+  if (/s$/.test(verb)) return verb.slice(0, -1);                  // knows -> know
+  return verb;
+}
+
+var pron = 'they';
+function T(str){
+  var g = PRON[pron];
+  return String(str)
+    .replace(/\{v:([a-z' ]+)\}/gi, function(_, v){ return g.plural ? deS(v) : v; })
+    .replace(/\{S\}/g, g.S).replace(/\{s\}/g, g.s)
+    .replace(/\{o\}/g, g.o)
+    .replace(/\{P\}/g, g.P).replace(/\{p\}/g, g.p)
+    .replace(/\{self\}/g, g.self);
+}
+
+/* ------------------------- items ------------------------- */
+var A1 = 'When you need something', A2 = 'When your partner needs something';
+
 var ITEMS = [
-  /* ---- direct instrumental: asks plainly for practical help ---- */
-  { k:'ask', p:'When you need something',
-    t:"When I am stuck on something, I ask my partner straight out for help.",
-    s:"The claim has been rejected twice and you are getting nowhere. You put the phone down and say, can you please look at this with me." },
-  { k:'ask', p:'When you need something',
-    t:"I ask my partner for advice directly, rather than working around to it.",
-    s:"You do not tell the whole story first to see which way he leans. You say, what would you do here." },
-  { k:'ask', p:'When you need something',
-    t:"When I need my partner to do something, I say what it is.",
+  { k:'ask', p:A1, t:"When I need my partner to do something, I say what it is.",
     s:"Not a remark about how full the bin is getting. You say, please take the bin out tonight." },
-
-  /* ---- direct emotional: asks plainly for comfort ---- */
-  { k:'reach', p:'When you need something',
-    t:"When something has knocked me, I tell my partner that I need comfort.",
+  { k:'door', p:A1, t:"I would rather sort out my problems myself than bring them to my partner.",
+    s:"The situation at work has been running for three weeks. {S} still {v:does} not know it is happening." },
+  { k:'reach', p:A1, t:"When something has knocked me, I tell my partner that I need comfort.",
     s:"You come in from the phone call about your dad and you say, I need you to hold me for a minute." },
-  { k:'reach', p:'When you need something',
-    t:"I ask my partner for reassurance out loud when I am unsettled.",
-    s:"You say, tell me we are okay. And you mean it as a real question, not a rhetorical one." },
-  { k:'reach', p:'When you need something',
-    t:"I will say plainly that I want to be held.",
-    s:"Not standing near your partner hoping it occurs to him. You say, can I have a hug." },
-
-  /* ---- indirect: signals rather than asks ---- */
-  { k:'round', p:'When you need something',
-    t:"When I am upset with my partner, I go silent and wait to be asked.",
-    s:"He asks what is wrong. You say nothing, in a tone that clearly means something." },
-  { k:'round', p:'When you need something',
-    t:"I sigh, or move around the house a bit harder, so my partner can see something is wrong.",
+  { k:'round', p:A1, t:"When I am upset with my partner, I go silent rather than say what is wrong.",
+    s:"{S} {v:asks} what is wrong. You say nothing, in a tone that clearly means something." },
+  { k:'ask', p:A1, t:"When I am stuck on something, I ask my partner straight out for help.",
+    s:"The medical aid has rejected the claim twice and you are getting nowhere. You put the phone down and say, can you please look at this with me." },
+  { k:'round', p:A1, t:"I sigh, or move around the house a bit harder, so my partner can see something is wrong.",
     s:"The cupboard doors close with more force than they need. You are not going to say it, but you would like it noticed." },
-  { k:'round', p:'When you need something',
-    t:"I drop hints about what I want instead of asking for it.",
-    s:"You mention twice that your friend's husband booked a whole weekend away as a surprise." },
-
-  /* ---- no support wanted: handles it alone ---- */
-  { k:'door', p:'When you need something',
-    t:"I would rather solve my problems myself than bring them to my partner.",
-    s:"The situation at work has been running for three weeks. She still does not know it is happening." },
-  { k:'door', p:'When you need something',
-    t:"I prefer to do things on my own rather than ask my partner for support.",
+  { k:'door', p:A1, t:"I prefer to do things on my own rather than ask my partner for support.",
     s:"It would genuinely be faster with help. You do it alone anyway, and you could not fully explain why." },
-  { k:'door', p:'When you need something',
-    t:"When something is hard, my first instinct is to handle it before my partner notices.",
+  { k:'reach', p:A1, t:"I ask my partner for reassurance out loud when I am unsettled.",
+    s:"You say, tell me we are okay. And you mean it as a real question, not a rhetorical one." },
+  { k:'round', p:A1, t:"I drop hints about what I want instead of asking for it.",
+    s:"You mention twice that your friend's husband booked a whole weekend away as a surprise." },
+  { k:'ask', p:A1, t:"I ask my partner for advice directly, rather than working around to it.",
+    s:"You do not tell the whole story first to see which way {s} {v:leans}. You say, what would you do here." },
+  { k:'reach', p:A1, t:"I will say plainly that I want to be held.",
+    s:"Not standing near your partner hoping it occurs to {o}. You say, can I have a hug." },
+  { k:'door', p:A1, t:"When something is hard, my first instinct is to handle it before my partner notices.",
     s:"You had already made three calls and sorted most of it before you mentioned it at supper." },
 
-  /* ---- giving: fix (+1) or be with (-1) ---- */
-  { k:'give', d:+1, p:'When your partner needs something',
-    t:"When my partner tells me about a problem, I start working out how to solve it.",
-    s:"She is still describing what her boss said, and you are already three steps into what she should do about it." },
-  { k:'give', d:-1, p:'When your partner needs something',
-    t:"When my partner is upset, my first move is to get close, not to suggest anything.",
-    s:"You do not say a word. You put your hand on his back and you stay there." },
-  { k:'give', d:+1, p:'When your partner needs something',
-    t:"I find it hard to listen to a problem when I can already see the answer.",
-    s:"You know exactly what would sort this out and it is taking everything you have not to say it." },
-  { k:'give', d:-1, p:'When your partner needs something',
-    t:"I ask my partner whether she wants help with it or wants to be heard.",
-    s:"You say, do you want me to help you fix this, or do you want me to just listen." },
-
-  /* ---- capitalization: active-constructive (+1) or not (-1) ---- */
-  { k:'cap', d:+1, p:'When your partner needs something',
-    t:"When my partner tells me good news, I stop what I am doing and want the whole story.",
-    s:"He comes in with the news about the interview. The laptop closes. You want every detail of it." },
-  { k:'cap', d:-1, p:'When your partner needs something',
-    t:"I am pleased about my partner's good news, but I do not make much of it.",
+  { k:'give', d:+1, p:A2, t:"When my partner tells me about a problem, I start working out how to solve it.",
+    s:"{S} {v:is} still describing what {p} boss said, and you are already three steps into what {s} should do about it." },
+  { k:'cap', d:+1, p:A2, t:"When my partner tells me good news, I stop what I am doing and want the whole story.",
+    s:"{S} {v:comes} in with the news about the interview. The laptop closes. You want every detail of it." },
+  { k:'give', d:-1, p:A2, t:"When my partner is upset, my first move is to get close, not to suggest anything.",
+    s:"You do not say a word. You put your hand on {p} back and you stay there." },
+  { k:'cap', d:-1, p:A2, t:"I am pleased about my partner's good news, but I do not make much of it.",
     s:"That is great, love. And you carry on with what you were busy with." },
-  { k:'cap', d:-1, p:'When your partner needs something',
-    t:"When my partner is excited about something, I point out what could go wrong.",
-    s:"She is thrilled about the new role. You hear yourself asking about the drive and whether the money is actually better." },
-  { k:'cap', d:+1, p:'When your partner needs something',
-    t:"I ask my partner questions about her good news so she can enjoy telling it twice.",
-    s:"You say, tell me exactly what she said. And then, and what did you say back to her?" }
+  { k:'give', d:+1, p:A2, t:"I find it hard to listen to a problem when I can already see the answer.",
+    s:"You know exactly what would sort this out and it is taking everything you have not to say it." },
+  { k:'cap', d:-1, p:A2, t:"When my partner is excited about something, I point out what could go wrong.",
+    s:"{S} {v:is} thrilled about the new role. You hear yourself asking about the drive and whether the money is actually better." },
+  { k:'give', d:-1, p:A2, t:"I ask my partner whether {s} {v:wants} help with it, or {v:wants} to be heard.",
+    s:"You say, do you want me to help you fix this, or do you want me to just listen." },
+  { k:'cap', d:+1, p:A2, t:"I ask my partner questions about {p} good news so {s} can enjoy telling it twice.",
+    s:"You say, tell me exactly how it happened. And then, and what did you say back?" }
 ];
 
 var SCALE = [
@@ -416,69 +478,80 @@ var SCALE = [
   { v:5, l:"Exactly like me" }
 ];
 
+var ORDER = ['ask','reach','round','door'];
+
 var STYLES = {
   ask: {
-    name:"The Straight Ask", colour:"var(--c-ask)", hex:"#18C0C0",
+    name:"The Straight Ask", hex:"#18C0C0",
     short:"You ask for help with the thing, plainly, and you expect a plain answer back.",
-    line:"When something is wrong, you bring your partner the problem and you ask him to help you with it. No preamble, no testing the water first. You have a thing that needs sorting and he is the person you sort things with, so you say so.",
-    good:"Your partner never has to guess. He knows where he stands with you, he knows what you actually want from him, and he gets to be useful, which for many people is how being loved feels from the inside. You are also, without meaning to be, the easiest person in the house to help. The research is on your side here: partners who ask directly report better relationships than partners who signal.",
-    bad:"You bring the problem and you skip the feeling, because the feeling seems like the part that does not need attention. So your partner ends up knowing every situation in your life and very little about how any of it landed on you. He starts to feel like your operations manager rather than your husband. And when he brings you a feeling with no problem attached, you go looking for the problem, because that is the only shape you know how to hold.",
+    line:"When something is wrong, you bring your partner the problem and you ask {o} to help you with it. No preamble, no testing the water first. You have a thing that needs sorting and {s} {v:is} the person you sort things with, so you say so.",
+    good:"Your partner never has to guess. {S} {v:knows} where {s} {v:stands} with you, {s} {v:knows} what you actually want from {o}, and {s} {v:gets} to be useful, which for many is what being loved feels like from the inside. You are also the easiest person in the house to help. The research is on your side here: asking directly is linked to better relationships than signalling is.",
+    bad:"You bring the problem and you skip the feeling, because the feeling seems like the part that does not need attention. So your partner ends up knowing every situation in your life and very little about how any of it landed on you. {S} {v:starts} to feel like your operations manager rather than your husband. And when {s} {v:brings} you a feeling with no problem attached, you go looking for the problem, because that is the only shape you know how to hold.",
     ask:"Try bringing one thing to your partner this week with no request attached. Say: I do not need you to do anything about this, I just want you to know it is sitting on me. It will feel pointless. It is the opposite of pointless."
   },
   reach: {
-    name:"The Reach", colour:"var(--c-reach)", hex:"#E38070",
+    name:"The Reach", hex:"#E38070",
     short:"You ask for the person, not the solution. You want closeness first and the problem second.",
-    line:"When something knocks you, what you want is your partner, near you, before anything gets discussed. And you will say so. You will ask for the hug, ask to be told it is alright, ask him to come and sit. You have worked out that closeness is what settles you, and you do not pretend otherwise.",
-    good:"You ask out loud for the thing many people spend a whole marriage hoping to be offered. That is not weakness, it is unusually good information, and it means your partner can actually succeed with you. You also keep the relationship warm on purpose. Repair happens faster in your house, because you go towards him rather than away, and you say the vulnerable sentence first.",
-    bad:"When your partner does not come, or comes slowly, you can read that as an answer about how he feels rather than as a difference in wiring. So you ask again, a little louder, and he steps back to think, and now you are chasing the person who is retreating from being chased. That is the pursue-and-withdraw loop, and it is the pattern most reliably linked to couples becoming unhappy. It starts with a reasonable need and turns into pressure without either of you deciding it should.",
-    ask:"Ask for a time instead of asking for now. Say: I need you close tonight, can we do that after supper. You get the certainty that it is coming, which is the thing you actually need, and your partner gets the twenty minutes it takes him to arrive properly."
+    line:"When something knocks you, what you want is your partner, near you, before anything gets discussed. And you will say so. You will ask for the hug, ask to be told it is alright, ask {o} to come and sit. You have worked out that closeness is what settles you, and you do not pretend otherwise.",
+    good:"You ask out loud for the thing many spend a whole marriage hoping to be offered. That is not weakness, it is unusually good information, and it means your partner can actually succeed with you. You also keep the relationship warm on purpose. Repair happens faster in your house, because you go towards {o} rather than away, and you say the vulnerable sentence first.",
+    bad:"When your partner does not come, or {v:comes} slowly, you can read that as an answer about how {s} {v:feels} rather than as a difference in wiring. So you ask again, a little louder, and {s} {v:steps} back to think, and now you are chasing the person who is retreating from being chased. That is the pursue-and-withdraw loop, the pattern most reliably linked to couples becoming unhappy. It starts with a reasonable need and turns into pressure without either of you deciding it should.",
+    ask:"Ask for a time instead of asking for now. Say: I need you close tonight, can we do that after supper. You get the certainty that it is coming, which is the thing you actually need, and your partner gets the twenty minutes it takes {o} to arrive properly."
   },
   round: {
-    name:"The Long Way Round", colour:"var(--c-round)", hex:"#E8B551",
+    name:"The Long Way Round", hex:"#E8B551",
     short:"You know what you need. You signal it, and you wait to be noticed.",
     line:"You very rarely ask straight out. You go a bit flat, you mention it sideways, you leave the opening and hope your partner walks through it. Somewhere along the line, asking plainly started to feel like too much to require of another person, so you learned to be read instead.",
-    good:"You are attuned in a way direct people are not. You clock the change in your partner's face before he has taken his coat off, you remember what he said he was dreading and you ask about it a week later, and you spare people the blunt version of things because you know exactly what blunt costs. You are protecting the relationship, not manipulating it, and that motive matters.",
-    bad:"The hint becomes a test your partner does not know he is sitting. You needed him to notice, he did not notice, and now his not noticing means something about how much he cares. Unspoken need turns into evidence, evidence turns into a story, and the story surfaces years later in an argument he thought was about the weekend. He cannot pass a test he was never told about, so eventually he stops trying to guess and goes flat himself.",
+    good:"You are attuned in a way direct people are not. You clock the change in your partner's face before {s} {v:has} taken {p} coat off, you remember what {s} said {s} {v:was} dreading and you ask about it a week later, and you spare {o} the blunt version of things because you know exactly what blunt costs. You are protecting the relationship, not manipulating it, and that motive matters.",
+    bad:"The hint becomes a test your partner does not know {s} {v:is} sitting. You needed {o} to notice, {s} did not notice, and now {p} not noticing means something about how much {s} {v:cares}. Unspoken need turns into evidence, evidence turns into a story, and the story surfaces years later in an argument {s} thought was about the weekend. {S} cannot pass a test {s} {v:was} never told about, so eventually {s} {v:stops} trying to guess and {v:goes} flat too.",
     ask:"Once this week, say the need as a plain sentence with no wrapping. I would like a hug. I want you to ask me about my day. It will feel unbearably direct, and it will feel like it does not count because you had to ask. It counts. Being given the thing is the point, not being read correctly."
   },
   door: {
-    name:"The Closed Door", colour:"var(--c-door)", hex:"#8B9DE0",
+    name:"The Closed Door", hex:"#8B9DE0",
     short:"You handle it yourself. Your partner usually hears about it once it is over.",
-    line:"Your instinct when something goes wrong is to take it away and deal with it. Not out of secrecy, out of a sense that your trouble is yours to carry and that putting it on your partner would be a kind of imposition. So she often finds out afterwards, in the past tense.",
-    good:"You are steady. You do not flood your partner with every passing difficulty, you do not turn a bad Tuesday into a household emergency, and in a genuinely hard season you are the one still standing and still functioning. When you finally do say something, she knows it is real, because you do not spend words cheaply.",
-    bad:"Your partner is married to a locked room. She can tell there is something behind the door and she is not invited in, so she starts guessing, and people who guess guess badly. She may read the closed door as contentment and relax while you are drowning. She may read it as disappointment in her and start working for a warmth she cannot seem to earn. And because she never got to help while it was happening, the day you do come out it can arrive as a decision rather than a conversation.",
-    ask:"Tell your partner about one thing before you have solved it. Not the finished report, the middle of it: I am carrying something and I have not worked it out yet. That single sentence is the whole shift, because it lets her in during the part that actually matters."
+    line:"Your instinct when something goes wrong is to take it away and deal with it. Not out of secrecy, out of a sense that your trouble is yours to carry and that putting it on your partner would be an imposition. So {s} often {v:finds} out afterwards, in the past tense.",
+    good:"You are steady. You do not flood your partner with every passing difficulty, you do not turn a bad Tuesday into a household emergency, and in a genuinely hard season you are the one still standing and still functioning. When you finally do say something, {s} {v:knows} it is real, because you do not spend words cheaply.",
+    bad:"Your partner is married to a locked room. {S} can tell there is something behind the door and {s} {v:is} not invited in, so {s} {v:starts} guessing, and people who guess guess badly. {S} may read the closed door as contentment and relax while you are drowning. {S} may read it as disappointment in {o} and start working for a warmth {s} cannot seem to earn. And because {s} never got to help while it was happening, the day you do come out it can arrive as a decision rather than a conversation.",
+    ask:"Tell your partner about one thing before you have solved it. Not the finished report, the middle of it: I am carrying something and I have not worked it out yet. That single sentence is the whole shift, because it lets {o} in during the part that actually matters."
   }
 };
 
 var GIVE = {
-  fix:{
-    h:"When your partner brings you a problem, you reach for the answer",
-    p:"He starts telling you about it and your mind goes straight to what would sort it out. That is a real form of love and it is often exactly right. The trouble is timing. Arriving with the solution before he has finished being upset lands as being handled rather than being heard, and then his reaction seems out of proportion to you, so you get plainer, and now you are having a second argument about the first one. Eight seconds fixes it: ask him whether he wants help with it or wants you to listen. You will be surprised how often it is the second one."
-  },
-  with:{
-    h:"When your partner brings you a problem, you go and sit with her",
-    p:"You do not rush to fix it. You get close, you stay, and you let her finish. That is the rarer instinct and it is the one that builds the sense of being understood, which the research puts at the centre of intimacy. The trouble is the mirror image of the fixer's: sometimes she genuinely does want the practical help, and sitting warmly with someone who needed a decision made can feel like being left alone in it. Ask her which one she wants. Both of you get to be right."
-  },
-  even:{
-    h:"When your partner brings you something, you read the situation",
-    p:"You do not always reach for the answer and you do not always sit back. You seem to take the temperature and respond to what is in front of you, which is genuinely uncommon. Keep the question anyway, out loud, when you are not sure: do you want help with this or do you want me to listen. Getting it right by instinct is good. Getting it right by asking never misses."
-  }
+  fix:{ h:"When your partner brings you a problem, you reach for the answer",
+    p:"{S} {v:starts} telling you about it and your mind goes straight to what would sort it out. That is a real form of love and it is often exactly right. The trouble is timing. Arriving with the solution before {s} {v:has} finished being upset lands as being handled rather than being heard, and then {p} reaction seems out of proportion to you, so you get plainer, and now you are having a second argument about the first one. Eight seconds fixes it: ask {o} whether {s} {v:wants} help with it or {v:wants} you to listen. You will be surprised how often it is the second one." },
+  with:{ h:"When your partner brings you a problem, you go and sit with {o}",
+    p:"You do not rush to fix it. You get close, you stay, and you let {o} finish. That is the rarer instinct and it is the one that builds the sense of being understood, which the research puts at the centre of intimacy. The trouble is the mirror image of the fixer's: sometimes {s} genuinely {v:does} want the practical help, and sitting warmly with someone who needed a decision made can feel like being left alone in it. Ask {o} which one {s} {v:wants}. Both of you get to be right." },
+  even:{ h:"When your partner brings you something, you read the situation",
+    p:"You do not always reach for the answer and you do not always sit back. You seem to take the temperature and respond to what is in front of you, which is genuinely uncommon. Keep the question anyway, out loud, when you are not sure: do you want help with this, or do you want me to listen. Getting it right by instinct is good. Getting it right by asking never misses." }
 };
 
 var NEXT = [
-  { href:"https://survival-instinct-assessment.netlify.app/",
-    t:"Your conflict style",
+  { href:"/conflict-styles/", t:"Your conflict style",
     d:"The Survival Instinct Assessment. What you do when it stops being a conversation, where that instinct came from, and why it collides with your partner's. 36 questions." },
-  { href:"/books/habits/",
-    t:"10 Habits of Happy Relationships",
+  { href:"/books/habits/", t:"10 Habits of Happy Relationships",
     d:"The book. What the couples who make it actually do differently, on the ordinary days." }
 ];
 
 /* ------------------------- state ------------------------- */
+var KEY = 'cs.v2';
 var i = 0;
 var answers = new Array(ITEMS.length).fill(null);
+var lastResult = null;
 var $ = function(id){ return document.getElementById(id); };
+
+function save(){
+  try {
+    localStorage.setItem(KEY, JSON.stringify({ a:answers, i:i, pron:pron, r:lastResult }));
+  } catch (e) { /* private mode, carry on without persistence */ }
+}
+function load(){
+  try {
+    var raw = localStorage.getItem(KEY);
+    if (!raw) return null;
+    var d = JSON.parse(raw);
+    if (!d || !Array.isArray(d.a) || d.a.length !== ITEMS.length) return null;
+    return d;
+  } catch (e) { return null; }
+}
 
 function show(id){
   var all = document.querySelectorAll('.screen');
@@ -486,47 +559,93 @@ function show(id){
   $(id).classList.add('on');
   window.scrollTo(0, 0);
 }
-function progress(p){ $('bar').firstElementChild.style.width = (p * 100) + '%'; }
+function progress(p){ $('q-fill').style.width = (p * 100) + '%'; }
 
+/* ------------------------- pronoun picker ------------------------- */
+(function(){
+  var row = $('pron-row');
+  Object.keys(PRON).forEach(function(k){
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.textContent = PRON[k].label;
+    b.setAttribute('aria-pressed', k === pron ? 'true' : 'false');
+    b.addEventListener('click', function(){
+      pron = k;
+      [].forEach.call(row.children, function(c){
+        c.setAttribute('aria-pressed', c === b ? 'true' : 'false');
+      });
+      save();
+      if ($('s-res').classList.contains('on') && lastResult) paint(lastResult);
+      if ($('s-q').classList.contains('on')) renderQ();
+    });
+    row.appendChild(b);
+  });
+})();
+
+/* ------------------------- questions ------------------------- */
 function renderQ(){
   var it = ITEMS[i];
   $('q-count').textContent = 'Question ' + (i + 1) + ' of ' + ITEMS.length;
   $('q-part').textContent = it.p;
-  $('q-stmt').textContent = it.t;
-  $('q-scene').textContent = it.s;
+  $('q-stmt').textContent = T(it.t);
+  $('q-scene').textContent = T(it.s);
   $('q-back').style.visibility = i === 0 ? 'hidden' : 'visible';
 
   var box = $('q-opts');
   box.innerHTML = '';
-  for (var n = 0; n < SCALE.length; n++) {
-    (function(opt){
-      var b = document.createElement('button');
-      b.type = 'button';
-      b.className = 'opt';
-      b.setAttribute('aria-pressed', answers[i] === opt.v ? 'true' : 'false');
-      b.innerHTML = '<i></i><span></span>';
-      b.querySelector('span').textContent = opt.l;
-      b.addEventListener('click', function(){ pick(opt.v); });
-      box.appendChild(b);
-    })(SCALE[n]);
-  }
+  SCALE.forEach(function(opt, idx){
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'opt';
+    b.setAttribute('role', 'radio');
+    b.setAttribute('aria-checked', answers[i] === opt.v ? 'true' : 'false');
+    // only one stop in the tab order, arrows move within, which is the radiogroup pattern
+    b.tabIndex = (answers[i] === opt.v || (answers[i] === null && idx === 0)) ? 0 : -1;
+    var dot = document.createElement('span'); dot.className = 'dot';
+    var lab = document.createElement('span'); lab.textContent = opt.l;
+    var key = document.createElement('span'); key.className = 'key'; key.textContent = opt.v;
+    b.appendChild(dot); b.appendChild(lab); b.appendChild(key);
+    b.addEventListener('click', function(){ pick(opt.v); });
+    b.addEventListener('keydown', function(e){ optKeys(e, idx); });
+    box.appendChild(b);
+  });
   progress(i / ITEMS.length);
 }
+
+function optKeys(e, idx){
+  var btns = $('q-opts').children;
+  var next = null;
+  if (e.key === 'ArrowDown' || e.key === 'ArrowRight') next = (idx + 1) % btns.length;
+  else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') next = (idx - 1 + btns.length) % btns.length;
+  else if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); pick(SCALE[idx].v); return; }
+  if (next !== null) {
+    e.preventDefault();
+    btns[next].tabIndex = 0; btns[idx].tabIndex = -1; btns[next].focus();
+  }
+}
+
+document.addEventListener('keydown', function(e){
+  if (!$('s-q').classList.contains('on')) return;
+  if (e.metaKey || e.ctrlKey || e.altKey) return;
+  if (/^[1-5]$/.test(e.key)) { e.preventDefault(); pick(parseInt(e.key, 10)); }
+  else if (e.key === 'Backspace' && i > 0) { e.preventDefault(); i--; renderQ(); save(); }
+});
 
 function pick(v){
   answers[i] = v;
   var btns = $('q-opts').children;
   for (var n = 0; n < btns.length; n++) {
-    btns[n].setAttribute('aria-pressed', SCALE[n].v === v ? 'true' : 'false');
+    btns[n].setAttribute('aria-checked', SCALE[n].v === v ? 'true' : 'false');
   }
+  save();
   setTimeout(function(){
-    if (i < ITEMS.length - 1) { i++; renderQ(); }
-    else { progress(1); show('s-mail'); }
+    if (i < ITEMS.length - 1) { i++; renderQ(); save(); }
+    else { progress(1); show('s-mail'); $('f-name').focus(); }
   }, 190);
 }
 
 $('go').addEventListener('click', function(){ show('s-q'); renderQ(); });
-$('q-back').addEventListener('click', function(){ if (i > 0) { i--; renderQ(); } });
+$('q-back').addEventListener('click', function(){ if (i > 0) { i--; renderQ(); save(); } });
 
 /* ------------------------- scoring ------------------------- */
 function score(){
@@ -535,71 +654,122 @@ function score(){
   for (var n = 0; n < ITEMS.length; n++) {
     var raw = answers[n] === null ? 3 : answers[n];
     var it = ITEMS[n];
-    if (it.k in sub) { sub[it.k] += raw; }              // 3 items, 3..15
-    else if (it.k === 'give') { give += (raw - 3) * it.d; }  // -8..+8, + means fix
-    else if (it.k === 'cap')  { cap  += (raw - 3) * it.d; }  // -8..+8, + means active-constructive
+    if (it.k in sub) sub[it.k] += raw;                       // 3 items, 3..15
+    else if (it.k === 'give') give += (raw - 3) * it.d;      // -8..+8, + means fix
+    else if (it.k === 'cap')  cap  += (raw - 3) * it.d;      // -8..+8, + means active-constructive
   }
-  // each subscale 3..15 onto 0..100
   var pct = {};
-  Object.keys(sub).forEach(function(k){ pct[k] = Math.round((sub[k] - 3) / 12 * 100); });
-
-  var order = Object.keys(pct).sort(function(a, b){ return pct[b] - pct[a]; });
+  ORDER.forEach(function(k){ pct[k] = Math.round((sub[k] - 3) / 12 * 100); });
+  var order = ORDER.slice().sort(function(a, b){ return pct[b] - pct[a]; });
   return {
-    pct: pct,
-    order: order,
-    top: order[0],
-    // is the top style actually clear of the second?
+    pct: pct, order: order, top: order[0],
     clear: pct[order[0]] - pct[order[1]] >= 12,
     give: give,
-    // -8..+8 onto 0..100
     cap: Math.round((cap + 8) / 16 * 100)
+  };
+}
+
+/* ------------------------- result link ------------------------- */
+function resultUrl(s){
+  var q = '?r=' + s.top +
+          '&s=' + ORDER.map(function(k){ return s.pct[k]; }).join(',') +
+          '&c=' + s.cap + '&g=' + s.give + '&w=' + pron;
+  return location.origin + location.pathname + q;
+}
+function fromUrl(){
+  var q = new URLSearchParams(location.search);
+  var r = q.get('r'), sv = q.get('s'), c = q.get('c'), g = q.get('g'), w = q.get('w');
+  if (!r || !STYLES[r] || !sv) return null;
+  var parts = sv.split(',').map(Number);
+  if (parts.length !== 4 || parts.some(function(n){ return isNaN(n) || n < 0 || n > 100; })) return null;
+  if (w && PRON[w]) pron = w;
+  var pct = {};
+  ORDER.forEach(function(k, idx){ pct[k] = parts[idx]; });
+  var order = ORDER.slice().sort(function(a, b){ return pct[b] - pct[a]; });
+  return {
+    pct: pct, order: order, top: r,
+    clear: pct[order[0]] - pct[order[1]] >= 12,
+    give: Math.max(-8, Math.min(8, parseInt(g, 10) || 0)),
+    cap: Math.max(0, Math.min(100, parseInt(c, 10) || 50))
   };
 }
 
 /* ------------------------- email and results ------------------------- */
 function valid(e){ return /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e); }
 
-$('f-go').addEventListener('click', function(){
-  var name = $('f-name').value.trim();
-  var mail = $('f-mail').value.trim().toLowerCase();
-  var err  = $('f-err');
-
-  if (!name) { err.textContent = 'I need a first name so the email does not open with "Hi there".'; err.classList.add('on'); $('f-name').focus(); return; }
-  if (!valid(mail)) { err.textContent = 'That email does not look right. Check it and try again.'; err.classList.add('on'); $('f-mail').focus(); return; }
-  err.classList.remove('on');
-
-  var s = score();
-  var st = STYLES[s.top];
-
-  this.disabled = true;
-  this.textContent = 'One moment';
-
-  var payload = {
-    tool: 'communication-styles',
-    name: name, email: mail,
-    resultKey: s.top,
-    resultName: st.name,
-    line: st.short,
-    axisA: s.pct[s.top],
-    axisB: s.cap
-  };
-  var done = false;
-  var reveal = function(){ if (!done) { done = true; render(st, s); show('s-res'); } };
-  setTimeout(reveal, 4000);
-
-  fetch('/api/assessment', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload)
-  }).then(reveal).catch(reveal);
+function fieldError(inputId, errId, msg){
+  var inp = $(inputId), err = $(errId);
+  if (msg) { err.textContent = msg; err.classList.add('on'); inp.setAttribute('aria-invalid', 'true'); }
+  else { err.textContent = ''; err.classList.remove('on'); inp.removeAttribute('aria-invalid'); }
+}
+['f-name','f-mail'].forEach(function(id){
+  $(id).addEventListener('input', function(){
+    fieldError(id, id === 'f-name' ? 'e-name' : 'e-mail', null);
+  });
 });
 
-function render(st, s){
+$('mail-form').addEventListener('submit', function(ev){
+  ev.preventDefault();
+  var btn = $('f-go');
+  if (btn.disabled) return;
+
+  var name = $('f-name').value.trim();
+  var mail = $('f-mail').value.trim().toLowerCase();
+  var ok = true;
+  if (!name) { fieldError('f-name','e-name','I need a first name so the email does not open with "Hi there".'); ok = false; }
+  if (!valid(mail)) { fieldError('f-mail','e-mail','That email does not look right. Check it and try again.'); ok = false; }
+  if (!ok) { $(name ? 'f-mail' : 'f-name').focus(); return; }
+
+  var s = score();
+  lastResult = s;
+  save();
+
+  btn.disabled = true;
+  btn.classList.add('busy');
+  $('f-go-t').textContent = 'Sending it over';
+
+  var payload = {
+    tool: 'communication-styles', name: name, email: mail,
+    resultKey: s.top, resultName: STYLES[s.top].name,
+    line: T(STYLES[s.top].short),
+    axisA: s.pct[s.top], axisB: s.cap,
+    link: resultUrl(s)
+  };
+
+  var done = false;
+  var reveal = function(emailed){
+    if (done) return;
+    done = true;
+    paint(s);
+    // the gate promised an inbox. If that failed, say so rather than let it pass.
+    if (emailed) { $('r-warn').classList.remove('on'); }
+    else {
+      $('r-warn-t').textContent = 'One thing: I could not get that email out just now, so your results are on this screen only. Use the copy link button further down and keep it somewhere, or come back and try again later.';
+      $('r-warn').classList.add('on');
+    }
+    history.replaceState(null, '', resultUrl(s));
+    show('s-res');
+  };
+
+  var timer = setTimeout(function(){ reveal(false); }, 8000);
+  fetch('/api/assessment', {
+    method:'POST', headers:{ 'Content-Type':'application/json' }, body: JSON.stringify(payload)
+  }).then(function(res){
+    return res.json().catch(function(){ return { ok:false }; });
+  }).then(function(j){
+    clearTimeout(timer); reveal(!!(j && j.ok));
+  }).catch(function(){
+    clearTimeout(timer); reveal(false);
+  });
+});
+
+function paint(s){
+  var st = STYLES[s.top];
   $('r-name').textContent = st.name;
-  $('r-line').textContent = st.line;
-  $('r-good').textContent = st.good;
-  $('r-bad').textContent  = st.bad;
-  $('r-ask').textContent  = st.ask;
+  $('r-line').textContent = T(st.line);
+  $('r-good').textContent = T(st.good);
+  $('r-bad').textContent  = T(st.bad);
+  $('r-ask').textContent  = T(st.ask);
 
   var badge = $('r-badge');
   badge.textContent = 'Your style';
@@ -607,50 +777,45 @@ function render(st, s){
   badge.style.border = '1px solid ' + st.hex;
   badge.style.background = 'rgba(255,255,255,.04)';
 
-  // Two styles within 12 points is not a clear read, and saying so is honest.
   var hedge = $('r-hedge');
   if (!s.clear) {
     hedge.textContent = 'You scored almost as highly on ' + STYLES[s.order[1]].name +
       ', so read both. The two of them together are probably closer to you than either one alone.';
     hedge.style.display = '';
-  } else {
-    hedge.style.display = 'none';
-  }
+  } else { hedge.style.display = 'none'; }
 
-  // the four bars, strongest first
   var prof = $('r-profile');
   prof.innerHTML = '';
   s.order.forEach(function(k, idx){
     var row = document.createElement('div'); row.className = 'prow';
     var lab = document.createElement('div'); lab.className = 'plab';
     var b = document.createElement('b'); b.textContent = STYLES[k].name; b.style.color = STYLES[k].hex;
-    var pc = document.createElement('span'); pc.textContent = s.pct[k] + '%';
+    var pc = document.createElement('span'); pc.textContent = s.pct[k] + ' / 100';
     lab.appendChild(b); lab.appendChild(pc);
     var track = document.createElement('div'); track.className = 'ptrack';
     var fill = document.createElement('i'); fill.style.background = STYLES[k].hex;
     track.appendChild(fill);
-    var sub = document.createElement('div'); sub.className = 'psub'; sub.textContent = STYLES[k].short;
+    var sub = document.createElement('div'); sub.className = 'psub'; sub.textContent = T(STYLES[k].short);
     row.appendChild(lab); row.appendChild(track); row.appendChild(sub);
     prof.appendChild(row);
     setTimeout(function(){ fill.style.width = Math.max(2, s.pct[k]) + '%'; }, 140 + idx * 110);
   });
 
-  // giving side
   var g = s.give >= 3 ? GIVE.fix : (s.give <= -3 ? GIVE.with : GIVE.even);
-  $('r-give-h').textContent = g.h;
-  $('r-give').textContent = g.p;
+  $('r-give-h').textContent = T(g.h);
+  $('r-give').textContent = T(g.p);
+  $('r-gap').textContent = T(gapText(s));
 
-  // the mismatch, which is the whole point of asking both halves
-  $('r-gap').textContent = gapText(s);
-
-  // capitalization dial
-  var dash = 239;
-  $('r-dial').setAttribute('stroke', s.cap >= 66 ? '#5FCB89' : (s.cap >= 40 ? '#E8B551' : '#E38070'));
+  // circumference from the actual radius, so the arc can never disagree with the number
+  var dial = $('r-dial');
+  var r = parseFloat(dial.getAttribute('r'));
+  var C = 2 * Math.PI * r;
+  dial.setAttribute('stroke-dasharray', C.toFixed(2));
+  dial.style.strokeDashoffset = String(C);
+  dial.setAttribute('stroke', s.cap >= 66 ? '#5FCB89' : (s.cap >= 40 ? '#E8B551' : '#E38070'));
   $('r-dial-n').textContent = s.cap;
-  setTimeout(function(){
-    $('r-dial').style.strokeDashoffset = String(dash - (dash * s.cap / 100));
-  }, 400);
-  $('r-cap').textContent = capText(s.cap);
+  setTimeout(function(){ dial.style.strokeDashoffset = String(C - (C * s.cap / 100)); }, 400);
+  $('r-cap').textContent = T(capText(s.cap));
 
   var rows = $('r-next');
   rows.innerHTML = '';
@@ -666,32 +831,79 @@ function render(st, s){
   });
 }
 
+$('copy-link').addEventListener('click', function(){
+  var btn = this, url = location.href;
+  var ok = function(){ btn.textContent = 'Copied'; setTimeout(function(){ btn.textContent = 'Copy my link'; }, 2200); };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(url).then(ok).catch(function(){ prompt('Copy this link', url); });
+  } else { prompt('Copy this link', url); }
+});
+
 function gapText(s){
   var wantsFeeling = (s.top === 'reach' || s.top === 'round');
-  var givesFix = s.give >= 3;
-  var givesWith = s.give <= -3;
-
-  if (wantsFeeling && givesFix) {
-    return "Here is the thing worth sitting with. What you want when you are struggling is your partner close to you. What you hand him when he is struggling is a solution. You are giving the opposite of what you are asking for, which means you are both able to feel unmet by someone who is genuinely trying. Say it to him this week in those words. It is a short conversation and it explains about ten years of small disappointments.";
-  }
-  if (!wantsFeeling && givesWith) {
-    return "Worth noticing: when you need something you want it dealt with, and when your partner needs something you sit with her rather than sorting it. You are giving her the thing you would not want yourself. That is generous, and it can also mean she is waiting for a decision while you are being tender at her. Ask her which one she is after.";
-  }
-  if (wantsFeeling && givesWith) {
+  var givesFix = s.give >= 3, givesWith = s.give <= -3;
+  if (wantsFeeling && givesFix)
+    return "Here is the thing worth sitting with. What you want when you are struggling is your partner close to you. What you hand {o} when {s} {v:is} struggling is a solution. You are giving the opposite of what you are asking for, which means you are both able to feel unmet by someone who is genuinely trying. Say it to {o} this week in those words. It is a short conversation and it explains about ten years of small disappointments.";
+  if (!wantsFeeling && givesWith)
+    return "Worth noticing: when you need something you want it dealt with, and when your partner needs something you sit with {o} rather than sorting it. You are giving {o} the thing you would not want yourself. That is generous, and it can also mean {s} {v:is} waiting for a decision while you are being tender at {o}. Ask {o} which one {s} {v:is} after.";
+  if (wantsFeeling && givesWith)
     return "You ask for closeness and you give closeness, which means the two of you probably repair well when you are both in the same mood. Watch the other failure: two people going towards each other's feelings and neither one making the decision that actually needs making. Somebody has to say, right, what are we going to do about it.";
-  }
-  if (!wantsFeeling && givesFix) {
-    return "You ask for practical help and you give practical help, so things get done in your house. The risk is that neither of you has anywhere to put a feeling that does not come with a problem attached. If your partner ever seems upset about something already solved, that is what is happening. Nothing needs fixing. She needs company in it.";
-  }
-  return "You are fairly even in how you respond, which makes you adaptable. The thing to keep an eye on is whether you are reading the situation or avoiding a position. Asking your partner out loud which one she wants costs nothing and removes the guesswork.";
+  if (!wantsFeeling && givesFix)
+    return "You ask for practical help and you give practical help, so things get done in your house. The risk is that neither of you has anywhere to put a feeling that does not come with a problem attached. If your partner ever seems upset about something already solved, that is what is happening. Nothing needs fixing. {S} {v:needs} company in it.";
+  return "You are fairly even in how you respond, which makes you adaptable. The thing to keep an eye on is whether you are reading the situation or avoiding a position. Asking your partner out loud which one {s} {v:wants} costs nothing and removes the guesswork.";
 }
 
 function capText(v){
-  if (v >= 80) return "This is your strongest suit and it matters more than it looks. When your partner comes to you with something good, you stop, you turn towards him and you want the details. Gable's research found this predicts how satisfied a couple is more strongly than how well the two of you handle a crisis together. Anyone can rally in a disaster. You are good on the ordinary Thursday when he got the thing he wanted, and that is the rarer skill.";
-  if (v >= 60) return "You take your partner's good news well, though not always with your full attention. This is worth deliberate effort, because the research is counterintuitive here: how you respond to his good news predicts satisfaction more strongly than how you respond to his bad news. Next time he comes in pleased about something, put the phone down and ask him for the whole story. That is the entire technique.";
+  if (v >= 80) return "This is your strongest suit and it matters more than it looks. When your partner comes to you with something good, you stop, you turn towards {o} and you want the details. Gable's research found this predicts how satisfied a couple is more strongly than how well the two of you handle a crisis together. Anyone can rally in a disaster. You are good on the ordinary Thursday when {s} got the thing {s} wanted, and that is the rarer skill.";
+  if (v >= 60) return "You take your partner's good news well, though not always with your full attention. This is worth deliberate effort, because the research is counterintuitive here: how you respond to {p} good news predicts satisfaction more strongly than how you respond to {p} bad news. Next time {s} {v:comes} in pleased about something, put the phone down and ask for the whole story. That is the entire technique.";
   if (v >= 40) return "Your partner's good news gets a warm response, but it does not get much of you. That is the passive version, and it is the most common way affection goes unnoticed: nothing unkind is said, and nothing much happens either. Gable's work found that turning towards good news predicts satisfaction more strongly than support during hard times, so this is a cheap place to gain a lot. Stop what you are doing and ask for the details.";
-  return "This is the one to look at. When your partner brings you something she is excited about, you tend to check it rather than join it, or you let it pass without much response. You will experience that as being realistic and she will experience it as her good news not being safe with you. Over time she stops bringing it, and you lose the easiest connection the two of you have. The fix is unglamorous: put down what you are holding, and ask her to tell you the whole thing.";
+  return "This is the one to look at. When your partner brings you something {s} {v:is} excited about, you tend to check it rather than join it, or you let it pass without much response. You will experience that as being realistic and {s} will experience it as {p} good news not being safe with you. Over time {s} {v:stops} bringing it, and you lose the easiest connection the two of you have. The fix is unglamorous: put down what you are holding, and ask {o} to tell you the whole thing.";
 }
+
+/* ------------------------- boot ------------------------- */
+(function(){
+  var shared = fromUrl();
+  if (shared) {
+    [].forEach.call($('pron-row').children, function(c){
+      c.setAttribute('aria-pressed', c.textContent === PRON[pron].label ? 'true' : 'false');
+    });
+    lastResult = shared;
+    paint(shared);
+    show('s-res');
+    return;
+  }
+  var d = load();
+  if (!d) return;
+  if (d.pron && PRON[d.pron]) {
+    pron = d.pron;
+    [].forEach.call($('pron-row').children, function(c){
+      c.setAttribute('aria-pressed', c.textContent === PRON[pron].label ? 'true' : 'false');
+    });
+  }
+  answers = d.a;
+  var answered = answers.filter(function(x){ return x !== null; }).length;
+  if (d.r && answered === ITEMS.length) {
+    lastResult = d.r;
+    var note = $('resume-note');
+    note.innerHTML = '';
+    var a = document.createElement('a');
+    a.href = '#'; a.textContent = 'Open the results you got last time';
+    a.style.color = '#18C0C0';
+    a.addEventListener('click', function(e){ e.preventDefault(); paint(d.r); show('s-res'); });
+    note.appendChild(a);
+    note.style.display = '';
+  } else if (answered > 0) {
+    i = Math.min(d.i || 0, ITEMS.length - 1);
+    var note2 = $('resume-note');
+    note2.innerHTML = '';
+    var a2 = document.createElement('a');
+    a2.href = '#'; a2.textContent = 'Carry on where you left off, question ' + (i + 1) + ' of ' + ITEMS.length;
+    a2.style.color = '#18C0C0';
+    a2.addEventListener('click', function(e){ e.preventDefault(); show('s-q'); renderQ(); });
+    note2.appendChild(a2);
+    note2.style.display = '';
+  }
+})();
 </script>
 </body>
 </html>

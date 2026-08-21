@@ -68,20 +68,24 @@ GATES = {
         "must_not": ["noindex", "read free", "the-empowering-truth"],
     },
     "communication-styles": {
-        # Free front door for the relational ladder. Rebuilt 21 Aug 2026 on the
-        # Romantic Support-Seeking subscales rather than on invented axes, after
-        # he asked for real research. Email at the END, never the start.
+        # Free front door for the relational ladder. Built on the Romantic
+        # Support-Seeking subscales. Email at the END, never the start.
+        # Partner pronouns are templated from the reader's own choice, after a
+        # QA pass found the partner changing sex three times in one report.
         "must": ["Communication Styles", "Question 1 of 20",
                  "The Straight Ask", "The Reach", "The Long Way Round", "The Closed Door",
                  "What this gives your partner", "What it costs your partner",
                  "The gap between the two", "capitalization",
                  "Romantic Support-Seeking", "Christensen and Heavey",
-                 "/api/assessment", "Show me my style",
-                 "also land in your inbox", "survival-instinct",
-                 "Much love"],
-        # the voice rule: results must speak to a person, never describe a type
+                 "/api/assessment", "Show me my style", "also land in your inbox",
+                 "/conflict-styles/", "Much love",
+                 'role="radiogroup"', "setAttribute('role', 'radio')", "localStorage",
+                 "out of 100", "Two to three minutes"],
         "must_not": ["Pattern Breaker", "Headlights", "Loop Map",
-                     "the other person", "people with this style", "Some people walk in"],
+                     "people with this style", "Some people walk in",
+                     # the staging domain must never be visible in a CTA again
+                     "survival-instinct-assessment.netlify.app",
+                     'placeholder="Francois"'],
     },
     "invisible-contracts": {
         # Contracts you keep. No email gate; markers are content.
