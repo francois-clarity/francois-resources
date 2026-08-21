@@ -68,14 +68,20 @@ GATES = {
         "must_not": ["noindex", "read free", "the-empowering-truth"],
     },
     "communication-styles": {
-        # Free front door for the relational ladder. Email at the END, never
-        # the start, and it must point at the paid conflict-styles assessment.
-        "must": ["Communication Styles", "Question 1 of 16", "The Quiet Fixer",
-                 "The Long Way Round", "The Straight Line", "The Open Window",
-                 "The healthy sign of it", "The unhealthy sign of it",
+        # Free front door for the relational ladder. Rebuilt 21 Aug 2026 on the
+        # Romantic Support-Seeking subscales rather than on invented axes, after
+        # he asked for real research. Email at the END, never the start.
+        "must": ["Communication Styles", "Question 1 of 20",
+                 "The Straight Ask", "The Reach", "The Long Way Round", "The Closed Door",
+                 "What this gives your partner", "What it costs your partner",
+                 "The gap between the two", "capitalization",
+                 "Romantic Support-Seeking", "Christensen and Heavey",
                  "/api/assessment", "Show me my style",
-                 "also land in your inbox", "survival-instinct"],
-        "must_not": ["Pattern Breaker", "Headlights", "Loop Map", "MMERGE2=communication"],
+                 "also land in your inbox", "survival-instinct",
+                 "Much love"],
+        # the voice rule: results must speak to a person, never describe a type
+        "must_not": ["Pattern Breaker", "Headlights", "Loop Map",
+                     "the other person", "people with this style", "Some people walk in"],
     },
     "invisible-contracts": {
         # Contracts you keep. No email gate; markers are content.
@@ -169,12 +175,46 @@ def check_goal_words():
     return True
 
 
+def strip_verbatim(html):
+    """Remove any element marked data-verbatim, nesting and all.
+
+    His own published words are not ghostwriting tics. Chapter One of the
+    responsibility book is literally called "How taking responsibility for
+    these things changes everything", so the banned-phrase check must not
+    demand that his book be reworded. Depth tracking rather than a lazy regex,
+    because the marked element contains nested tags of the same name and a
+    non-greedy match closes on the first inner tag.
+    """
+    out, pos = [], 0
+    for m in re.finditer(r"<([a-z]+)[^>]*\bdata-verbatim\b[^>]*>", html, re.I):
+        if m.start() < pos:
+            continue
+        tag = m.group(1)
+        out.append(html[pos:m.start()])
+        depth, i = 1, m.end()
+        pattern = re.compile(r"</?%s\b[^>]*>" % re.escape(tag), re.I)
+        while depth and i < len(html):
+            t = pattern.search(html, i)
+            if not t:
+                i = len(html)
+                break
+            depth += -1 if t.group(0).startswith("</") else 1
+            i = t.end()
+        pos = i
+    out.append(html[pos:])
+    return " ".join(out)
+
+
 BANNED = {
     # Standing voice rules. These are not style preferences, they are rules he
     # has had to repeat, so the deploy enforces them rather than trusting memory.
-    "quietly": "banned everywhere, in copy and in conversation",
+    # The francois-copywriter skill is the source of truth; this mirrors it.
+    "quiet": "the whole family is banned, quiet/quietly/quieter, including literal uses",
     "most people": "he never says this, find another way",
     "most couples": "same rule as most people",
+    "most of us": "same rule as most people",
+    "you're not broken": "banned 4 Aug 2026, not his sentence",
+    "changes everything": "grandiose claim, he earns weight by precision",
     "\u2014": "em dash, never used",
     "\u2013": "en dash, never used",
 }
@@ -191,6 +231,7 @@ def check_banned_words():
         except Exception: continue
         # strip script and style: the rule is about what a reader sees
         body = re.sub(r"<(script|style)[\s\S]*?</\1>", " ", text, flags=re.I)
+        body = strip_verbatim(body)
         for word, why in BANNED.items():
             for m in re.finditer(re.escape(word), body, re.I):
                 snippet = " ".join(body[max(0, m.start()-40):m.start()+40].split())
