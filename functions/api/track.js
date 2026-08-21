@@ -37,6 +37,10 @@ const ALLOWED = new Set([
   // Paid tease
   'paid_tease_click_personal',
   'paid_tease_click_relational',
+  // Interactive tools (extra = tool key, e.g. v=ppb)
+  'tool_start',
+  'tool_complete',
+  'tool_pdf',
   // Later: checkout events
   'checkout_view',
   'bump_added',

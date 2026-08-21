@@ -37,6 +37,13 @@
 
   if (!tool) { location.replace('/'); return; }
 
+  // Carry the visitor's name and path to tool pages on this origin so no
+  // tool ever asks for details again (standing rule: email asked ONCE).
+  try {
+    if (name) localStorage.setItem('rf_name', name);
+    localStorage.setItem('rf_path', path);
+  } catch (e) {}
+
   FUNNEL.track('thankyou_view_' + path, toolKey);
 
   const greet = name ? `${esc(name)}, here` : 'Here';
