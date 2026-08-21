@@ -158,10 +158,46 @@ def check_goal_words():
     print("ok   goal-words                        [local] all %d in the wheel" % len(words))
     return True
 
+
+BANNED = {
+    # Standing voice rules. These are not style preferences, they are rules he
+    # has had to repeat, so the deploy enforces them rather than trusting memory.
+    "quietly": "banned everywhere, in copy and in conversation",
+    "most people": "he never says this, find another way",
+    "most couples": "same rule as most people",
+    "\u2014": "em dash, never used",
+    "\u2013": "en dash, never used",
+}
+
+def check_banned_words():
+    """Fail the deploy if a banned word reaches a page. Born 21 Aug 2026, after
+    'quietly' turned up in a live sales page and two assessment results despite
+    being a standing rule."""
+    import pathlib as _pl, glob as _glob
+    base = _pl.Path(__file__).parent
+    bad = []
+    for f in sorted(base.glob("*/index.html")) + sorted(base.glob("*/*/index.html")) + [base / "index.html"]:
+        try: text = f.read_text()
+        except Exception: continue
+        # strip script and style: the rule is about what a reader sees
+        body = re.sub(r"<(script|style)[\s\S]*?</\1>", " ", text, flags=re.I)
+        for word, why in BANNED.items():
+            for m in re.finditer(re.escape(word), body, re.I):
+                snippet = " ".join(body[max(0, m.start()-40):m.start()+40].split())
+                bad.append((f.relative_to(base), word, why, snippet))
+    if bad:
+        for f, w, why, sn in bad[:12]:
+            print("FAIL banned-words                      [local] %s uses %r (%s)" % (f, w, why))
+            print("       ...%s..." % sn)
+        return False
+    print("ok   banned-words                      [local] no banned wording on any page")
+    return True
+
 def main():
     base = pathlib.Path(__file__).parent
     live = "--live" in sys.argv
     all_ok = check_goal_words()
+    all_ok &= check_banned_words()
     for name in GATES:
         html = (base / name / "index.html").read_text()
         all_ok &= check(name, html, "local")
