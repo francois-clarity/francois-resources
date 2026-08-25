@@ -3,457 +3,347 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>The Procrastination Pattern Breaker · Francois Esterhuizen</title>
-<meta name="description" content="One task, taken apart, right on this page: the feeling under it, the payoff of avoiding, the cost, and your smallest next action. Leave with a PDF of your own answers.">
+<title>The Procrastination Pattern Breaker · a guided tool</title>
+<meta name="description" content="A guided tool for the task you keep not doing: find the feeling inside it, the meaning underneath it, and the smallest real contact action.">
 <meta property="og:title" content="The Procrastination Pattern Breaker">
-<meta property="og:description" content="Find the ache inside the task, and choose the smallest honest contact action.">
+<meta property="og:description" content="Find the feeling inside the task, the meaning underneath it, and the smallest real contact action.">
 <meta property="og:type" content="website">
 <meta name="theme-color" content="#1B222D">
 <link rel="icon" href="/favicon.ico" sizes="any">
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
-<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root{
-    --navy:#262E3B; --navy-deep:#1B222D; --teal:#18C0C0; --white:#fff;
-    --muted:rgba(255,255,255,.66); --muted2:rgba(255,255,255,.42);
-    --line:rgba(255,255,255,.10); --line-strong:rgba(255,255,255,.18);
-    --teal-soft:rgba(24,192,192,.18); --teal-tint:rgba(24,192,192,.10);
+    --navy-deep:#1B222D; --navy:#262E3B; --navy-lift:#2E3849; --surface-2:#333E52;
+    --white:#fff; --muted:rgba(255,255,255,.66); --muted-2:rgba(255,255,255,.42);
+    --dim:rgba(255,255,255,.28); --line:rgba(255,255,255,.10); --line-strong:rgba(255,255,255,.18);
+    --teal:#18C0C0; --teal-soft:rgba(24,192,192,.18); --teal-tint:rgba(24,192,192,.10);
+    --teal-glow:rgba(24,192,192,.35); --coral:#E38070; --coral-soft:rgba(227,128,112,.16);
   }
   *{box-sizing:border-box;margin:0;padding:0}
-  html{scroll-behavior:smooth}
   body{
     font-family:'Manrope',system-ui,-apple-system,sans-serif;
-    background:radial-gradient(ellipse at 26% 22%,#333E52 0%,var(--navy) 56%,var(--navy-deep) 100%);
-    background-attachment:fixed;
-    color:var(--white);min-height:100vh;
-    -webkit-font-smoothing:antialiased;
-    padding:64px 24px 110px;
-    overflow-x:hidden;
+    background:radial-gradient(ellipse at 26% 22%,var(--surface-2) 0%,var(--navy) 56%,var(--navy-deep) 100%);
+    color:var(--white);min-height:100vh;-webkit-font-smoothing:antialiased;
+    padding:64px 24px 120px;
   }
-  body::before{
-    content:'';position:fixed;inset:0;pointer-events:none;
+  body::before{content:'';position:fixed;inset:0;pointer-events:none;
     background-image:radial-gradient(rgba(255,255,255,.045) 1px,transparent 1px);
-    background-size:34px 34px;
-  }
-  .orb{position:fixed;border-radius:50%;pointer-events:none;filter:blur(60px);z-index:0}
-  .orb.a{width:560px;height:560px;left:-220px;top:12%;
-    background:radial-gradient(circle,rgba(24,192,192,.17),rgba(24,192,192,0) 65%)}
-  .orb.b{width:640px;height:640px;right:-260px;top:58%;
-    background:radial-gradient(circle,rgba(24,192,192,.13),rgba(24,192,192,0) 65%)}
-  .wrap{position:relative;max-width:720px;margin:0 auto;z-index:1}
-
-  .eyebrow{font-weight:500;font-size:12px;letter-spacing:5px;text-transform:uppercase;
-    color:var(--teal);margin-bottom:18px}
-  h1{font-weight:800;font-size:clamp(34px,5vw,52px);line-height:1.08;letter-spacing:-1.2px}
+    background-size:34px 34px}
+  .orb{position:fixed;border-radius:50%;filter:blur(90px);pointer-events:none;z-index:0}
+  .orb.a{width:520px;height:520px;left:-180px;top:-120px;background:rgba(24,192,192,.10)}
+  .orb.b{width:420px;height:420px;right:-160px;bottom:-100px;background:rgba(24,192,192,.07)}
+  main{position:relative;z-index:1;max-width:680px;margin:0 auto;animation:fadeUp .5s ease both}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  .eyebrow{font-weight:500;font-size:12px;letter-spacing:5px;text-transform:uppercase;color:var(--teal);margin-bottom:18px}
+  h1{font-weight:800;font-size:clamp(36px,5.5vw,58px);line-height:1.08;letter-spacing:-1.2px}
   h1 .teal{color:var(--teal)}
-  .lede{font-weight:300;font-size:18px;line-height:1.65;color:var(--muted);margin:20px 0 0;max-width:56ch}
-
-  /* Video */
-  .video{position:relative;border-radius:22px;overflow:hidden;margin:36px 0 10px;
-    border:1px solid var(--line);box-shadow:0 24px 60px rgba(0,0,0,.30);
-    aspect-ratio:16/9;background:#000}
-  .video iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
-  .video-note{font-size:13.5px;color:var(--muted2);font-weight:300;margin:12px 2px 0;line-height:1.5}
-
-  /* Summary card */
-  .summary{background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.01));
-    border:1px solid var(--line);border-radius:22px;padding:30px 32px;margin:34px 0 0;
-    -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
-  .summary p{font-weight:300;font-size:16.5px;line-height:1.65;color:var(--muted)}
-  .summary p b{color:var(--white);font-weight:600}
-
-  /* Steps */
-  .steps{margin-top:44px}
-  .progress{display:flex;gap:6px;margin-bottom:26px}
-  .progress i{flex:1;height:2px;border-radius:99px;background:rgba(255,255,255,.10);transition:background .3s}
-  .progress i.done{background:var(--teal);box-shadow:0 0 8px rgba(24,192,192,.35)}
-
-  .step{display:none;background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.01));
-    border:1px solid var(--line);border-radius:22px;padding:36px 34px 30px;
-    -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
-  .step.active{display:block;animation:rise .45s cubic-bezier(.16,1,.3,1)}
-  @keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
-  .step .num{font-weight:500;font-size:11px;letter-spacing:4px;text-transform:uppercase;
-    color:var(--teal);margin-bottom:12px}
-  .step h2{font-weight:800;font-size:clamp(22px,3vw,28px);letter-spacing:-.5px;line-height:1.2;margin-bottom:10px}
-  .step .help{font-weight:300;font-size:15.5px;line-height:1.6;color:var(--muted);margin-bottom:22px}
-  .step .help em{color:var(--white);font-style:normal;font-weight:600}
-
-  textarea,input[type=text]{
-    width:100%;padding:15px 18px;border-radius:14px;
-    border:1px solid var(--line-strong);
-    background:rgba(0,0,0,.20);color:var(--white);
-    font-family:inherit;font-size:16px;font-weight:400;line-height:1.5;
-    transition:border-color .15s,box-shadow .15s;
-  }
-  textarea{resize:vertical;min-height:84px}
-  textarea::placeholder,input::placeholder{color:var(--muted2);font-weight:300}
-  textarea:focus,input:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 4px var(--teal-tint)}
-  label.f{display:block;font-size:12px;font-weight:500;letter-spacing:2.5px;text-transform:uppercase;
-    color:var(--muted2);margin:20px 0 8px}
-  label.f:first-of-type{margin-top:0}
-
-  /* Feeling chips */
-  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
-  .chip{padding:11px 18px;border-radius:99px;border:1px solid var(--line);
-    background:rgba(255,255,255,.04);color:var(--muted);cursor:pointer;
-    font-family:inherit;font-size:15px;font-weight:400;transition:all .15s}
-  .chip:hover{border-color:var(--line-strong);background:rgba(255,255,255,.07);color:var(--white)}
-  .chip.on{background:var(--teal-soft);border-color:var(--teal);color:var(--white);font-weight:600}
-
-  .nav{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:28px}
-  .btn{display:inline-flex;align-items:center;gap:8px;padding:15px 28px;border-radius:14px;
-    border:1px solid transparent;cursor:pointer;font-family:inherit;font-weight:800;font-size:15px;
-    background:var(--teal);color:var(--navy);text-decoration:none;
-    transition:transform .15s,filter .15s;box-shadow:0 6px 20px rgba(24,192,192,.18)}
-  .btn:hover{filter:brightness(1.07)}
+  h2{font-weight:800;font-size:clamp(26px,3.8vw,36px);letter-spacing:-.025em;line-height:1.15}
+  .lede{font-weight:300;font-size:19px;line-height:1.65;color:var(--muted);margin:22px 0 8px;max-width:56ch}
+  p{font-weight:300;font-size:17px;line-height:1.6;color:var(--muted)}
+  .hint{font-size:14px;color:var(--muted-2);margin-top:10px}
+  .card{background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.01));
+    border:1px solid var(--line);border-radius:22px;padding:28px;backdrop-filter:blur(6px)}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;
+    font-family:inherit;font-weight:800;font-size:16px;border-radius:14px;cursor:pointer;
+    padding:16px 30px;border:0;transition:filter .16s,transform .16s}
+  .btn.primary{background:var(--teal);color:var(--navy);box-shadow:0 8px 30px var(--teal-glow)}
+  .btn.primary:hover{filter:brightness(1.06)}
   .btn:active{transform:translateY(1px)}
-  .btn.ghost{background:transparent;color:var(--white);border-color:var(--line-strong);
-    font-weight:600;box-shadow:none}
-  .btn.ghost:hover{background:rgba(255,255,255,.06)}
-  .btn[disabled]{opacity:.4;cursor:default;filter:none}
-  .hint-req{font-size:13px;color:var(--muted2);font-weight:300}
-
-  /* Result / recap */
-  .recap-block{border-top:1px solid var(--line);padding:18px 0}
-  .recap-block:first-of-type{border-top:none}
-  .recap-block .k{font-size:11px;font-weight:500;letter-spacing:3px;text-transform:uppercase;
-    color:var(--teal);margin-bottom:6px}
-  .recap-block .v{font-weight:300;font-size:16.5px;line-height:1.55;color:var(--white);white-space:pre-wrap}
-  .closing-lines{margin:26px 0 4px;padding:22px 26px;border-radius:16px;
-    background:var(--teal-tint);border:1px solid rgba(24,192,192,.35)}
-  .closing-lines p{font-weight:600;font-size:16.5px;line-height:1.6;color:var(--white)}
-  .closing-lines p+p{margin-top:8px}
-
-  .acts{display:flex;gap:12px;flex-wrap:wrap;margin-top:26px}
-
-  /* Deeper card (ONE offer) */
-  .deeper{margin-top:52px;background:linear-gradient(180deg,rgba(24,192,192,.13),rgba(24,192,192,.04));
-    border:1px solid var(--teal);border-radius:22px;padding:34px 34px 28px;
-    box-shadow:0 0 60px rgba(24,192,192,.10)}
-  .deeper .kicker{font-weight:500;font-size:11px;letter-spacing:4px;text-transform:uppercase;
-    color:var(--teal);margin-bottom:10px}
-  .deeper h3{font-weight:800;font-size:clamp(20px,2.6vw,26px);letter-spacing:-.4px;margin-bottom:10px}
-  .deeper p{font-weight:300;font-size:15.5px;line-height:1.65;color:var(--muted)}
-  .deeper .price{margin:14px 0 18px;font-size:13px;font-weight:600;letter-spacing:1px;color:var(--muted2)}
-  .deeper .whatsapp{display:inline-block;margin-top:14px;font-size:13.5px;color:var(--muted2);
-    text-decoration:underline;text-underline-offset:3px}
-  .deeper .whatsapp:hover{color:var(--teal)}
-
-  .foot{margin-top:56px;display:flex;gap:22px;flex-wrap:wrap;font-size:13px}
-  .foot a{color:var(--muted2);text-decoration:none;font-weight:500}
-  .foot a:hover{color:var(--teal)}
-
+  .btn.ghost{background:transparent;border:1px solid var(--line-strong);color:var(--white);font-weight:600}
+  .btn[disabled]{opacity:.4;cursor:default}
+  .row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+  input[type=text],input[type=email]{
+    width:100%;padding:16px 18px;border-radius:14px;border:1px solid var(--line-strong);
+    background:rgba(0,0,0,.20);color:var(--white);font-family:inherit;font-size:16px;font-weight:500}
+  input:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 4px var(--teal-tint);background:rgba(0,0,0,.28)}
+  label{display:block;font-weight:600;font-size:14px;margin:20px 0 8px;color:var(--white)}
+  /* progress */
+  .prog{position:sticky;top:0;z-index:5;margin:-64px -24px 40px;padding:14px 24px 10px;
+    background:rgba(27,34,45,.72);backdrop-filter:blur(10px)}
+  .prog .bar{height:2px;background:var(--line);border-radius:2px;overflow:hidden}
+  .prog .fill{height:100%;width:0;background:var(--teal);box-shadow:0 0 12px var(--teal-glow);transition:width .42s ease}
+  .prog .lbl{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--muted-2);margin-top:8px}
+  /* steps */
+  .step{display:none}
+  .step.on{display:block;animation:fadeUp .4s ease both}
+  .stepnum{font-size:12px;letter-spacing:5px;text-transform:uppercase;color:var(--teal);font-weight:500;margin-bottom:12px}
+  /* guarantee cards */
+  .gpick{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:24px 0 6px}
+  .gpick button{
+    text-align:left;font-family:inherit;cursor:pointer;padding:18px;border-radius:16px;
+    background:rgba(255,255,255,.04);border:1px solid var(--line);color:var(--muted);
+    font-weight:600;font-size:15px;line-height:1.4;transition:all .16s}
+  .gpick button:hover{border-color:var(--line-strong);background:rgba(255,255,255,.07);color:var(--white)}
+  .gpick button.sel{background:var(--teal-soft);border-color:var(--teal);color:var(--white)}
+  /* trait chips */
+  .chips{display:flex;flex-wrap:wrap;gap:10px;margin:20px 0 4px}
+  .chips button{font-family:inherit;cursor:pointer;padding:11px 18px;border-radius:100px;
+    background:rgba(255,255,255,.04);border:1px solid var(--line);color:var(--muted);
+    font-weight:600;font-size:14px;transition:all .16s}
+  .chips button:hover{border-color:var(--line-strong);color:var(--white)}
+  .chips button.sel{background:var(--teal-soft);border-color:var(--teal);color:var(--white)}
+  .chips.coral button.sel{background:var(--coral-soft);border-color:var(--coral)}
+  /* reveal */
+  .compare{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:26px 0}
+  .roadcard{border-radius:22px;padding:24px;border:1px solid var(--line);cursor:pointer;
+    background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.01));transition:all .18s}
+  .roadcard:hover{border-color:var(--line-strong)}
+  .roadcard.sel{border-color:var(--teal);background:linear-gradient(180deg,rgba(24,192,192,.14),rgba(24,192,192,.04));box-shadow:0 10px 40px rgba(24,192,192,.18)}
+  .roadcard .rn{font-weight:800;font-size:19px;margin-bottom:12px}
+  .roadcard .tr{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+  .roadcard .tr span{font-size:12px;font-weight:600;padding:5px 12px;border-radius:100px;background:var(--teal-tint);color:var(--teal)}
+  .roadcard .sn{font-size:14px;font-weight:300;color:var(--muted);line-height:1.5;font-style:normal}
+  /* teal glow panel */
+  .glow{background:linear-gradient(180deg,rgba(24,192,192,.14),rgba(24,192,192,.04));
+    border:1px solid var(--teal);border-radius:22px;padding:28px;box-shadow:0 12px 44px rgba(24,192,192,.16)}
+  /* video */
+  .vid{position:relative;border-radius:18px;overflow:hidden;border:1px solid var(--line);
+    aspect-ratio:16/9;background:#000;cursor:pointer;margin:26px 0 4px}
+  .vid img{width:100%;height:100%;object-fit:cover;opacity:.85}
+  .vid .play{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+  .vid .play span{width:76px;height:54px;border-radius:14px;background:rgba(24,192,192,.92);
+    display:flex;align-items:center;justify-content:center;box-shadow:0 10px 34px var(--teal-glow)}
+  .vid iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+  .vidnote{font-size:13px;color:var(--muted-2);margin-top:8px}
+  hr.section-break{border:0;border-top:1px solid var(--line);margin:56px 0 36px}
+  .msg{font-size:14px;margin-top:12px;color:var(--muted)}
+  .msg.err{color:var(--coral)}
+  .signoff{margin-top:56px;font-weight:300;color:var(--muted)}
+  .signoff .name{color:var(--teal);font-weight:700}
+  .foot{max-width:680px;margin:64px auto 0;display:flex;gap:22px;font-size:13px;position:relative;z-index:1}
+  .foot a{color:var(--muted-2);text-decoration:none}
+  .foot a:hover{color:var(--white)}
   @media (max-width:640px){
-    body{padding:44px 18px 90px}
-    .step{padding:28px 22px 24px}
-    .summary{padding:24px 22px}
-    .deeper{padding:28px 24px 24px}
-    .orb{display:none}
+    .gpick,.compare{grid-template-columns:1fr}
+    body{padding:40px 20px 96px}
+    .prog{margin:-40px -20px 32px}
   }
   @media print{
-    body{background:#fff!important;color:#000;padding:0}
-    body::before,.orb,.video,.video-note,.summary,.steps .progress,.nav,.deeper,.foot{display:none!important}
+    body{background:#fff;color:#111;padding:20px}
+    body::before,.orb,.prog,.vid,.vidnote,.btn,.foot{display:none!important}
+    .card,.glow,.roadcard{border-color:#ddd;background:#fff;color:#111;box-shadow:none}
+    .roadcard .sn,p,.lede{color:#333}
+    h1 .teal,.eyebrow,.signoff .name{color:#0a8f8f}
   }
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
 <div class="orb a"></div>
 <div class="orb b"></div>
-<div class="wrap">
 
-  <div class="eyebrow">Getting unstuck · from the video</div>
-  <h1>The Procrastination <span class="teal">Pattern Breaker</span></h1>
-  <p class="lede" id="lede">One task, taken apart, right here on this page. You are not managing time badly. There is an ache inside the task, and every delay is medicating it. This finds the ache, then breaks the pattern.</p>
-
-  <div class="video">
-    <iframe src="https://www.youtube-nocookie.com/embed/l5ihPiQ_QOI" title="Why You Procrastinate on Things That Matter" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-  </div>
-  <p class="video-note">The tool below comes from this video. Watch it first if you can: the questions will land differently once you know what they are pointing at.</p>
-
-  <div class="summary">
-    <p><b>How this works.</b> Six short steps, one task. Type your answers right here, on your phone or laptop; the page keeps them as you go. Do not do ten tasks. <b>One.</b> At the end you get everything you wrote on one page, and you can download it as a PDF to keep.</p>
+<main id="app">
+  <div class="prog" id="prog" hidden>
+    <div class="bar"><div class="fill" id="fill"></div></div>
+    <div class="lbl" id="plbl">STEP 1 OF 5</div>
   </div>
 
-  <div class="steps" id="steps">
-    <div class="progress" id="progress"></div>
+  <section class="step on" data-step="intro">
+    <div class="eyebrow">Getting Unstuck · Part Two</div>
+    <h1>The Procrastination <span class="teal">Pattern Breaker</span></h1>
+    <p class="lede">You are not avoiding the task. You are avoiding what the task carries. This tool walks you under one task you keep not doing, finds the feeling and the meaning hiding inside it, and hands you the smallest real contact action.</p>
+    <div class="vid" id="vid1" data-yt="l5ihPiQ_QOI">
+      <img src="https://i.ytimg.com/vi/l5ihPiQ_QOI/hqdefault.jpg" alt="Watch the episode">
+      <div class="play"><span><svg width="22" height="26" viewBox="0 0 22 26"><path d="M2 2v22l18-11z" fill="#1B222D"/></svg></span></div>
+    </div>
+    <div class="vidnote">The episode this tool comes from. It stays right here while you work.</div>
+    <div style="margin-top:30px" class="row">
+      <button class="btn primary" id="begin">Begin</button>
+      <span class="hint">About six minutes. Your answers stay on your device until you finish.</span>
+    </div>
+  </section>
 
-    <!-- Step 1 -->
-    <section class="step" data-step="1">
-      <div class="num">Step 1 of 6</div>
-      <h2>Name the task plainly</h2>
-      <p class="help">Not "sort my life out". That is a fog machine. Write it the way you would say it to a friend: <em>"send the proposal"</em>, <em>"twenty minutes on the budget"</em>, <em>"ask my partner for a conversation"</em>.</p>
-      <textarea id="a-task" placeholder="e.g. send the proposal · twenty minutes on the budget · ask my partner for a conversation" maxlength="400"></textarea>
-      <div class="nav">
-        <span class="hint-req" id="req-1"></span>
-        <button class="btn" data-next="1">Next →</button>
-      </div>
-    </section>
+  <section class="step" data-step="1">
+    <div class="stepnum">Step 1 · The task</div>
+    <h2>Name the task you keep not doing.</h2>
+    <p class="lede">Concrete, the way you would say it to a friend. Send the proposal. Twenty minutes on the budget. Ask my partner for a conversation.</p>
+    <div class="card" style="margin-top:22px">
+      <label for="task">The task</label>
+      <input type="text" id="task" maxlength="90" placeholder="Send the proposal" autocomplete="off">
+    </div>
+    <div style="margin-top:26px" class="row"><button class="btn primary" data-next>Next</button></div>
+  </section>
 
-    <!-- Step 2 -->
-    <section class="step" data-step="2">
-      <div class="num">Step 2 of 6</div>
-      <h2>Name the feeling</h2>
-      <p class="help">Ask: <em>"What shows up when I imagine doing this?"</em> Do not analyse it. Just name it. Tap what answers, or write your own.</p>
-      <div class="chips" id="chips"></div>
-      <input type="text" id="a-feeling-own" placeholder="Or write your own… e.g. dread · guilt about how long it has been" maxlength="120">
-      <div class="nav">
-        <button class="btn ghost" data-back="2">← Back</button>
-        <button class="btn" data-next="2">Next →</button>
-      </div>
-    </section>
+  <section class="step" data-step="2">
+    <div class="stepnum">Step 2 · The feeling</div>
+    <h2>What shows up when you imagine doing it?</h2>
+    <p class="lede">Sit with the task for five seconds before you choose. The feeling arrives before the excuse does. Pick up to three.</p>
+    <div class="chips" id="feels"></div>
+    <div style="margin-top:26px" class="row"><button class="btn primary" data-next id="next2" disabled>Next</button></div>
+  </section>
 
-    <!-- Step 3 -->
-    <section class="step" data-step="3">
-      <div class="num">Step 3 of 6</div>
-      <h2>Find the pattern</h2>
-      <p class="help">Complete these honestly. The task has not changed. <em>Your relationship with the task has changed.</em> That is what we are repairing.</p>
-      <label class="f" for="a-avoid">When I think about this task, the feeling I want to avoid is</label>
-      <textarea id="a-avoid" placeholder="e.g. feeling exposed · being judged · finding out it is worse than I thought" maxlength="400"></textarea>
-      <label class="f" for="a-relief">The relief I get from avoiding it is</label>
-      <textarea id="a-relief" placeholder="e.g. my chest loosens for the rest of the day · I get to feel busy with easier things · I do not have to find out the truth yet" maxlength="400"></textarea>
-      <label class="f" for="a-cost">The cost of that relief is</label>
-      <textarea id="a-cost" placeholder="e.g. the task grows in the dark · I trust myself a little less every day · the stress leaks into my evenings" maxlength="400"></textarea>
-      <div class="nav">
-        <button class="btn ghost" data-back="3">← Back</button>
-        <button class="btn" data-next="3">Next →</button>
-      </div>
-    </section>
+  <section class="step" data-step="3">
+    <div class="stepnum">Step 3 · The trade</div>
+    <h2>What do you do instead?</h2>
+    <p class="lede">When the feeling arrives, you trade the task for something lighter. Name your usual trade. Your phone. A smaller task that feels productive. Suddenly cleaning the kitchen.</p>
+    <div class="card" style="margin-top:22px">
+      <label for="instead">Instead, I</label>
+      <input type="text" id="instead" maxlength="90" placeholder="Answer easy emails so the day still counts" autocomplete="off">
+    </div>
+    <div style="margin-top:26px" class="row"><button class="btn primary" data-next>Next</button></div>
+  </section>
 
-    <!-- Step 4 -->
-    <section class="step" data-step="4">
-      <div class="num">Step 4 of 6</div>
-      <h2>Choose a contact action of less than ten minutes</h2>
-      <p class="help">A system that has avoided a task for six months does not trust a five-hour plan. So we go small. The question is not <em>"can I finish this now?"</em> The question is <em>"can I make honest contact now?"</em> Open the document. Write one bad paragraph. Make the first call. Look at the bank account.</p>
-      <label class="f" for="a-contact">The smallest honest contact action I can take in the next 24 hours is</label>
-      <textarea id="a-contact" placeholder="e.g. open the document and just read it once · write one bad paragraph · make the first call · look at the bank account" maxlength="400"></textarea>
-      <label class="f" for="a-contact-time">I will do it at (time)</label>
-      <input type="text" id="a-contact-time" placeholder="e.g. 07:30 tomorrow, before email" maxlength="120">
-      <div class="nav">
-        <button class="btn ghost" data-back="4">← Back</button>
-        <button class="btn" data-next="4">Next →</button>
-      </div>
-    </section>
+  <section class="step" data-step="4">
+    <div class="stepnum">Step 4 · The meaning</div>
+    <h2>Finish the sentence.</h2>
+    <p class="lede">This is the engine room. The task has weight because of what a bad outcome would say about you. Do not judge your answers, just finish them.</p>
+    <div class="card" style="margin-top:22px">
+      <label for="stem1">If I do this and it goes badly, I am afraid it means...</label>
+      <input type="text" id="stem1" maxlength="120" placeholder="...I was never good enough for this work" autocomplete="off">
+      <label for="stem2">As long as I have not done it, I get to keep...</label>
+      <input type="text" id="stem2" maxlength="120" placeholder="...the version of me that might still succeed" autocomplete="off">
+    </div>
+    <div style="margin-top:26px" class="row"><button class="btn primary" data-next>Next</button></div>
+  </section>
 
-    <!-- Step 5 -->
-    <section class="step" data-step="5">
-      <div class="num">Step 5 of 6</div>
-      <h2>Decide the next action before you stop</h2>
-      <p class="help">The step everyone skips. Do not end your contact with vague hope. End it with a visible next step, written down. Say when, where and how, and a vague desire becomes an instruction.</p>
-      <label class="f" for="a-next-when">Tomorrow at</label>
-      <input type="text" id="a-next-when" placeholder="e.g. 08:00" maxlength="80">
-      <label class="f" for="a-next-where">in (place)</label>
-      <input type="text" id="a-next-where" placeholder="e.g. at my desk, before anything else opens" maxlength="120">
-      <label class="f" for="a-next-what">I will</label>
-      <textarea id="a-next-what" placeholder="e.g. write the first section, rough and unpolished · finish reading the contract · book the appointment" maxlength="400"></textarea>
-      <div class="nav">
-        <button class="btn ghost" data-back="5">← Back</button>
-        <button class="btn" data-next="5">Next →</button>
-      </div>
-    </section>
+  <section class="step" data-step="5">
+    <div class="stepnum">Step 5 · Contact</div>
+    <h2>Now make it about contact, not outcome.</h2>
+    <p class="lede">You do not have to finish the task, or do it well. You have to make contact with it for two minutes, with the feeling still there. Small enough that the feeling does not win. What is your contact action?</p>
+    <div class="card" style="margin-top:22px">
+      <label for="contact">My two minutes of contact</label>
+      <input type="text" id="contact" maxlength="110" placeholder="Open the proposal and write one rough sentence" autocomplete="off">
+    </div>
+    <div style="margin-top:26px" class="row"><button class="btn primary" data-next>Finish</button></div>
+  </section>
 
-    <!-- Step 6 -->
-    <section class="step" data-step="6">
-      <div class="num">Step 6 of 6</div>
-      <h2>Afterwards, ask the right question</h2>
-      <p class="help">Not <em>"did this change my life?"</em> Wrong question. Ask: <em>"Did I interrupt the loop?"</em> That is the first win. You repair self-trust the way you repair trust with anyone: small promises, kept consistently.</p>
-      <label class="f" for="a-promise">The next small promise I can keep is</label>
-      <textarea id="a-promise" placeholder="e.g. ten minutes on this again tomorrow, same time · one paragraph every morning until it is done" maxlength="400"></textarea>
-      <div class="nav">
-        <button class="btn ghost" data-back="6">← Back</button>
-        <button class="btn" id="finish">See my pattern →</button>
-      </div>
-    </section>
+  <section class="step" data-step="gate">
+    <div class="stepnum">Almost there</div>
+    <h2>Your pattern is ready.</h2>
+    <p class="lede">Your pattern opens on the next screen, in your own words, and I will also send it to your inbox for the next time the task starts growing.</p>
+    <div class="card" style="margin-top:22px">
+      <form id="f" novalidate>
+        <div class="row">
+          <input type="text" id="fn" placeholder="First name" autocomplete="given-name" style="flex:1 1 140px">
+          <input type="text" id="ln" placeholder="Last name" autocomplete="family-name" style="flex:1 1 140px">
+        </div>
+        <div style="margin-top:12px"><input type="email" id="em" placeholder="Your email" autocomplete="email"></div>
+        <div style="margin-top:16px" class="row"><button class="btn primary" id="go" type="submit">Open my pattern</button></div>
+        <div class="msg" id="msg"></div>
+      </form>
+    </div>
+  </section>
 
-    <!-- Recap -->
-    <section class="step" data-step="7" id="recap-step">
-      <div class="num">Your pattern, on one page</div>
-      <h2 id="recap-title">Here is what you wrote</h2>
-      <div id="recap"></div>
-      <div class="closing-lines">
-        <p>Avoidance is no longer protecting me. It's costing me.</p>
-        <p>Your feelings can ride in the car. They just can't always drive.</p>
-      </div>
-      <div class="acts">
-        <button class="btn" id="pdf">Download my answers as a PDF</button>
-        <button class="btn ghost" id="edit">← Change an answer</button>
-      </div>
-    </section>
-  </div>
+  <section class="step" data-step="result">
+    <div class="eyebrow">Your Pattern</div>
+    <h2 id="rT"></h2>
+    <div class="card" style="margin-top:24px">
+      <div class="eyebrow" style="margin-bottom:10px">What the task carries</div>
+      <div id="rFeels" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px"></div>
+      <p id="rStem1" style="font-size:15px"></p>
+      <p id="rStem2" style="font-size:15px;margin-top:8px"></p>
+      <p class="hint" style="margin-top:12px" id="rTradeLine"></p>
+    </div>
+    <div class="glow" style="margin-top:18px">
+      <div class="eyebrow" style="margin-bottom:10px">The pattern breaker</div>
+      <p id="rContact" style="color:var(--white);font-weight:600;font-size:19px;line-height:1.5"></p>
+      <p class="hint" style="margin-top:10px">Contact, not outcome. The feeling is allowed to come along. It becomes easier once you acknowledge it, because you are reprogramming your nervous system, two minutes at a time.</p>
+    </div>
+    <div style="margin-top:26px" class="row">
+      <button class="btn primary" onclick="window.print()">Print or save my pattern</button>
+      <button class="btn ghost" id="redo">Start again</button>
+    </div>
+    <hr class="section-break">
+    <h2 style="font-size:24px">Watch the episode again</h2>
+    <div class="vid" id="vid2" data-yt="l5ihPiQ_QOI">
+      <img src="https://i.ytimg.com/vi/l5ihPiQ_QOI/hqdefault.jpg" alt="Watch the episode">
+      <div class="play"><span><svg width="22" height="26" viewBox="0 0 22 26"><path d="M2 2v22l18-11z" fill="#1B222D"/></svg></span></div>
+    </div>
+    <div class="vidnote">Part two of Getting Unstuck: How to Stop Procrastinating on What Matters Most.</div>
+    <p class="signoff">You were never lazy. The task was carrying weight, and now you have seen what it was. Two minutes of contact, and the pattern starts losing its grip.<br><br>Much love,<br><span class="name">Francois</span></p>
+  </section>
+</main>
 
-  <!-- ONE deeper offer -->
-  <div class="deeper" id="deeper" hidden>
-    <div class="kicker">If you want to go deeper</div>
-    <h3>Clarity Quest</h3>
-    <p>Get unstuck in ten weeks, or spend another year busy and going nowhere. The Clarity Quest is a guided process, built as step-by-step exercises like the one you just did, that gets you clear on exactly what you want and moving on it. Do it Solo at your own pace, join Basecamp with weekly group coaching, or go Solo Expedition with one-on-one coaching alongside the exercises.</p>
-    <div class="price">Read the page for the formats and pricing</div>
-    <a class="btn" id="deeper-cta" href="https://clarityquest.francoisesterhuizen.com/" target="_blank" rel="noopener">Read about Clarity Quest →</a>
-    <br>
-    <a class="whatsapp" href="https://wa.me/27824441831?text=Hi%20Francois%2C%20I%20just%20did%20the%20Procrastination%20Pattern%20Breaker%20and%20I%20have%20a%20question%20about%20Clarity%20Quest." target="_blank" rel="noopener">Or message me on WhatsApp</a>
-  </div>
+<footer class="foot">
+  <a href="https://resources.francoisesterhuizen.com">All free tools</a>
+  <a href="https://www.youtube.com/@francoisesterhuizen">YouTube</a>
+  <a href="https://www.francoisesterhuizen.com">francoisesterhuizen.com</a>
+</footer>
 
-  <div class="foot">
-    <a href="/">← All resources</a>
-    <a href="https://www.francoisesterhuizen.com">francoisesterhuizen.com</a>
-    <a href="https://www.getclarity.co.za">getclarity.co.za</a>
-  </div>
-</div>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-<script src="/assets/funnel.js"></script>
 <script>
 (function(){
-  'use strict';
-  var KEY = 'rf_tool_ppb_v1';
-  var FEELINGS = ['Fear','Shame','Pressure','Boredom','Uncertainty','Overwhelm','Resentment','Being judged'];
-  var FIELDS = ['a-task','a-feeling-own','a-avoid','a-relief','a-cost','a-contact','a-contact-time','a-next-when','a-next-where','a-next-what','a-promise'];
-
-  var state = { step: 1, chips: [], vals: {} };
-  try { var saved = JSON.parse(localStorage.getItem(KEY) || 'null'); if (saved && saved.vals) state = saved; } catch(e){}
-
-  // Personal greeting if the funnel captured a name
-  try {
-    var n = localStorage.getItem('rf_name');
-    if (n) document.getElementById('lede').textContent =
-      n + ', this is one task, taken apart, right here on this page. You are not managing time badly. There is an ache inside the task, and every delay is medicating it. This finds the ache, then breaks the pattern.';
-  } catch(e){}
-
-  // Build chips
-  var chipsEl = document.getElementById('chips');
-  FEELINGS.forEach(function(f){
-    var b = document.createElement('button');
-    b.type = 'button'; b.className = 'chip'; b.textContent = f;
-    if (state.chips.indexOf(f) > -1) b.classList.add('on');
-    b.addEventListener('click', function(){
-      var i = state.chips.indexOf(f);
-      if (i > -1) { state.chips.splice(i,1); b.classList.remove('on'); }
-      else { state.chips.push(f); b.classList.add('on'); }
-      save();
-    });
-    chipsEl.appendChild(b);
-  });
-
-  // Restore values + autosave
-  FIELDS.forEach(function(id){
-    var el = document.getElementById(id);
-    if (state.vals[id]) el.value = state.vals[id];
-    el.addEventListener('input', function(){ state.vals[id] = el.value; save(); });
-  });
-
-  function save(){ try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e){} }
-
-  // Progress
-  var progEl = document.getElementById('progress');
-  for (var i = 0; i < 6; i++) progEl.appendChild(document.createElement('i'));
+  var S={task:'',feels:[],instead:'',stem1:'',stem2:'',contact:''};
+  try{var sv=localStorage.getItem('ppb-v2'); if(sv) S=Object.assign(S,JSON.parse(sv));}catch(e){}
+  function save(){try{localStorage.setItem('ppb-v2',JSON.stringify(S));}catch(e){}}
+  var FEELS=['dread','boredom','fear of failing','fear of being seen','resentment','overwhelm','shame','blankness','anger','doubt','pressure','guilt'];
+  var order=['intro','1','2','3','4','5','gate','result'];
+  var progSteps=['1','2','3','4','5'];
+  function el(q){return document.querySelector(q)} function els(q){return Array.prototype.slice.call(document.querySelectorAll(q))}
   function show(step){
-    state.step = step; save();
-    document.querySelectorAll('.step').forEach(function(s){
-      s.classList.toggle('active', +s.dataset.step === step);
-    });
-    var bars = progEl.children;
-    for (var i = 0; i < 6; i++) bars[i].classList.toggle('done', i < Math.min(step, 6));
-    document.getElementById('steps').scrollIntoView({behavior:'smooth', block:'start'});
+    els('.step').forEach(function(s){s.classList.remove('on')});
+    el('[data-step="'+step+'"]').classList.add('on');
+    var i=progSteps.indexOf(step), p=el('#prog');
+    if(i>=0){p.hidden=false;el('#fill').style.width=(((i+1)/progSteps.length)*100)+'%';
+      el('#plbl').textContent='STEP '+(i+1)+' OF '+progSteps.length;}
+    else p.hidden=true;
+    window.scrollTo({top:0,behavior:'smooth'});
+    if(step==='result'){renderResult()}
   }
+  els('.vid').forEach(function(v){v.addEventListener('click',function(){
+    if(v.querySelector('iframe'))return;
+    var f=document.createElement('iframe');
+    f.src='https://www.youtube-nocookie.com/embed/'+v.dataset.yt+'?autoplay=1&rel=0';
+    f.allow='autoplay; encrypted-media; picture-in-picture'; f.allowFullscreen=true;
+    v.appendChild(f);});});
+  var fw=el('#feels');
+  FEELS.forEach(function(t){
+    var b=document.createElement('button'); b.type='button'; b.textContent=t;
+    if(S.feels.indexOf(t)>=0)b.classList.add('sel');
+    b.addEventListener('click',function(){
+      var i=S.feels.indexOf(t);
+      if(i>=0){S.feels.splice(i,1);b.classList.remove('sel')}
+      else{if(S.feels.length>=3)return; S.feels.push(t);b.classList.add('sel')}
+      el('#next2').disabled=S.feels.length===0; save();});
+    fw.appendChild(b);});
+  el('#next2').disabled=S.feels.length===0;
 
-  // Nav
-  document.querySelectorAll('[data-next]').forEach(function(b){
-    b.addEventListener('click', function(){
-      var s = +b.dataset.next;
-      if (s === 1 && !document.getElementById('a-task').value.trim()) {
-        document.getElementById('req-1').textContent = 'Name the task first. One line is enough.';
-        return;
-      }
-      show(s + 1);
-    });
-  });
-  document.querySelectorAll('[data-back]').forEach(function(b){
-    b.addEventListener('click', function(){ show(+b.dataset.back - 1); });
-  });
-
-  function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-  function val(id){ return (state.vals[id] || document.getElementById(id).value || '').trim(); }
-
-  // Finish → recap
-  function buildRecap(){
-    var feelings = state.chips.slice();
-    var own = val('a-feeling-own'); if (own) feelings.push(own);
-    var blocks = [
-      ['The task', val('a-task')],
-      ['What shows up', feelings.join(', ')],
-      ['The feeling I want to avoid', val('a-avoid')],
-      ['The relief I get from avoiding it', val('a-relief')],
-      ['The cost of that relief', val('a-cost')],
-      ['My contact action, under ten minutes', val('a-contact') + (val('a-contact-time') ? '\nAt: ' + val('a-contact-time') : '')],
-      ['The next action, decided before I stop', ['Tomorrow at ' + (val('a-next-when') || '…'), 'in ' + (val('a-next-where') || '…'), 'I will ' + (val('a-next-what') || '…')].join('\n')],
-      ['The next small promise I can keep', val('a-promise')]
-    ];
-    var html = '';
-    blocks.forEach(function(b){
-      if (!b[1] || b[1].replace(/[…\s]/g,'') === '' ) return;
-      html += '<div class="recap-block"><div class="k">' + esc(b[0]) + '</div><div class="v">' + esc(b[1]) + '</div></div>';
-    });
-    document.getElementById('recap').innerHTML = html || '<p class="help">Nothing filled in yet. Go back and give it one honest pass.</p>';
-    try { var n2 = localStorage.getItem('rf_name'); if (n2) document.getElementById('recap-title').textContent = n2 + ', here is what you wrote'; } catch(e){}
-    show(7);
-    document.getElementById('deeper').hidden = false;
+  function renderResult(){
+    el('#rT').textContent='"'+(S.task||'The task')+'" was never the problem.';
+    el('#rFeels').innerHTML=S.feels.map(function(t){return '<span style="font-size:12px;font-weight:600;padding:5px 12px;border-radius:100px;background:rgba(24,192,192,.10);color:#18C0C0">'+t+'</span>'}).join('');
+    el('#rStem1').textContent=S.stem1?('If it goes badly, you are afraid it means '+S.stem1.replace(/^\.{3}\s*/,'')):'';
+    el('#rStem2').textContent=S.stem2?('And by not doing it, you get to keep '+S.stem2.replace(/^\.{3}\s*/,'')):'';
+    el('#rTradeLine').textContent=S.instead?('The trade you make: '+S.instead+'. It buys relief now, and it bills you later.'):'';
+    el('#rContact').textContent=S.contact;
   }
-  document.getElementById('finish').addEventListener('click', function(){
-    buildRecap();
-    FUNNEL.track('tool_complete', 'ppb');
+  el('#begin').addEventListener('click',function(){show('1')});
+  var req={'1':['task','Name it, even roughly.'],'3':['instead','What do you reach for instead?'],
+    '5':['contact','Two minutes. It can be tiny.']};
+  els('[data-next]').forEach(function(b){b.addEventListener('click',function(){
+    var cur=b.closest('.step').dataset.step;
+    if(req[cur]){var k=req[cur][0]; S[k]=el('#'+k).value.trim();
+      if(!S[k]){alert(req[cur][1]);return}}
+    if(cur==='4'){S.stem1=el('#stem1').value.trim();S.stem2=el('#stem2').value.trim();
+      if(!S.stem1&&!S.stem2){alert('Finish at least one of the two sentences.');return}}
+    save(); show(order[order.indexOf(cur)+1]);});});
+  el('#redo').addEventListener('click',function(){localStorage.removeItem('ppb-v2');location.reload();});
+  ['task','instead','stem1','stem2','contact'].forEach(function(k){var i=el('#'+k); if(i&&S[k])i.value=S[k];});
+  var MC='https://francoisesterhuizen.us5.list-manage.com/subscribe/post-json'
+       +'?u=097ed8fb3c6e3c943817d0d80&id=7a7438d8f4';
+  el('#f').addEventListener('submit',function(ev){
+    ev.preventDefault();
+    var email=el('#em').value.trim(),first=el('#fn').value.trim(),last=el('#ln').value.trim(),msg=el('#msg');
+    function m(t,e){msg.textContent=t;msg.className='msg'+(e?' err':'')}
+    if(!first||!last){m('Please add your first and last name.',true);return}
+    if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){m('That email address does not look right.',true);return}
+    el('#go').disabled=true;m('One moment...');
+    var cb='mc_'+Date.now();
+    window[cb]=function(res){el('#go').disabled=false;
+      var already=res&&res.msg&&/already subscribed/i.test(res.msg);
+      if(res&&(res.result==='success'||already)){show('result')}
+      else{m((res&&res.msg?res.msg.replace(/<[^>]*>/g,''):'Something went wrong. Please try again.'),true)}
+      delete window[cb];};
+    var s=document.createElement('script');
+    s.src=MC+'&EMAIL='+encodeURIComponent(email)
+        +'&FNAME='+encodeURIComponent(first)+'&LNAME='+encodeURIComponent(last)
+        +'&MERGE0='+encodeURIComponent(email)
+        +'&MERGE3='+encodeURIComponent(first)+'&MERGE4='+encodeURIComponent(last)
+        +'&MMERGE2=pattern-breaker'+'&c='+cb;
+    s.onerror=function(){el('#go').disabled=false;show('result')};
+    document.body.appendChild(s);
   });
-
-  document.getElementById('edit').addEventListener('click', function(){
-    document.getElementById('deeper').hidden = true;
-    show(1);
-  });
-
-  // PDF of their answers
-  document.getElementById('pdf').addEventListener('click', function(){
-    FUNNEL.track('tool_pdf', 'ppb');
-    var src = document.getElementById('recap-step');
-    var clone = src.cloneNode(true);
-    clone.querySelectorAll('.acts').forEach(function(a){ a.remove(); });
-    var shell = document.createElement('div');
-    shell.style.cssText = 'font-family:Manrope,system-ui,sans-serif;color:#111;background:#fff;padding:34px 38px;max-width:700px';
-    shell.innerHTML =
-      '<div style="font-size:11px;letter-spacing:4px;text-transform:uppercase;color:#0E8F8F;font-weight:600;margin-bottom:10px">The Procrastination Pattern Breaker</div>' +
-      '<div style="font-size:24px;font-weight:800;letter-spacing:-.5px;margin-bottom:6px">My pattern, on one page</div>' +
-      '<div style="font-size:12px;color:#888;margin-bottom:22px">resources.francoisesterhuizen.com · from the video: Why You Procrastinate on Things That Matter</div>';
-    clone.querySelectorAll('.recap-block').forEach(function(b){
-      var k = b.querySelector('.k'), v = b.querySelector('.v');
-      shell.innerHTML +=
-        '<div style="border-top:1px solid #e4e4e4;padding:13px 0">' +
-        '<div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#0E8F8F;font-weight:600;margin-bottom:4px">' + k.innerHTML + '</div>' +
-        '<div style="font-size:14.5px;line-height:1.55;white-space:pre-wrap">' + v.innerHTML + '</div></div>';
-    });
-    shell.innerHTML +=
-      '<div style="margin-top:22px;padding:16px 20px;border:1px solid #0E8F8F;border-radius:10px;background:#F0FAFA">' +
-      '<div style="font-weight:700;font-size:14px;margin-bottom:4px">Avoidance is no longer protecting me. It’s costing me.</div>' +
-      '<div style="font-weight:700;font-size:14px">Your feelings can ride in the car. They just can’t always drive.</div></div>' +
-      '<div style="margin-top:18px;font-size:12px;color:#888">Much love, Francois · francoisesterhuizen.com</div>';
-    html2pdf().from(shell).set({
-      margin: [10,10,12,10],
-      filename: 'my-procrastination-pattern.pdf',
-      image: { type:'jpeg', quality:.96 },
-      html2canvas: { scale:2, backgroundColor:'#ffffff' },
-      jsPDF: { unit:'mm', format:'a4', orientation:'portrait' }
-    }).save();
-  });
-
-  // Deeper CTA tracking
-  document.getElementById('deeper-cta').addEventListener('click', function(){
-    FUNNEL.track('paid_tease_click_personal', 'ppb');
-  });
-
-  // Boot
-  FUNNEL.track('tool_start', 'ppb');
-  if (state.step === 7) { buildRecap(); }
-  else { show(Math.min(state.step || 1, 6)); }
 })();
 </script>
-<!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "a9b056ed20bf4324b33f372dd69b5db4"}'></script><!-- End Cloudflare Web Analytics -->
 </body>
 </html>
