@@ -120,22 +120,23 @@ GATES = {
                  "Which of these is closest", "emotional granularity"],
         "must_not": ["Pattern Breaker", "Headlights", "Loop Map"],
     },
-    # Interactive rebuild (Aug 2026): the page IS the tool. No Mailchimp form,
-    # no blank-PDF download; PDF is generated from the visitor's own answers.
+    # Guided-journey rebuild (other session) + funnel-aware email gate:
+    # funnel visitors skip the gate (isFunnel), direct visitors get a soft
+    # ask with a skip link (skipmail). Tracking restored (tool_start).
     "unstuck-loop-map": {
-        "must": ["Unstuck Loop Map", "youtube-nocookie.com/embed/IdZGSQr9kBE",
-                 "data-step=\"7\"", "tool_start", "html2pdf",
-                 "five-minute contact action", "e.g. a finished first draft"],
-        "must_not": ["Pattern Breaker", "Headlights", "MMERGE2"],
+        "must": ["Unstuck Loop Map", "data-yt", "youtube-nocookie",
+                 "MMERGE2=unstuck-loop-map", "isFunnel", "skipmail",
+                 "tool_start", "placeholder="],
+        "must_not": ["Pattern Breaker", "Headlights"],
     },
-    # Interactive rebuild (Aug 2026): the page IS the tool. No Mailchimp form
-    # (email is captured once at the funnel gate), no blank-PDF download (the
-    # PDF is generated from the visitor's own answers via html2pdf).
+    # Guided-journey rebuild (other session) + funnel-aware email gate:
+    # funnel visitors skip the gate (isFunnel), direct visitors get a soft
+    # ask with a skip link (skipmail). Tracking restored (tool_start).
     "procrastination-pattern-breaker": {
-        "must": ["Pattern Breaker", "youtube-nocookie.com/embed/l5ihPiQ_QOI",
-                 "data-step=\"6\"", "tool_start", "html2pdf",
-                 "e.g. my chest loosens"],
-        "must_not": ["Headlights", "Loop Map", "MMERGE2"],
+        "must": ["Pattern Breaker", "data-yt", "youtube-nocookie",
+                 "MMERGE2=pattern-breaker", "isFunnel", "skipmail",
+                 "tool_start", "placeholder="],
+        "must_not": ["Headlights", "Loop Map"],
     },
     # Interactive rebuild in progress (other session). Email form stays for
     # now: YouTube-direct visitors never pass the funnel gate, so this page
