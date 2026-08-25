@@ -137,9 +137,12 @@ GATES = {
                  "e.g. my chest loosens"],
         "must_not": ["Headlights", "Loop Map", "MMERGE2"],
     },
+    # Interactive rebuild in progress (other session). Email form stays for
+    # now: YouTube-direct visitors never pass the funnel gate, so this page
+    # is its own capture point until that routing is decided.
     "headlights-system": {
         "must": ["Headlights", "MMERGE2=headlights-system",
-                 "Headlights_System_Card.pdf", "next visible move"],
+                 "youtube-nocookie", "placeholder=", "next visible move"],
         "must_not": ["Pattern Breaker", "avoiding the feeling", "Loop Map"],
     },
     # Interactive rebuild (commit b3e7244): guided journey, no card-PDF
