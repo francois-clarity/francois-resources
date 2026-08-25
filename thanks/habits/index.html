@@ -25,7 +25,19 @@
   .steps li::before{content:'';position:absolute;left:2px;top:23px;width:8px;height:8px;
     border-radius:50%;background:var(--teal)}
   .steps li b{color:#fff;font-weight:600}
-  @media (max-width:640px){.got{padding:26px 22px}}
+  .deeper{margin-top:40px;max-width:640px;border:1px solid var(--teal);border-radius:22px;
+    padding:34px 36px;background:linear-gradient(180deg,rgba(24,192,192,.13),rgba(24,192,192,.04));
+    box-shadow:0 12px 44px rgba(24,192,192,.14)}
+  .deeper .kick{font-weight:500;font-size:11px;letter-spacing:4px;text-transform:uppercase;
+    color:var(--teal);margin-bottom:10px}
+  .deeper .big{font-weight:800;font-size:clamp(21px,3vw,27px);letter-spacing:-.5px;line-height:1.25}
+  .deeper p{font-size:16px;line-height:1.65;color:rgba(255,255,255,.7);margin-top:12px;font-weight:300}
+  .deeper .price{margin-top:14px;font-size:13px;font-weight:600;letter-spacing:1px;color:rgba(255,255,255,.42)}
+  .deeper .btn{margin-top:20px}
+  .deeper .wa{display:inline-block;margin-top:14px;font-size:13.5px;color:rgba(255,255,255,.42);
+    text-decoration:underline;text-underline-offset:3px}
+  .deeper .wa:hover{color:var(--teal)}
+  @media (max-width:640px){.got{padding:26px 22px}.deeper{padding:26px 22px}}
 </style>
 </head>
 <body>
@@ -56,6 +68,15 @@
     <li><b>Read it slowly.</b> It is short on purpose. A chapter at a time does more than a single sitting.</li>
     <li><b>If anything goes wrong</b>, email me at francois@francoisesterhuizen.com and I will sort it out personally. You paid, so the book is yours either way.</li>
   </ul>
+
+  <div class="deeper">
+    <div class="kick">Now that the book is yours</div>
+    <div class="big">Cracking the Conflict Code</div>
+    <p>You are about to read the ten habits. The course goes underneath them: what is actually happening between the two of you when it goes wrong, what it means to really communicate, and how your brain is in the room with you. Built on the same work as the book.</p>
+    <p class="price">R1 200, once off</p>
+    <a class="btn" id="deeper-cta" href="https://www.francoisesterhuizen.com/defuse-conflict" target="_blank" rel="noopener">Read about the course</a>
+    <a class="wa" href="https://wa.me/27824441831?text=Hi%20Francois%2C%20I%20just%20bought%20the%2010%20Habits%20book%20and%20I%20have%20a%20question%20about%20Cracking%20the%20Conflict%20Code." target="_blank" rel="noopener">Or message me on WhatsApp</a>
+  </div>
 
   <div class="sign">
     <p>Much love,<br>Francois</p>
@@ -93,6 +114,8 @@
   });
 })();
 </script>
+<script src="/assets/funnel.js"></script>
+<script>try{FUNNEL.track('oto_view','book-habits');document.getElementById('deeper-cta').addEventListener('click',function(){FUNNEL.track('paid_tease_click_relational','book-habits')});}catch(e){}</script>
 <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "a9b056ed20bf4324b33f372dd69b5db4"}'></script><!-- End Cloudflare Web Analytics -->
 </body>
 </html>

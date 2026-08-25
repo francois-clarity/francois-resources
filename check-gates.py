@@ -47,14 +47,17 @@ GATES = {
         "must_not": ["Story of Us", "/library/"],
     },
     "thanks/responsibility": {
-        # Post-purchase delivery. Must hand over the right file and stay hidden.
+        # Post-purchase delivery + one upsell (Foundations of Clarity).
         "must": ["Download the ebook", "/api/download?book=responsibility",
-                 "noindex", "Download your copy", "Save it somewhere"],
+                 "noindex", "Download your copy", "Save it somewhere",
+                 "The Foundations of Clarity", "oto_view"],
         "must_not": ["files/d/", "Pattern Breaker"],
     },
     "thanks/habits": {
+        # Post-purchase delivery + one upsell (Cracking the Conflict Code).
         "must": ["Download the ebook", "/api/download?book=habits",
-                 "noindex", "Download your copy", "Save it somewhere"],
+                 "noindex", "Download your copy", "Save it somewhere",
+                 "Cracking the Conflict Code", "R1 200", "oto_view"],
         "must_not": ["files/d/", "Pattern Breaker"],
     },
     "books/responsibility": {
