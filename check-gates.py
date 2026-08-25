@@ -124,10 +124,14 @@ GATES = {
         "must": ["Unstuck Loop Map", "MMERGE2=loop-map"],
         "must_not": ["Pattern Breaker", "Headlights"],
     },
+    # Interactive rebuild (Aug 2026): the page IS the tool. No Mailchimp form
+    # (email is captured once at the funnel gate), no blank-PDF download (the
+    # PDF is generated from the visitor's own answers via html2pdf).
     "procrastination-pattern-breaker": {
-        "must": ["Pattern Breaker", "MMERGE2=pattern-breaker",
-                 "Procrastination_Pattern_Breaker.pdf"],
-        "must_not": ["Headlights", "Loop Map"],
+        "must": ["Pattern Breaker", "youtube-nocookie.com/embed/l5ihPiQ_QOI",
+                 "data-step=\"6\"", "tool_start", "html2pdf",
+                 "e.g. my chest loosens"],
+        "must_not": ["Headlights", "Loop Map", "MMERGE2"],
     },
     "headlights-system": {
         "must": ["Headlights", "MMERGE2=headlights-system",
