@@ -138,9 +138,11 @@ GATES = {
                  "Headlights_System_Card.pdf", "next visible move"],
         "must_not": ["Pattern Breaker", "avoiding the feeling", "Loop Map"],
     },
+    # Interactive rebuild (commit b3e7244): guided journey, no card-PDF
+    # download. MMERGE2 here is the background tag sync, not an email ask.
     "ten-year-question": {
-        "must": ["Ten-Year", "MMERGE2=ten-year-question",
-                 "Ten_Year_Question_Card.pdf", "who you want to become"],
+        "must": ["Ten-Year", "ten years", "MMERGE2=ten-year-question",
+                 "youtube-nocookie", "placeholder="],
         "must_not": ["Headlights", "two-minute test", "Pattern Breaker"],
     },
 }
