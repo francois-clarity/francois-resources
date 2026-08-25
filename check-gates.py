@@ -120,9 +120,13 @@ GATES = {
                  "Which of these is closest", "emotional granularity"],
         "must_not": ["Pattern Breaker", "Headlights", "Loop Map"],
     },
+    # Interactive rebuild (Aug 2026): the page IS the tool. No Mailchimp form,
+    # no blank-PDF download; PDF is generated from the visitor's own answers.
     "unstuck-loop-map": {
-        "must": ["Unstuck Loop Map", "MMERGE2=loop-map"],
-        "must_not": ["Pattern Breaker", "Headlights"],
+        "must": ["Unstuck Loop Map", "youtube-nocookie.com/embed/IdZGSQr9kBE",
+                 "data-step=\"7\"", "tool_start", "html2pdf",
+                 "five-minute contact action", "e.g. a finished first draft"],
+        "must_not": ["Pattern Breaker", "Headlights", "MMERGE2"],
     },
     # Interactive rebuild (Aug 2026): the page IS the tool. No Mailchimp form
     # (email is captured once at the funnel gate), no blank-PDF download (the
