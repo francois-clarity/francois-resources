@@ -10,6 +10,10 @@
 #         ./deploy.sh --force    deploy anyway with a dirty tree (say why out loud)
 
 set -euo pipefail
+
+# Cloudflare bulk uploads die mid-run with 'TypeError: fetch failed' on this
+# network unless Node prefers IPv4 (found 25 Aug 2026, three failed deploys).
+export NODE_OPTIONS="${NODE_OPTIONS:---dns-result-order=ipv4first}"
 cd "$(dirname "$0")"
 
 FORCE=no
