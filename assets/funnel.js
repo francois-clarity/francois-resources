@@ -109,7 +109,7 @@
       deeper: {
         kicker: 'If you want to go deeper',
         title: 'Clarity Quest',
-        body: 'Get unstuck in ten weeks, or spend another year busy and going nowhere. The Clarity Quest is a guided process, built as step-by-step exercises, that gets you clear on exactly what you want and moving on it. Do it Solo at your own pace, join Basecamp and do it with weekly group coaching (the one I would point most people to), or go Solo Expedition with one-on-one coaching alongside the exercises.',
+        body: 'Get unstuck in ten weeks, or spend another year busy and going nowhere. The Clarity Quest is a guided process, built as step-by-step exercises, that gets you clear on exactly what you want and moving on it. Do it Solo at your own pace, join Basecamp and do it with weekly group coaching (the one I point people to first), or go Solo Expedition with one-on-one coaching alongside the exercises.',
         price: 'Read the page for the formats and pricing',
         url: 'https://clarityquest.francoisesterhuizen.com/',
         ctaLabel: 'Read about Clarity Quest'
