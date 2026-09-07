@@ -34,6 +34,9 @@
 
 const TOOLS = {
   'communication-styles': { merge: 'communication-styles' },
+  // Windows and Walls only ever posts here when the reader explicitly asks for
+  // the email AFTER seeing results. There is no gate on that tool on purpose.
+  'windows-and-walls':    { merge: 'windows-and-walls' },
 };
 
 export async function onRequestPost({ request, env }) {

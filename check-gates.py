@@ -90,6 +90,31 @@ GATES = {
                      "survival-instinct-assessment.netlify.app",
                      'placeholder="Francois"'],
     },
+    "windows-and-walls": {
+        # Affair prevention, built on Glass. Three rules this gate enforces,
+        # each from the research brief of 7 Sep 2026:
+        #   1. no attraction items. Attraction is universal and predicts
+        #      nothing; secrecy is the mechanism. Asking about it produces
+        #      guilt and no signal.
+        #   2. the email is OPTIONAL and comes AFTER results. A results email
+        #      in a shared inbox is the exact harm this tool prevents.
+        #   3. it never tells anybody to disclose an affair. That decision
+        #      needs a person, not a page.
+        "must": ["Windows and Walls", "Question 1 of 17",
+                 "Facing In", "Separate Rooms", "The Open Door", "Turned Around",
+                 "built out of secrecy", "Is there a particular person",
+                 "What is working", "Where it is thin", "The one move this week",
+                 "This one stays on your phone", "Want this in writing",
+                 "shared inbox", "0800 567 567", "0800 150 150",
+                 "/api/assessment", "noindex", "Much love",
+                 'role="radiogroup"', "localStorage"],
+        "must_not": ["Pattern Breaker", "Headlights", "Loop Map",
+                     "survival-instinct-assessment.netlify.app",
+                     "people with this style",
+                     # never instruct disclosure of an affair
+                     "tell your partner tonight", "you must tell", "confess to your partner",
+                     ],
+    },
     "invisible-contracts": {
         # Contracts you keep. No email gate; markers are content.
         "must": ["Invisible Contracts", "ic-contracts", "then you should",
@@ -226,6 +251,31 @@ def strip_verbatim(html):
     return " ".join(out)
 
 
+def check_no_attraction_items():
+    """Windows and Walls must never ask about attraction, only about secrecy.
+
+    Glass's finding is that attraction is universal and predicts nothing, while
+    secrecy is the actual mechanism. An attraction item would produce guilt and
+    no signal, and would make the tool feel like an accusation to the person who
+    most needs it. The page is allowed to SAY it does not ask about attraction,
+    so this scans the item bank rather than the whole page.
+    """
+    import pathlib as _pl
+    f = _pl.Path(__file__).parent / "windows-and-walls" / "index.html"
+    html = f.read_text()
+    m = re.search(r"var ITEMS = \[([\s\S]*?)\n\];", html)
+    if not m:
+        print("FAIL attraction-items                  [local] item bank not found"); return False
+    bank = m.group(1).lower()
+    banned = ["attract", "fancy", "desire", "chemistry", "tempt", "flirt"]
+    hits = [w for w in banned if w in bank]
+    if hits:
+        print("FAIL attraction-items                  [local] item bank asks about %s" % ", ".join(hits))
+        return False
+    print("ok   attraction-items                  [local] item bank asks about secrecy, not attraction")
+    return True
+
+
 BANNED = {
     # Standing voice rules. These are not style preferences, they are rules he
     # has had to repeat, so the deploy enforces them rather than trusting memory.
@@ -269,6 +319,7 @@ def main():
     base = pathlib.Path(__file__).parent
     live = "--live" in sys.argv
     all_ok = check_goal_words()
+    all_ok &= check_no_attraction_items()
     all_ok &= check_banned_words()
     for name in GATES:
         html = (base / name / "index.html").read_text()
