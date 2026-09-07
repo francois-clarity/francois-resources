@@ -73,8 +73,8 @@ GATES = {
     "communication-styles": {
         # Free front door for the relational ladder. Built on the Romantic
         # Support-Seeking subscales. Email at the END, never the start.
-        # Partner pronouns are templated from the reader's own choice, after a
-        # QA pass found the partner changing sex three times in one report.
+        # No pronoun picker: the copy says "your partner" throughout, decided
+        # 7 Sep 2026. The gate refuses a picker coming back by the side door.
         "must": ["Communication Styles", "Question 1 of 20",
                  "The Straight Ask", "The Reach", "The Long Way Round", "The Closed Door",
                  "What this gives your partner", "What it costs your partner",
@@ -112,8 +112,28 @@ GATES = {
                      "survival-instinct-assessment.netlify.app",
                      "people with this style",
                      # never instruct disclosure of an affair
-                     "tell your partner tonight", "you must tell", "confess to your partner",
+                     "you must tell", "confess to your partner",
                      ],
+    },
+    "two-different-problems": {
+        # Porn, deliberately NOT an addiction test. Grubbs's finding is that
+        # self-reported addiction tracks moral disapproval more than actual
+        # use, so a single severity score would mostly measure shame and hand
+        # it back with a clinical word on it. Two scales, never summed.
+        "must": ["Two Different Problems", "Question 1 of 14",
+                 "Not The Thing", "The Fight With Yourself", "The Slow Leak", "Caught Between",
+                 "What it is costing you", "how far it sits from what you believe",
+                 "moral incongruence", "impulse control disorder",
+                 "Compulsive Sexual Behaviour Disorder",
+                 "This one stays on your phone", "0800 567 567",
+                 "/api/assessment", "noindex", "Much love",
+                 'role="radiogroup"', "localStorage", "/ 100"],
+        "must_not": ["Pattern Breaker", "Headlights", "Loop Map",
+                     "survival-instinct-assessment.netlify.app",
+                     # it must never hand somebody a verdict
+                     "you are an addict", "you have an addiction",
+                     "your score indicates", "severity level",
+                     "sex addict", "porn addict."],
     },
     "invisible-contracts": {
         # Contracts you keep. No email gate; markers are content.

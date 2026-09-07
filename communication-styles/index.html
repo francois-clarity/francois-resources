@@ -82,18 +82,6 @@ p{color:var(--muted);font-weight:300;font-size:17px;line-height:1.62}
 .meta b{font-size:15px;font-weight:700}
 .meta span{font-size:12.5px;color:var(--muted-2)}
 
-/* ---- pronoun picker ---- */
-.pron{margin-top:30px;padding:20px 22px;border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.03)}
-.pron legend,.pron .q{font-size:15px;font-weight:600;color:var(--white);margin-bottom:4px;padding:0}
-.pron .why{font-size:13.5px;color:var(--muted-2);font-weight:300;margin-bottom:14px}
-.pron .row{display:flex;flex-wrap:wrap;gap:9px}
-.pron button{
-  cursor:pointer;font-family:inherit;font-size:15px;font-weight:600;padding:11px 20px;
-  border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--muted);
-  transition:.16s;
-}
-.pron button:hover{border-color:var(--line-strong);color:var(--white)}
-.pron button[aria-pressed="true"]{border-color:var(--teal);background:var(--teal-soft);color:var(--white)}
 
 /* ---- question ---- */
 .qhead{display:flex;align-items:center;gap:14px;margin-bottom:8px}
@@ -247,12 +235,6 @@ p{color:var(--muted);font-weight:300;font-size:17px;line-height:1.62}
     <p class="lede">Maybe you walk in and say it straight out. Maybe you go and stand in the kitchen, doing nothing in particular, until you get asked. Maybe you say nothing at all, sort it out yourself, and your partner hears about it on Friday once it is over.</p>
     <p class="lede">Whichever one you do, you learned it long before the two of you met. Your partner learned a different one. Neither of you has ever discussed it, and it is running underneath every hard week you have.</p>
 
-    <div class="pron" role="group" aria-labelledby="pron-q">
-      <div class="q" id="pron-q">When I write about your partner, which word should I use?</div>
-      <div class="why">So the whole thing reads like it is about your actual relationship.</div>
-      <div class="row" id="pron-row"></div>
-    </div>
-
     <div class="meta">
       <div><b>20 questions</b><span>Two to three minutes</span></div>
       <div><b>No right answer</b><span>Only what is true for you</span></div>
@@ -392,36 +374,16 @@ p{color:var(--muted);font-weight:300;font-size:17px;line-height:1.62}
    choice on the intro screen, so nobody's partner changes sex mid-report.
    See the naming rule in the francois-copywriter skill, hard rule 13.
 
-   Tokens: {s} {S} subject, {o} object, {p} {P} possessive, {self} reflexive,
-   and {v:verb} for third-person agreement (knows -> know for they).
+   Tokens: your partner Your partner subject, your partner object, your partner's Your partner's possessive, your partner reflexive,
+   and verb for third-person agreement (knows -> know for they).
 ------------------------------------------------------------------ */
 
-var PRON = {
-  she:  { s:'she',  S:'She',  o:'her',  p:'her',   P:'Her',   self:'herself',    label:'She',  plural:false },
-  he:   { s:'he',   S:'He',   o:'him',  p:'his',   P:'His',   self:'himself',    label:'He',   plural:false },
-  they: { s:'they', S:'They', o:'them', p:'their', P:'Their', self:'themselves', label:'They', plural:true  }
-};
-var IRREGULAR = { is:'are', has:'have', does:'do', was:'were', goes:'go', 'is not':'are not' };
-
-function deS(verb){
-  /* third-person singular -> base form, for "they" */
-  if (IRREGULAR[verb]) return IRREGULAR[verb];
-  if (/ies$/.test(verb)) return verb.slice(0, -3) + 'y';         // tries -> try
-  if (/(ches|shes|sses|xes|zes)$/.test(verb)) return verb.slice(0, -2); // watches -> watch
-  if (/s$/.test(verb)) return verb.slice(0, -1);                  // knows -> know
-  return verb;
-}
-
-var pron = 'they';
-function T(str){
-  var g = PRON[pron];
-  return String(str)
-    .replace(/\{v:([a-z' ]+)\}/gi, function(_, v){ return g.plural ? deS(v) : v; })
-    .replace(/\{S\}/g, g.S).replace(/\{s\}/g, g.s)
-    .replace(/\{o\}/g, g.o)
-    .replace(/\{P\}/g, g.P).replace(/\{p\}/g, g.p)
-    .replace(/\{self\}/g, g.self);
-}
+/* Partner references were templated from a pronoun picker on the intro
+   screen until 7 Sep 2026, when Francois removed it: the copy says "your
+   partner" throughout instead. T is kept as a pass-through so every call
+   site did not have to be unpicked by hand, which is how the first attempt
+   at this broke the file. */
+function T(str){ return String(str); }
 
 /* ------------------------- items ------------------------- */
 var A1 = 'When you need something', A2 = 'When your partner needs something';
@@ -430,11 +392,11 @@ var ITEMS = [
   { k:'ask', p:A1, t:"When I need my partner to do something, I say what it is.",
     s:"Not a remark about how full the bin is getting. You say, please take the bin out tonight." },
   { k:'door', p:A1, t:"I would rather sort out my problems myself than bring them to my partner.",
-    s:"The situation at work has been running for three weeks. {S} still {v:does} not know it is happening." },
+    s:"The situation at work has been running for three weeks. Your partner still does not know it is happening." },
   { k:'reach', p:A1, t:"When something has knocked me, I tell my partner that I need comfort.",
     s:"You come in from the phone call about your dad and you say, I need you to hold me for a minute." },
   { k:'round', p:A1, t:"When I am upset with my partner, I go silent rather than say what is wrong.",
-    s:"{S} {v:asks} what is wrong. You say nothing, in a tone that clearly means something." },
+    s:"Your partner asks what is wrong. You say nothing, in a tone that clearly means something." },
   { k:'ask', p:A1, t:"When I am stuck on something, I ask my partner straight out for help.",
     s:"The medical aid has rejected the claim twice and you are getting nowhere. You put the phone down and say, can you please look at this with me." },
   { k:'round', p:A1, t:"I sigh, or move around the house a bit harder, so my partner can see something is wrong.",
@@ -446,27 +408,27 @@ var ITEMS = [
   { k:'round', p:A1, t:"I drop hints about what I want instead of asking for it.",
     s:"You mention twice that your friend's husband booked a whole weekend away as a surprise." },
   { k:'ask', p:A1, t:"I ask my partner for advice directly, rather than working around to it.",
-    s:"You do not tell the whole story first to see which way {s} {v:leans}. You say, what would you do here." },
+    s:"You do not tell the whole story first to see which way your partner leans. You say, what would you do here." },
   { k:'reach', p:A1, t:"I will say plainly that I want to be held.",
-    s:"Not standing near your partner hoping it occurs to {o}. You say, can I have a hug." },
+    s:"Not standing near your partner hoping it occurs to your partner. You say, can I have a hug." },
   { k:'door', p:A1, t:"When something is hard, my first instinct is to handle it before my partner notices.",
     s:"You had already made three calls and sorted most of it before you mentioned it at supper." },
 
   { k:'give', d:+1, p:A2, t:"When my partner tells me about a problem, I start working out how to solve it.",
-    s:"{S} {v:is} still describing what {p} boss said, and you are already three steps into what {s} should do about it." },
+    s:"Your partner is still describing what happened at work, and you are already three steps into the solution." },
   { k:'cap', d:+1, p:A2, t:"When my partner tells me good news, I stop what I am doing and want the whole story.",
-    s:"{S} {v:comes} in with the news about the interview. The laptop closes. You want every detail of it." },
+    s:"Your partner comes in with the news about the interview. The laptop closes. You want every detail of it." },
   { k:'give', d:-1, p:A2, t:"When my partner is upset, my first move is to get close, not to suggest anything.",
-    s:"You do not say a word. You put your hand on {p} back and you stay there." },
+    s:"You do not say a word. You put your hand on your partner's back and you stay there." },
   { k:'cap', d:-1, p:A2, t:"I am pleased about my partner's good news, but I do not make much of it.",
     s:"That is great, love. And you carry on with what you were busy with." },
   { k:'give', d:+1, p:A2, t:"I find it hard to listen to a problem when I can already see the answer.",
     s:"You know exactly what would sort this out and it is taking everything you have not to say it." },
   { k:'cap', d:-1, p:A2, t:"When my partner is excited about something, I point out what could go wrong.",
-    s:"{S} {v:is} thrilled about the new role. You hear yourself asking about the drive and whether the money is actually better." },
-  { k:'give', d:-1, p:A2, t:"I ask my partner whether {s} {v:wants} help with it, or {v:wants} to be heard.",
+    s:"Your partner is thrilled about the new role. You hear yourself asking about the drive and whether the money is actually better." },
+  { k:'give', d:-1, p:A2, t:"I ask my partner whether your partner wants help with it, or wants to be heard.",
     s:"You say, do you want me to help you fix this, or do you want me to just listen." },
-  { k:'cap', d:+1, p:A2, t:"I ask my partner questions about {p} good news so {s} can enjoy telling it twice.",
+  { k:'cap', d:+1, p:A2, t:"I ask my partner questions about your partner's good news so your partner can enjoy telling it twice.",
     s:"You say, tell me exactly how it happened. And then, and what did you say back?" }
 ];
 
@@ -484,42 +446,42 @@ var STYLES = {
   ask: {
     name:"The Straight Ask", hex:"#18C0C0",
     short:"You ask for help with the thing, plainly, and you expect a plain answer back.",
-    line:"When something is wrong, you bring your partner the problem and you ask {o} to help you with it. No preamble, no testing the water first. You have a thing that needs sorting and {s} {v:is} the person you sort things with, so you say so.",
-    good:"Your partner never has to guess. {S} {v:knows} where {s} {v:stands} with you, {s} {v:knows} what you actually want from {o}, and {s} {v:gets} to be useful, which for many is what being loved feels like from the inside. You are also the easiest person in the house to help. The research is on your side here: asking directly is linked to better relationships than signalling is.",
-    bad:"You bring the problem and you skip the feeling, because the feeling seems like the part that does not need attention. So your partner ends up knowing every situation in your life and very little about how any of it landed on you. {S} {v:starts} to feel like your operations manager rather than your husband. And when {s} {v:brings} you a feeling with no problem attached, you go looking for the problem, because that is the only shape you know how to hold.",
+    line:"When something is wrong, you take the problem straight to your partner and ask for help with it. No preamble, no testing the water first. You have a thing that needs sorting and your partner is the person you sort things with, so you say so.",
+    good:"Your partner never has to guess. There is no decoding to do, no working out what you actually want, and there is a real chance to be useful, which for many is exactly what being loved feels like from the inside. You are also the easiest person in the house to help. The research is on your side here: asking directly is linked to better relationships than signalling is.",
+    bad:"You bring the problem and you skip the feeling, because the feeling seems like the part that does not need attention. So your partner ends up knowing every situation in your life and very little about how any of it landed on you, which starts to feel like being your operations manager rather than your husband. And when a feeling arrives with no problem attached to it, you go looking for the problem, because that is the only shape you know how to hold.",
     ask:"Try bringing one thing to your partner this week with no request attached. Say: I do not need you to do anything about this, I just want you to know it is sitting on me. It will feel pointless. It is the opposite of pointless."
   },
   reach: {
     name:"The Reach", hex:"#E38070",
     short:"You ask for the person, not the solution. You want closeness first and the problem second.",
-    line:"When something knocks you, what you want is your partner, near you, before anything gets discussed. And you will say so. You will ask for the hug, ask to be told it is alright, ask {o} to come and sit. You have worked out that closeness is what settles you, and you do not pretend otherwise.",
-    good:"You ask out loud for the thing many spend a whole marriage hoping to be offered. That is not weakness, it is unusually good information, and it means your partner can actually succeed with you. You also keep the relationship warm on purpose. Repair happens faster in your house, because you go towards {o} rather than away, and you say the vulnerable sentence first.",
-    bad:"When your partner does not come, or {v:comes} slowly, you can read that as an answer about how {s} {v:feels} rather than as a difference in wiring. So you ask again, a little louder, and {s} {v:steps} back to think, and now you are chasing the person who is retreating from being chased. That is the pursue-and-withdraw loop, the pattern most reliably linked to couples becoming unhappy. It starts with a reasonable need and turns into pressure without either of you deciding it should.",
-    ask:"Ask for a time instead of asking for now. Say: I need you close tonight, can we do that after supper. You get the certainty that it is coming, which is the thing you actually need, and your partner gets the twenty minutes it takes {o} to arrive properly."
+    line:"When something knocks you, what you want is your partner, near you, before anything gets discussed. And you will say so. You will ask for the hug, ask to be told it is alright, ask your partner to come and sit. You have worked out that closeness is what settles you, and you do not pretend otherwise.",
+    good:"You ask out loud for the thing many spend a whole marriage hoping to be offered. That is not weakness, it is unusually good information, and it means your partner can actually succeed with you. You also keep the relationship warm on purpose. Repair happens faster in your house, because you go towards your partner rather than away, and you say the vulnerable sentence first.",
+    bad:"When your partner does not come, or comes slowly, you can read the delay as a verdict on how much you are loved rather than as a difference in wiring. So you ask again, a little louder, and they step back to think, and now you are chasing the person who is retreating from being chased. That is the pursue-and-withdraw loop, the pattern most reliably linked to couples becoming unhappy. It starts with a reasonable need and turns into pressure without either of you deciding it should.",
+    ask:"Ask for a time instead of asking for now. Say: I need you close tonight, can we do that after supper. You get the certainty that it is coming, which is the thing you actually need, and your partner gets the twenty minutes it takes your partner to arrive properly."
   },
   round: {
     name:"The Long Way Round", hex:"#E8B551",
     short:"You know what you need. You signal it, and you wait to be noticed.",
     line:"You very rarely ask straight out. You go a bit flat, you mention it sideways, you leave the opening and hope your partner walks through it. Somewhere along the line, asking plainly started to feel like too much to require of another person, so you learned to be read instead.",
-    good:"You are attuned in a way direct people are not. You clock the change in your partner's face before {s} {v:has} taken {p} coat off, you remember what {s} said {s} {v:was} dreading and you ask about it a week later, and you spare {o} the blunt version of things because you know exactly what blunt costs. You are protecting the relationship, not manipulating it, and that motive matters.",
-    bad:"The hint becomes a test your partner does not know {s} {v:is} sitting. You needed {o} to notice, {s} did not notice, and now {p} not noticing means something about how much {s} {v:cares}. Unspoken need turns into evidence, evidence turns into a story, and the story surfaces years later in an argument {s} thought was about the weekend. {S} cannot pass a test {s} {v:was} never told about, so eventually {s} {v:stops} trying to guess and {v:goes} flat too.",
+    good:"You are attuned in a way direct people are not. You clock the change in your partner's face before the coat is even off, you remember what they said they were dreading and you ask about it a week later, and you spare them the blunt version of things because you know exactly what blunt costs. You are protecting the relationship, not manipulating it, and that motive matters.",
+    bad:"The hint becomes a test your partner does not know they are sitting. You needed it noticed, it went unnoticed, and now that failure means something about how much you are cared for. Unspoken need turns into evidence, evidence turns into a story, and the story surfaces years later in an argument your partner thought was about the weekend. Nobody passes a test they were never told about, so eventually they stop trying to guess and go flat as well.",
     ask:"Once this week, say the need as a plain sentence with no wrapping. I would like a hug. I want you to ask me about my day. It will feel unbearably direct, and it will feel like it does not count because you had to ask. It counts. Being given the thing is the point, not being read correctly."
   },
   door: {
     name:"The Closed Door", hex:"#8B9DE0",
     short:"You handle it yourself. Your partner usually hears about it once it is over.",
-    line:"Your instinct when something goes wrong is to take it away and deal with it. Not out of secrecy, out of a sense that your trouble is yours to carry and that putting it on your partner would be an imposition. So {s} often {v:finds} out afterwards, in the past tense.",
-    good:"You are steady. You do not flood your partner with every passing difficulty, you do not turn a bad Tuesday into a household emergency, and in a genuinely hard season you are the one still standing and still functioning. When you finally do say something, {s} {v:knows} it is real, because you do not spend words cheaply.",
-    bad:"Your partner is married to a locked room. {S} can tell there is something behind the door and {s} {v:is} not invited in, so {s} {v:starts} guessing, and people who guess guess badly. {S} may read the closed door as contentment and relax while you are drowning. {S} may read it as disappointment in {o} and start working for a warmth {s} cannot seem to earn. And because {s} never got to help while it was happening, the day you do come out it can arrive as a decision rather than a conversation.",
-    ask:"Tell your partner about one thing before you have solved it. Not the finished report, the middle of it: I am carrying something and I have not worked it out yet. That single sentence is the whole shift, because it lets {o} in during the part that actually matters."
+    line:"Your instinct when something goes wrong is to take it away and deal with it. Not out of secrecy, out of a sense that your trouble is yours to carry and that putting it on your partner would be an imposition. So your partner often finds out afterwards, in the past tense.",
+    good:"You are steady. You do not flood your partner with every passing difficulty, you do not turn a bad Tuesday into a household emergency, and in a genuinely hard season you are the one still standing and still functioning. When you finally do say something, your partner knows it is real, because you do not spend words cheaply.",
+    bad:"Your partner is married to a locked room. They can tell there is something behind the door and they are not invited in, so they start guessing, and people who guess guess badly. The closed door might read as contentment, and they relax while you are drowning. Or it reads as disappointment in them, and they start working for a warmth they cannot seem to earn. And because they never got to help while it was happening, the day you do come out it can arrive as a decision rather than a conversation.",
+    ask:"Tell your partner about one thing before you have solved it. Not the finished report, the middle of it: I am carrying something and I have not worked it out yet. That single sentence is the whole shift, because it lets your partner in during the part that actually matters."
   }
 };
 
 var GIVE = {
   fix:{ h:"When your partner brings you a problem, you reach for the answer",
-    p:"{S} {v:starts} telling you about it and your mind goes straight to what would sort it out. That is a real form of love and it is often exactly right. The trouble is timing. Arriving with the solution before {s} {v:has} finished being upset lands as being handled rather than being heard, and then {p} reaction seems out of proportion to you, so you get plainer, and now you are having a second argument about the first one. Eight seconds fixes it: ask {o} whether {s} {v:wants} help with it or {v:wants} you to listen. You will be surprised how often it is the second one." },
-  with:{ h:"When your partner brings you a problem, you go and sit with {o}",
-    p:"You do not rush to fix it. You get close, you stay, and you let {o} finish. That is the rarer instinct and it is the one that builds the sense of being understood, which the research puts at the centre of intimacy. The trouble is the mirror image of the fixer's: sometimes {s} genuinely {v:does} want the practical help, and sitting warmly with someone who needed a decision made can feel like being left alone in it. Ask {o} which one {s} {v:wants}. Both of you get to be right." },
+    p:"Your partner starts telling you about it and your mind goes straight to what would sort it out. That is a real form of love and it is often exactly right. The trouble is timing. Arriving with the solution before they have finished being upset lands as being handled rather than being heard, and then their reaction seems out of proportion to you, so you get plainer, and now you are having a second argument about the first one. Eight seconds fixes it: ask whether they want help with it, or want you to listen. You will be surprised how often it is the second one." },
+  with:{ h:"When your partner brings you a problem, you go and sit with your partner",
+    p:"You do not rush to fix it. You get close, you stay, and you let them finish. That is the rarer instinct and it is the one that builds the sense of being understood, which the research puts at the centre of intimacy. The trouble is the mirror image of the fixer's: sometimes your partner genuinely does want the practical help, and sitting warmly with someone who needed a decision made can feel like being left alone in it. Ask which one they are after. Both of you get to be right." },
   even:{ h:"When your partner brings you something, you read the situation",
     p:"You do not always reach for the answer and you do not always sit back. You seem to take the temperature and respond to what is in front of you, which is genuinely uncommon. Keep the question anyway, out loud, when you are not sure: do you want help with this, or do you want me to listen. Getting it right by instinct is good. Getting it right by asking never misses." }
 };
@@ -540,7 +502,7 @@ var $ = function(id){ return document.getElementById(id); };
 
 function save(){
   try {
-    localStorage.setItem(KEY, JSON.stringify({ a:answers, i:i, pron:pron, r:lastResult }));
+    localStorage.setItem(KEY, JSON.stringify({ a:answers, i:i,  r:lastResult }));
   } catch (e) { /* private mode, carry on without persistence */ }
 }
 function load(){
@@ -562,25 +524,6 @@ function show(id){
 function progress(p){ $('q-fill').style.width = (p * 100) + '%'; }
 
 /* ------------------------- pronoun picker ------------------------- */
-(function(){
-  var row = $('pron-row');
-  Object.keys(PRON).forEach(function(k){
-    var b = document.createElement('button');
-    b.type = 'button';
-    b.textContent = PRON[k].label;
-    b.setAttribute('aria-pressed', k === pron ? 'true' : 'false');
-    b.addEventListener('click', function(){
-      pron = k;
-      [].forEach.call(row.children, function(c){
-        c.setAttribute('aria-pressed', c === b ? 'true' : 'false');
-      });
-      save();
-      if ($('s-res').classList.contains('on') && lastResult) paint(lastResult);
-      if ($('s-q').classList.contains('on')) renderQ();
-    });
-    row.appendChild(b);
-  });
-})();
 
 /* ------------------------- questions ------------------------- */
 function renderQ(){
@@ -673,7 +616,7 @@ function score(){
 function resultUrl(s){
   var q = '?r=' + s.top +
           '&s=' + ORDER.map(function(k){ return s.pct[k]; }).join(',') +
-          '&c=' + s.cap + '&g=' + s.give + '&w=' + pron;
+          '&c=' + s.cap + '&g=' + s.give;
   return location.origin + location.pathname + q;
 }
 function fromUrl(){
@@ -682,7 +625,6 @@ function fromUrl(){
   if (!r || !STYLES[r] || !sv) return null;
   var parts = sv.split(',').map(Number);
   if (parts.length !== 4 || parts.some(function(n){ return isNaN(n) || n < 0 || n > 100; })) return null;
-  if (w && PRON[w]) pron = w;
   var pct = {};
   ORDER.forEach(function(k, idx){ pct[k] = parts[idx]; });
   var order = ORDER.slice().sort(function(a, b){ return pct[b] - pct[a]; });
@@ -843,30 +785,27 @@ function gapText(s){
   var wantsFeeling = (s.top === 'reach' || s.top === 'round');
   var givesFix = s.give >= 3, givesWith = s.give <= -3;
   if (wantsFeeling && givesFix)
-    return "Here is the thing worth sitting with. What you want when you are struggling is your partner close to you. What you hand {o} when {s} {v:is} struggling is a solution. You are giving the opposite of what you are asking for, which means you are both able to feel unmet by someone who is genuinely trying. Say it to {o} this week in those words. It is a short conversation and it explains about ten years of small disappointments.";
+    return "Here is the thing worth sitting with. What you want when you are struggling is your partner close to you. What you hand your partner when your partner is struggling is a solution. You are giving the opposite of what you are asking for, which means you are both able to feel unmet by someone who is genuinely trying. Say it to your partner this week in those words. It is a short conversation and it explains about ten years of small disappointments.";
   if (!wantsFeeling && givesWith)
-    return "Worth noticing: when you need something you want it dealt with, and when your partner needs something you sit with {o} rather than sorting it. You are giving {o} the thing you would not want yourself. That is generous, and it can also mean {s} {v:is} waiting for a decision while you are being tender at {o}. Ask {o} which one {s} {v:is} after.";
+    return "Worth noticing: when you need something you want it dealt with, and when your partner needs something you sit with them rather than sorting it. You are giving away the thing you would not want yourself. That is generous, and it can also mean your partner is waiting for a decision while you are being tender at them. Ask which one they are after.";
   if (wantsFeeling && givesWith)
     return "You ask for closeness and you give closeness, which means the two of you probably repair well when you are both in the same mood. Watch the other failure: two people going towards each other's feelings and neither one making the decision that actually needs making. Somebody has to say, right, what are we going to do about it.";
   if (!wantsFeeling && givesFix)
-    return "You ask for practical help and you give practical help, so things get done in your house. The risk is that neither of you has anywhere to put a feeling that does not come with a problem attached. If your partner ever seems upset about something already solved, that is what is happening. Nothing needs fixing. {S} {v:needs} company in it.";
-  return "You are fairly even in how you respond, which makes you adaptable. The thing to keep an eye on is whether you are reading the situation or avoiding a position. Asking your partner out loud which one {s} {v:wants} costs nothing and removes the guesswork.";
+    return "You ask for practical help and you give practical help, so things get done in your house. The risk is that neither of you has anywhere to put a feeling that does not come with a problem attached. If your partner ever seems upset about something already solved, that is what is happening. Nothing needs fixing. Your partner needs company in it.";
+  return "You are fairly even in how you respond, which makes you adaptable. The thing to keep an eye on is whether you are reading the situation or avoiding a position. Asking your partner out loud which one your partner wants costs nothing and removes the guesswork.";
 }
 
 function capText(v){
-  if (v >= 80) return "This is your strongest suit and it matters more than it looks. When your partner comes to you with something good, you stop, you turn towards {o} and you want the details. Gable's research found this predicts how satisfied a couple is more strongly than how well the two of you handle a crisis together. Anyone can rally in a disaster. You are good on the ordinary Thursday when {s} got the thing {s} wanted, and that is the rarer skill.";
-  if (v >= 60) return "You take your partner's good news well, though not always with your full attention. This is worth deliberate effort, because the research is counterintuitive here: how you respond to {p} good news predicts satisfaction more strongly than how you respond to {p} bad news. Next time {s} {v:comes} in pleased about something, put the phone down and ask for the whole story. That is the entire technique.";
+  if (v >= 80) return "This is your strongest suit and it matters more than it looks. When your partner comes to you with something good, you stop, you turn towards them and you want the details. Gable's research found this predicts how satisfied a couple is more strongly than how well the two of you handle a crisis together. Anyone can rally in a disaster. You are good on the ordinary Thursday when your partner got the thing they wanted, and that is the rarer skill.";
+  if (v >= 60) return "You take your partner's good news well, though not always with your full attention. This is worth deliberate effort, because the research is counterintuitive here: how you respond to the good news predicts satisfaction more strongly than how you respond to the bad. Next time your partner comes in pleased about something, put the phone down and ask for the whole story. That is the entire technique.";
   if (v >= 40) return "Your partner's good news gets a warm response, but it does not get much of you. That is the passive version, and it is the most common way affection goes unnoticed: nothing unkind is said, and nothing much happens either. Gable's work found that turning towards good news predicts satisfaction more strongly than support during hard times, so this is a cheap place to gain a lot. Stop what you are doing and ask for the details.";
-  return "This is the one to look at. When your partner brings you something {s} {v:is} excited about, you tend to check it rather than join it, or you let it pass without much response. You will experience that as being realistic and {s} will experience it as {p} good news not being safe with you. Over time {s} {v:stops} bringing it, and you lose the easiest connection the two of you have. The fix is unglamorous: put down what you are holding, and ask {o} to tell you the whole thing.";
+  return "This is the one to look at. When your partner brings you something they are excited about, you tend to check it rather than join it, or you let it pass without much response. You will experience that as being realistic. They will experience it as their good news not being safe with you. Over time they stop bringing it, and you lose the easiest connection the two of you have. The fix is unglamorous: put down what you are holding, and ask to hear the whole thing.";
 }
 
 /* ------------------------- boot ------------------------- */
 (function(){
   var shared = fromUrl();
   if (shared) {
-    [].forEach.call($('pron-row').children, function(c){
-      c.setAttribute('aria-pressed', c.textContent === PRON[pron].label ? 'true' : 'false');
-    });
     lastResult = shared;
     paint(shared);
     show('s-res');
@@ -874,12 +813,6 @@ function capText(v){
   }
   var d = load();
   if (!d) return;
-  if (d.pron && PRON[d.pron]) {
-    pron = d.pron;
-    [].forEach.call($('pron-row').children, function(c){
-      c.setAttribute('aria-pressed', c.textContent === PRON[pron].label ? 'true' : 'false');
-    });
-  }
   answers = d.a;
   var answered = answers.filter(function(x){ return x !== null; }).length;
   if (d.r && answered === ITEMS.length) {

@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en-ZA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Two Different Problems · Francois Esterhuizen</title>
+<meta name="description" content="Porn, measured honestly. What it is actually costing you, and how far it sits from what you believe. Those are two different problems and they need two different answers.">
+<meta property="og:title" content="Two Different Problems · Francois Esterhuizen">
+<meta property="og:description" content="What it is actually costing you, and how far it sits from what you believe.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#1B222D">
+<meta name="robots" content="noindex">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --navy:#262E3B; --navy-deep:#1B222D; --teal:#18C0C0; --white:#fff;
+  --muted:rgba(255,255,255,.66); --muted-2:rgba(255,255,255,.42);
+  --line:rgba(255,255,255,.10); --line-strong:rgba(255,255,255,.18);
+  --teal-soft:rgba(24,192,192,.18); --teal-tint:rgba(24,192,192,.10);
+  --green:#5FCB89; --amber:#E8B551; --red:#E38070; --peri:#8B9DE0;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  font-family:'Manrope',system-ui,-apple-system,sans-serif;
+  background:radial-gradient(ellipse at 26% 22%,#333E52 0%,var(--navy) 56%,var(--navy-deep) 100%);
+  background-attachment:fixed;color:var(--white);min-height:100vh;
+  -webkit-font-smoothing:antialiased;padding:0 20px 90px;overflow-x:hidden;
+}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:radial-gradient(rgba(255,255,255,.045) 1px,transparent 1px);
+  background-size:34px 34px;animation:drift 60s linear infinite}
+.orb{position:fixed;border-radius:50%;filter:blur(90px);pointer-events:none;z-index:0;opacity:.5}
+.orb.a{width:420px;height:420px;background:rgba(24,192,192,.22);top:-120px;left:-140px}
+.orb.b{width:380px;height:380px;background:rgba(139,157,224,.14);bottom:-140px;right:-120px}
+@keyframes drift{to{background-position:34px 34px}}
+@media (prefers-reduced-motion:reduce){
+  body::before{animation:none}
+  *{animation-duration:.01ms !important;transition-duration:.01ms !important}
+}
+
+.wrap{position:relative;z-index:1;max-width:680px;margin:0 auto}
+.screen{display:none;padding-top:56px;animation:rise .45s cubic-bezier(.2,.7,.3,1) both}
+.screen.on{display:block}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+.eyebrow{font-size:12px;font-weight:500;letter-spacing:5px;text-transform:uppercase;color:var(--teal);margin-bottom:16px}
+h1{font-size:clamp(32px,6.4vw,48px);font-weight:800;letter-spacing:-.028em;line-height:1.06;text-wrap:balance}
+h1 .teal{color:var(--teal)}
+h2{font-size:clamp(23px,5vw,31px);font-weight:800;letter-spacing:-.022em;line-height:1.16;text-wrap:balance}
+p{color:var(--muted);font-weight:300;font-size:17px;line-height:1.62}
+.lede{font-size:19px;line-height:1.65;margin-top:18px;max-width:56ch}
+strong{color:var(--white);font-weight:600}
+
+.btn{display:inline-flex;align-items:center;gap:10px;border:0;cursor:pointer;
+  background:var(--teal);color:var(--navy);font-family:inherit;font-weight:800;font-size:16px;
+  padding:15px 30px;border-radius:14px;box-shadow:0 8px 26px rgba(24,192,192,.28);
+  transition:filter .18s ease,transform .1s ease}
+.btn:hover{filter:brightness(1.08)}
+.btn:active{transform:translateY(1px)}
+.btn:disabled{opacity:.5;cursor:progress;filter:none}
+.btn.ghost{background:transparent;border:1px solid var(--line-strong);color:var(--white);box-shadow:none;font-weight:600}
+.btn.ghost:hover{border-color:var(--teal);filter:none}
+.btn .spin{width:15px;height:15px;border:2px solid rgba(27,34,45,.3);border-top-color:var(--navy);
+  border-radius:50%;animation:spin .7s linear infinite;display:none}
+.btn.busy .spin{display:block}
+@keyframes spin{to{transform:rotate(360deg)}}
+:focus-visible{outline:none;box-shadow:0 0 0 4px var(--teal-tint),0 0 0 2px var(--teal);border-radius:10px}
+
+.private{margin-top:28px;border:1px solid rgba(24,192,192,.35);border-radius:18px;
+  padding:18px 20px;background:rgba(24,192,192,.06)}
+.private p{color:var(--white);font-size:15.5px;font-weight:500}
+.private p + p{margin-top:7px;color:var(--muted);font-weight:300;font-size:14.5px}
+
+.meta{display:flex;flex-wrap:wrap;gap:22px;margin-top:28px;padding-top:22px;border-top:1px solid var(--line)}
+.meta div{display:flex;flex-direction:column;gap:2px}
+.meta b{font-size:15px;font-weight:700}
+.meta span{font-size:12.5px;color:var(--muted-2)}
+
+.qhead{display:flex;align-items:center;gap:14px;margin-bottom:8px}
+.count{font-size:12px;color:var(--muted-2);letter-spacing:.1em;text-transform:uppercase;font-weight:700;white-space:nowrap}
+.qbar{flex:1;height:7px;background:rgba(255,255,255,.08);border-radius:99px;overflow:hidden}
+.qbar i{display:block;height:100%;width:0;background:var(--teal);border-radius:99px;box-shadow:0 0 10px rgba(24,192,192,.5);transition:width .35s cubic-bezier(.4,0,.2,1)}
+.part{font-size:12px;color:var(--teal);letter-spacing:.1em;text-transform:uppercase;font-weight:600;margin-bottom:18px}
+.stmt{font-size:clamp(21px,4.6vw,27px);font-weight:700;line-height:1.32;letter-spacing:-.015em;text-wrap:balance}
+.scene{margin-top:16px;padding:14px 18px;border-left:2px solid var(--teal-soft);
+  color:var(--muted);font-weight:300;font-size:15.5px;line-height:1.6;
+  background:rgba(255,255,255,.025);border-radius:0 8px 8px 0}
+.opts{display:flex;flex-direction:column;gap:9px;margin-top:28px}
+.opt{display:flex;align-items:center;gap:14px;width:100%;text-align:left;cursor:pointer;
+  background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:12px;
+  padding:15px 18px;color:var(--muted);font-family:inherit;font-size:16px;font-weight:500;
+  transition:border-color .16s ease,background .16s ease,color .16s ease}
+.opt:hover{border-color:var(--line-strong);background:rgba(255,255,255,.07);color:var(--white)}
+.opt[aria-checked="true"]{border-color:var(--teal);background:var(--teal-soft);color:var(--white)}
+.opt .dot{width:16px;height:16px;border-radius:50%;border:2px solid var(--line-strong);flex:none;transition:.16s}
+.opt[aria-checked="true"] .dot{border-color:var(--teal);box-shadow:inset 0 0 0 4px var(--teal)}
+.opt .key{margin-left:auto;font-size:11.5px;font-weight:700;color:var(--muted-2);
+  border:1px solid var(--line);border-radius:6px;padding:2px 7px;min-width:22px;text-align:center}
+.opt[aria-checked="true"] .key{color:var(--teal);border-color:var(--teal-soft)}
+.opt.wide .key{display:none}
+.nav{display:flex;gap:12px;margin-top:24px;align-items:center;justify-content:space-between}
+.nav .back{background:none;border:0;color:var(--muted-2);font-family:inherit;font-size:14px;cursor:pointer;padding:8px 4px;font-weight:600}
+.nav .back:hover{color:var(--white)}
+.hint{font-size:12.5px;color:var(--muted-2);font-weight:300}
+@media (max-width:560px){.hint{display:none}}
+
+/* ---- result ---- */
+.badge{display:inline-block;padding:7px 16px;border-radius:999px;font-size:12px;font-weight:700;
+  letter-spacing:.12em;text-transform:uppercase;margin-bottom:18px}
+.hedge{color:var(--amber);font-size:16.5px;font-weight:500;margin-top:16px;line-height:1.6;max-width:60ch}
+
+.grid{margin-top:34px;display:flex;justify-content:center}
+.axes{display:flex;flex-direction:column;gap:20px;margin-top:28px}
+.arow{display:flex;flex-direction:column;gap:7px}
+.alab{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.alab b{font-size:15.5px;font-weight:700}
+.alab span{font-size:13px;color:var(--muted-2);font-weight:600;font-variant-numeric:tabular-nums}
+.atrack{height:8px;background:rgba(255,255,255,.07);border-radius:99px;overflow:hidden}
+.atrack i{display:block;height:100%;width:0;border-radius:99px;transition:width .9s cubic-bezier(.3,.8,.3,1)}
+.asub{font-size:13.5px;color:var(--muted-2);font-weight:300}
+
+.card{margin-top:20px;border:1px solid var(--line);border-radius:22px;padding:24px 26px;
+  background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.01))}
+.card h3{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;margin-bottom:12px;color:var(--teal)}
+.card.key{border-color:rgba(24,192,192,.45);background:linear-gradient(180deg,rgba(24,192,192,.10),rgba(24,192,192,.02));
+  box-shadow:0 10px 40px rgba(24,192,192,.10)}
+.card.watch h3{color:var(--amber)}
+.card.now h3{color:var(--red)}
+.card p{font-size:16.5px;line-height:1.66}
+.card p + p{margin-top:12px}
+
+.sect{margin-top:52px;display:flex;align-items:center;gap:14px}
+.sect span{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted-2);white-space:nowrap}
+.sect::after{content:"";flex:1;height:1px;background:var(--line)}
+
+.keep{margin-top:24px;border:1px dashed var(--line-strong);border-radius:16px;padding:16px 18px;
+  display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}
+.keep p{font-size:14px;margin:0}
+.keep button{cursor:pointer;font-family:inherit;font-size:14px;font-weight:700;padding:10px 18px;
+  border-radius:10px;border:1px solid var(--teal);background:transparent;color:var(--teal);transition:.16s}
+.keep button:hover{background:var(--teal-tint)}
+
+.mailbox{margin-top:26px;border:1px solid var(--line);border-radius:22px;padding:24px 26px;background:rgba(255,255,255,.03)}
+.mailbox h3{font-size:19px;font-weight:800;letter-spacing:-.016em;margin-bottom:10px}
+.mailbox .caution{margin-top:12px;padding:13px 16px;border-radius:10px;
+  background:rgba(232,181,81,.09);border:1px solid rgba(232,181,81,.35);font-size:14.5px;color:var(--white);font-weight:500}
+.field{display:flex;flex-direction:column;gap:7px;margin-top:14px}
+.field label{font-size:13px;font-weight:600;color:var(--muted)}
+.field input{background:rgba(0,0,0,.2);border:1px solid var(--line-strong);border-radius:12px;
+  padding:14px 16px;color:var(--white);font-family:inherit;font-size:16px;width:100%}
+.field input:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 4px var(--teal-tint)}
+.field input[aria-invalid="true"]{border-color:var(--red)}
+.fe{color:var(--red);font-size:13.5px;font-weight:500;display:none}
+.fe.on{display:block}
+.sent{display:none;margin-top:14px;font-size:15.5px;color:var(--green);font-weight:600}
+.sent.on{display:block}
+
+.help{margin-top:26px;border:1px solid rgba(227,128,112,.4);background:rgba(227,128,112,.06);
+  border-radius:18px;padding:22px 24px}
+.help h3{font-size:17px;font-weight:800;margin-bottom:10px;color:#F0A79C}
+.help p{font-size:15.5px}
+.help p + p{margin-top:9px}
+
+.next{margin-top:52px;padding-top:32px;border-top:1px solid var(--line)}
+.next h3{font-size:21px;font-weight:800;letter-spacing:-.018em;margin-bottom:10px}
+.next .rows{display:flex;flex-direction:column;gap:10px;margin-top:22px}
+.next a{display:flex;align-items:center;justify-content:space-between;gap:16px;
+  border:1px solid var(--line);border-radius:16px;padding:18px 20px;text-decoration:none;
+  color:var(--white);background:rgba(255,255,255,.03);transition:.16s}
+.next a:hover{border-color:var(--teal);background:var(--teal-tint)}
+.next a b{font-size:16px;font-weight:700;display:block}
+.next a span{font-size:13.5px;color:var(--muted);font-weight:300;display:block;margin-top:3px}
+.next a em{font-style:normal;color:var(--teal);font-size:20px;flex:none}
+
+.signoff{margin-top:52px;padding-top:30px;border-top:1px solid var(--line)}
+.signoff p{font-size:16.5px}
+.signoff .name{margin-top:14px;font-size:17px;font-weight:700;color:var(--teal)}
+.refs{margin-top:44px;font-size:13px;color:var(--muted-2);font-weight:300;line-height:1.7}
+.refs b{display:block;color:var(--muted);font-weight:600;font-size:12px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px}
+.foot{margin-top:48px;padding-top:24px;border-top:1px solid var(--line);display:flex;justify-content:center}
+.foot a{color:var(--muted-2);font-size:13px;text-decoration:none;font-weight:500}
+.foot a:hover{color:var(--teal)}
+
+@media (max-width:520px){
+  .screen{padding-top:40px}
+  .opt{padding:14px 16px;font-size:15.5px}
+  .card,.mailbox{padding:20px}
+}
+@media print{
+  body{background:#fff;color:#000}
+  .orb,body::before,.keep,.mailbox,.next{display:none}
+  .card{border-color:#ccc;background:none}
+  p{color:#333}
+}
+</style>
+</head>
+<body>
+
+<div class="orb a"></div>
+<div class="orb b"></div>
+
+<div class="wrap">
+
+  <!-- ================= INTRO ================= -->
+  <div class="screen on" id="s-intro">
+    <div class="eyebrow">Start here</div>
+    <h1>Nobody is going to tell you whether you are an <span class="teal">addict.</span></h1>
+    <p class="lede">Not because it would be unkind, but because the honest answer is that the word does not do what people think it does. The World Health Organisation does list a compulsive sexual behaviour disorder, and classifies it as an impulse control problem rather than an addiction. The American manual looked at the same evidence and left it out altogether. There is no settled test to give you.</p>
+    <p class="lede">What there is, is a finding worth more than a label. When researchers measured what actually predicts somebody calling themselves a porn addict, the strongest predictor was not how much they used. It was how strongly they believed it was wrong. Two men doing exactly the same thing, one of whom thinks it is a sin, describe completely different levels of compulsion.</p>
+    <p class="lede">So this measures two things and it keeps them apart: <strong>what it is actually costing you</strong>, and <strong>how far it sits from what you believe</strong>. Both are real. They are not the same problem, and treating one as the other is how people spend years getting nowhere.</p>
+
+    <div class="private">
+      <p>This one stays on your phone.</p>
+      <p>No email needed, no account, nothing sent anywhere. Your answers never leave this device unless you choose at the end to have the results sent to you.</p>
+    </div>
+
+    <div class="meta">
+      <div><b>14 questions</b><span>About three minutes</span></div>
+      <div><b>No verdict</b><span>Two measurements, kept separate</span></div>
+      <div><b>No judgment from me</b><span>Your values are yours to hold</span></div>
+    </div>
+
+    <div style="margin-top:30px"><button class="btn" id="go">Begin</button></div>
+    <p class="hint" id="resume-note" style="display:none;margin-top:16px"></p>
+  </div>
+
+  <!-- ================= QUESTION ================= -->
+  <div class="screen" id="s-q">
+    <div class="qhead">
+      <div class="count" id="q-count">Question 1 of 14</div>
+      <div class="qbar"><i id="q-fill"></i></div>
+    </div>
+    <div class="part" id="q-part"></div>
+    <div class="stmt" id="q-stmt"></div>
+    <div class="scene" id="q-scene"></div>
+    <div class="opts" id="q-opts" role="radiogroup" aria-labelledby="q-stmt"></div>
+    <div class="nav">
+      <button class="back" id="q-back">&larr; Back</button>
+      <span class="hint" id="q-hint">Press 1 to 5, or use the arrow keys</span>
+    </div>
+  </div>
+
+  <!-- ================= RESULT ================= -->
+  <div class="screen" id="s-res">
+    <div class="badge" id="r-badge">Where this sits</div>
+    <h1 id="r-name"></h1>
+    <p class="hedge" id="r-hedge" style="display:none"></p>
+    <p class="lede" id="r-line"></p>
+
+    <div class="grid" id="r-grid"></div>
+
+    <div class="axes">
+      <div class="arow">
+        <div class="alab"><b>What it is costing you</b><span id="a1-v"></span></div>
+        <div class="atrack"><i id="a1-fill"></i></div>
+        <div class="asub" id="a1-sub"></div>
+      </div>
+      <div class="arow">
+        <div class="alab"><b>How far it sits from what you believe</b><span id="a2-v"></span></div>
+        <div class="atrack"><i id="a2-fill"></i></div>
+        <div class="asub" id="a2-sub"></div>
+      </div>
+    </div>
+
+    <div class="card key"><h3>The thing worth understanding</h3><p id="r-key"></p></div>
+    <div class="card"><h3>What this actually means</h3><p id="r-mean"></p></div>
+    <div class="card watch" id="r-partner-card" style="display:none"><h3>The part your partner is in</h3><p id="r-partner"></p></div>
+    <div class="card now"><h3>Where I would start</h3><p id="r-move"></p></div>
+
+    <div class="help" id="r-help" style="display:none">
+      <h3>Worth saying plainly</h3>
+      <p id="r-help-p"></p>
+      <p>If you are in South Africa and you want to talk to somebody: SADAG on 0800 567 567, or Famsa on 011 975 7106. A page cannot assess you and this one has not. It has only shown you back what you told it.</p>
+    </div>
+
+    <div class="keep">
+      <p>This link opens this page again exactly as it is. Nothing is stored anywhere else.</p>
+      <button type="button" id="copy-link">Copy my link</button>
+    </div>
+
+    <div class="mailbox">
+      <h3>Want this in writing?</h3>
+      <p>Only if it is safe to. This one does not send anything automatically, for the obvious reason.</p>
+      <div class="caution">Do not use a shared inbox, and do not use one somebody else has the password to.</div>
+      <form id="mail-form" novalidate>
+        <div class="field">
+          <label for="f-name">Your first name</label>
+          <input id="f-name" type="text" autocomplete="given-name" placeholder="First name" aria-describedby="e-name">
+          <div class="fe" id="e-name"></div>
+        </div>
+        <div class="field">
+          <label for="f-mail">Your email</label>
+          <input id="f-mail" type="email" autocomplete="email" inputmode="email" placeholder="you@example.com" aria-describedby="e-mail">
+          <div class="fe" id="e-mail"></div>
+        </div>
+        <div style="margin-top:18px">
+          <button class="btn ghost" id="f-go" type="submit"><span class="spin"></span><span id="f-go-t">Send it to me</span></button>
+        </div>
+      </form>
+      <div class="sent" id="f-sent">Sent. Check your inbox in a minute or two.</div>
+    </div>
+
+    <div class="next">
+      <h3>What sits next to this</h3>
+      <div class="rows" id="r-next"></div>
+    </div>
+
+    <div class="signoff">
+      <p>One last thing. Whatever the two numbers above say, you are not the worst thing you do in private, and the size of the gap between your behaviour and your beliefs is not a measure of your worth. It is a measure of a distance. Distances can be closed, and there is more than one direction to close them from.</p>
+      <p class="name">Much love,<br>Francois</p>
+    </div>
+
+    <div class="refs">
+      <b>What this is built on</b>
+      Joshua Grubbs and colleagues on moral incongruence, whose work found that self-reported addiction to pornography is predicted more strongly by moral disapproval of one's own use than by how much a person actually uses, and that the gap between belief and behaviour is itself a direct source of distress. The classification note is the ICD-11, which lists Compulsive Sexual Behaviour Disorder as an impulse control disorder rather than an addiction, and the DSM-5, which declined to include hypersexual disorder on the grounds that the evidence did not show a distinct syndrome. Nothing here is a diagnosis and nothing here can be.
+    </div>
+
+    <div class="foot"><a href="https://www.francoisesterhuizen.com">francoisesterhuizen.com</a></div>
+  </div>
+
+</div>
+
+<script>
+/* ------------------------------------------------------------------
+   Two Different Problems.
+
+   Deliberately NOT an addiction test. Grubbs's finding is that
+   self-reported porn addiction is predicted more strongly by moral
+   disapproval than by actual use, so a single severity score would mostly
+   measure shame and would hand it back with a clinical word attached.
+
+   So two independent scales, reported separately and never summed:
+     cost  what it has actually displaced, and whether control has slipped
+     gap   moral incongruence, the distance between belief and behaviour
+
+   Frequency is asked once, for context, and is NEVER scored. High use with
+   no cost and no gap is a legitimate result and the tool says so.
+
+   Nothing here diagnoses. The word addiction appears only where the page is
+   explicitly rejecting it as a frame.
+------------------------------------------------------------------ */
+
+
+var C = 'What it is costing', G = 'What you believe', X = 'A bit of context';
+
+var ITEMS = [
+  /* ---- functional cost ---- */
+  { k:'cost', p:C, t:"I have tried to cut down or stop, and found that I could not.",
+    s:"Not a vague intention. An actual decision, with a date on it, that did not hold." },
+  { k:'gap',  p:G, t:"What I do here goes against what I actually believe.",
+    s:"Not what you think you should believe. What you genuinely do believe when nobody is arguing with you." },
+  { k:'cost', p:C, t:"It has taken time I had meant to give to something else.",
+    s:"You went up at half past nine to read. It was half past midnight when you put the phone down." },
+  { k:'gap',  p:G, t:"I feel worse about myself afterwards.",
+    s:"Not during. In the twenty minutes after, when the room is the same and you are not." },
+  { k:'cost', p:C, t:"It is the main way I settle myself when I am stressed, bored or lonely.",
+    s:"Something goes wrong at four in the afternoon and you already know what the evening will look like." },
+  { k:'gap',  p:G, t:"I have promised myself I would stop, on principle, more than once.",
+    s:"There have been real resolutions. Some of them had prayers attached." },
+  { k:'cost', p:C, t:"What I look at now is not what I would have looked at a few years ago.",
+    s:"You noticed the drift at some point and decided not to think about it too hard." },
+  { k:'gap',  p:G, t:"If the people whose opinion I care about knew, I would be ashamed.",
+    s:"You can picture the specific faces. That is the part that stings." },
+  { k:'cost', p:C, t:"It has cost me at work, or in my sleep, or in something I had committed to.",
+    s:"Something real got worse, and you know which thing it was." },
+  { k:'gap',  p:G, t:"I think of myself as a lesser person because of this.",
+    s:"Not that you did a bad thing. That you are a worse man than you had hoped to be." },
+  { k:'cost', p:C, t:"It has taken something out of my sex life.",
+    s:"Interest, or attention, or the ordinary wanting that used to be there without effort." },
+  { k:'gap',  p:G, t:"It sits badly with my faith, or with the kind of person I mean to be.",
+    s:"There is a version of you that you can picture clearly, and this is not in it." }
+];
+
+var SCALE = [
+  { v:1, l:"Not at all" },
+  { v:2, l:"A little" },
+  { v:3, l:"Somewhat" },
+  { v:4, l:"Mostly" },
+  { v:5, l:"Very much" }
+];
+
+/* two context questions, never scored */
+var CONTEXT = [
+  { id:'freq', part:X, t:"Roughly how often, over the last few months?",
+    s:"There is no right number here and this one is not scored. It is only so the result can talk about your actual situation instead of an average one.",
+    opts:[
+      { v:'never',   l:"Not at all" },
+      { v:'rare',    l:"A few times a year" },
+      { v:'monthly', l:"About once a month" },
+      { v:'weekly',  l:"Most weeks" },
+      { v:'often',   l:"Most days" },
+      { v:'daily',   l:"Every day, sometimes more" }
+    ] },
+  { id:'partner', part:X, t:"Does your partner know how much you actually look at?",
+    s:"Knowing roughly and knowing actually are different things, and the difference matters more than the amount does.",
+    opts:[
+      { v:'open',    l:"Yes, and we have talked about it properly" },
+      { v:'rough',   l:"Roughly, but not the real picture" },
+      { v:'suspect', l:"I think my partner suspects, but we have not discussed it" },
+      { v:'no',      l:"No, and it would be a shock" },
+      { v:'single',  l:"I am not in a relationship at the moment" }
+    ] }
+];
+
+var QUAD = {
+  clear: {
+    name:"Not The Thing", hex:"#18C0C0",
+    line:"By your own account this is neither taking much from you nor sitting far from what you believe. That is a legitimate result and I am not going to manufacture a problem so that this page feels worth your time.",
+    key:"This is the result people are most surprised to be allowed to have. There is an entire industry built on the idea that any use at all is a crisis, and the research does not support that. What predicts trouble is not the existence of the behaviour, it is whether it is taking things from you and whether it is at war with what you believe. On both of those, you have said no.",
+    mean:"Two things are worth knowing anyway. The first is that this can change without announcing itself, and the thing that usually changes it is not appetite, it is a hard season. Grief, a stretch of loneliness, a job that empties you out. The second is that secrecy has its own cost, separate from the behaviour, and that cost grows even when nothing else does.",
+    move:"Nothing needs fixing here. If you want one thing to keep an eye on, it is whether this quietly becomes your main way of settling yourself when life gets heavy, because that is the shift that turns a habit into a problem. You would notice it as reaching for it on the bad days rather than the ordinary ones."
+  },
+  moral: {
+    name:"The Fight With Yourself", hex:"#E8B551",
+    line:"This is not taking much from you that you can point at. It is taking a great deal from how you see yourself. Those are different injuries, and the second one is the one you are actually carrying.",
+    key:"Here is the finding that changes what to do about this. When researchers looked at what predicts somebody describing themselves as a porn addict, the strongest predictor was not how much they used. It was how strongly they disapproved of their own use. The distress you feel is real, and it is not evidence of addiction. It is evidence of a gap between what you do and what you believe, which is a different thing with a different treatment.",
+    mean:"This matters practically, not just philosophically. If you treat a values gap as an addiction, you reach for the addiction tools: powerlessness, surrender, the language of disease, the assumption that you are one slip from ruin. Applied to a values gap, those tend to increase the shame, and shame is the fuel here rather than the cure. People can spend years in that loop getting more distressed and no freer.",
+    move:"A gap has two sides and it can be closed from either. You can move your behaviour towards your belief, which is the route you have probably already tried. Or you can examine whether the belief is exactly yours, or partly something you inherited and have never actually looked at directly. I am not telling you which one. I am telling you that only doing the first, while never once looking at the second, is why it has not moved. And I would drop the word addiction, starting today. It is not describing you and it is making the thing heavier."
+  },
+  leak: {
+    name:"The Slow Leak", hex:"#8B9DE0",
+    line:"This is taking real things from you, and you have made a kind of peace with it. There is not much moral argument going on in you about it. There is just a steady loss you have stopped noticing.",
+    key:"Your position is the mirror image of the one people usually write about. The standard material assumes the problem is guilt and aims everything at the conscience. That will not land with you, because your conscience is not the part that is struggling. Time is. Attention is. Possibly your sex life is. This is a cost problem, not a conviction problem.",
+    mean:"That is genuinely better news than the alternative, because cost problems respond to ordinary methods. You do not need a moral awakening. You need to see the bill clearly and decide whether you want to keep paying it, the same way you would with anything else that has quietly taken more room than you meant to give it.",
+    move:"Work out what it is actually doing for you, because it is doing something. Settling you, filling a gap, ending the day, giving you twenty minutes where nothing is required of you. Then find the cheaper version of that same thing and put it in the same slot. Removing a habit without replacing its function almost never holds, and that is the reason most attempts at this fail."
+  },
+  both: {
+    name:"Caught Between", hex:"#E38070",
+    line:"Both at once. It is taking things you can name, and it sits a long way from what you believe. That is the hardest of the four positions, and it is also the one where getting help makes the most difference, so I would rather be straight with you about it.",
+    key:"The thing to hold onto is that these are still two separate problems even though you have both. The cost is a practical problem: control has slipped and things are being displaced. The gap is a values problem: what you do and what you believe are far apart and the distance itself hurts. Work that pushes only on the moral side tends to spike the shame without touching the mechanics, and shame reliably makes the behaviour worse rather than better.",
+    mean:"I am not going to give this a clinical name, because there is not a settled one to give. What I can say is that when both scales are high, the thing that changes it is almost never a fresh promise made alone at night. It is a person. Somebody who will take both halves seriously, the practical one and the moral one, and not collapse them into each other.",
+    move:"Find one person to say this out loud to who is not going to make it entirely about sin and is not going to tell you it is meaningless either. A counsellor is the straightest route. If that is not possible this month, then one honest friend, and one specific practical change rather than a total resolution. Total resolutions made privately are what the last few years have already been made of."
+  }
+};
+
+var NEXT = [
+  { href:"/windows-and-walls/", t:"Windows and Walls",
+    d:"Where the secrecy in your relationship currently sits. If the not-telling is the heavier half of this, that is the one to do next. 17 questions." },
+  { href:"/communication-styles/", t:"Communication Styles",
+    d:"How you ask for what you need, and what you do when your partner brings you something. 20 questions." }
+];
+
+/* ------------------------- state ------------------------- */
+var KEY = 'tdp.v1';
+var TOTAL = ITEMS.length + CONTEXT.length;
+var i = 0;
+var answers = new Array(ITEMS.length).fill(null);
+var ctx = { freq:null, partner:null };
+var lastResult = null;
+var $ = function(id){ return document.getElementById(id); };
+
+function save(){
+  try { localStorage.setItem(KEY, JSON.stringify({ a:answers, i:i, ctx:ctx, r:lastResult })); } catch(e){}
+}
+function load(){
+  try {
+    var d = JSON.parse(localStorage.getItem(KEY) || 'null');
+    if (!d || !Array.isArray(d.a) || d.a.length !== ITEMS.length) return null;
+    return d;
+  } catch(e){ return null; }
+}
+function show(id){
+  var all = document.querySelectorAll('.screen');
+  for (var n = 0; n < all.length; n++) all[n].classList.remove('on');
+  $(id).classList.add('on');
+  window.scrollTo(0, 0);
+}
+function progress(p){ $('q-fill').style.width = (p * 100) + '%'; }
+
+/* ------------------------- questions ------------------------- */
+function ctxIndex(){ return i - ITEMS.length; }
+function isCtx(){ return i >= ITEMS.length; }
+
+function renderQ(){
+  $('q-count').textContent = 'Question ' + (i + 1) + ' of ' + TOTAL;
+  $('q-back').style.visibility = i === 0 ? 'hidden' : 'visible';
+  var box = $('q-opts');
+  box.innerHTML = '';
+
+  if (isCtx()) {
+    var c = CONTEXT[ctxIndex()];
+    $('q-part').textContent = c.part;
+    $('q-stmt').textContent = c.t;
+    $('q-scene').textContent = c.s;
+    $('q-hint').style.visibility = 'hidden';
+    c.opts.forEach(function(opt, idx){
+      var b = mkOpt(opt.l, ctx[c.id] === opt.v, idx, true);
+      b.addEventListener('click', function(){ pickCtx(c.id, opt.v); });
+      b.addEventListener('keydown', function(e){ optKeys(e, idx, c.opts.length, function(n){ pickCtx(c.id, c.opts[n].v); }); });
+      box.appendChild(b);
+    });
+    progress(i / TOTAL);
+    return;
+  }
+
+  var it = ITEMS[i];
+  $('q-part').textContent = it.p;
+  $('q-stmt').textContent = it.t;
+  $('q-scene').textContent = it.s;
+  $('q-hint').style.visibility = '';
+  SCALE.forEach(function(opt, idx){
+    var b = mkOpt(opt.l, answers[i] === opt.v, idx, false, opt.v);
+    b.addEventListener('click', function(){ pick(opt.v); });
+    b.addEventListener('keydown', function(e){ optKeys(e, idx, SCALE.length, function(n){ pick(SCALE[n].v); }); });
+    box.appendChild(b);
+  });
+  progress(i / TOTAL);
+}
+
+function mkOpt(label, checked, idx, wide, keyNum){
+  var b = document.createElement('button');
+  b.type = 'button';
+  b.className = 'opt' + (wide ? ' wide' : '');
+  b.setAttribute('role', 'radio');
+  b.setAttribute('aria-checked', checked ? 'true' : 'false');
+  b.tabIndex = checked || idx === 0 ? 0 : -1;
+  var dot = document.createElement('span'); dot.className = 'dot';
+  var lab = document.createElement('span'); lab.textContent = label;
+  b.appendChild(dot); b.appendChild(lab);
+  if (!wide) { var k = document.createElement('span'); k.className = 'key'; k.textContent = keyNum; b.appendChild(k); }
+  return b;
+}
+
+function optKeys(e, idx, len, choose){
+  var btns = $('q-opts').children, next = null;
+  if (e.key === 'ArrowDown' || e.key === 'ArrowRight') next = (idx + 1) % len;
+  else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') next = (idx - 1 + len) % len;
+  else if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); choose(idx); return; }
+  if (next !== null) { e.preventDefault(); btns[next].tabIndex = 0; btns[idx].tabIndex = -1; btns[next].focus(); }
+}
+
+document.addEventListener('keydown', function(e){
+  if (!$('s-q').classList.contains('on')) return;
+  if (e.metaKey || e.ctrlKey || e.altKey) return;
+  if (!isCtx() && /^[1-5]$/.test(e.key)) { e.preventDefault(); pick(parseInt(e.key, 10)); }
+  else if (e.key === 'Backspace' && i > 0) { e.preventDefault(); i--; renderQ(); save(); }
+});
+
+function advance(){
+  setTimeout(function(){
+    if (i < TOTAL - 1) { i++; renderQ(); save(); }
+    else { progress(1); finish(); }
+  }, 190);
+}
+function pick(v){
+  answers[i] = v;
+  var btns = $('q-opts').children;
+  for (var n = 0; n < btns.length; n++) btns[n].setAttribute('aria-checked', SCALE[n].v === v ? 'true' : 'false');
+  save(); advance();
+}
+function pickCtx(id, v){
+  ctx[id] = v;
+  var c = CONTEXT[ctxIndex()];
+  var btns = $('q-opts').children;
+  for (var n = 0; n < btns.length; n++) btns[n].setAttribute('aria-checked', c.opts[n].v === v ? 'true' : 'false');
+  save(); advance();
+}
+
+$('go').addEventListener('click', function(){ show('s-q'); renderQ(); });
+$('q-back').addEventListener('click', function(){ if (i > 0) { i--; renderQ(); save(); } });
+
+/* ------------------------- scoring ------------------------- */
+function score(){
+  var cost = 0, gap = 0, vals = [];
+  for (var n = 0; n < ITEMS.length; n++) {
+    var v = (answers[n] === null ? 3 : answers[n]);
+    vals.push(v);
+    if (ITEMS[n].k === 'cost') cost += v; else gap += v;
+  }
+  // 6 items each, 6..30, onto 0..100. Never summed together, on purpose.
+  var cPct = Math.round((cost - 6) / 24 * 100);
+  var gPct = Math.round((gap  - 6) / 24 * 100);
+  var key = cPct >= 50
+    ? (gPct >= 50 ? 'both'  : 'leak')
+    : (gPct >= 50 ? 'moral' : 'clear');
+  var mean = vals.reduce(function(a,b){ return a+b; },0) / vals.length;
+  var sd = Math.sqrt(vals.reduce(function(a,b){ return a + (b-mean)*(b-mean); },0) / vals.length);
+  return {
+    cost:cPct, gap:gPct, key:key,
+    freq: ctx.freq, partner: ctx.partner,
+    flat: sd < 0.55,
+    borderline: Math.abs(cPct - 50) <= 8 || Math.abs(gPct - 50) <= 8
+  };
+}
+
+function finish(){
+  var s = score();
+  lastResult = s; save();
+  paint(s);
+  history.replaceState(null, '', resultUrl(s));
+  show('s-res');
+}
+function resultUrl(s){
+  return location.origin + location.pathname +
+    '?k=' + s.key + '&c=' + s.cost + '&g=' + s.gap +
+    '&f=' + (s.freq || 'na') + '&p=' + (s.partner || 'na');
+}
+function fromUrl(){
+  var q = new URLSearchParams(location.search);
+  var k = q.get('k'), c = parseInt(q.get('c'),10), g = parseInt(q.get('g'),10);
+  if (!k || !QUAD[k] || isNaN(c) || isNaN(g) || c < 0 || c > 100 || g < 0 || g > 100) return null;
+  var f = q.get('f'), p = q.get('p');
+  var okF = CONTEXT[0].opts.some(function(o){ return o.v === f; });
+  var okP = CONTEXT[1].opts.some(function(o){ return o.v === p; });
+  return { cost:c, gap:g, key:k, freq: okF ? f : null, partner: okP ? p : null,
+           flat:false, borderline: Math.abs(c-50) <= 8 || Math.abs(g-50) <= 8 };
+}
+
+/* ------------------------- the grid ------------------------- */
+function gridSvg(s){
+  var hex = QUAD[s.key].hex;
+  // inset from the axes so the marker can never sit under a quadrant label
+  var x = 52 + (s.cost / 100) * 196;
+  var y = 198 - (s.gap / 100) * 144;
+  return '<svg width="100%" height="auto" viewBox="0 0 300 250" role="img" aria-label="Cost ' + s.cost +
+    ' out of 100, values gap ' + s.gap + ' out of 100">' +
+    '<line x1="30" y1="30" x2="30" y2="210" stroke="rgba(255,255,255,.18)" stroke-width="1.5"/>' +
+    '<line x1="30" y1="210" x2="270" y2="210" stroke="rgba(255,255,255,.18)" stroke-width="1.5"/>' +
+    '<line x1="150" y1="30" x2="150" y2="210" stroke="rgba(255,255,255,.07)" stroke-width="1" stroke-dasharray="4 6"/>' +
+    '<line x1="30" y1="120" x2="270" y2="120" stroke="rgba(255,255,255,.07)" stroke-width="1" stroke-dasharray="4 6"/>' +
+    '<text x="34" y="24" fill="rgba(255,255,255,.42)" font-family="Manrope" font-size="10.5" font-weight="600">FIGHT WITH YOURSELF</text>' +
+    '<text x="266" y="24" text-anchor="end" fill="rgba(255,255,255,.42)" font-family="Manrope" font-size="10.5" font-weight="600">CAUGHT BETWEEN</text>' +
+    '<text x="34" y="228" fill="rgba(255,255,255,.42)" font-family="Manrope" font-size="10.5" font-weight="600">NOT THE THING</text>' +
+    '<text x="266" y="228" text-anchor="end" fill="rgba(255,255,255,.42)" font-family="Manrope" font-size="10.5" font-weight="600">SLOW LEAK</text>' +
+    '<text x="150" y="246" text-anchor="middle" fill="rgba(255,255,255,.42)" font-family="Manrope" font-size="10.5" font-weight="600">COST &rarr;</text>' +
+    '<circle cx="' + x.toFixed(1) + '" cy="' + y.toFixed(1) + '" r="11" fill="' + hex + '"/>' +
+    '<circle cx="' + x.toFixed(1) + '" cy="' + y.toFixed(1) + '" r="19" fill="none" stroke="' + hex + '" stroke-width="1.5" opacity=".45"/>' +
+    '</svg>';
+}
+
+/* ------------------------- band text ------------------------- */
+function band(v){ return v >= 75 ? 'High' : v >= 50 ? 'Raised' : v >= 25 ? 'Low' : 'Very low'; }
+
+function costSub(s){
+  if (s.cost >= 75) return "Control, time and displacement are all showing up together. This is the half that responds to practical work rather than to resolve.";
+  if (s.cost >= 50) return "There is a real bill being paid here, in time or attention or interest, even if it has not become dramatic.";
+  if (s.cost >= 25) return "Some cost, not a great deal. Worth keeping an eye on rather than acting on.";
+  return "By your own account, very little is being taken from you by this.";
+}
+function gapSub(s){
+  if (s.gap >= 75) return "Your behaviour and your beliefs are a long way apart, and that distance is itself doing damage, separately from anything the behaviour does.";
+  if (s.gap >= 50) return "There is a genuine conflict between what you do and what you hold, and it is costing you something in how you regard yourself.";
+  if (s.gap >= 25) return "Some discomfort, not a war. You are not at peace with it and you are not tormented by it either.";
+  return "You are largely at peace with this on principle. Whatever else is true, you are not at war with yourself about it.";
+}
+
+function freqText(s){
+  if (!s.freq || s.freq === 'na') return '';
+  if (s.cost < 50 && s.gap < 50 && (s.freq === 'often' || s.freq === 'daily'))
+    return " You told me this happens most days or more. That is worth naming, because a lot of material would call that alone a crisis. On the two measures that actually predict trouble, you did not report one. Frequency on its own is the weakest of the three signals, and I am not going to convert it into a problem you did not describe.";
+  if (s.freq === 'never')
+    return " You said this has not happened at all recently, so read the two numbers above as being about the pull of it rather than the practice of it.";
+  return '';
+}
+
+function partnerText(s){
+  if (!s.partner || s.partner === 'na' || s.partner === 'single') return null;
+  if (s.partner === 'open')
+    return "Your partner knows, and the two of you have actually talked about it. That is rarer than you might think and it removes the single biggest multiplier on this whole thing. Whatever the numbers above say, you are dealing with one problem rather than two, because the secrecy is not stacked on top of it.";
+  if (s.partner === 'rough')
+    return "Your partner knows roughly, but not the real picture. That gap is doing more work than it looks like it is. A partner who has been given an edited version tends to sense the edit without being able to name it, and what your partner ends up mistrusting is not the behaviour, it is the reporting. The discovery that hurts is almost always the scale, not the fact.";
+  if (s.partner === 'suspect')
+    return "You think your partner suspects and it has not been discussed. That is the most corrosive of the arrangements, because both of you are now managing something neither of you has said out loud, and the not-saying costs you both energy every week. It also means that if this does come out, it will come out at the worst possible moment rather than at one you chose.";
+  return "Your partner does not know, and it would be a shock. I am not going to tell you what to do with that, because a page cannot see your marriage and disclosure decisions are not simple. What I will say is that the secrecy is a second, separate problem sitting on top of the first one, and it grows on its own schedule regardless of what happens to the behaviour.";
+}
+
+/* ------------------------- painting ------------------------- */
+function paint(s){
+  var q = QUAD[s.key];
+  $('r-name').textContent = q.name;
+  $('r-line').textContent = q.line;
+  $('r-key').textContent  = q.key;
+  $('r-mean').textContent = q.mean + freqText(s);
+  $('r-move').textContent = q.move;
+
+  var badge = $('r-badge');
+  badge.textContent = 'Where this sits';
+  badge.style.color = q.hex;
+  badge.style.border = '1px solid ' + q.hex;
+  badge.style.background = 'rgba(255,255,255,.04)';
+
+  var hedge = $('r-hedge');
+  if (s.flat) {
+    hedge.textContent = 'Before the result: you gave almost the same answer to every question, so this is not built on much. If you moved through quickly it is worth doing again slowly, because the whole value of this one is in the difference between the two scales.';
+    hedge.style.display = '';
+  } else if (s.borderline) {
+    hedge.textContent = 'You landed close to the line on at least one of the two scales, so read the neighbouring description as well. The exact quadrant matters far less than the difference between your two numbers.';
+    hedge.style.display = '';
+  } else { hedge.style.display = 'none'; }
+
+  $('r-grid').innerHTML = gridSvg(s);
+
+  $('a1-v').textContent = band(s.cost) + ' · ' + s.cost + ' / 100';
+  $('a2-v').textContent = band(s.gap)  + ' · ' + s.gap  + ' / 100';
+  $('a1-sub').textContent = costSub(s);
+  $('a2-sub').textContent = gapSub(s);
+  var f1 = $('a1-fill'), f2 = $('a2-fill');
+  f1.style.background = q.hex; f2.style.background = q.hex;
+  setTimeout(function(){
+    f1.style.width = Math.max(2, s.cost) + '%';
+    f2.style.width = Math.max(2, s.gap) + '%';
+  }, 160);
+
+  var pt = partnerText(s), pc = $('r-partner-card');
+  if (pt) { $('r-partner').textContent = pt; pc.style.display = ''; }
+  else { pc.style.display = 'none'; }
+
+  var help = $('r-help');
+  if (s.cost >= 75 && s.gap >= 75) {
+    $('r-help-p').textContent = 'Both scales came back high. That does not make you an addict, because that is not a thing this page can establish and the science behind the word is genuinely unsettled. It does mean you are carrying two heavy things at once, and doing that privately is the arrangement least likely to change anything. Please take this to a person.';
+    help.style.display = '';
+  } else { help.style.display = 'none'; }
+
+  var rows = $('r-next');
+  rows.innerHTML = '';
+  NEXT.forEach(function(n){
+    var a = document.createElement('a'); a.href = n.href;
+    var wrap = document.createElement('div');
+    var b = document.createElement('b'); b.textContent = n.t;
+    var sp = document.createElement('span'); sp.textContent = n.d;
+    wrap.appendChild(b); wrap.appendChild(sp);
+    var em = document.createElement('em'); em.textContent = '→';
+    a.appendChild(wrap); a.appendChild(em);
+    rows.appendChild(a);
+  });
+}
+
+$('copy-link').addEventListener('click', function(){
+  var btn = this, url = location.href;
+  var ok = function(){ btn.textContent = 'Copied'; setTimeout(function(){ btn.textContent = 'Copy my link'; }, 2200); };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(url).then(ok).catch(function(){ prompt('Copy this link', url); });
+  } else { prompt('Copy this link', url); }
+});
+
+/* ------------------------- optional email ------------------------- */
+function valid(e){ return /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e); }
+function fieldError(id, eid, msg){
+  var inp = $(id), err = $(eid);
+  if (msg) { err.textContent = msg; err.classList.add('on'); inp.setAttribute('aria-invalid','true'); }
+  else { err.textContent = ''; err.classList.remove('on'); inp.removeAttribute('aria-invalid'); }
+}
+['f-name','f-mail'].forEach(function(id){
+  $(id).addEventListener('input', function(){ fieldError(id, id === 'f-name' ? 'e-name' : 'e-mail', null); });
+});
+
+$('mail-form').addEventListener('submit', function(ev){
+  ev.preventDefault();
+  var btn = $('f-go');
+  if (btn.disabled || !lastResult) return;
+  var name = $('f-name').value.trim(), mail = $('f-mail').value.trim().toLowerCase(), ok = true;
+  if (!name) { fieldError('f-name','e-name','I need a first name so the email does not open with "Hi there".'); ok = false; }
+  if (!valid(mail)) { fieldError('f-mail','e-mail','That email does not look right. Check it and try again.'); ok = false; }
+  if (!ok) { $(name ? 'f-mail' : 'f-name').focus(); return; }
+
+  btn.disabled = true; btn.classList.add('busy');
+  $('f-go-t').textContent = 'Sending';
+
+  fetch('/api/assessment', {
+    method:'POST', headers:{ 'Content-Type':'application/json' },
+    body: JSON.stringify({
+      tool:'two-different-problems', name:name, email:mail,
+      resultKey:lastResult.key, resultName:QUAD[lastResult.key].name,
+      line: QUAD[lastResult.key].line.slice(0,240),
+      axisA:lastResult.cost, axisB:lastResult.gap,
+      link: resultUrl(lastResult)
+    })
+  }).then(function(r){ return r.json().catch(function(){ return {ok:false}; }); })
+    .then(function(j){ done(!!(j && j.ok)); })
+    .catch(function(){ done(false); });
+
+  function done(sent){
+    btn.classList.remove('busy');
+    if (sent) { $('mail-form').style.display = 'none'; $('f-sent').classList.add('on'); }
+    else {
+      btn.disabled = false; $('f-go-t').textContent = 'Send it to me';
+      fieldError('f-mail','e-mail','That did not go through. Use the copy link button above and keep the link somewhere safe instead.');
+    }
+  }
+});
+
+/* ------------------------- boot ------------------------- */
+(function(){
+  var shared = fromUrl();
+  if (shared) { lastResult = shared; paint(shared); show('s-res'); return; }
+  var d = load();
+  if (!d) return;
+  answers = d.a;
+  ctx = d.ctx || { freq:null, partner:null };
+  var answered = answers.filter(function(x){ return x !== null; }).length;
+  var note = $('resume-note');
+  function offer(text, fn){
+    note.innerHTML = '';
+    var a = document.createElement('a');
+    a.href = '#'; a.textContent = text; a.style.color = '#18C0C0';
+    a.addEventListener('click', function(e){ e.preventDefault(); fn(); });
+    note.appendChild(a); note.style.display = '';
+  }
+  if (d.r && answered === ITEMS.length) {
+    lastResult = d.r;
+    offer('Open the result you got last time', function(){ paint(d.r); show('s-res'); });
+  } else if (answered > 0) {
+    i = Math.min(d.i || 0, TOTAL - 1);
+    offer('Carry on where you left off, question ' + (i + 1) + ' of ' + TOTAL, function(){ show('s-q'); renderQ(); });
+  }
+})();
+</script>
+</body>
+</html>

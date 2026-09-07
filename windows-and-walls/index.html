@@ -91,14 +91,6 @@ strong{color:var(--white);font-weight:600}
 .meta b{font-size:15px;font-weight:700}
 .meta span{font-size:12.5px;color:var(--muted-2)}
 
-.pron{margin-top:26px;padding:20px 22px;border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.03)}
-.pron .q{font-size:15px;font-weight:600;color:var(--white);margin-bottom:4px}
-.pron .why{font-size:13.5px;color:var(--muted-2);font-weight:300;margin-bottom:14px}
-.pron .row{display:flex;flex-wrap:wrap;gap:9px}
-.pron button{cursor:pointer;font-family:inherit;font-size:15px;font-weight:600;padding:11px 20px;
-  border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--muted);transition:.16s}
-.pron button:hover{border-color:var(--line-strong);color:var(--white)}
-.pron button[aria-pressed="true"]{border-color:var(--teal);background:var(--teal-soft);color:var(--white)}
 
 .qhead{display:flex;align-items:center;gap:14px;margin-bottom:8px}
 .count{font-size:12px;color:var(--muted-2);letter-spacing:.1em;text-transform:uppercase;font-weight:700;white-space:nowrap}
@@ -238,12 +230,6 @@ strong{color:var(--white);font-weight:600}
       <p>No email needed, no account, nothing sent anywhere. Your answers never leave this device unless you choose at the end to have the results sent to you. That is deliberate: this only works if you can afford to be honest.</p>
     </div>
 
-    <div class="pron">
-      <div class="q">When I write about your partner, which word should I use?</div>
-      <div class="why">So this reads like it is about your actual relationship.</div>
-      <div class="row" id="pron-row"></div>
-    </div>
-
     <div class="meta">
       <div><b>17 questions</b><span>About three minutes</span></div>
       <div><b>Nothing has to have happened</b><span>This is the version you do beforehand</span></div>
@@ -377,36 +363,21 @@ strong{color:var(--white);font-weight:600}
        decision that needs a person, not a web page.
 
    Partner pronouns are templated from the reader's own choice.
-   Tokens: {s} {S} {o} {p} {P} {self}, and {v:verb} for agreement.
+   Tokens: your partner Your partner your partner your partner's Your partner's your partner, and verb for agreement.
 ------------------------------------------------------------------ */
 
-var PRON = {
-  she:  { s:'she',  S:'She',  o:'her',  p:'her',   P:'Her',   self:'herself',    label:'She',  plural:false },
-  he:   { s:'he',   S:'He',   o:'him',  p:'his',   P:'His',   self:'himself',    label:'He',   plural:false },
-  they: { s:'they', S:'They', o:'them', p:'their', P:'Their', self:'themselves', label:'They', plural:true  }
-};
-var IRREGULAR = { is:'are', has:'have', does:'do', was:'were', goes:'go' };
-function deS(v){
-  if (IRREGULAR[v]) return IRREGULAR[v];
-  if (/ies$/.test(v)) return v.slice(0,-3) + 'y';
-  if (/(ches|shes|sses|xes|zes)$/.test(v)) return v.slice(0,-2);
-  if (/s$/.test(v)) return v.slice(0,-1);
-  return v;
-}
-var pron = 'they';
-function T(str){
-  var g = PRON[pron];
-  return String(str)
-    .replace(/\{v:([a-z' ]+)\}/gi, function(_, v){ return g.plural ? deS(v) : v; })
-    .replace(/\{S\}/g,g.S).replace(/\{s\}/g,g.s).replace(/\{o\}/g,g.o)
-    .replace(/\{P\}/g,g.P).replace(/\{p\}/g,g.p).replace(/\{self\}/g,g.self);
-}
+/* Partner references were templated from a pronoun picker on the intro
+   screen until 7 Sep 2026, when Francois removed it: the copy says "your
+   partner" throughout instead. T is kept as a pass-through so every call
+   site did not have to be unpicked by hand, which is how the first attempt
+   at this broke the file. */
+function T(str){ return String(str); }
 
 var P1 = 'What your partner sees', P2 = 'What surrounds the two of you';
 
 var ITEMS = [
   { k:'win', p:P1, t:"When something good happens in my day, my partner is the first person I want to tell.",
-    s:"The call comes at eleven in the morning. You are already working out how you will tell {o} tonight." },
+    s:"The call comes at eleven in the morning. You are already working out how you will tell your partner tonight." },
   { k:'sec', p:P1, t:"There are conversations on my phone I would not want my partner to scroll through.",
     s:"Nothing has happened. You would still not hand it over unlocked." },
   { k:'per', p:P2, t:"The people I spend time with know I am married, and know that it matters to me.",
@@ -419,21 +390,21 @@ var ITEMS = [
   { k:'sec', p:P1, t:"I have left something out when telling my partner where I was, or who was there.",
     s:"Not a lie. You just did not mention who else came along, and then the moment for saying it passed." },
   { k:'per', p:P2, t:"If somebody made their interest in me obvious, my partner would hear about it.",
-    s:"Not as a confession. As a story you would tell {o} that same evening, probably laughing." },
+    s:"Not as a confession. As a story you would tell your partner that same evening, probably laughing." },
   { k:'out', p:P2, t:"I have told somebody else about a problem in my marriage before I told my partner.",
     s:"It came out easily over coffee. It did not feel like a betrayal at the time, and it may not have been one." },
 
   { k:'win', p:P1, t:"I tell my partner about the parts of my day that went badly, not only the parts that went well.",
-    s:"The meeting where you got it wrong. {S} {v:hears} about that one too." },
+    s:"The meeting where you got it wrong. Your partner hears about that one too." },
   { k:'sec', p:P1, t:"There are things going on in my life that my partner knows nothing about.",
-    s:"Not secrets exactly. Just a part of your life {s} {v:has} no map of." },
+    s:"Not secrets exactly. Just a part of your life your partner has no map of." },
   { k:'per', p:P2, t:"I would be comfortable with my partner reading anything I have sent this month.",
     s:"Not because there is nothing in there. Because there is genuinely nothing in there." },
   { k:'out', p:P2, t:"I look forward to seeing one particular person in a way I have never mentioned at home.",
     s:"You know which days that person is around. You have never said that out loud to anybody." },
 
   { k:'win', p:P1, t:"My partner could describe what has been on my mind lately.",
-    s:"If somebody asked {o} what you have been chewing on, {s} would get it roughly right." },
+    s:"If somebody asked your partner what you have been chewing on, your partner would get it roughly right." },
   { k:'sec', p:P1, t:"I have deleted a message before my partner could see it.",
     s:"It would have needed explaining, and you did not feel like explaining it." },
   { k:'per', p:P2, t:"When I am alone with someone whose company I enjoy, I keep it where my partner could hear it.",
@@ -467,23 +438,23 @@ var ARCH = {
   facing: {
     name:"Facing In", hex:"#18C0C0",
     line:"The window between the two of you is open and the wall around you is holding. Your partner has a fairly accurate picture of what is going on in you, and nobody outside is being given the things that belong inside. This is the arrangement that makes affairs unlikely, and it is not luck. Somebody has been maintaining it.",
-    good:"What protects you is not willpower and it is not that neither of you meets anybody interesting. It is that there is very little for a secret to attach to. You tell {o} the small things, so there is no backlog of unsaid material building up, and the people around you know where you stand. Attraction still happens. It just has nowhere private to go and grow.",
+    good:"What protects you is not willpower and it is not that neither of you meets anybody interesting. It is that there is very little for a secret to attach to. You tell your partner the small things, so there is no backlog of unsaid material building up, and the people around you know where you stand. Attraction still happens. It just has nowhere private to go and grow.",
     thin:"The risk for a house like yours is complacency and time. Perimeters do not usually fail suddenly, they fail during a stretch when one of you is exhausted, or grieving, or working somewhere new, and the telling stops for a few months without anybody deciding it should. Watch the seasons when you stop reporting the boring parts of your day. That is the first thing to go, every time.",
-    move:"Ask {o} this week what you have not been telling {o} lately. Not as an accusation of yourself, as maintenance. The answer is often something small and slightly embarrassing that got skipped, and putting it back is the whole job."
+    move:"Ask your partner this week what you have not been telling your partner lately. Not as an accusation of yourself, as maintenance. The answer is often something small and slightly embarrassing that got skipped, and putting it back is the whole job."
   },
   rooms: {
     name:"Separate Rooms", hex:"#8B9DE0",
     line:"The perimeter is holding, but a wall has gone up between the two of you. Nobody has come in. That matters and it is worth saying first. What has happened is that the two of you have stopped telling each other things, and you are living companionably in separate rooms of the same house.",
     good:"You are not being pulled anywhere. There is no window open outward, no person collecting the things your partner is not getting. Whatever has gone thin here, it has gone thin between the two of you and not because of somebody else, which means it can be repaired without anyone having to be dealt with first. That is a much simpler problem than it feels like from inside.",
     thin:"This is the arrangement affairs are most often built on, and it is the reason I would rather you did this now than in a year. Nothing is wrong. That is exactly the difficulty. There is a growing supply of unsaid things in you and no demand for them at home, and if somebody eventually asks you a real question at a hard moment, you will have a great deal ready to say. That is not weakness of character. It is stock and opportunity meeting.",
-    move:"Tell {o} one true thing this week that {s} did not ask for. Not a grievance about the marriage. Something about you: what you are worried about, what you have been thinking about, what went badly on Tuesday. The wall between two people comes down one unrequested sentence at a time, and it has to be a real one."
+    move:"Tell your partner one true thing this week that your partner did not ask for. Not a grievance about the marriage. Something about you: what you are worried about, what you have been thinking about, what went badly on Tuesday. The wall between two people comes down one unrequested sentence at a time, and it has to be a real one."
   },
   door: {
     name:"The Open Door", hex:"#E8B551",
     line:"You and your partner are still telling each other things, which is the harder half and you have it. The perimeter is the loose part. There is more of you circulating outside this marriage than you have probably registered, and the openness at home is currently doing the work of holding it all together.",
     good:"The honesty between you is genuine protection and it is why this reads as a warning rather than as a problem. People who talk to their partners like you do tend to catch things early, because there is already a channel for saying the awkward sentence. You are not hiding. You are just a bit unguarded, and those are different.",
     thin:"Openness at home does not automatically protect the perimeter, and there is a specific way this fails. A friendship that is warm and above board slowly becomes the place where a particular kind of conversation happens, and because you are not hiding anything you never flag it, even to yourself. Glass's slide starts precisely here, in a friendship nobody had any reason to worry about.",
-    move:"Pick the friendship outside this marriage that gets the most of your inner life and say it out loud to {o} this week. Name the person. You are not confessing, because there is nothing to confess. You are moving that relationship inside the perimeter where it is safe, which is exactly what keeps it safe."
+    move:"Pick the friendship outside this marriage that gets the most of your inner life and say it out loud to your partner this week. Name the person. You are not confessing, because there is nothing to confess. You are moving that relationship inside the perimeter where it is safe, which is exactly what keeps it safe."
   },
   turned: {
     name:"Turned Around", hex:"#E38070",
@@ -497,7 +468,7 @@ var ARCH = {
 var PERSON_TEXT = {
   maybe: {
     h:"About the person on your mind",
-    p:"There is somebody, and nothing has happened. That is a real position and it is worth being precise about, because it is the one place where a small action still changes the outcome. Glass's finding was that what keeps somebody from crossing is not resisting harder in private. It is taking the thing out of private. An attraction your partner knows about behaves completely differently to one {s} {v:does} not, because secrecy is what gives it room to grow. You do not have to make it a confession or a crisis. You have to make it not a secret."
+    p:"There is somebody, and nothing has happened. That is a real position and it is worth being precise about, because it is the one place where a small action still changes the outcome. Glass's finding was that what keeps somebody from crossing is not resisting harder in private. It is taking the thing out of private. An attraction your partner knows about behaves completely differently to one your partner does not, because secrecy is what gives it room to grow. You do not have to make it a confession or a crisis. You have to make it not a secret."
   },
   yes: {
     h:"About what has already happened",
@@ -522,7 +493,7 @@ var lastResult = null;
 var $ = function(id){ return document.getElementById(id); };
 
 function save(){
-  try { localStorage.setItem(KEY, JSON.stringify({ a:answers, i:i, pron:pron, person:person, r:lastResult })); }
+  try { localStorage.setItem(KEY, JSON.stringify({ a:answers, i:i,  person:person, r:lastResult })); }
   catch (e) {}
 }
 function load(){
@@ -540,22 +511,6 @@ function show(id){
 }
 function progress(p){ $('q-fill').style.width = (p * 100) + '%'; }
 
-(function(){
-  var row = $('pron-row');
-  Object.keys(PRON).forEach(function(k){
-    var b = document.createElement('button');
-    b.type = 'button'; b.textContent = PRON[k].label;
-    b.setAttribute('aria-pressed', k === pron ? 'true' : 'false');
-    b.addEventListener('click', function(){
-      pron = k;
-      [].forEach.call(row.children, function(c){ c.setAttribute('aria-pressed', c === b ? 'true':'false'); });
-      save();
-      if ($('s-res').classList.contains('on') && lastResult) paint(lastResult);
-      if ($('s-q').classList.contains('on')) renderQ();
-    });
-    row.appendChild(b);
-  });
-})();
 
 /* ------------------------- questions ------------------------- */
 function isPersonStep(){ return i === ITEMS.length; }
@@ -692,14 +647,13 @@ function finish(){
 function resultUrl(s){
   return location.origin + location.pathname +
     '?a=' + s.key + '&b=' + s.between + '&r=' + s.around +
-    '&p=' + (s.person || 'none') + '&w=' + pron;
+    '&p=' + (s.person || 'none');
 }
 function fromUrl(){
   var q = new URLSearchParams(location.search);
   var k = q.get('a'), b = parseInt(q.get('b'), 10), r = parseInt(q.get('r'), 10);
   if (!k || !ARCH[k] || isNaN(b) || isNaN(r)) return null;
   if (Math.abs(b) > 16 || Math.abs(r) > 16) return null;
-  var w = q.get('w'); if (w && PRON[w]) pron = w;
   var pv = q.get('p');
   return {
     between:b, around:r, key:k,
@@ -872,28 +826,11 @@ $('mail-form').addEventListener('submit', function(ev){
 
 /* ------------------------- boot ------------------------- */
 (function(){
-  function syncPron(){
-    [].forEach.call($('pron-row').children, function(c){
-      c.setAttribute('aria-pressed', c.textContent === PRON[pron].label ? 'true' : 'false');
-    });
-  }
   var shared = fromUrl();
-  if (shared) { syncPron(); lastResult = shared; paint(shared); show('s-res'); return; }
+  if (shared) { lastResult = shared; paint(shared); show('s-res'); return; }
 
   var d = load();
   if (!d) return;
-  if (d.pron && PRON[d.pron]) { pron = d.pron; syncPron(); }
-  answers = d.a;
-  person = d.person || null;
-  var answered = answers.filter(function(x){ return x !== null; }).length;
-  var note = $('resume-note');
-  function offer(text, fn){
-    note.innerHTML = '';
-    var a = document.createElement('a');
-    a.href = '#'; a.textContent = text; a.style.color = '#18C0C0';
-    a.addEventListener('click', function(e){ e.preventDefault(); fn(); });
-    note.appendChild(a); note.style.display = '';
-  }
   if (d.r && answered === ITEMS.length) {
     lastResult = d.r;
     offer('Open the result you got last time', function(){ paint(d.r); show('s-res'); });
