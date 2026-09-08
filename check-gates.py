@@ -42,6 +42,17 @@ GATES = {
         "must": ['data-path="relational"', "qualifier.js", "funnel.js", 'id="qualifier"'],
         "must_not": ['data-path="personal"', "Story of Us", "/library/"],
     },
+    "events": {
+        # Unlisted events page. Every workshop must offer a waiting list, and
+        # the page must always carry a general one, so somebody arriving when
+        # nothing is scheduled still has somewhere to put their name.
+        "must": ["Join the waiting list", 'data-wl="couples-communication"',
+                 'data-wl="confidence-with-claude"', 'data-wl="general"',
+                 "/api/waitlist", 'name="phone"', 'name="email"', 'name="name"',
+                 "noindex"],
+        # a mailto loses everybody without a mail client configured
+        "must_not": ["mailto:", "Pattern Breaker"],
+    },
     "thanks": {
         "must": ["thankyou_view_", "tool_open_", "paid_tease_click_", "wa.me/27824441831"],
         "must_not": ["Story of Us", "/library/"],

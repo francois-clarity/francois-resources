@@ -88,6 +88,36 @@
     .card.next::before{animation:none}
     a.card:hover{transform:none}
   }
+
+  /* ---- waiting list ---- */
+  .wl{margin-top:20px;border-top:1px solid rgba(255,255,255,.10);padding-top:20px}
+  .wl > button{cursor:pointer;font-family:inherit;font-weight:800;font-size:15px;
+    padding:12px 24px;border-radius:12px;border:1px solid rgba(24,192,192,.5);
+    background:rgba(24,192,192,.12);color:var(--teal);transition:.16s}
+  .wl > button:hover{background:rgba(24,192,192,.2);color:#fff}
+  .wl form{display:none;margin-top:16px}
+  .wl.open form{display:block}
+  .wl.open > button{display:none}
+  .wl .row{display:flex;flex-wrap:wrap;gap:10px}
+  .wl input{flex:1 1 180px;min-width:0;background:rgba(0,0,0,.24);
+    border:1px solid rgba(255,255,255,.18);border-radius:12px;padding:13px 15px;
+    color:#fff;font-family:inherit;font-size:16px}
+  .wl input:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 4px rgba(24,192,192,.10)}
+  .wl input[aria-invalid="true"]{border-color:#E38070}
+  .wl .go2{margin-top:12px;cursor:pointer;font-family:inherit;font-weight:800;font-size:15.5px;
+    padding:13px 26px;border:0;border-radius:12px;background:var(--teal);color:var(--navy-deep);
+    display:inline-flex;align-items:center;gap:9px}
+  .wl .go2:hover{filter:brightness(1.08)}
+  .wl .go2:disabled{opacity:.5;cursor:progress}
+  .wl .sp{width:14px;height:14px;border:2px solid rgba(27,34,45,.3);border-top-color:var(--navy-deep);
+    border-radius:50%;animation:wlspin .7s linear infinite;display:none}
+  .wl .go2.busy .sp{display:block}
+  @keyframes wlspin{to{transform:rotate(360deg)}}
+  .wl .msg{margin-top:11px;font-size:14.5px;font-weight:600;display:none}
+  .wl .msg.on{display:block}
+  .wl .msg.err{color:#E38070}
+  .wl .msg.ok{color:#5FCB89}
+  .wl .fine{margin-top:11px;font-size:13px;color:rgba(255,255,255,.42);font-weight:300}
 </style>
 </head>
 <body>
@@ -148,15 +178,61 @@
     <p>How to build AI agents for your small business. A working session, not a
       demonstration: you leave with something running that does a real job for you.</p>
     <p class="note">This round is full. New dates are being set now.</p>
+      <div class="wl" data-wl="confidence-with-claude">
+        <button type="button">Join the waiting list</button>
+        <form novalidate>
+          <div class="row">
+            <input name="name" type="text" placeholder="Your name" autocomplete="name" aria-label="Your name">
+            <input name="email" type="email" placeholder="you@example.com" autocomplete="email" inputmode="email" aria-label="Your email">
+            <input name="phone" type="tel" placeholder="Phone number" autocomplete="tel" inputmode="tel" aria-label="Your phone number">
+          </div>
+          <button class="go2" type="submit"><span class="sp"></span><span>Add me to the list</span></button>
+          <p class="fine">I will let you know as soon as dates are set. Nothing else.</p>
+        </form>
+        <p class="msg"></p>
+      </div>
   </div>
 
-  <a class="card" href="mailto:francois@francoisesterhuizen.com?subject=Couples%20Communication%20Workshop%20waiting%20list&amp;body=Please%20add%20me%20to%20the%20waiting%20list%20for%20the%20next%20Couples%20Communication%20Workshop." >
+  <div class="card">
     <span class="tag tbc">Dates to be confirmed</span>
     <h2>The Couples Communication Workshop</h2>
     <p>A day for two people who love each other and keep having the same argument.
       The patterns underneath it, and what to do differently while you are still in the room.</p>
-    <span class="go">Join the waiting list</span>
-  </a>
+      <div class="wl" data-wl="couples-communication">
+        <button type="button">Join the waiting list</button>
+        <form novalidate>
+          <div class="row">
+            <input name="name" type="text" placeholder="Your name" autocomplete="name" aria-label="Your name">
+            <input name="email" type="email" placeholder="you@example.com" autocomplete="email" inputmode="email" aria-label="Your email">
+            <input name="phone" type="tel" placeholder="Phone number" autocomplete="tel" inputmode="tel" aria-label="Your phone number">
+          </div>
+          <button class="go2" type="submit"><span class="sp"></span><span>Add me to the list</span></button>
+          <p class="fine">I will let you know as soon as dates are set. Nothing else.</p>
+        </form>
+        <p class="msg"></p>
+      </div>
+  </div>
+
+  <div class="sect"><span>Nothing here for you yet</span></div>
+
+  <div class="card">
+    <h2>Tell me what you are waiting for</h2>
+    <p>New workshops get set a few months out and the people on this list hear first,
+      usually before anything goes on the website.</p>
+      <div class="wl" data-wl="general">
+        <button type="button">Put me on the list</button>
+        <form novalidate>
+          <div class="row">
+            <input name="name" type="text" placeholder="Your name" autocomplete="name" aria-label="Your name">
+            <input name="email" type="email" placeholder="you@example.com" autocomplete="email" inputmode="email" aria-label="Your email">
+            <input name="phone" type="tel" placeholder="Phone number" autocomplete="tel" inputmode="tel" aria-label="Your phone number">
+          </div>
+          <button class="go2" type="submit"><span class="sp"></span><span>Add me to the list</span></button>
+          <p class="fine">I will let you know as soon as dates are set. Nothing else.</p>
+        </form>
+        <p class="msg"></p>
+      </div>
+  </div>
 
   <div class="foot">
     <a href="/">Resources</a>
@@ -165,6 +241,70 @@
   </div>
 
 </div>
+
+<script>
+/* Waiting list. Each block posts to /api/waitlist, which writes to KV first
+   and then forwards to the Google Sheet, so a signup is never lost to a
+   third party being down. */
+(function(){
+  document.querySelectorAll('.wl').forEach(function(wl){
+    var open = wl.querySelector(':scope > button');
+    var form = wl.querySelector('form');
+    var msg  = wl.querySelector('.msg');
+    var go   = wl.querySelector('.go2');
+    var lab  = go.querySelector('span:last-child');
+
+    open.addEventListener('click', function(){
+      wl.classList.add('open');
+      form.querySelector('input[name=name]').focus();
+    });
+
+    form.querySelectorAll('input').forEach(function(i){
+      i.addEventListener('input', function(){
+        i.removeAttribute('aria-invalid');
+        msg.className = 'msg';
+      });
+    });
+
+    function say(text, kind){
+      msg.textContent = text;
+      msg.className = 'msg on ' + kind;
+    }
+
+    form.addEventListener('submit', function(ev){
+      ev.preventDefault();
+      if (go.disabled) return;
+      var f = {};
+      form.querySelectorAll('input').forEach(function(i){ f[i.name] = i.value.trim(); });
+
+      if (!f.name) { say('I need a name.', 'err'); form.querySelector('[name=name]').setAttribute('aria-invalid','true'); return; }
+      if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(f.email)) { say('That email does not look right.', 'err'); form.querySelector('[name=email]').setAttribute('aria-invalid','true'); return; }
+      if (f.phone.replace(/\D/g,'').length < 9) { say('That phone number looks too short.', 'err'); form.querySelector('[name=phone]').setAttribute('aria-invalid','true'); return; }
+
+      go.disabled = true; go.classList.add('busy'); lab.textContent = 'Adding you';
+      msg.className = 'msg';
+
+      fetch('/api/waitlist', {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ event: wl.dataset.wl, name:f.name, email:f.email, phone:f.phone, source:'events page' })
+      }).then(function(r){ return r.json().catch(function(){ return {ok:false}; }); })
+        .then(function(j){
+          go.classList.remove('busy');
+          if (j && j.ok) {
+            form.style.display = 'none';
+            say('You are on the list. I will be in touch as soon as dates are set.', 'ok');
+          } else {
+            go.disabled = false; lab.textContent = 'Add me to the list';
+            say((j && j.error) || 'That did not go through. Try again in a moment, or email me directly.', 'err');
+          }
+        }).catch(function(){
+          go.classList.remove('busy'); go.disabled = false; lab.textContent = 'Add me to the list';
+          say('That did not go through. Try again in a moment, or email me directly.', 'err');
+        });
+    });
+  });
+})();
+</script>
 <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "a9b056ed20bf4324b33f372dd69b5db4"}'></script><!-- End Cloudflare Web Analytics -->
 </body>
 </html>
