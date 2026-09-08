@@ -38,6 +38,12 @@ const TOOLS = {
   // the email AFTER seeing results. There is no gate on that tool on purpose.
   'windows-and-walls':    { merge: 'windows-and-walls' },
   'two-different-problems': { merge: 'two-different-problems' },
+  // The open tools. These captured nothing at all until 8 Sep 2026.
+  'invisible-contracts':     { merge: 'invisible-contracts' },
+  'tree-of-clarity':         { merge: 'tree-of-clarity' },
+  'belief-inventory':        { merge: 'belief-inventory' },
+  'four-voices':             { merge: 'four-voices' },
+  'emotional-language-wheel':{ merge: 'emotional-language-wheel' },
 };
 
 export async function onRequestPost({ request, env }) {

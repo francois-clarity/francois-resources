@@ -1672,9 +1672,13 @@ function finish(){
 
     '<div class="nav"><button class="btn" id="save">Save this</button>'+
     '<button class="btn ghost" id="print">Print or save as PDF</button>'+
-    '<button class="back" id="again">Another situation</button></div></div>';
+    '<button class="back" id="again">Another situation</button></div></div>'+
+    '<div id="cap-mount"></div>';
 
   tool.innerHTML = h;
+  var capEl = document.getElementById('cap-mount');
+  if (capEl && window.CAPTURE) CAPTURE.mount({ el: capEl, tool: 'tree-of-clarity',
+    heading: 'Want this emailed to you?', blurb: 'This page lives on your phone and disappears if you clear your browser. An email gives you a copy of what you worked out.' });
   document.getElementById("save").onclick = function(){
     filledBeliefs().forEach(function(b){
       saveBelief({ b:b.text, shape:b.shape, fn:b.fn, trig:S.trigger,
@@ -1710,7 +1714,7 @@ function renderSaved(){
     h += '<div class="bcard"><div class="bt">'+esc(e.b)+'</div><div class="bm">'+
       SHAPE_LABEL[e.shape]+' · '+(e.fn==="limiting"?"stops me":"excuses me")+'</div></div>';
   });
-  h += '<p class="note">Saved on this device only. No account, nothing sent anywhere. Bring these to a one-on-one.</p>';
+  h += '<p class="note">Saved on this device only. No account. Nothing leaves this device unless you ask for the email below. Bring these to a one-on-one.</p>';
   box.innerHTML = h;
   document.getElementById("clear").onclick = function(){
     try { localStorage.removeItem(KEY); } catch(e){} renderSaved();
@@ -1759,5 +1763,6 @@ function renderSaved(){
 renderSaved();
 </script>
 <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "a9b056ed20bf4324b33f372dd69b5db4"}'></script><!-- End Cloudflare Web Analytics -->
+<script src="/assets/capture.js"></script>
 </body>
 </html>

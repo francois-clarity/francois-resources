@@ -100,12 +100,11 @@ GATES = {
         #      in a shared inbox is the exact harm this tool prevents.
         #   3. it never tells anybody to disclose an affair. That decision
         #      needs a person, not a page.
-        "must": ["Windows and Walls", "Question 1 of 17",
+        "must": ['id="s-mail"', "Show me my results", "plain subject line", "Windows and Walls", "Question 1 of 17",
                  "Facing In", "Separate Rooms", "The Open Door", "Turned Around",
                  "built out of secrecy", "Is there a particular person",
                  "What is working", "Where it is thin", "The one move this week",
-                 "This one stays on your phone", "Want this in writing",
-                 "shared inbox", "0800 567 567", "0800 150 150",
+                 "This one stays on your phone", "0800 567 567", "0800 150 150",
                  "/api/assessment", "noindex", "Much love",
                  'role="radiogroup"', "localStorage"],
         "must_not": ["Pattern Breaker", "Headlights", "Loop Map",
@@ -120,7 +119,7 @@ GATES = {
         # self-reported addiction tracks moral disapproval more than actual
         # use, so a single severity score would mostly measure shame and hand
         # it back with a clinical word on it. Two scales, never summed.
-        "must": ["Two Different Problems", "Question 1 of 14",
+        "must": ['id="s-mail"', "Show me my results", "plain subject line", "Two Different Problems", "Question 1 of 14",
                  "Not The Thing", "The Fight With Yourself", "The Slow Leak", "Caught Between",
                  "What it is costing you", "how far it sits from what you believe",
                  "moral incongruence", "impulse control disorder",
@@ -137,26 +136,26 @@ GATES = {
     },
     "invisible-contracts": {
         # Contracts you keep. No email gate; markers are content.
-        "must": ["Invisible Contracts", "ic-contracts", "then you should",
+        "must": ["/assets/capture.js", "CAPTURE.mount", "Invisible Contracts", "ic-contracts", "then you should",
                  "if you do not, it means", "Null and void", "Would you be willing",
                  "underage when you signed"],
         "must_not": ["Pattern Breaker", "Headlights", "Loop Map"],
     },
     "four-voices": {
         # Thoughts layer. No email gate; markers are content.
-        "must": ["Four Voices", "toc-voices", "The judge", "The cheerleader",
+        "must": ["/assets/capture.js", "CAPTURE.mount", "Four Voices", "toc-voices", "The judge", "The cheerleader",
                  "The comforter", "The coach", "tried everything"],
         "must_not": ["Pattern Breaker", "Headlights", "Loop Map"],
     },
     "belief-inventory": {
         # Guided sweep by life domain. No email gate; markers are content.
-        "must": ["Belief Inventory", "toc-inventory", "What you would say",
+        "must": ["/assets/capture.js", "CAPTURE.mount", "Belief Inventory", "toc-inventory", "What you would say",
                  "What you live", "Identity statements"],
         "must_not": ["Pattern Breaker", "Headlights", "Loop Map"],
     },
     "tree-of-clarity": {
         # Companion tool, no email gate. Markers are content.
-        "must": ["The Belief System Model", "toc-beliefs", "Identity statement",
+        "must": ["/assets/capture.js", "CAPTURE.mount", "The Belief System Model", "toc-beliefs", "Identity statement",
                  "It excuses me", "badly outdated", "the belief system model",
                  "Three thoughts in total", "At least one of each",
                  "The comforter", "Between people", "toc-progress"],
@@ -164,7 +163,7 @@ GATES = {
     },
     "emotional-language-wheel": {
         # No email gate on this one, so the markers are content, not MMERGE2.
-        "must": ["Emotional Language Wheel", "elw-checkins",
+        "must": ["/assets/capture.js", "CAPTURE.mount", "Emotional Language Wheel", "elw-checkins",
                  "Which of these is closest", "emotional granularity"],
         "must_not": ["Pattern Breaker", "Headlights", "Loop Map"],
     },

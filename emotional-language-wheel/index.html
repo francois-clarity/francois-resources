@@ -1048,9 +1048,13 @@ function renderGuide(){
       (gState.ring === 'intense' ? '<p class="g-hint">If it is loud in your body right now, the practices under <a href="#settle">When it feels too big</a> can help it pass through.</p>' : '') +
       '<div class="g-actions"><button class="btn" id="g-save">Save this check-in</button>' +
       '<button class="btn ghost" id="g-wheel">See it on the wheel</button>' +
-      '<button class="btn ghost" id="g-again">Start again</button></div></div>';
+      '<button class="btn ghost" id="g-again">Start again</button></div>' + '<div id="cap-mount"></div></div>';
   }
   guide.innerHTML = h;
+  var capEl = guide.querySelector('#cap-mount');
+  if (capEl && window.CAPTURE) CAPTURE.mount({ el: capEl, tool: 'emotional-language-wheel',
+    heading: 'Want this check-in emailed to you?',
+    blurb: 'Check-ins live on your phone and disappear if you clear your browser. An email gives you a copy, and the wheel to come back to.' });
 
   guide.querySelectorAll('.opt[data-fam]').forEach(function(b){
     b.addEventListener('click', function(){ gState.fam = b.getAttribute('data-fam'); gState.step = 2; renderGuide(); });
@@ -1136,5 +1140,6 @@ renderLog();
 })();
 </script>
 <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "a9b056ed20bf4324b33f372dd69b5db4"}'></script><!-- End Cloudflare Web Analytics -->
+<script src="/assets/capture.js"></script>
 </body>
 </html>

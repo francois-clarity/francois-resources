@@ -795,13 +795,17 @@ function renderResult(){
   }
 
   h += '<div class="test"><b>Why this matters</b><p>Friction is the drag between what the process requires and what you believe. The process requires direct communication, honest requests, boundaries, negotiation, courage and responsibility. The contract requires silence, mind-reading, hints, scorekeeping, resentment and role protection. So when you feel the drag, ask yourself: which contract is running, which role is it protecting, and what would the process require if I stopped protecting it?</p></div>'+
-    '<p class="note">Saved on this device only. No account, and nothing is sent anywhere. Come back to it after you have had the conversation and see whether the contract still reads true.</p>'+
+    '<p class="note">Saved on this device only. No account. Nothing leaves this device unless you ask for the email below. Come back to it after you have had the conversation and see whether the contract still reads true.</p>'+
     '<div class="nav"><button class="btn" onclick="window.print()">Print or save as PDF</button>'+
     '<button class="back" id="again">Start again</button></div>'+
+    '<div id="cap-mount"></div>'+
     '<p class="signoff">Whatever you found, the contract only had power while it stayed invisible. Now it is on the page, in your own words, and that is already a different position to stand in. Much love, <b>Francois</b></p>'+
     '</div>';
 
   tool.innerHTML = h;
+  var capEl = document.getElementById('cap-mount');
+  if (capEl && window.CAPTURE) CAPTURE.mount({ el: capEl, tool: 'invisible-contracts',
+    heading: 'Want a copy of your contracts?', blurb: 'This page lives on your phone and disappears if you clear your browser. An email gives you something to come back to after you have had the conversation.' });
   var t = document.getElementById("tear");
   if (t) t.onclick = function(){ S.torn = true; save(); renderResult(); var el = document.getElementById("doc-"+d.id); if (el) el.scrollIntoView({block:"center"}); };
   var u = document.getElementById("untear");
@@ -819,5 +823,6 @@ document.getElementById("begin").onclick = function(){ if (!S.step) S.step = 1; 
 if (S.step) render();
 </script>
 <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "a9b056ed20bf4324b33f372dd69b5db4"}'></script><!-- End Cloudflare Web Analytics -->
+<script src="/assets/capture.js"></script>
 </body>
 </html>

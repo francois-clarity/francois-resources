@@ -256,6 +256,37 @@ strong{color:var(--white);font-weight:600}
     </div>
   </div>
 
+  <!-- ================= EMAIL ================= -->
+  <div class="screen" id="s-mail">
+    <div class="eyebrow">Last step</div>
+    <h2>That is all seventeen. Where should I send this?</h2>
+    <p class="lede">You have just been honest about something people are rarely honest about. Let me make sure you can find it again.</p>
+
+    <form id="mail-form" novalidate>
+      <div class="field">
+        <label for="f-name">Your first name</label>
+        <input id="f-name" type="text" autocomplete="given-name" placeholder="First name" aria-describedby="e-name">
+        <div class="fe" id="e-name"></div>
+      </div>
+      <div class="field">
+        <label for="f-mail">Your email</label>
+        <input id="f-mail" type="email" autocomplete="email" inputmode="email" placeholder="you@example.com" aria-describedby="e-mail">
+        <div class="fe" id="e-mail"></div>
+      </div>
+
+      <div class="mailbox" style="margin-top:22px">
+        <p><strong>Your results open on the next screen either way.</strong></p>
+        <div class="caution">The email comes from me with a plain subject line and says nothing about the topic, so it is safe in a normal inbox. Even so, do not use one somebody else reads.</div>
+      </div>
+
+      <div style="margin-top:24px">
+        <button class="btn" id="f-go" type="submit"><span class="spin"></span><span id="f-go-t">Show me my results</span></button>
+      </div>
+    </form>
+    <div class="sent" id="f-sent"></div>
+    <p class="fine">One email. You can leave at any time and I will not chase you.</p>
+  </div>
+
   <!-- ================= RESULT ================= -->
   <div class="screen" id="s-res">
     <div class="badge" id="r-badge">Your architecture</div>
@@ -294,27 +325,6 @@ strong{color:var(--white);font-weight:600}
       <button type="button" id="copy-link">Copy my link</button>
     </div>
 
-    <div class="mailbox">
-      <h3>Want this in writing?</h3>
-      <p>Only if it is safe to. Most of my tools send results automatically. This one does not, because an email like this landing in an inbox somebody else reads would do exactly the damage we are trying to prevent.</p>
-      <div class="caution">Do not use a shared inbox, and do not use one your partner has the password to unless you would be comfortable with them opening it.</div>
-      <form id="mail-form" novalidate>
-        <div class="field">
-          <label for="f-name">Your first name</label>
-          <input id="f-name" type="text" autocomplete="given-name" placeholder="First name" aria-describedby="e-name">
-          <div class="fe" id="e-name"></div>
-        </div>
-        <div class="field">
-          <label for="f-mail">Your email</label>
-          <input id="f-mail" type="email" autocomplete="email" inputmode="email" placeholder="you@example.com" aria-describedby="e-mail">
-          <div class="fe" id="e-mail"></div>
-        </div>
-        <div style="margin-top:18px">
-          <button class="btn ghost" id="f-go" type="submit"><span class="spin"></span><span id="f-go-t">Send it to me</span></button>
-        </div>
-      </form>
-      <div class="sent" id="f-sent">Sent. Check your inbox in a minute or two.</div>
-    </div>
 
     <div class="next">
       <h3>The thing that makes this worth doing twice</h3>
@@ -639,6 +649,13 @@ function finish(){
   var s = score();
   lastResult = s;
   save();
+  // The email is asked for here, between the work and the results.
+  // Francois, 8 Sep 2026: every tool captures, sensitive ones included.
+  show('s-mail');
+  document.getElementById('f-name').focus();
+}
+
+function reveal(s){
   paint(s);
   history.replaceState(null, '', resultUrl(s));
   show('s-res');
@@ -789,7 +806,7 @@ function fieldError(id, eid, msg){
 $('mail-form').addEventListener('submit', function(ev){
   ev.preventDefault();
   var btn = $('f-go');
-  if (btn.disabled || !lastResult) return;
+  if (btn.disabled) return;
   var name = $('f-name').value.trim(), mail = $('f-mail').value.trim().toLowerCase(), ok = true;
   if (!name) { fieldError('f-name','e-name','I need a first name so the email does not open with "Hi there".'); ok = false; }
   if (!valid(mail)) { fieldError('f-mail','e-mail','That email does not look right. Check it and try again.'); ok = false; }
@@ -813,14 +830,12 @@ $('mail-form').addEventListener('submit', function(ev){
 
   function done(sent){
     btn.classList.remove('busy');
-    if (sent) {
-      $('mail-form').style.display = 'none';
+    if (!sent) {
+      // never trap somebody behind a failed sync: show the results anyway
+      $('f-sent').textContent = 'I could not send that just now, so your results are on the next screen only. Use the copy link button to keep them.';
       $('f-sent').classList.add('on');
-    } else {
-      btn.disabled = false;
-      $('f-go-t').textContent = 'Send it to me';
-      fieldError('f-mail','e-mail','That did not go through. Use the copy link button above and keep the link somewhere safe instead.');
     }
+    reveal(lastResult);
   }
 });
 

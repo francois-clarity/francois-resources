@@ -505,13 +505,17 @@ function renderMap(){
   }
 
   h += '<div class="test"><b>The only test that counts</b><p>Not whether any of these are true. A belief can be perfectly true and still be unhealthy. Ask of each one: <b>does believing this help me show up the way I want to?</b> If the answer is no, that settles it, and no amount of arguing that it is accurate changes anything.</p></div>'+
-    '<p class="note">Saved on this device only. No account, and nothing is sent anywhere. Take this to a one-on-one, or pick the one that costs you most and run it through the tree.</p>'+
+    '<p class="note">Saved on this device only. No account. Nothing leaves this device unless you ask for the email below. Take this to a one-on-one, or pick the one that costs you most and run it through the tree.</p>'+
     '<div class="nav"><button class="btn" onclick="window.print()">Print or save as PDF</button>'+
     '<a class="btn ghost" href="/tree-of-clarity/">Work one of these in the tree</a>'+
     '<button class="back" id="addmore">Add more areas</button>'+
-    '<button class="back" id="wipe">Clear everything</button></div></div>';
+    '<button class="back" id="wipe">Clear everything</button></div></div>'+
+    '<div id="cap-mount"></div>';
 
   tool.innerHTML = h;
+  var capEl = document.getElementById('cap-mount');
+  if (capEl && window.CAPTURE) CAPTURE.mount({ el: capEl, tool: 'belief-inventory',
+    heading: 'Want the inventory emailed to you?', blurb: 'This page lives on your phone and disappears if you clear your browser. An email gives you a copy to work from.' });
   document.getElementById("addmore").onclick = function(){ S.view = "pick"; render(); };
   document.getElementById("wipe").onclick = function(){
     try { localStorage.removeItem(KEY); } catch(e){}
@@ -531,5 +535,6 @@ document.getElementById("begin").onclick = function(){ S.view = "pick"; render()
 if (hasAny()){ S.view = "map"; render(); }
 </script>
 <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "a9b056ed20bf4324b33f372dd69b5db4"}'></script><!-- End Cloudflare Web Analytics -->
+<script src="/assets/capture.js"></script>
 </body>
 </html>

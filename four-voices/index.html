@@ -433,12 +433,16 @@ function renderMap(){
   }
 
   h += '<div class="test"><b>Why this layer matters</b><p>Thoughts are what turn a belief into a feeling, so this is where you can interrupt the chain most quickly. But the voices keep coming back while the belief underneath stays intact. When you have the patience for it, take one of the judge lines down to the root it grew from.</p></div>'+
-    '<p class="note">Saved on this device only. No account, and nothing is sent anywhere.</p>'+
+    '<p class="note">Saved on this device only. No account. Nothing leaves this device unless you ask for the email below.</p>'+
     '<div class="nav"><button class="btn" onclick="window.print()">Print or save as PDF</button>'+
     '<a class="btn ghost" href="/tree-of-clarity/">Take a line down to the belief</a>'+
-    '<button class="back" id="again">Start again</button></div></div>';
+    '<button class="back" id="again">Start again</button></div></div>'+
+    '<div id="cap-mount"></div>';
 
   tool.innerHTML = h;
+  var capEl = document.getElementById('cap-mount');
+  if (capEl && window.CAPTURE) CAPTURE.mount({ el: capEl, tool: 'four-voices',
+    heading: 'Want these lines emailed to you?', blurb: 'This page lives on your phone and disappears if you clear your browser. An email gives you a copy to come back to.' });
   document.getElementById("again").onclick = function(){
     try { localStorage.removeItem(KEY); } catch(e){}
     S = { step:1, situation:"", jStat:[], jQs:[], cheer:[], tried:[], fresh:[], encourage:"", instruct:"" };
@@ -452,5 +456,6 @@ document.getElementById("begin").onclick = function(){ if (!S.step) S.step = 1; 
 if (S.step) render();
 </script>
 <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "a9b056ed20bf4324b33f372dd69b5db4"}'></script><!-- End Cloudflare Web Analytics -->
+<script src="/assets/capture.js"></script>
 </body>
 </html>
