@@ -171,7 +171,7 @@ GATES = {
     # funnel visitors skip the gate (isFunnel), direct visitors get a soft
     # ask with a skip link (skipmail). Tracking restored (tool_start).
     "unstuck-loop-map": {
-        "must": ["Unstuck Loop Map", "data-yt", "youtube-nocookie",
+        "must": ["backbtn", "trail", "Back", "Unstuck Loop Map", "data-yt", "youtube-nocookie",
                  "MMERGE2=unstuck-loop-map", "isFunnel", "skipmail",
                  "tool_start", "placeholder="],
         "must_not": ["Pattern Breaker", "Headlights"],
@@ -180,7 +180,7 @@ GATES = {
     # funnel visitors skip the gate (isFunnel), direct visitors get a soft
     # ask with a skip link (skipmail). Tracking restored (tool_start).
     "procrastination-pattern-breaker": {
-        "must": ["Pattern Breaker", "data-yt", "youtube-nocookie",
+        "must": ["backbtn", "trail", "Back", "Pattern Breaker", "data-yt", "youtube-nocookie",
                  "MMERGE2=pattern-breaker", "isFunnel", "skipmail",
                  "tool_start", "placeholder="],
         "must_not": ["Headlights", "Loop Map"],
@@ -189,14 +189,14 @@ GATES = {
     # now: YouTube-direct visitors never pass the funnel gate, so this page
     # is its own capture point until that routing is decided.
     "headlights-system": {
-        "must": ["Headlights", "MMERGE2=headlights-system",
+        "must": ["backbtn", "trail", "Back", "Headlights", "MMERGE2=headlights-system",
                  "youtube-nocookie", "placeholder=", "next visible move"],
         "must_not": ["Pattern Breaker", "avoiding the feeling", "Loop Map"],
     },
     # Interactive rebuild (commit b3e7244): guided journey, no card-PDF
     # download. MMERGE2 here is the background tag sync, not an email ask.
     "ten-year-question": {
-        "must": ["Ten-Year", "ten years", "MMERGE2=ten-year-question",
+        "must": ["backbtn", "trail", "Back", "Ten-Year", "ten years", "MMERGE2=ten-year-question",
                  "youtube-nocookie", "placeholder="],
         "must_not": ["Headlights", "two-minute test", "Pattern Breaker"],
     },

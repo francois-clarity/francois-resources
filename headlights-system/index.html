@@ -349,6 +349,90 @@
     if(cur==='4'){S.move=el('#move').value.trim(); if(!S.move){alert('One small move. Two minutes or less.');return}}
     if(cur==='5'){S.when=el('#when').value.trim(); if(!S.when){alert('Pick a moment. Deciding now is the whole trick.');return}}
     save(); show(order[order.indexOf(cur)+1]);});});
+
+  /* ---- Back, and jump to any section already reached ----------------------
+     Francois, 8 Sep 2026: "most of them don't have a back button. This
+     includes a back button, so a person can go back anytime they want, to any
+     section they want."
+
+     Steps AHEAD of where somebody has actually reached stay locked, because
+     the Next handler enforces a required answer per step and jumping past it
+     would leave the tool holding blanks. Everything already visited is one
+     tap away. How far somebody got is remembered per tool, so it survives a
+     reload the same way their answers do. */
+  (function(){
+    var NAVKEY = 'nav' + location.pathname;
+    var reached = 0;
+    try { reached = parseInt(localStorage.getItem(NAVKEY) || '0', 10) || 0; } catch(e){}
+
+    var st = document.createElement('style');
+    st.textContent =
+      '.trail{display:flex;flex-wrap:wrap;gap:6px;margin:14px 0 2px}' +
+      '.trail button{cursor:pointer;font-family:inherit;font-size:12.5px;font-weight:700;' +
+        'min-width:30px;padding:5px 9px;border-radius:8px;border:1px solid rgba(255,255,255,.14);' +
+        'background:rgba(255,255,255,.04);color:rgba(255,255,255,.42);transition:.15s}' +
+      '.trail button:hover:not(:disabled){border-color:rgba(255,255,255,.3);color:#fff}' +
+      '.trail button[aria-current="step"]{background:rgba(24,192,192,.18);border-color:#18C0C0;color:#fff}' +
+      '.trail button:disabled{opacity:.35;cursor:default}' +
+      '.btn.backbtn{background:transparent;border:1px solid rgba(255,255,255,.18);color:rgba(255,255,255,.66)}' +
+      '.btn.backbtn:hover{color:#fff;border-color:rgba(255,255,255,.34)}' +
+      '@media print{.trail,.backbtn{display:none}}';
+    document.head.appendChild(st);
+
+    var trail = document.createElement('nav');
+    trail.className = 'trail';
+    trail.setAttribute('aria-label', 'Jump to a section');
+    var prog = el('#prog');
+    if (prog && prog.parentNode) prog.parentNode.insertBefore(trail, prog.nextSibling);
+
+    progSteps.forEach(function(s, i){
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.textContent = String(i + 1);
+      b.title = 'Section ' + (i + 1);
+      b.addEventListener('click', function(){ if (i <= reached) show(s); });
+      trail.appendChild(b);
+    });
+
+    function paint(step){
+      var i = progSteps.indexOf(step);
+      trail.hidden = i < 0;
+      [].forEach.call(trail.children, function(b, n){
+        b.disabled = n > reached;
+        if (n === i) b.setAttribute('aria-current', 'step');
+        else b.removeAttribute('aria-current');
+      });
+    }
+
+    var _show = show;
+    show = function(step){
+      var i = progSteps.indexOf(step);
+      if (i > reached) {
+        reached = i;
+        try { localStorage.setItem(NAVKEY, String(reached)); } catch(e){}
+      }
+      _show(step);
+      paint(step);
+    };
+
+    // a Back button beside every Next
+    els('[data-next]').forEach(function(b){
+      var sec = b.closest('.step');
+      if (!sec) return;
+      var cur = sec.dataset.step, i = order.indexOf(cur);
+      if (i <= 0) return;
+      var back = document.createElement('button');
+      back.type = 'button';
+      back.className = 'btn backbtn';
+      back.textContent = 'Back';
+      back.addEventListener('click', function(){ show(order[i - 1]); });
+      b.parentNode.insertBefore(back, b);
+    });
+
+    var open = els('.step.on')[0];
+    paint(open ? open.dataset.step : progSteps[0]);
+  })();
+
   el('#redo').addEventListener('click',function(){localStorage.removeItem('hls-v2');location.reload();});
   ['thing','move','when'].forEach(function(k){var i=el('#'+k); if(i&&S[k])i.value=S[k];});
 
