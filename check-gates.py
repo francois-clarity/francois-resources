@@ -146,11 +146,23 @@ GATES = {
                      "sex addict", "porn addict."],
     },
     "invisible-contracts": {
-        # Contracts you keep. No email gate; markers are content.
-        "must": ["/assets/capture.js", "CAPTURE.mount", "Invisible Contracts", "ic-contracts", "then you should",
-                 "if you do not, it means", "Null and void", "Would you be willing",
-                 "underage when you signed"],
-        "must_not": ["Pattern Breaker", "Headlights", "Loop Map"],
+        # Rebuilt 9 Sep 2026. He walked the old one before a PGW class and said
+        # it was too much text, overwhelming and full of AI giveaways. Eleven
+        # steps and 10,000 words became six steps and about 1,650, with one
+        # destination: the contract in his words, and the request that replaces
+        # it. These markers hold that shape.
+        "must": ["/assets/capture.js", "CAPTURE.mount",
+                 "Invisible Contracts", "Step 1 of 6",
+                 "Where did you feel it", "Write the deal",
+                 "then WHO should", "It means", "Where did you sign it",
+                 "What I want is", "Would you be willing",
+                 "Null and void", "underage when you signed",
+                 "implicit relational knowing", "Boszormenyi-Nagy",
+                 "Much love"],
+        "must_not": ["Pattern Breaker", "Headlights", "Loop Map",
+                     # the sprawl that made it overwhelming
+                     "Your family motto", "Your brothers and sisters",
+                     "Which one sits deepest"],
     },
     "four-voices": {
         # Thoughts layer. No email gate; markers are content.

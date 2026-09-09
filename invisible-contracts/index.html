@@ -3,826 +3,516 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#1B222D">
-<title>Invisible Contracts | Francois Esterhuizen</title>
-<meta name="description" content="A guided process for finding the unspoken deals that run your relationships. From the feeling of being taken for granted, back to the contract underneath it, then on to a clear request or a torn-up contract.">
-<meta property="og:title" content="Invisible Contracts">
-<meta property="og:description" content="If I do my part, you should do yours. Every relationship runs on agreements nobody wrote down. This walks you from the resentment back to the contract, and then helps you decide what to do with it.">
+<title>Invisible Contracts · Francois Esterhuizen</title>
+<meta name="description" content="Follow the resentment and you find the deal you never agreed to out loud. Six steps, about ten minutes, and you leave with one contract written down and one request to make.">
+<meta property="og:title" content="Invisible Contracts · Francois Esterhuizen">
+<meta property="og:description" content="Follow the resentment and you find the deal you never agreed to out loud.">
 <meta property="og:type" content="website">
+<meta name="theme-color" content="#1B222D">
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;500;600;700;800&display=swap" rel="stylesheet">
+
 <style>
-  :root{
-    --navy:#262E3B; --navy-deep:#1B222D; --teal:#18C0C0; --white:#fff;
-    --muted:rgba(255,255,255,.66); --muted-2:rgba(255,255,255,.42);
-    --line:rgba(255,255,255,.10); --line-strong:rgba(255,255,255,.18);
-    --coral:#E38070; --amber:#E8B551; --green:#5FCB89;
-  }
-  *{box-sizing:border-box;margin:0;padding:0}
-  html{scroll-behavior:smooth}
-  body{
-    font-family:'Manrope',system-ui,-apple-system,sans-serif;
-    background:radial-gradient(ellipse at 26% 22%,#333E52 0%,var(--navy) 56%,var(--navy-deep) 100%);
-    color:var(--white);min-height:100vh;-webkit-font-smoothing:antialiased;
-    padding:72px 24px 96px;overflow-x:hidden;
-  }
-  body::before{content:'';position:fixed;inset:0;pointer-events:none;
-    background-image:radial-gradient(rgba(255,255,255,.045) 1px,transparent 1px);
-    background-size:34px 34px}
-  .orb{position:fixed;border-radius:50%;pointer-events:none;filter:blur(60px);z-index:0}
-  .orb.a{width:560px;height:560px;left:-220px;top:12%;
-    background:radial-gradient(circle,rgba(24,192,192,.15),rgba(24,192,192,0) 65%)}
-  .orb.b{width:640px;height:640px;right:-260px;top:58%;
-    background:radial-gradient(circle,rgba(24,192,192,.12),rgba(24,192,192,0) 65%)}
-  .wrap{position:relative;max-width:860px;margin:0 auto;z-index:1}
+:root{
+  --navy:#262E3B; --navy-deep:#1B222D; --teal:#18C0C0; --white:#fff;
+  --muted:rgba(255,255,255,.66); --muted-2:rgba(255,255,255,.42);
+  --line:rgba(255,255,255,.10); --line-strong:rgba(255,255,255,.18);
+  --teal-soft:rgba(24,192,192,.18); --teal-tint:rgba(24,192,192,.10);
+  --amber:#E8B551;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{
+  font-family:'Manrope',system-ui,-apple-system,sans-serif;
+  background:radial-gradient(ellipse at 26% 22%,#333E52 0%,var(--navy) 56%,var(--navy-deep) 100%);
+  background-attachment:fixed;color:var(--white);min-height:100vh;
+  -webkit-font-smoothing:antialiased;padding:0 20px 90px;overflow-x:hidden;
+}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:radial-gradient(rgba(255,255,255,.045) 1px,transparent 1px);
+  background-size:34px 34px;animation:drift 60s linear infinite}
+.orb{position:fixed;border-radius:50%;filter:blur(90px);pointer-events:none;z-index:0;opacity:.5}
+.orb.a{width:420px;height:420px;background:rgba(24,192,192,.22);top:-120px;left:-140px}
+.orb.b{width:380px;height:380px;background:rgba(232,181,81,.10);bottom:-140px;right:-120px}
+@keyframes drift{to{background-position:34px 34px}}
+@media (prefers-reduced-motion:reduce){
+  body::before{animation:none}
+  *{animation-duration:.01ms !important;transition-duration:.01ms !important}
+}
 
-  .eyebrow{font-weight:500;font-size:13px;letter-spacing:5px;text-transform:uppercase;
-    color:var(--teal);margin-bottom:20px}
-  h1{font-weight:800;font-size:clamp(36px,5vw,56px);line-height:1.08;letter-spacing:-1.2px}
-  h1 .teal{color:var(--teal)}
-  .lede{font-weight:300;font-size:19px;line-height:1.65;color:var(--muted);margin:24px 0 0;max-width:58ch}
-  .lede b{color:var(--white);font-weight:600}
-  .btn{display:inline-block;padding:16px 28px;border-radius:14px;cursor:pointer;
-    background:var(--teal);color:var(--navy);text-decoration:none;border:none;
-    font-family:inherit;font-weight:800;font-size:16px;
-    transition:transform .15s ease,filter .15s ease}
-  .btn:hover{filter:brightness(1.07)}
-  .btn:active{transform:translateY(1px)}
-  .btn[disabled]{opacity:.4;cursor:default}
-  .btn.ghost{background:rgba(255,255,255,.06);color:var(--white);
-    border:1px solid var(--line-strong);font-weight:600}
-  .btn.ghost:hover{border-color:var(--teal);filter:none}
-  .cta-row{display:flex;gap:14px;flex-wrap:wrap;margin-top:32px}
+.wrap{position:relative;z-index:1;max-width:660px;margin:0 auto}
+.screen{display:none;padding-top:56px;animation:rise .4s cubic-bezier(.2,.7,.3,1) both}
+.screen.on{display:block}
+@keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
 
-  .stage{margin-top:40px;
-    background:linear-gradient(135deg,rgba(38,46,59,.7),rgba(30,37,48,.6));
-    border:1px solid var(--line);border-radius:26px;padding:40px 42px;
-    -webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);
-    box-shadow:0 24px 60px rgba(0,0,0,.30)}
-  @media (max-width:640px){.stage{padding:28px 20px}body{padding:44px 18px 72px}}
-  .rail{display:flex;gap:6px;margin-bottom:28px}
-  .rail i{height:3px;flex:1;border-radius:2px;background:rgba(255,255,255,.12);transition:background .4s}
-  .rail i.on{background:var(--teal)}
-  .step-n{font-weight:800;font-size:12px;letter-spacing:3px;text-transform:uppercase;
-    margin-bottom:12px;color:var(--teal)}
-  .stage h2{font-weight:800;font-size:clamp(22px,3.2vw,30px);letter-spacing:-.5px;line-height:1.2}
-  .say{font-weight:300;font-size:16.5px;line-height:1.65;color:var(--muted);margin-top:14px;max-width:62ch}
-  .say b{color:var(--white);font-weight:600}
-  .hint{font-size:14px;line-height:1.6;color:var(--muted-2);margin-top:10px;max-width:58ch}
-  .miss{font-size:13.5px;line-height:1.55;color:var(--amber);margin-top:12px;font-weight:600}
+.eyebrow{font-size:12px;font-weight:500;letter-spacing:5px;text-transform:uppercase;color:var(--teal);margin-bottom:16px}
+h1{font-size:clamp(31px,6.2vw,46px);font-weight:800;letter-spacing:-.028em;line-height:1.07;text-wrap:balance}
+h1 .teal{color:var(--teal)}
+h2{font-size:clamp(23px,4.8vw,30px);font-weight:800;letter-spacing:-.02em;line-height:1.18;text-wrap:balance}
+p{color:var(--muted);font-weight:300;font-size:17px;line-height:1.6}
+.lede{font-size:18.5px;line-height:1.62;margin-top:16px;max-width:54ch}
+.lede + .lede{margin-top:14px}
+strong,b{color:var(--white);font-weight:600}
 
-  /* his voice, from the room */
-  .room{margin-top:22px;border:1px solid rgba(24,192,192,.28);border-radius:18px;
-    padding:18px 22px 18px 22px;background:rgba(24,192,192,.05)}
-  .room .k{font-size:11px;letter-spacing:2.5px;text-transform:uppercase;font-weight:800;
-    color:var(--teal);margin-bottom:8px}
-  .room p{font-size:15.5px;line-height:1.65;color:rgba(255,255,255,.82);font-weight:300}
-  .room p + p{margin-top:8px}
-  .room p b{color:var(--white);font-weight:600}
-  .room .src{font-size:12px;color:var(--muted-2);margin-top:10px;font-weight:600;letter-spacing:.3px}
+.btn{display:inline-flex;align-items:center;gap:9px;border:0;cursor:pointer;
+  background:var(--teal);color:var(--navy-deep);font-family:inherit;font-weight:800;font-size:16px;
+  padding:15px 30px;border-radius:14px;box-shadow:0 8px 26px rgba(24,192,192,.26);
+  transition:filter .18s ease,transform .1s ease}
+.btn:hover{filter:brightness(1.08)}
+.btn:active{transform:translateY(1px)}
+.btn.ghost{background:transparent;border:1px solid var(--line-strong);color:var(--white);box-shadow:none;font-weight:600}
+.btn.ghost:hover{border-color:var(--teal)}
+:focus-visible{outline:none;box-shadow:0 0 0 4px var(--teal-tint),0 0 0 2px var(--teal);border-radius:10px}
 
-  label.f{display:block;margin-top:18px;font-size:13px;letter-spacing:1.5px;text-transform:uppercase;
-    font-weight:700;color:var(--muted)}
-  textarea,input[type=text]{width:100%;margin-top:8px;padding:15px 17px;border-radius:14px;
-    border:1px solid rgba(255,255,255,.16);background:rgba(0,0,0,.20);
-    color:var(--white);font-family:inherit;font-size:16px;font-weight:500;line-height:1.55;resize:vertical}
-  textarea::placeholder,input::placeholder{color:rgba(255,255,255,.32)}
-  textarea:focus,input:focus{outline:none;border-color:var(--teal);background:rgba(0,0,0,.28);
-    box-shadow:0 0 0 4px rgba(24,192,192,.10)}
+.head{display:flex;align-items:center;gap:14px;margin-bottom:10px}
+.count{font-size:12px;color:var(--muted-2);letter-spacing:.1em;text-transform:uppercase;font-weight:700;white-space:nowrap}
+.bar{flex:1;height:7px;background:rgba(255,255,255,.08);border-radius:99px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--teal);border-radius:99px;
+  box-shadow:0 0 10px rgba(24,192,192,.5);transition:width .35s cubic-bezier(.4,0,.2,1)}
+.trail{display:flex;gap:6px;margin:0 0 22px}
+.trail button{cursor:pointer;font-family:inherit;font-size:12.5px;font-weight:700;min-width:30px;
+  padding:5px 9px;border-radius:8px;border:1px solid var(--line);background:rgba(255,255,255,.04);
+  color:var(--muted-2);transition:.15s}
+.trail button:hover:not(:disabled){border-color:var(--line-strong);color:#fff}
+.trail button[aria-current="step"]{background:var(--teal-soft);border-color:var(--teal);color:#fff}
+.trail button:disabled{opacity:.35;cursor:default}
 
-  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
-  .chip{font-family:inherit;font-size:14px;font-weight:600;color:rgba(255,255,255,.78);
-    padding:9px 14px;border-radius:100px;cursor:pointer;text-align:left;
-    border:1px solid var(--line-strong);background:rgba(255,255,255,.04);transition:all .16s}
-  .chip:hover{border-color:var(--teal);color:var(--white);background:rgba(255,255,255,.07)}
-  .chip.on{background:rgba(24,192,192,.18);border-color:var(--teal);color:var(--white)}
-  .chip.stem{border-style:dashed;font-weight:500;color:rgba(255,255,255,.7)}
-  .chip.stem:hover{border-style:solid;color:var(--teal)}
+.ask{font-size:15.5px;color:var(--muted);font-weight:300;margin-top:12px;max-width:52ch}
+.field{margin-top:20px}
+.field label{display:block;font-size:13px;font-weight:700;color:var(--teal);
+  letter-spacing:.06em;text-transform:uppercase;margin-bottom:7px}
+input[type=text],textarea{width:100%;background:rgba(0,0,0,.22);border:1px solid var(--line-strong);
+  border-radius:12px;padding:14px 16px;color:#fff;font-family:inherit;font-size:16.5px;line-height:1.5}
+textarea{min-height:92px;resize:vertical}
+input:focus,textarea:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 4px var(--teal-tint)}
+.stem{display:flex;align-items:baseline;gap:10px;margin-top:14px;flex-wrap:wrap}
+.stem span{font-size:17px;font-weight:700;color:#fff;white-space:nowrap}
+.stem input{flex:1 1 260px;min-width:0}
 
-  .signs{margin-top:16px;display:grid;gap:8px}
-  .sign{display:flex;gap:14px;align-items:flex-start;padding:14px 16px;border-radius:14px;cursor:pointer;
-    border:1px solid var(--line);background:rgba(255,255,255,.035);transition:all .16s;font-weight:500;font-size:15.5px;line-height:1.45}
-  .sign:hover{border-color:var(--line-strong);background:rgba(255,255,255,.06)}
-  .sign.on{background:rgba(24,192,192,.14);border-color:var(--teal)}
-  .sign .box{width:22px;height:22px;flex:none;border-radius:7px;border:1px solid var(--line-strong);
-    display:grid;place-items:center;font-size:13px;font-weight:800;color:var(--navy);margin-top:1px}
-  .sign.on .box{background:var(--teal);border-color:var(--teal)}
-  .count{margin-top:16px;font-size:14.5px;color:var(--muted);font-weight:500}
-  .count b{color:var(--teal);font-weight:800}
+.mine{margin-top:26px;border-left:2px solid var(--teal);padding:2px 0 2px 18px}
+.mine p{font-size:16px;color:var(--muted);line-height:1.62}
+.mine p + p{margin-top:10px}
+.mine .src{margin-top:9px;font-size:12.5px;color:var(--muted-2);font-weight:500}
 
-  /* contract editor */
-  .con{border:1px solid var(--line);border-radius:18px;padding:18px 20px;margin-top:14px;
-    background:rgba(255,255,255,.035);position:relative}
-  .con .n{font-size:11px;letter-spacing:2.5px;text-transform:uppercase;font-weight:800;color:var(--teal)}
-  .con .del{position:absolute;top:14px;right:16px;background:none;border:none;color:rgba(255,255,255,.28);
-    cursor:pointer;font-size:20px;font-family:inherit;line-height:1}
-  .con .del:hover{color:#ff9d9d}
-  .clause{display:grid;grid-template-columns:150px 1fr;gap:12px;align-items:center;margin-top:10px}
-  .clause span{font-size:15px;font-weight:700;color:rgba(255,255,255,.85)}
-  .clause input{margin-top:0}
-  @media (max-width:560px){.clause{grid-template-columns:1fr;gap:4px}.clause span{margin-top:8px}}
-  .con .read{margin-top:8px;font-size:15.5px;line-height:1.6;font-weight:500}
-  .con .read em{font-style:normal;color:var(--muted-2);font-weight:600}
-  .con.pick{cursor:pointer;transition:all .16s}
-  .con.pick:hover{border-color:var(--line-strong)}
-  .con.pick.on{border-color:var(--teal);background:rgba(24,192,192,.10)}
-  .con.pick .mark{position:absolute;top:16px;right:18px;font-size:11px;letter-spacing:2px;
-    text-transform:uppercase;font-weight:800;color:var(--teal)}
-  .addrow{margin-top:14px}
-  .addrow button{font-family:inherit;font-size:14px;font-weight:700;color:var(--teal);background:none;
-    border:1px dashed rgba(24,192,192,.45);border-radius:12px;padding:10px 16px;cursor:pointer}
-  .addrow button:hover{border-style:solid}
-  .kinds{display:grid;gap:8px;margin-top:12px}
-  .kind{display:block;text-align:left;font-family:inherit;padding:12px 14px;border-radius:14px;cursor:pointer;
-    border:1px solid var(--line);background:rgba(255,255,255,.035);color:var(--white);transition:all .16s}
-  .kind:hover{border-color:var(--line-strong)}
-  .kind.on{background:rgba(24,192,192,.14);border-color:var(--teal)}
-  .kind b{display:block;font-size:14.5px;font-weight:800}
-  .kind small{display:block;font-size:13.5px;color:var(--muted);margin-top:3px;line-height:1.45;font-weight:400}
+.nav{display:flex;gap:12px;margin-top:28px;align-items:center;justify-content:space-between}
+.nav .back{background:none;border:0;color:var(--muted-2);font-family:inherit;font-size:14px;
+  cursor:pointer;padding:8px 4px;font-weight:600}
+.nav .back:hover{color:#fff}
+.warn{display:none;margin-top:12px;color:var(--amber);font-size:14.5px;font-weight:500}
+.warn.on{display:block}
 
-  .yn{display:flex;gap:8px;margin-top:10px}
-  .two{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:6px}
-  @media (max-width:640px){.two{grid-template-columns:1fr}}
+/* ---- the one card ---- */
+.card{margin-top:26px;border:1px solid var(--teal);border-radius:22px;padding:28px 30px;
+  background:linear-gradient(180deg,rgba(24,192,192,.10),rgba(24,192,192,.02));
+  box-shadow:0 14px 46px rgba(24,192,192,.10)}
+.card .k{font-size:11.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--teal);margin-bottom:8px}
+.card .clause{font-size:clamp(19px,3.6vw,23px);font-weight:700;line-height:1.42;letter-spacing:-.01em}
+.card .clause em{font-style:normal;color:var(--teal)}
+.card .row{margin-top:22px;padding-top:20px;border-top:1px solid rgba(255,255,255,.12)}
+.card .row p{font-size:16.5px;color:#fff;font-weight:500;line-height:1.55}
+.blank{color:var(--muted-2);font-style:italic;font-weight:300}
+.card{position:relative;overflow:hidden}
+.card.torn{border-color:rgba(255,255,255,.18);opacity:.62}
+.stamp{display:none;position:absolute;top:26px;right:-14px;transform:rotate(-11deg);
+  border:3px solid #E38070;color:#E38070;font-weight:800;font-size:17px;letter-spacing:.14em;
+  text-transform:uppercase;padding:7px 20px;border-radius:6px;opacity:.9;pointer-events:none}
+.card.torn .stamp{display:block}
+.tear{margin-top:22px}
+.tear .hint{margin-top:10px;font-size:15px;color:var(--muted);font-weight:300;max-width:48ch}
 
-  .nav{display:flex;gap:12px;margin-top:30px;align-items:center;flex-wrap:wrap}
-  .back{background:none;border:none;cursor:pointer;font-family:inherit;
-    color:var(--muted);font-size:14.5px;font-weight:600;padding:6px 2px}
-  .back:hover{color:var(--white)}
+.after{margin-top:30px}
+.after h3{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--muted-2);margin-bottom:10px}
+.why{margin-top:38px;padding-top:24px;border-top:1px solid var(--line)}
+.why p{font-size:15.5px}
+.why p + p{margin-top:11px}
+.signoff{margin-top:36px;padding-top:26px;border-top:1px solid var(--line)}
+.signoff .name{margin-top:12px;font-size:17px;font-weight:700;color:var(--teal)}
+.foot{margin-top:44px;padding-top:22px;border-top:1px solid var(--line);display:flex;justify-content:center}
+.foot a{color:var(--muted-2);font-size:13px;text-decoration:none;font-weight:500}
+.foot a:hover{color:var(--teal)}
 
-  /* result */
-  .doc{margin-top:22px;border:1px solid var(--line-strong);border-radius:20px;overflow:hidden;
-    background:rgba(255,255,255,.03)}
-  .doc .dh{padding:16px 22px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;
-    align-items:baseline;gap:12px;flex-wrap:wrap}
-  .doc .dh b{font-size:12px;letter-spacing:2.5px;text-transform:uppercase;font-weight:800;color:var(--teal)}
-  .doc .dh span{font-size:12.5px;color:var(--muted-2);font-weight:600}
-  .doc .db{padding:18px 22px}
-  .cl{display:grid;grid-template-columns:170px 1fr;gap:10px;padding:8px 0;font-size:16px;line-height:1.55;font-weight:500}
-  .cl em{font-style:normal;color:var(--muted-2);font-weight:700;font-size:13px;letter-spacing:1.2px;text-transform:uppercase;padding-top:3px}
-  @media (max-width:560px){.cl{grid-template-columns:1fr;gap:2px}}
-  .tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
-  .tag{font-size:11.5px;letter-spacing:1.2px;text-transform:uppercase;font-weight:800;color:var(--muted);
-    border:1px solid var(--line-strong);border-radius:100px;padding:5px 11px}
-  .tag.deep{color:var(--teal);border-color:rgba(24,192,192,.5)}
-  .doc.deep{border-color:rgba(24,192,192,.55);box-shadow:0 0 0 4px rgba(24,192,192,.06)}
-  .doc.torn .cl{text-decoration:line-through;text-decoration-color:rgba(227,128,112,.85);text-decoration-thickness:2px;opacity:.5}
-  .doc.torn{border-color:rgba(227,128,112,.45)}
-  .stamp{display:none;position:absolute;right:22px;top:14px;transform:rotate(-8deg);
-    border:3px solid var(--coral);color:var(--coral);border-radius:8px;padding:6px 12px;
-    font-weight:800;letter-spacing:3px;text-transform:uppercase;font-size:14px;opacity:.95}
-  .doc.torn .stamp{display:block;animation:stamp .5s cubic-bezier(.16,1,.3,1) both}
-  @keyframes stamp{from{opacity:0;transform:rotate(-8deg) scale(1.6)}to{opacity:.95;transform:rotate(-8deg) scale(1)}}
-  .doc.deep .db{position:relative}
-  .tear{margin-top:16px}
-  .tear .btn{background:var(--coral);color:var(--navy)}
-  .place{margin-top:20px;border:1px solid rgba(24,192,192,.35);border-radius:20px;padding:24px 26px;
-    background:linear-gradient(180deg,rgba(24,192,192,.14),rgba(24,192,192,.04));
-    box-shadow:0 0 40px rgba(24,192,192,.10)}
-  .place .k{font-size:12px;letter-spacing:2.5px;text-transform:uppercase;font-weight:800;color:var(--teal);margin-bottom:12px}
-  .place .line{font-size:16px;line-height:1.65;font-weight:500;margin-top:10px}
-  .place .line em{font-style:normal;color:var(--muted-2);font-weight:700;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;display:block;margin-bottom:2px}
-  .place .decl{margin-top:16px;padding-top:16px;border-top:1px solid rgba(24,192,192,.25);font-size:17px;font-weight:700;line-height:1.55}
-  .origin{margin-top:18px;border-left:3px solid var(--line-strong);padding:4px 0 4px 18px}
-  .origin p{font-size:15px;line-height:1.6;color:rgba(255,255,255,.7);font-weight:400;margin-top:6px}
-  .origin p em{font-style:normal;color:var(--muted-2);font-weight:600}
-  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
-  @media (max-width:640px){.grid2{grid-template-columns:1fr}}
-  .stat{border:1px solid var(--line);border-radius:14px;padding:14px 18px;background:rgba(255,255,255,.035)}
-  .stat .l{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);font-weight:700}
-  .stat .v{font-size:15.5px;line-height:1.55;margin-top:6px;font-weight:500}
-  .stat .v small{display:block;color:var(--muted-2);font-size:13px;margin-top:4px;font-weight:500}
-  .test{margin-top:30px;border-left:3px solid var(--teal);padding:6px 0 6px 18px}
-  .test b{display:block;font-size:12px;letter-spacing:2.5px;text-transform:uppercase;color:var(--teal);margin-bottom:8px;font-weight:800}
-  .test p{font-size:15.5px;line-height:1.62;color:rgba(255,255,255,.85);font-weight:400}
-  .note{font-size:13px;line-height:1.6;color:var(--muted-2);margin-top:16px;max-width:66ch}
-  .signoff{margin-top:34px;font-size:16px;line-height:1.7;color:var(--muted);font-weight:300;max-width:60ch}
-  .signoff b{color:var(--teal);font-weight:700}
-
-  footer{margin-top:80px;padding-top:36px;border-top:1px solid var(--line);
-    display:flex;align-items:center;gap:20px;flex-wrap:wrap}
-  footer img{width:44px;height:44px;display:block}
-  footer .who{font-size:14px;color:var(--muted);line-height:1.5}
-  footer .who b{color:var(--white)}
-  footer nav{margin-left:auto;display:flex;gap:22px;flex-wrap:wrap}
-  footer nav a{color:var(--muted);text-decoration:none;font-size:14px;font-weight:500}
-  footer nav a:hover{color:var(--teal)}
-
-  @keyframes m-rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
-  .m-in{animation:m-rise .7s cubic-bezier(.16,1,.3,1) both}
-  @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.m-in,.doc.torn .stamp{animation:none}}
-
-  @media print{
-    body{background:#fff;color:#111;padding:0}
-    body::before,.orb,.cta-row,.nav,footer nav,.btn,.tear,.rail,.note{display:none!important}
-    .stage{background:#fff;border:none;box-shadow:none;padding:0;margin-top:16px;backdrop-filter:none}
-    .say,.hint,.origin p,.stat .v,.place .line,.signoff{color:#333}
-    .doc,.stat,.place,.room{border-color:#bbb;background:#fff;box-shadow:none}
-    h1,h2,.cl,.doc .dh span,.stat .l,.tag,.place .decl{color:#111}
-    .step-n,.test b,.place .k,.doc .dh b,.tag.deep,.signoff b,.room .k{color:#0a6a6a}
-    .stamp{color:#b3412f;border-color:#b3412f}
-    .doc.torn .cl{text-decoration-color:#b3412f;opacity:.6}
-    .test{border-color:#0a6a6a}
-  }
+@media (max-width:520px){ .screen{padding-top:40px} .card{padding:22px 20px} }
+@media print{
+  body{background:#fff;color:#000;padding:0}
+  .orb,body::before,.trail,.head,.nav,.after,.btn{display:none}
+  .card{border-color:#999;background:none;box-shadow:none}
+  p,.mine p{color:#333}
+}
 </style>
 </head>
 <body>
-<div class="orb a"></div><div class="orb b"></div>
+
+<div class="orb a"></div>
+<div class="orb b"></div>
+
 <div class="wrap">
 
-  <header id="top">
-    <div class="eyebrow">Freeing yourself from friction · the contracts you keep</div>
-    <h1>Invisible<br><span class="teal">Contracts</span></h1>
-    <p class="lede">Every relationship runs on agreements nobody wrote down. <b>If I do my part, you should do yours. If I keep the peace, you should not upset me. If I carry the load, you should appreciate me.</b> You may never have said it out loud. You may not even know you believe it. But the moment the other person does not deliver, you feel the breach, and you call it disrespect, being taken for granted, or betrayal. I want to walk you from that feeling back to the contract underneath it, and then help you decide what to do with it: upgrade it into a clear request, or tear it up.</p>
-    <div class="cta-row">
-      <button class="btn" id="begin">Find your contracts</button>
+  <!-- INTRO -->
+  <div class="screen on" id="s0">
+    <div class="eyebrow">Invisible Contracts</div>
+    <h1>You agreed to something. Nobody <span class="teal">said it out loud.</span></h1>
+    <p class="lede">There are deals running in your relationships that were never negotiated. You keep your side. You expect the other side to be kept too. And when it is not, you feel it before you can explain it.</p>
+    <p class="lede">That flare is the doorway. We are going to follow it to one contract, get it onto the page in your words, and turn it into something you can actually say.</p>
+
+    <div class="mine">
+      <p>If you do that, I feel like this. If you do not do that, I feel like this. <b>That is a contract.</b></p>
+      <p class="src">Freeing Yourself From Friction, session five</p>
     </div>
-  </header>
 
-  <div id="tool"></div>
+    <p class="lede" style="margin-top:26px"><b>Six steps. About ten minutes.</b> Short answers are better than good ones. Nobody marks this.</p>
+    <div style="margin-top:26px"><button class="btn" id="go">Start</button></div>
+    <p class="ask" id="resume" style="display:none"></p>
+  </div>
 
-  <footer>
-    <img src="/assets/fe-logo.png" alt="Francois Esterhuizen tree logo">
-    <div class="who"><b>Francois Esterhuizen</b><br>© Invisible Contracts</div>
-  </footer>
+  <!-- STEPS -->
+  <div class="screen" id="sq">
+    <div class="head">
+      <div class="count" id="count">Step 1 of 6</div>
+      <div class="bar"><i id="fill"></i></div>
+    </div>
+    <nav class="trail" id="trail" aria-label="Jump to a step"></nav>
+    <h2 id="title"></h2>
+    <p class="ask" id="ask"></p>
+    <div id="fields"></div>
+    <div class="mine" id="mine"></div>
+    <p class="warn" id="warn"></p>
+    <div class="nav">
+      <button class="back" id="back">&larr; Back</button>
+      <button class="btn" id="next">Next</button>
+    </div>
+  </div>
+
+  <!-- RESULT -->
+  <div class="screen" id="sr">
+    <div class="eyebrow">Your contract</div>
+    <h1>Here it is, in <span class="teal">your words.</span></h1>
+
+    <div class="card" id="card"></div>
+
+    <div class="tear">
+      <button class="btn" id="tear">Tear this one up</button>
+      <button class="back" id="untear" style="display:none">Put it back, I am not ready</button>
+      <p class="hint">You were underage when you signed it. You are allowed to declare it null and void.</p>
+    </div>
+
+    <div class="after">
+      <h3>Do this one thing</h3>
+      <p id="do-this"></p>
+    </div>
+
+    <div class="mine" style="margin-top:26px">
+      <p>What I want is this. Would you be willing to do that? <b>If you cannot ask it, that is friction. That is your growth edge.</b></p>
+      <p>Then negotiate reality. Sometimes the answer is yes. Sometimes it is no. Either way you now have truth, and truth gives you choices.</p>
+      <p class="src">Freeing Yourself From Friction, session five</p>
+    </div>
+
+    <div class="nav" style="justify-content:flex-start">
+      <button class="btn ghost" onclick="window.print()">Print or save as PDF</button>
+      <button class="back" id="again">Start another one</button>
+    </div>
+
+    <div id="cap-mount"></div>
+
+    <div class="why">
+      <h3 style="font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted-2);margin-bottom:10px">Why you could not see it</h3>
+      <p>You learned this before you had language. Small children work out how to be with the people they depend on, and that learning is stored as something you do rather than something you can recall. Researchers call it implicit relational knowing. It sits in action and feeling, never in words, which is why the contract cannot be remembered. It can only be performed.</p>
+      <p>Your brain then runs it as a prediction about what should happen next. When somebody breaks it, an error signal fires before any thinking starts. You feel the flare first and reach for the reason afterwards. That is why resentment is the doorway, and why the reason you give in the moment is usually about the dishes.</p>
+      <p>Ivan Boszormenyi-Nagy called the family version invisible loyalties: an unspoken account of what is owed and what is due, carried down the generations. Nobody reads the ledger out. Everybody keeps to it.</p>
+    </div>
+
+    <div class="signoff">
+      <p>The contract had power while it stayed unnamed. It is on the page now, in your own words, and that is already a different position to stand in.</p>
+      <p class="name">Much love,<br>Francois</p>
+    </div>
+
+    <div class="foot"><a href="https://www.francoisesterhuizen.com">francoisesterhuizen.com</a></div>
+  </div>
+
 </div>
 
+<script src="/assets/capture.js"></script>
 <script>
-var KEY = "ic-contracts";
-var TOTAL = 10;
+/* ------------------------------------------------------------------
+   Invisible Contracts, rebuilt 9 Sep 2026.
 
-var SIGNS = [
-  "You often feel taken for granted.",
-  "You do things you do not want to do, then feel resentful.",
-  "You struggle to ask clearly, but you crave being understood.",
-  "You keep score.",
-  "You hint, withdraw, punish or go cold instead of asking.",
-  "You think: I should not have to say this.",
-  "You feel disappointed, but you cannot name what you expected.",
-  "You feel guilty when you set a boundary."
-];
-var RELS = ["My partner","A parent","A child","A sibling","A friend","At work","Myself","Someone else"];
-var SIBKIND = ["A brother","A sister"];
-var MOTTOS = ["We don't cry","We don't talk about money","Don't speak unless spoken to","Be strong","Keep the peace","Don't make a fuss","We don't need anyone","Family comes first, always"];
-var EXAMPLES = [
-  ["do my part","do yours","I am on my own in this"],
-  ["keep the peace","not upset me","you do not care how hard I work at this"],
-  ["carry the load","appreciate me","I am being used"],
-  ["am loyal","make me feel secure","I cannot trust you"],
-  ["do not make trouble","not abandon me","I was right to be afraid"],
-  ["do not ask","still meet my needs","you do not really love me"],
-  ["did this for you","feel grateful","I do not matter to you"]
-];
-var KINDS = [
-  ["comfort","The comfort contract","We avoid the hard conversation because it is uncomfortable. Some topics need fifty conversations, not one."],
-  ["dimming","The dimming contract","I shrink so you feel safe. I will not dream big, show my emotions, name my needs or have expectations."],
-  ["division","The division contract","I carry the emotion, you carry the practical. Or the reverse. We split instead of talking about it."],
-  ["stagnation","The stagnation contract","I do not evolve, so nothing changes and nobody gets upset. Very common inside families."],
-  ["mindread","The mind-reading contract","If you really loved me, you would just know. I do not name it, and I expect you to notice."],
-  ["covert","The covert contract","I give, help, keep quiet, make it easy. And inside I believe: now you owe me, now you should choose me."]
-];
-var ROLES = ["The peacemaker","The strong one","The helper or fixer","The good child","The invisible one","The responsible one","The performer or achiever","The one who needs nothing"];
-var THREATS = ["Approval","Belonging","Predictability","Comfort","The old identity","Being misunderstood","Disappointing people","Guilt","Seeing how unequal the relationship is","Losing the relationship"];
-var SELF = [
-  "If I want something, I will ask directly.",
-  "If I cannot ask, I will explore what I fear.",
-  "If the answer is no, I will not punish or disappear. I will decide.",
-  "I will say what I mean instead of hinting and hoping."
+   The old version ran eleven steps and about ten thousand words. He walked
+   it and said: too much text, overwhelming, confusing, and full of AI
+   giveaways. He asked for the shape of the Story of Us instead. A specific
+   journey with a specific end.
+
+   So there is now ONE destination: a single contract, written in the
+   reader's own words, with what it costs and the request that renegotiates
+   it. Everything that did not serve that destination is gone, including the
+   parents / family motto / each-sibling-in-turn sweep, which was four
+   separate excavations before anybody had found a single live contract.
+
+   The order comes from the research rather than from the old material:
+     - implicit relational knowing (Lyons-Ruth, Boston Change Process Study
+       Group): the deal was learned pre-verbally, stored in action, so it
+       cannot be recalled, only enacted. Asking somebody to remember it does
+       not work. That is why step one asks for a FEELING, not a memory.
+     - prediction error: the contract runs as an expectation, and a breach
+       fires before conscious reasoning. Resentment arrives first. So
+       resentment is the entry point and the whole tool follows it.
+     - Boszormenyi-Nagy's invisible loyalties for the family origin, which
+       is now ONE step near the end rather than four at the start.
+
+   His verbatim teaching lines are kept, seven of them, one per screen at
+   most. They are his and they are the best writing in here.
+------------------------------------------------------------------ */
+
+var STEPS = [
+  { id:'flare', t:"Where did you feel it?",
+    ask:"Think of a moment in the last week or two when something flared. Irritation, resentment, the after everything I do feeling. One moment. Two lines is plenty.",
+    fields:[{k:'moment', label:'What happened', type:'area', ph:'She made plans for Saturday without asking me.'}],
+    mine:["Many fights are not about the event. <b>They are about the contract behind the event.</b>",
+          "Freeing Yourself From Friction, session five"] },
+
+  { id:'who', t:"Who was it with?",
+    ask:"A name, or just who they are to you. This contract is with one person.",
+    fields:[{k:'who', label:'The other person', type:'text', ph:'My wife. My mother. My business partner.'}],
+    mine:[] },
+
+  { id:'deal', t:"Write the deal.",
+    ask:"Finish both halves. Your side is what you have been doing without being asked. Their side is what you expected back, and never said.",
+    fields:[
+      {k:'mine_side', stem:'If I', type:'text', ph:'keep everything running at home'},
+      {k:'their_side', stem:'then WHO should', type:'text', ph:'notice, and thank me for it'}],
+    mine:["So what do these sound like? Well, I did this, so why don't you feel grateful? <b>I like the feel one, because it is so common.</b>",
+          "Freeing Yourself From Friction, session five"] },
+
+  { id:'breach', t:"And when it does not happen?",
+    ask:"This is the part that actually hurts. When they do not do it, you decide it means something. Write the meaning, not the behaviour.",
+    fields:[{k:'means', stem:'It means', type:'text', ph:'I do not matter to her'}],
+    mine:["The covert contract is when you do something for someone with a hidden expectation of return. You give, you help, you make it easy. You do not ask directly. You hope.",
+          "Freeing Yourself From Friction, session five"] },
+
+  { id:'origin', t:"Where did you sign it?",
+    ask:"Go back to the house you grew up in. Watching your parents, what did you see, and what did you feel about it? Then finish the last line.",
+    fields:[
+      {k:'saw', label:'Watching my parents, I saw', type:'area', ph:'My mother did everything and never asked for help.'},
+      {k:'learned', stem:'So I learned that to be loved, I must', type:'text', ph:'never be a burden'}],
+    mine:["Watching my parents, what did I see? What was my recurring feeling? Write that down first. It gives you something to start the discovery with.",
+          "Relationship Course, on defining love and breaking invisible contracts"] },
+
+  { id:'ask', t:"Now say it out loud.",
+    ask:"Two lines and you are done. What this has cost you, and the request that replaces the contract.",
+    fields:[
+      {k:'cost', label:'What keeping this has cost me', type:'text', ph:'Years of being tired and unthanked.'},
+      {k:'request', stem:'What I want is', type:'text', ph:'to be asked before plans get made'}],
+    mine:["You are not the role. You are the one performing the role. So instead of I am the strong one, try: <b>I have been playing the strong one.</b> That shift creates space. Space creates choice. Choice creates change.",
+          "Clarity Quest group coaching"] }
 ];
 
-function fresh(){ return { step:0, signs:[], relType:"", relWho:"", moment:"",
-  sub:0, origin:freshOrigin(), contracts:[newCon()], deep:"", cost:"", threat:[],
-  want:"", willing:"", canAsk:"", fear:"", self:[], selfCustom:"", act:"", torn:false }; }
-function freshOrigin(){ return { parents:{obs:"",felt:""}, motto:"", loved:"", father:{obs:"",felt:"",deal:"",skip:false}, mother:{obs:"",felt:"",deal:"",skip:false}, sibCount:null, sibs:[] }; }
-function newSib(){ return { id:uid(), kind:"", name:"", obs:"", felt:"", deal:"", skip:false }; }
-function hasLine(p){ return !!(p && ((p.obs||"").trim()||(p.felt||"").trim()||(p.deal||"").trim())); }
-function sibLabel(sb, i){ return (sb.kind ? sb.kind.replace(/^A /,"My ") : "Sibling "+(i+1)) + (sb.name && sb.name.trim() ? " ("+sb.name.trim()+")" : ""); }
-function sibPron(sb){ return sb.kind==="A sister" ? "her" : sb.kind==="A brother" ? "him" : "them"; }
-// the time-travel sequence: both parents, the motto, father, mother, then every sibling
-function originScreens(){
-  var list = ["parents","motto","father","mother","sibcount"];
-  var n = S.origin.sibCount || 0;
-  for (var i=0;i<n;i++) list.push("sib"+i);
-  return list;
-}
-function ensureSibs(){ var n = S.origin.sibCount || 0; while (S.origin.sibs.length < n) S.origin.sibs.push(newSib()); if (S.origin.sibs.length > n) S.origin.sibs = S.origin.sibs.slice(0, n); }
-function newCon(){ return { id:uid(), ifI:"", youShould:"", means:"", kind:"", role:"", roleOther:"" }; }
-var S = fresh();
-var tool = document.getElementById("tool");
+var KEY = 'ic.v3';
+var S = {};
+var i = 0, reached = 0;
+var $ = function(id){ return document.getElementById(id); };
+function esc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){
+  return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;' }[c]; }); }
 
-function esc(s){ return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/"/g,"&quot;"); }
-function uid(){ return "c"+Math.random().toString(36).slice(2,9); }
-function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
-function load(){ try{ var o=JSON.parse(localStorage.getItem(KEY)); if(o&&o.contracts){ S=o;
-  if (S.sub === undefined) S.sub = 0;
-  if (!S.origin.parents){
-    // older saves: one generic line, or a free list of people. Carry what maps, drop the rest.
-    var old = S.origin, no = freshOrigin(); no.motto = old.motto||""; no.loved = old.loved||"";
-    if (old.obs || old.felt){ no.parents.obs = old.obs||""; no.parents.felt = old.felt||""; }
-    (old.people||[]).forEach(function(p){
-      var t = {obs:p.obs||"",felt:p.felt||"",deal:p.deal||"",skip:false};
-      if (p.who==="Both my parents"||p.who==="My family as a whole"){ no.parents.obs = no.parents.obs||t.obs; no.parents.felt = no.parents.felt||t.felt; }
-      else if (p.who==="My father") no.father = t; else if (p.who==="My mother") no.mother = t;
-      else if (p.who==="A brother"||p.who==="A sister"){ var sb = newSib(); sb.kind = p.who; sb.name = p.name||""; sb.obs=t.obs; sb.felt=t.felt; sb.deal=t.deal; no.sibs.push(sb); }
-    });
-    if (no.sibs.length) no.sibCount = no.sibs.length;
-    S.origin = no; S.sub = 0;
-  }
-} }catch(e){} }
-function earlyDeals(){
-  var o = S.origin, out = [];
-  if (!o.father.skip && o.father.deal.trim()) out.push({who:"my father", deal:o.father.deal});
-  if (!o.mother.skip && o.mother.deal.trim()) out.push({who:"my mother", deal:o.mother.deal});
-  o.sibs.forEach(function(sb,i){ if (!sb.skip && sb.deal.trim()) out.push({who:(sb.kind ? sb.kind.replace(/^A /,"my ") : "sibling "+(i+1)) + (sb.name && sb.name.trim() ? " ("+sb.name.trim()+")" : ""), deal:sb.deal}); });
-  return out;
+function save(){
+  try { localStorage.setItem(KEY, JSON.stringify({ s:S, i:i, r:reached })); } catch(e){}
 }
-function full(c){ return !!(c.ifI.trim() && c.youShould.trim() && c.means.trim()); }
-function done(){ return S.contracts.filter(full); }
-function con(id){ return S.contracts.filter(function(c){return c.id===id;})[0]; }
-function deepCon(){ var d = con(S.deep); if (!d || !full(d)) d = done()[0]; return d; }
-function readCon(c){
-  return '<em>If I</em> '+esc(c.ifI)+', <em>then you should</em> '+esc(c.youShould)+'. <em>And if you do not, it means</em> '+esc(c.means)+'.';
+function load(){
+  try { var d = JSON.parse(localStorage.getItem(KEY) || 'null');
+        return (d && d.s) ? d : null; } catch(e){ return null; }
 }
-function roleOf(c){ return c.role === "other" ? c.roleOther : c.role; }
-function kindOf(c){ var k = KINDS.filter(function(x){return x[0]===c.kind;})[0]; return k ? k[1] : ""; }
-
-function rail(n){ var h='<div class="rail">'; for(var i=1;i<=TOTAL;i++) h+='<i class="'+(i<=n?"on":"")+'"></i>'; return h+"</div>"; }
-function nav(label){
-  var missing = missingFor(S.step), ok = !missing.length;
-  return '<div class="miss" id="miss"'+(ok?' style="display:none"':'')+'>'+missLine(missing)+'</div>'+
-    '<div class="nav"><button class="btn" id="next"'+(ok?"":" disabled")+'>'+label+'</button>'+
-    (S.step>1?'<button class="back" id="back">Back</button>':'')+'</div>';
+function show(id){
+  ['s0','sq','sr'].forEach(function(x){ $(x).classList.remove('on'); });
+  $(id).classList.add('on');
+  window.scrollTo(0, 0);
 }
-function missLine(m){ return m.length ? "Still needed: "+esc(m.join(", "))+"." : ""; }
-// One place that knows what each step needs before the button lights up.
-function missingFor(step){
-  var m = [];
-  if (step === 2){ if (!S.relType) m.push("which relationship"); if (!S.moment.trim()) m.push("the moment"); }
-  else if (step === 3){
-    var o = S.origin, sc = originScreens()[S.sub] || "parents";
-    if (sc === "parents"){ if (!hasLine(o.parents)) m.push("at least one of the two lines"); }
-    else if (sc === "father"){ if (!o.father.skip && !hasLine(o.father)) m.push("at least one line about him, or skip him"); }
-    else if (sc === "mother"){ if (!o.mother.skip && !hasLine(o.mother)) m.push("at least one line about her, or skip her"); }
-    else if (sc === "sibcount"){ if (o.sibCount === null) m.push("how many brothers and sisters"); }
-    else if (sc.indexOf("sib") === 0){ var sb = o.sibs[+sc.slice(3)]; if (sb && !sb.skip){ if (!sb.kind) m.push("brother or sister"); if (!hasLine(sb)) m.push("at least one line, or skip this one"); } }
-  }
-  else if (step === 4){ if (done().length < 1) m.push("one complete contract, all three lines"); }
-  else if (step === 6){ if (done().filter(function(c){ var r = roleOf(c); return !r || !r.trim(); }).length) m.push("a role for each contract"); }
-  else if (step === 7){ if (!deepCon()) m.push("one contract to carry forward"); }
-  else if (step === 8){ if (!S.cost.trim()) m.push("what it has cost you"); if (!S.threat.length) m.push("what breaking it would threaten"); }
-  else if (step === 9){
-    if (!S.want.trim()) m.push("what you want"); if (!S.willing.trim()) m.push("what you are asking them to do");
-    if (!S.canAsk) m.push("whether you could ask it this week");
-    if (S.canAsk==="no" && !S.fear.trim()) m.push("what you fear would happen");
-  }
-  else if (step === 10){ if (!(S.self.length || S.selfCustom.trim())) m.push("one agreement with yourself"); if (!S.act.trim()) m.push("one small act"); }
-  return m;
-}
-function room(label, paras, src){
-  return '<div class="room"><div class="k">'+label+'</div>'+paras.map(function(p){return '<p>'+p+'</p>';}).join("")+
-    (src?'<div class="src">'+src+'</div>':'')+'</div>';
-}
-function chips(list, sel, attr, multi){
-  return '<div class="chips">'+list.map(function(x){
-    var on = multi ? sel.indexOf(x)>-1 : sel===x;
-    return '<button type="button" class="chip'+(on?" on":"")+'" data-'+attr+'="'+esc(x)+'">'+esc(x)+'</button>';
-  }).join("")+'</div>';
+function who(){ return (S.who || '').trim() || 'them'; }
+/* Somebody types "My wife", which then reads as "then My wife should".
+   Lowercase it mid-sentence only when it opens with a determiner, so a real
+   name like Sarah keeps its capital. */
+function whoMid(){
+  var s = who();
+  return /^(My|The|A|An|Our|Her|His|Their)\s/.test(s) ? s.charAt(0).toLowerCase() + s.slice(1) : s;
 }
 
 function render(){
-  if (S.step === 0){ tool.innerHTML=""; return; }
-  if (S.step > TOTAL) return renderResult();
-  var h = '<div class="stage m-in">' + rail(S.step);
+  var st = STEPS[i];
+  $('count').textContent = 'Step ' + (i + 1) + ' of ' + STEPS.length;
+  $('fill').style.width = ((i + 1) / STEPS.length * 100) + '%';
+  $('title').textContent = st.t;
+  $('ask').textContent = st.ask;
+  $('warn').classList.remove('on');
+  $('next').textContent = (i === STEPS.length - 1) ? 'See my contract' : 'Next';
+  $('back').style.visibility = i === 0 ? 'hidden' : 'visible';
 
-  if (S.step === 1){
-    h += '<div class="step-n">Step one · the self-check</div><h2>Is a contract running?</h2>'+
-      '<p class="say">Before we go looking for the contract, I want you to notice the symptoms. Tick whatever is true of you at the moment, in any relationship. Be honest with yourself here rather than kind.</p>'+
-      '<div class="signs">'+SIGNS.map(function(s,i){
-        var on = S.signs.indexOf(i)>-1;
-        return '<div class="sign'+(on?" on":"")+'" data-sign="'+i+'"><span class="box">'+(on?"&#10003;":"")+'</span><span>'+esc(s)+'</span></div>';
-      }).join("")+'</div>'+
-      '<div class="count" id="count">'+countLine()+'</div>'+
-      room("In my words", [
-        "The breach of that invisible contract creates resentment, disconnection, friction. If this, then that. <b>If you do that, I feel like this. If you do not do that, I feel like this. That is a contract.</b> And as long as you are not aware of the contract, you will keep feeling the same way every time someone does something you cannot control.",
-        "This is one of the most common sources of friction I see. Because the process requires clarity, honesty, boundaries and responsibility. But invisible contracts rely on silence, hints, roles and resentment."
-      ], "This is something I taught in the Freeing Yourself From Friction classes, session five.")+
-      nav("Next");
-  }
-
-  else if (S.step === 2){
-    h += '<div class="step-n">Step two · the moment</div><h2>Where is the drag right now?</h2>'+
-      '<p class="say">Pick the relationship where you most often feel the pull: taken for granted, disappointed, keeping score without saying so. Then describe one recent moment in it for me, plainly. What happened, what you did, and what you felt.</p>'+
-      chips(RELS, S.relType, "rel", false)+
-      '<input type="text" id="relWho" placeholder="Their name, or how you would describe them (optional)" value="'+esc(S.relWho)+'">'+
-      '<label class="f" for="moment">The moment</label>'+
-      '<textarea id="moment" rows="4" placeholder="Last Sunday I spent the whole afternoon sorting out the thing they asked for. They did not say a word about it. I went quiet for the rest of the evening and I am still annoyed.">'+esc(S.moment)+'</textarea>'+
-      room("In my words", [
-        "Many fights are not about the event. <b>They are about the contract behind the event.</b> When the other person does not deliver on what you believe was promised, you experience a breach. And the emotional experience of that breach is what gets called betrayal, rejection, disrespect, or being taken for granted."
-      ], "This is something I taught in the Freeing Yourself From Friction classes, session five.")+
-      nav("Next");
-  }
-
-  else if (S.step === 3){
-    var o = S.origin, screens = originScreens(), sc = screens[S.sub] || "parents", pos = (S.sub+1)+" of "+screens.length;
-    h += '<div class="step-n">Step three · time travel · '+pos+'</div>';
-    if (sc === "parents"){
-      h += '<h2>Watching your parents</h2>'+
-        '<p class="say">Contracts are usually signed early, in your family, long before you could read the fine print. So we go back and look, one person at a time, in this order: both your parents together, the family motto, then your father on his own, your mother on her own, and then each brother and sister. This is a bit of time travel. Think back. What did you see?</p>'+
-        '<label class="f" for="p_obs">Watching my parents, or the adults who raised me, I observed...</label>'+
-        '<textarea id="p_obs" rows="2" placeholder="Money was always tight. Work was something you slogged through. They were in the same house but not together.">'+esc(o.parents.obs)+'</textarea>'+
-        '<label class="f" for="p_felt">My recurring feeling, watching that, was...</label>'+
-        '<textarea id="p_felt" rows="2" placeholder="Disconnected. On edge. Like it was my job to keep things calm.">'+esc(o.parents.felt)+'</textarea>'+
-        room("In my words", [
-          "When I was a little boy we lived close together as a family. My parents were each one of eight children, so it was a lot of uncles, aunts and cousins, and we often congregated at my grandfather's place. What I observed there, even as a little boy: money is scarce. Work is horrible, something you slog through and then you do not get paid enough. And relationships mean disconnection. That one goes with that one. That affected my belief system, because <b>I signed contracts from what I saw</b>.",
-          "So here is how you identify some of yours. Watching my parents, what did I see? What was my recurring feeling? Write that down first. It gives you something to start the discovery with."
-        ], "I taught this in my Relationship Course, in the session on defining love and breaking invisible contracts.");
+  var box = $('fields');
+  box.innerHTML = '';
+  st.fields.forEach(function(f){
+    var wrap = document.createElement('div');
+    if (f.stem) {
+      wrap.className = 'stem';
+      var sp = document.createElement('span');
+      sp.textContent = f.stem.replace('WHO', whoMid());
+      var inp = document.createElement('input');
+      inp.type = 'text'; inp.value = S[f.k] || ''; inp.placeholder = f.ph || '';
+      inp.setAttribute('aria-label', sp.textContent);
+      inp.addEventListener('input', function(){ S[f.k] = inp.value; save(); });
+      wrap.appendChild(sp); wrap.appendChild(inp);
+    } else {
+      wrap.className = 'field';
+      var lab = document.createElement('label');
+      lab.textContent = f.label;
+      var id = 'f-' + f.k; lab.setAttribute('for', id);
+      var inp2 = f.type === 'area' ? document.createElement('textarea') : document.createElement('input');
+      if (f.type !== 'area') inp2.type = 'text';
+      inp2.id = id; inp2.value = S[f.k] || ''; inp2.placeholder = f.ph || '';
+      inp2.addEventListener('input', function(){ S[f.k] = inp2.value; save(); });
+      wrap.appendChild(lab); wrap.appendChild(inp2);
     }
-    else if (sc === "motto"){
-      h += '<h2>Your family motto</h2>'+
-        '<p class="say">Every family has a motto, even if nobody ever said it out loud. Whatever your surname is: we So-and-sos do not cry. We So-and-sos do not talk about money. It can be different for the men and the women. Put words to yours, and then to what it taught you about being loved.</p>'+
-        '<label class="f" for="motto">Our family motto could have been...</label>'+
-        '<div class="chips">'+MOTTOS.map(function(m){return '<button type="button" class="chip stem" data-motto="'+esc(m)+'">'+esc(m)+'</button>';}).join("")+'</div>'+
-        '<input type="text" id="motto" placeholder="We Smiths do not..." value="'+esc(o.motto)+'">'+
-        '<label class="f" for="loved">I learned that to be loved, I had to...</label>'+
-        '<textarea id="loved" rows="2" placeholder="Be useful. Not need anything. Keep everyone happy.">'+esc(o.loved)+'</textarea>'+
-        room("In my words", [
-          "That motto becomes a contract, something you agree to live by. It is like a sports team. A player gets signed, puts on the jersey, and that is it, he belongs, and the supporters do not reject him. He is wearing the jersey, so he has signed the contract. He is agreeing to the motto.",
-          "And now you can understand why, when you are in a relationship with someone whose motto clashes with yours, that becomes conflict. <b>If you do not understand your own motto, you cannot change it.</b>"
-        ], "I taught this in my Relationship Course, in the session on defining love and breaking invisible contracts.");
-    }
-    else if (sc === "father" || sc === "mother"){
-      var who = sc, P = o[who], him = who==="father" ? "him" : "her", his = who==="father" ? "his" : "her";
-      h += '<h2>Your '+who+', on '+his+' own</h2>'+
-        '<p class="say">Now the same three lines, but for your '+who+' alone. Not the pair, just '+him+'. What did you see when you watched '+him+', what did you feel, and what could your agreement with '+him+' have been? If there was no '+who+' in your story, or you would rather not go there, you can skip '+him+'.</p>'+
-        (P.skip ? '<div class="hint" style="color:var(--amber)">You have skipped your '+who+'. Tap below to undo that.</div>' : '')+
-        '<label class="f">Watching my '+who+', I observed...</label>'+
-        '<textarea data-pp="'+who+'" data-f="obs" rows="2" placeholder="Always working, never satisfied. Went silent for days when upset.">'+esc(P.obs)+'</textarea>'+
-        '<label class="f">What I felt, again and again, was...</label>'+
-        '<textarea data-pp="'+who+'" data-f="felt" rows="2" placeholder="Responsible for '+him+'. On edge. Like I had to earn my place.">'+esc(P.felt)+'</textarea>'+
-        '<label class="f">My agreement or contract with '+him+' could have been...</label>'+
-        '<textarea data-pp="'+who+'" data-f="deal" rows="2" placeholder="I will be the easy one who never needs anything, and in return I get to stay close.">'+esc(P.deal)+'</textarea>'+
-        '<div class="chips"><button type="button" class="chip'+(P.skip?" on":"")+'" data-pskip="'+who+'">'+(P.skip?"Skipped. Tap to undo":"Skip my "+who)+'</button></div>'+
-        (who==="father" ? room("In my words", [
-          "Now do the same with your father on his own, and then your mother on her own. Watching my father, I observed this. I felt this. And then use this sentence: <b>my agreement or contract with him could have been something like...</b>"
-        ], "I taught this in my Relationship Course, in the session on defining love and breaking invisible contracts.") : '');
-    }
-    else if (sc === "sibcount"){
-      h += '<h2>Your brothers and sisters</h2>'+
-        '<p class="say">And now your siblings, one at a time, until we have covered them all. Step-siblings and half-siblings count if they were part of the house. How many brothers and sisters do you have?</p>'+
-        '<div class="chips">'+[0,1,2,3,4,5,6,7,8].map(function(n){ return '<button type="button" class="chip'+(o.sibCount===n?" on":"")+'" data-sibcount="'+n+'">'+(n===0?"None, I was an only child":n===8?"8 or more":n)+'</button>'; }).join("")+'</div>'+
-        (o.sibCount===0 ? '<div class="hint">No siblings, so the next step is the contracts themselves.</div>' : '')+
-        room("In my words", [
-          "Now you can do the same with your siblings. Watching my brother, my sister. I observed this. I felt this. I thought this. Whatever gives you something to start that discovery with. And the same sentence at the end: my agreement or contract with him, or her, could have been something like..."
-        ], "I taught this in my Relationship Course, in the session on defining love and breaking invisible contracts.");
-    }
-    else {
-      ensureSibs();
-      var si = +sc.slice(3), sb = o.sibs[si], n = o.sibs.length, spr = sibPron(sb);
-      h += '<h2>'+(sb.kind ? sb.kind.replace(/^A /,"Your ") : "Sibling "+(si+1))+(n>1?' <span style="font-weight:300;color:var(--muted)">'+(si+1)+' of '+n+'</span>':'')+'</h2>'+
-        '<p class="say">'+(si===0?'First one. ':'Next one. ')+'Brother or sister, then the same three lines. You can skip any sibling you would rather not write about.</p>'+
-        '<div class="chips">'+SIBKIND.map(function(k){ return '<button type="button" class="chip'+(sb.kind===k?" on":"")+'" data-sibkind="'+si+'" data-k="'+esc(k)+'">'+esc(k)+'</button>'; }).join("")+'</div>'+
-        '<input type="text" data-sf="'+si+'" data-f="name" placeholder="Their name (optional)" value="'+esc(sb.name)+'">'+
-        '<label class="f">Watching my '+(sb.kind?sb.kind.replace(/^A /,""):"brother or sister")+', I observed...</label>'+
-        '<textarea data-sf="'+si+'" data-f="obs" rows="2" placeholder="Got away with everything. Or carried everything. Or was never home.">'+esc(sb.obs)+'</textarea>'+
-        '<label class="f">What I felt, again and again, was...</label>'+
-        '<textarea data-sf="'+si+'" data-f="felt" rows="2" placeholder="Second best. Protective. Invisible next to '+spr+'.">'+esc(sb.felt)+'</textarea>'+
-        '<label class="f">My agreement or contract with '+spr+' could have been...</label>'+
-        '<textarea data-sf="'+si+'" data-f="deal" rows="2" placeholder="I will look after you, and you will look up to me.">'+esc(sb.deal)+'</textarea>'+
-        '<div class="chips"><button type="button" class="chip'+(sb.skip?" on":"")+'" data-sibskip="'+si+'">'+(sb.skip?"Skipped. Tap to undo":"Skip this one")+'</button></div>';
-    }
-    var last = S.sub >= screens.length-1;
-    h += nav(last ? "Next" : "Next person");
-  }
-
-  else if (S.step === 4){
-    var n = done().length;
-    h += '<div class="step-n">Step four · the contract</div><h2>Write the hidden deal</h2>'+
-      '<p class="say">Now put words to it. I want you to use the three lines exactly. The first two are the deal. <b>The third line is usually the real driver.</b> It reveals the meaning you give their behaviour, the fear, and the old role. Write one at least, three if you can, because in my experience the first one you find is seldom the deepest.</p>'+
-      (earlyDeals().length
-        ? '<div class="origin"><p><em>What you found in step three</em></p>'+earlyDeals().map(function(d){ return '<p><em>With '+esc(d.who)+':</em> '+esc(d.deal)+'</p>'; }).join("")+'<p class="hint">Those are the early versions. Now write the ones running in this relationship today, in the three-line form. Tap an example to load it, then change the words until it sounds like you.</p></div>'
-        : '<div class="hint">Tap an example to load it, then change the words until it sounds like you.</div>')+
-      '<div class="chips">'+EXAMPLES.map(function(e,i){return '<button type="button" class="chip stem" data-ex="'+i+'">If I '+esc(e[0])+', you should '+esc(e[1])+'</button>';}).join("")+'</div>';
-    S.contracts.forEach(function(c,i){
-      h += '<div class="con"><div class="n">Contract '+(i+1)+'</div>'+
-        (S.contracts.length>1?'<button class="del" data-del="'+c.id+'" aria-label="Remove">&times;</button>':'')+
-        '<div class="clause"><span>If I</span><input type="text" data-c="'+c.id+'" data-f="ifI" placeholder="keep the peace" value="'+esc(c.ifI)+'"></div>'+
-        '<div class="clause"><span>then you should</span><input type="text" data-c="'+c.id+'" data-f="youShould" placeholder="not upset me / feel grateful" value="'+esc(c.youShould)+'"></div>'+
-        '<div class="clause"><span>and if you do not, it means</span><input type="text" data-c="'+c.id+'" data-f="means" placeholder="you do not care" value="'+esc(c.means)+'"></div>'+
-        '</div>';
-    });
-    if (S.contracts.length < 5) h += '<div class="addrow"><button id="addcon">+ Add another contract</button></div>';
-    h += '<div class="count" id="count">'+(n===0?"No complete contract yet.":n+" complete. "+(n<3?"Aim for three if you can.":"Good."))+'</div>'+
-      room("In my words", [
-        "So what do these contracts sound like? Something like: if I do this, you should feel like that. Or then you should do this. <b>I like the feel one more, because it is so common.</b> Well, I did this, so why don't you feel grateful? I did this thing for you, so why don't you react that way?",
-        "And if you do not do the thing I expect, if you do not feel the way I expected you to, now the definitions come in. It means the following. Now you write a definition there. That is how we structure these contracts."
-      ], "This is something I taught in the Freeing Yourself From Friction classes, session five.")+
-      nav("Next");
-  }
-
-  else if (S.step === 5){
-    h += '<div class="step-n">Step five · the pattern</div><h2>Which kind is it?</h2>'+
-      '<p class="say">These are the ones I encounter again and again. Not labels to wear, patterns to notice. For each contract, pick the one it most resembles. If none fit, leave it, that is allowed.</p>';
-    done().forEach(function(c){
-      h += '<div class="con"><div class="read">'+readCon(c)+'</div><div class="kinds">'+
-        KINDS.map(function(k){ return '<button type="button" class="kind'+(c.kind===k[0]?" on":"")+'" data-kc="'+c.id+'" data-kind="'+k[0]+'"><b>'+k[1]+'</b><small>'+k[2]+'</small></button>'; }).join("")+
-        '</div></div>';
-    });
-    h += room("In my words", [
-        "The covert contract is when you do something for someone with a hidden expectation of return. You give, you help, you keep quiet, you make it easy. You do not ask directly. You do not negotiate openly. You hope. <b>Covert contracts create resentment because the other person cannot agree to terms they never heard.</b>",
-        "Listen to your spouse when they say: you were different when we were with your family. Be curious. What is the contract you are keeping there, the promise you are trying to honour?"
-      ], "This is something I taught in the Freeing Yourself From Friction classes, session five.")+
-      nav("Next");
-  }
-
-  else if (S.step === 6){
-    h += '<div class="step-n">Step six · the role</div><h2>Which role is this contract protecting?</h2>'+
-      '<p class="say">In my experience a contract is almost always there to keep a role in place. A role is a consistent way you show up that says: this is who I am, this is what I do, this is what I am allowed to do, and this is what I am not allowed to do. Once a role is formed, your nervous system defends it, because roles feel like safety. Even when they cost you your freedom.</p>';
-    done().forEach(function(c){
-      h += '<div class="con"><div class="read">'+readCon(c)+'</div>'+
-        '<div class="chips">'+ROLES.map(function(r){ return '<button type="button" class="chip'+(c.role===r?" on":"")+'" data-rc="'+c.id+'" data-role="'+esc(r)+'">'+esc(r)+'</button>'; }).join("")+
-        '<button type="button" class="chip'+(c.role==="other"?" on":"")+'" data-rc="'+c.id+'" data-role="other">Another role</button></div>'+
-        (c.role==="other"?'<input type="text" data-ro="'+c.id+'" placeholder="Name the role in your own words" value="'+esc(c.roleOther)+'">':'')+
-        '</div>';
-    });
-    h += room("In my words", [
-        "My own contract with my mother, and I share this as my story, was to be her surrogate spouse. To be the one who tries to be perfect, the emotional support, the one who does not need anything from her but is always there for whatever she needs. That was my contract. It was part of my belief system, and <b>I had to tear that contract up and declare it null and void</b>.",
-        "You are not the role. You are the one performing the role. So instead of: I am the strong one. Try: <b>I have been playing the strong one.</b> That shift creates space. Space creates choice. Choice creates change."
-      ], "I shared this in Clarity Quest group coaching, and taught it in the Freeing Yourself From Friction classes, session five.")+
-      nav("Next");
-  }
-
-  else if (S.step === 7){
-    var d = deepCon();
-    h += '<div class="step-n">Step seven · the deepest one</div><h2>Which one sits deepest?</h2>'+
-      '<p class="say">'+(done().length>1
-        ? 'You have more than one. Pick the one that has been running the longest, or the one you least want to say out loud. That is the one I want us to carry forward. The others stay on your record.'
-        : 'You wrote one contract, so it carries forward. If you want to add more, go back to step four.')+'</p>';
-    done().forEach(function(c){
-      var on = d && d.id===c.id;
-      h += '<div class="con pick'+(on?" on":"")+'" data-deep="'+c.id+'">'+(on?'<span class="mark">Carrying forward</span>':'')+
-        '<div class="read">'+readCon(c)+'</div>'+
-        '<div class="tags">'+(kindOf(c)?'<span class="tag">'+esc(kindOf(c))+'</span>':'')+(roleOf(c)?'<span class="tag">'+esc(roleOf(c))+'</span>':'')+'</div></div>';
-    });
-    h += room("In my words", [
-        "If you feel stuck in a certain area of your life, maybe you have done a lot of work already, but there is one area where you just do not break through, in my experience that is often because of vows and contracts. <b>They are so powerful because we create them around a lot of emotion.</b> Something painful, something scary, something recurring. And like all beliefs in the old system, we created them to keep us safe and comfortable. So be very curious about that. That is where you can start looking for the thing that is stopping you."
-      ], "I shared this in one of my Clarity Quest group coaching sessions.")+
-      nav("Next");
-  }
-
-  else if (S.step === 8){
-    var d = deepCon();
-    h += '<div class="step-n">Step eight · the cost</div><h2>What has this contract cost you?</h2>'+
-      (d?'<div class="con"><div class="read">'+readCon(d)+'</div></div>':'')+
-      '<p class="say">Two questions. First, what has honouring this contract cost you so far: in energy, in honesty, in the version of you that stays small. Second, what would breaking it threaten. This is where I see people stall. Not because they cannot see the contract, but because they can see the price of tearing it up.</p>'+
-      '<label class="f" for="cost">Honouring it has cost me...</label>'+
-      '<textarea id="cost" rows="3" placeholder="Years of doing things I resented. Never actually asking. A relationship where nothing has ever really been negotiated.">'+esc(S.cost)+'</textarea>'+
-      '<label class="f">Breaking it would threaten...</label>'+
-      chips(THREATS, S.threat, "threat", true)+
-      room("In my words", [
-        "Until you tear up the contract, until you break that promise, until you break that vow, you will stay loyal to it. You will honour that contract. And you will stay in the same place in life. Far away from the big dream, drifting gradually back toward the big dread.",
-        "<b>It is okay to break a promise if it is unhealthy. Not only okay. It is necessary.</b> Some promises and vows must be broken if the process is to move forward. And it is painful. But it is also clean. And clean is what creates momentum."
-      ], "This is something I taught in the Freeing Yourself From Friction classes, session five.")+
-      nav("Next");
-  }
-
-  else if (S.step === 9){
-    h += '<div class="step-n">Step nine · the upgrade</div><h2>Turn it into a request</h2>'+
-      '<p class="say">Invisible contracts fail because they are silent. So I want you to upgrade the deal into a request the other person can actually hear and answer. Two lines. Say what you want, then ask if they are willing. No hinting, no "you should just know".</p>'+
-      '<div class="two"><div><label class="f" for="want">What I want is...</label><input type="text" id="want" placeholder="to hear that you noticed" value="'+esc(S.want)+'"></div>'+
-      '<div><label class="f" for="willing">Would you be willing to...</label><input type="text" id="willing" placeholder="tell me when something I did helped you" value="'+esc(S.willing)+'"></div></div>'+
-      '<label class="f">Could you actually say this to them this week?</label>'+
-      '<div class="yn"><button type="button" class="chip'+(S.canAsk==="yes"?" on":"")+'" data-ask="yes">Yes, I could</button>'+
-      '<button type="button" class="chip'+(S.canAsk==="no"?" on":"")+'" data-ask="no">Not yet</button></div>'+
-      (S.canAsk==="no"?'<label class="f" for="fear">If I asked, I am afraid that...</label><textarea id="fear" rows="2" placeholder="They would laugh it off, or say no, and then I would know for sure.">'+esc(S.fear)+'</textarea>':'')+
-      room("In my words", [
-        "Use this stem: what I want is this. Would you be willing to do that? <b>If you cannot ask it, that is friction. That is your growth edge.</b>",
-        "Then negotiate reality, not fantasy. Sometimes the other person says yes. Sometimes they say no. Either way, you now have truth. And truth gives you choices."
-      ], "This is something I taught in the Freeing Yourself From Friction classes, session five.")+
-      nav("Next");
-  }
-
-  else if (S.step === 10){
-    h += '<div class="step-n">Step ten · the new agreement</div><h2>Make a new agreement with yourself</h2>'+
-      '<p class="say">Invisible contracts are not only about the other person. They are also about you abandoning yourself. So the contract you tear up gets replaced, not with a new deal for them to keep, but with one you keep. Choose the lines you actually mean, or write your own.</p>'+
-      chips(SELF, S.self, "self", true)+
-      '<input type="text" id="selfCustom" placeholder="Or in your own words..." value="'+esc(S.selfCustom)+'">'+
-      '<label class="f" for="act">One small act of integrity this week</label>'+
-      '<div class="hint">One action that breaks the old role pattern. Not rebellion. Expansion.</div>'+
-      '<textarea id="act" rows="2" placeholder="Ask my sister directly for the help instead of doing it all and going quiet.">'+esc(S.act)+'</textarea>'+
-      room("In my words", [
-        "Sometimes we make promises, commitments, to ourselves, to other people, to the world. We create these little contracts. And as we go through life we discover the fine print. Either it challenges us to step up, or we realise: <b>I made a promise, I made a contract from it, but I no longer believe that.</b>",
-        "This is how you move from roles to leadership. From protecting who you were to growing toward your Big Dream."
-      ], "I shared this in Clarity Quest group coaching, and taught it in the Freeing Yourself From Friction classes, session five.")+
-      nav("See my contracts");
-  }
-
-  h += '</div>';
-  tool.innerHTML = h;
-  wire();
-  if (S.step > 1) tool.scrollIntoView({block:"start"});
-}
-
-function countLine(){
-  var n = S.signs.length;
-  if (!n) return "Nothing ticked yet. Contracts run under the surface in some seasons, carry on anyway.";
-  return "<b>"+n+" of 8</b> present. "+(n>=3?"There is very likely a contract running underneath.":"If any of these are present, there is likely a contract underneath.");
-}
-
-function setC(id, f, val){ var c = con(id); if (c){ c[f] = val; save(); } }
-function refreshNext(){ render(); }
-
-function wire(){
-  var nx = document.getElementById("next");
-  if (nx) nx.onclick = function(){
-    if (S.step === 3 && S.sub < originScreens().length-1){ S.sub++; } else { S.step++; S.sub = 0; }
-    save(); render(); };
-  var bk = document.getElementById("back");
-  if (bk) bk.onclick = function(){
-    if (S.step === 3 && S.sub > 0){ S.sub--; } else { S.step--; S.sub = (S.step === 3) ? originScreens().length-1 : 0; }
-    save(); render(); };
-
-  // step 1 signs
-  tool.querySelectorAll("[data-sign]").forEach(function(el){
-    el.onclick = function(){
-      var i = +el.getAttribute("data-sign"), p = S.signs.indexOf(i);
-      if (p>-1) S.signs.splice(p,1); else S.signs.push(i);
-      save(); render();
-    };
-  });
-  // step 2
-  tool.querySelectorAll("[data-rel]").forEach(function(el){ el.onclick = function(){ S.relType = el.getAttribute("data-rel"); save(); render(); }; });
-  bindText("relWho", function(v){ S.relWho = v; });
-  bindText("moment", function(v){ S.moment = v; }, true);
-  // step 3
-  bindText("p_obs", function(v){ S.origin.parents.obs = v; }, true);
-  bindText("p_felt", function(v){ S.origin.parents.felt = v; }, true);
-  tool.querySelectorAll("[data-pp]").forEach(function(el){ el.oninput = function(){
-    S.origin[el.getAttribute("data-pp")][el.getAttribute("data-f")] = el.value; save(); liveNext(); }; });
-  tool.querySelectorAll("[data-pskip]").forEach(function(el){ el.onclick = function(){
-    var P = S.origin[el.getAttribute("data-pskip")]; P.skip = !P.skip; save(); render(); }; });
-  tool.querySelectorAll("[data-sibcount]").forEach(function(el){ el.onclick = function(){
-    S.origin.sibCount = +el.getAttribute("data-sibcount"); ensureSibs(); save(); render(); }; });
-  tool.querySelectorAll("[data-sibkind]").forEach(function(el){ el.onclick = function(){
-    var sb = S.origin.sibs[+el.getAttribute("data-sibkind")]; if (sb){ sb.kind = el.getAttribute("data-k"); save(); render(); } }; });
-  tool.querySelectorAll("[data-sf]").forEach(function(el){ el.oninput = function(){
-    var sb = S.origin.sibs[+el.getAttribute("data-sf")]; if (sb){ sb[el.getAttribute("data-f")] = el.value; save(); liveNext(); } }; });
-  tool.querySelectorAll("[data-sibskip]").forEach(function(el){ el.onclick = function(){
-    var sb = S.origin.sibs[+el.getAttribute("data-sibskip")]; if (sb){ sb.skip = !sb.skip; save(); render(); } }; });
-  bindText("motto", function(v){ S.origin.motto = v; }, true);
-  bindText("loved", function(v){ S.origin.loved = v; }, true);
-  tool.querySelectorAll("[data-motto]").forEach(function(el){ el.onclick = function(){
-    var inp = document.getElementById("motto"); inp.value = el.getAttribute("data-motto"); S.origin.motto = inp.value; save(); inp.focus(); liveNext(); }; });
-  // step 4
-  tool.querySelectorAll("input[data-c]").forEach(function(el){
-    el.oninput = function(){ setC(el.getAttribute("data-c"), el.getAttribute("data-f"), el.value); liveNext(); };
-  });
-  tool.querySelectorAll("[data-ex]").forEach(function(el){ el.onclick = function(){
-    var e = EXAMPLES[+el.getAttribute("data-ex")];
-    var target = S.contracts.filter(function(c){ return !c.ifI.trim() && !c.youShould.trim() && !c.means.trim(); })[0];
-    if (!target){ if (S.contracts.length>=5) return; target = newCon(); S.contracts.push(target); }
-    target.ifI = e[0]; target.youShould = e[1]; target.means = e[2]; save(); render();
-  }; });
-  var add = document.getElementById("addcon");
-  if (add) add.onclick = function(){ S.contracts.push(newCon()); save(); render(); };
-  tool.querySelectorAll("button[data-del]").forEach(function(el){ el.onclick = function(){
-    S.contracts = S.contracts.filter(function(c){ return c.id !== el.getAttribute("data-del"); }); save(); render(); }; });
-  // step 5
-  tool.querySelectorAll("[data-kc]").forEach(function(el){ el.onclick = function(){
-    var c = con(el.getAttribute("data-kc")); var k = el.getAttribute("data-kind");
-    c.kind = (c.kind===k) ? "" : k; save(); render(); }; });
-  // step 6
-  tool.querySelectorAll("[data-rc]").forEach(function(el){ el.onclick = function(){
-    var c = con(el.getAttribute("data-rc")); c.role = el.getAttribute("data-role"); save(); render(); }; });
-  tool.querySelectorAll("input[data-ro]").forEach(function(el){ el.oninput = function(){ setC(el.getAttribute("data-ro"), "roleOther", el.value); liveNext(); }; });
-  // step 7
-  tool.querySelectorAll("[data-deep]").forEach(function(el){ el.onclick = function(){ S.deep = el.getAttribute("data-deep"); save(); render(); }; });
-  // step 8
-  bindText("cost", function(v){ S.cost = v; }, true);
-  tool.querySelectorAll("[data-threat]").forEach(function(el){ el.onclick = function(){
-    var t = el.getAttribute("data-threat"), p = S.threat.indexOf(t);
-    if (p>-1) S.threat.splice(p,1); else S.threat.push(t); save(); render(); }; });
-  // step 9
-  bindText("want", function(v){ S.want = v; }, true);
-  bindText("willing", function(v){ S.willing = v; }, true);
-  bindText("fear", function(v){ S.fear = v; }, true);
-  tool.querySelectorAll("[data-ask]").forEach(function(el){ el.onclick = function(){ S.canAsk = el.getAttribute("data-ask"); save(); render(); }; });
-  // step 10
-  tool.querySelectorAll("[data-self]").forEach(function(el){ el.onclick = function(){
-    var t = el.getAttribute("data-self"), p = S.self.indexOf(t);
-    if (p>-1) S.self.splice(p,1); else S.self.push(t); save(); render(); }; });
-  bindText("selfCustom", function(v){ S.selfCustom = v; }, true);
-  bindText("act", function(v){ S.act = v; }, true);
-}
-function bindText(id, fn, affectsNext){
-  var el = document.getElementById(id); if (!el) return;
-  el.oninput = function(){ fn(el.value); save(); if (affectsNext) liveNext(); };
-}
-// Re-evaluate the button and the "still needed" line without re-rendering the inputs.
-function liveNext(){
-  var m = missingFor(S.step);
-  var nx = document.getElementById("next"), ms = document.getElementById("miss");
-  if (nx) nx.disabled = !!m.length;
-  if (ms){ ms.innerHTML = missLine(m); ms.style.display = m.length ? "" : "none"; }
-  var cnt = document.getElementById("count");
-  if (cnt && S.step === 4){ var n = done().length; cnt.innerHTML = n===0 ? "No complete contract yet." : n+" complete. "+(n<3?"Aim for three if you can.":"Good."); }
-}
-
-function renderResult(){
-  var d = deepCon();
-  var who = S.relType ? S.relType + (S.relWho.trim() ? " · " + esc(S.relWho) : "") : "";
-  var h = '<div class="stage m-in"><div class="step-n">Your invisible contracts</div>'+
-    '<h2>The deals that were never spoken</h2>'+
-    '<p class="say">Here is what you found. The contracts as you wrote them, the roles they protect, and where they were signed. The one you chose as deepest is marked. When you are ready, and only then, tear it up. What replaces it is not a better deal for the other person to keep. It is an agreement you keep with yourself.</p>';
-
-  if (who || S.moment.trim()){
-    h += '<div class="grid2">'+(who?'<div class="stat"><div class="l">The relationship</div><div class="v">'+who+'</div></div>':'')+
-      (S.moment.trim()?'<div class="stat"><div class="l">The moment</div><div class="v">'+esc(S.moment)+'</div></div>':'')+'</div>';
-  }
-  if (S.signs.length){
-    h += '<div class="stat" style="margin-top:12px"><div class="l">Signs present</div><div class="v">'+S.signs.length+' of 8<small>'+S.signs.map(function(i){return esc(SIGNS[i]);}).join(" ")+'</small></div></div>';
-  }
-  var o = S.origin;
-  var originRows = [];
-  if (hasLine(o.parents)) originRows.push('<p><strong style="font-weight:700">My parents.</strong> '+(o.parents.obs.trim()?'<em>I observed</em> '+esc(o.parents.obs)+' ':'')+(o.parents.felt.trim()?'<em>I felt</em> '+esc(o.parents.felt):'')+'</p>');
-  if (o.motto.trim()) originRows.push('<p><em>Our family motto could have been</em> '+esc(o.motto)+'</p>');
-  if (o.loved.trim()) originRows.push('<p><em>I learned that to be loved, I had to</em> '+esc(o.loved)+'</p>');
-  [["father","My father","him"],["mother","My mother","her"]].forEach(function(x){
-    var P = o[x[0]]; if (P.skip || !hasLine(P)) return;
-    originRows.push('<p><strong style="font-weight:700">'+x[1]+'.</strong> '+(P.obs.trim()?'<em>I observed</em> '+esc(P.obs)+' ':'')+(P.felt.trim()?'<em>I felt</em> '+esc(P.felt)+' ':'')+(P.deal.trim()?'<em>My contract with '+x[2]+' could have been</em> '+esc(P.deal):'')+'</p>');
-  });
-  o.sibs.forEach(function(sb,i){
-    if (sb.skip || !hasLine(sb)) return;
-    originRows.push('<p><strong style="font-weight:700">'+esc(sibLabel(sb,i))+'.</strong> '+(sb.obs.trim()?'<em>I observed</em> '+esc(sb.obs)+' ':'')+(sb.felt.trim()?'<em>I felt</em> '+esc(sb.felt)+' ':'')+(sb.deal.trim()?'<em>My contract with '+sibPron(sb)+' could have been</em> '+esc(sb.deal):'')+'</p>');
-  });
-  if (originRows.length) h += '<div class="origin"><p><em>Where it was signed</em></p>'+originRows.join("")+'</div>';
-
-  done().forEach(function(c, i){
-    var isDeep = d && c.id===d.id;
-    h += '<div class="doc'+(isDeep?" deep":"")+(isDeep&&S.torn?" torn":"")+'" id="doc-'+c.id+'">'+
-      '<div class="dh"><b>Contract '+(i+1)+'</b><span>signed early, never negotiated</span></div>'+
-      '<div class="db">'+(isDeep?'<div class="stamp">Null and void</div>':'')+
-      '<div class="cl"><em>If I</em><div>'+esc(c.ifI)+'</div></div>'+
-      '<div class="cl"><em>then you should</em><div>'+esc(c.youShould)+'</div></div>'+
-      '<div class="cl"><em>and if you do not, it means</em><div>'+esc(c.means)+'</div></div>'+
-      '<div class="tags">'+(isDeep?'<span class="tag deep">Sits deepest</span>':'')+
-        (kindOf(c)?'<span class="tag">'+esc(kindOf(c))+'</span>':'')+
-        (roleOf(c)?'<span class="tag">Protects '+esc(roleOf(c))+'</span>':'')+'</div>';
-    if (isDeep){
-      if (S.cost.trim() || S.threat.length){
-        h += '<div class="grid2">'+(S.cost.trim()?'<div class="stat"><div class="l">Honouring it has cost me</div><div class="v">'+esc(S.cost)+'</div></div>':'')+
-          (S.threat.length?'<div class="stat"><div class="l">Breaking it threatens</div><div class="v">'+S.threat.map(esc).join(", ")+'</div></div>':'')+'</div>';
-      }
-      h += '<div class="tear">'+(S.torn
-        ? '<button class="back" id="untear">Restore it (if you are not ready)</button>'
-        : '<button class="btn" id="tear">Tear up this contract</button><div class="hint">You were underage when you signed it. You are allowed to declare it null and void.</div>')+'</div>';
-    }
-    h += '</div></div>';
+    box.appendChild(wrap);
   });
 
-  if (d){
-    var selfLines = S.self.slice(); if (S.selfCustom.trim()) selfLines.push(S.selfCustom.trim());
-    h += '<div class="place"><div class="k">'+(S.torn?"In its place":"What will replace it")+'</div>'+
-      (S.want.trim()||S.willing.trim() ? '<div class="line"><em>The request, said out loud</em>What I want is '+esc(S.want)+'. Would you be willing to '+esc(S.willing)+'?</div>' : '')+
-      (S.canAsk==="no" && S.fear.trim() ? '<div class="line"><em>The growth edge · what I fear if I ask</em>'+esc(S.fear)+'</div>' : '')+
-      (selfLines.length ? '<div class="line"><em>My agreement with myself</em>'+selfLines.map(esc).join("<br>")+'</div>' : '')+
-      (S.act.trim() ? '<div class="line"><em>One small act this week</em>'+esc(S.act)+'</div>' : '')+
-      '<div class="decl">'+(S.torn
-        ? 'I was underage when I signed this. I no longer honour this contract.'
-        : 'When you tear it up, this is what you are choosing instead.')+'</div></div>';
-  }
+  var m = $('mine');
+  if (st.mine && st.mine.length) {
+    m.style.display = '';
+    m.innerHTML = '<p>' + st.mine[0] + '</p>' +
+      (st.mine[1] ? '<p class="src">' + esc(st.mine[1]) + '</p>' : '');
+  } else { m.style.display = 'none'; }
 
-  h += '<div class="test"><b>Why this matters</b><p>Friction is the drag between what the process requires and what you believe. The process requires direct communication, honest requests, boundaries, negotiation, courage and responsibility. The contract requires silence, mind-reading, hints, scorekeeping, resentment and role protection. So when you feel the drag, ask yourself: which contract is running, which role is it protecting, and what would the process require if I stopped protecting it?</p></div>'+
-    '<p class="note">Saved on this device only. No account. Nothing leaves this device unless you ask for the email below. Come back to it after you have had the conversation and see whether the contract still reads true.</p>'+
-    '<div class="nav"><button class="btn" onclick="window.print()">Print or save as PDF</button>'+
-    '<button class="back" id="again">Start again</button></div>'+
-    '<div id="cap-mount"></div>'+
-    '<p class="signoff">Whatever you found, the contract only had power while it stayed invisible. Now it is on the page, in your own words, and that is already a different position to stand in. Much love, <b>Francois</b></p>'+
+  var tr = $('trail');
+  tr.innerHTML = '';
+  STEPS.forEach(function(_, n){
+    var b = document.createElement('button');
+    b.type = 'button'; b.textContent = String(n + 1);
+    b.title = 'Step ' + (n + 1);
+    b.disabled = n > reached;
+    if (n === i) b.setAttribute('aria-current', 'step');
+    b.addEventListener('click', function(){ if (n <= reached) { i = n; render(); } });
+    tr.appendChild(b);
+  });
+
+  var first = box.querySelector('input,textarea');
+  if (first) first.focus();
+}
+
+$('go').addEventListener('click', function(){ show('sq'); render(); });
+$('back').addEventListener('click', function(){ if (i > 0) { i--; render(); save(); } });
+
+$('next').addEventListener('click', function(){
+  var st = STEPS[i];
+  // one required field per step, the first one, so nobody reaches the end
+  // holding an empty card. The rest can be left if somebody is stuck.
+  var need = st.fields[0];
+  if (!String(S[need.k] || '').trim()) {
+    $('warn').textContent = 'Put something in the first box, even roughly. You can come back and change it.';
+    $('warn').classList.add('on');
+    var el = $('fields').querySelector('input,textarea');
+    if (el) el.focus();
+    return;
+  }
+  if (i < STEPS.length - 1) {
+    i++; if (i > reached) reached = i;
+    render(); save();
+  } else {
+    reached = STEPS.length - 1;
+    save(); result();
+  }
+});
+
+function line(v, fallback){
+  var s = String(v || '').trim();
+  return s ? esc(s) : '<span class="blank">' + fallback + '</span>';
+}
+
+function result(){
+  var w = esc(whoMid());
+  $('card').innerHTML =
+    '<div class="stamp">Null and void</div>' +
+    '<div class="k">The deal you never said out loud</div>' +
+    '<div class="clause">' +
+      '<em>If I</em> ' + line(S.mine_side, 'your side') + ', ' +
+      '<em>then</em> ' + w + ' <em>should</em> ' + line(S.their_side, 'their side') + '.' +
+      '<br><em>And when ' + w + ' does not,</em> it means ' + line(S.means, 'the meaning you gave it') + '.' +
+    '</div>' +
+    '<div class="row"><div class="k">Where you signed it</div>' +
+      '<p>' + line(S.saw, 'what you saw growing up') + '</p>' +
+      '<p style="margin-top:8px">So I learned that to be loved, I must ' + line(S.learned, 'the rule you took from it') + '.</p>' +
+    '</div>' +
+    '<div class="row"><div class="k">What it has cost</div><p>' + line(S.cost, 'the cost') + '</p></div>' +
+    '<div class="row"><div class="k">The request that replaces it</div>' +
+      '<p>' + esc(who()) + ', what I want is ' + line(S.request, 'the thing you want') + '. Would you be willing to do that?</p>' +
     '</div>';
 
-  tool.innerHTML = h;
-  var capEl = document.getElementById('cap-mount');
-  if (capEl && window.CAPTURE) CAPTURE.mount({ el: capEl, tool: 'invisible-contracts',
-    heading: 'Want a copy of your contracts?', blurb: 'This page lives on your phone and disappears if you clear your browser. An email gives you something to come back to after you have had the conversation.' });
-  var t = document.getElementById("tear");
-  if (t) t.onclick = function(){ S.torn = true; save(); renderResult(); var el = document.getElementById("doc-"+d.id); if (el) el.scrollIntoView({block:"center"}); };
-  var u = document.getElementById("untear");
-  if (u) u.onclick = function(){ S.torn = false; save(); renderResult(); };
-  document.getElementById("again").onclick = function(){
-    try { localStorage.removeItem(KEY); } catch(e){}
-    S = fresh(); S.step = 1; render();
-  };
-  if (!t && !u) tool.scrollIntoView({block:"start"});
-  else if (!S.torn) tool.scrollIntoView({block:"start"});
+  $('do-this').textContent = 'Say that last line to ' + whoMid() +
+    ' this week. Just that one sentence, on its own. If saying it feels like too much, that is the size of the contract you have been keeping.';
+
+  if (S.torn) {
+    $('card').classList.add('torn');
+    $('tear').style.display = 'none';
+    $('untear').style.display = '';
+  } else {
+    $('card').classList.remove('torn');
+    $('tear').style.display = '';
+    $('untear').style.display = 'none';
+  }
+
+  show('sr');
+
+  var el = $('cap-mount');
+  el.innerHTML = '';
+  if (window.CAPTURE) CAPTURE.mount({
+    el: el, tool: 'invisible-contracts',
+    heading: 'Want this contract emailed to you?',
+    blurb: 'This page lives on your phone and disappears if you clear your browser. An email gives you something to come back to after you have said it.',
+    result: { key: 'contract', name: 'Your invisible contract',
+              line: String(S.mine_side || '') + ' / ' + String(S.their_side || '') }
+  });
 }
 
-load();
-document.getElementById("begin").onclick = function(){ if (!S.step) S.step = 1; save(); render(); tool.scrollIntoView({block:"start"}); };
-if (S.step) render();
+/* Tearing it up is the release the tool builds to. Writing the contract down
+   is the work; declaring it void is the permission. Reversible on purpose,
+   because somebody who is not ready should be able to put it back. */
+$('tear').addEventListener('click', function(){
+  $('card').classList.add('torn');
+  $('tear').style.display = 'none';
+  $('untear').style.display = '';
+  S.torn = true; save();
+});
+$('untear').addEventListener('click', function(){
+  $('card').classList.remove('torn');
+  $('tear').style.display = '';
+  $('untear').style.display = 'none';
+  S.torn = false; save();
+});
+
+$('again').addEventListener('click', function(){
+  S = {}; i = 0; reached = 0;
+  try { localStorage.removeItem(KEY); } catch(e){}
+  show('sq'); render();
+});
+
+(function(){
+  var d = load();
+  if (!d) return;
+  S = d.s || {}; reached = d.r || 0;
+  var filled = Object.keys(S).filter(function(k){ return String(S[k]).trim(); }).length;
+  if (!filled) return;
+  var note = $('resume');
+  var a = document.createElement('a');
+  a.href = '#'; a.style.color = '#18C0C0';
+  var done = reached >= STEPS.length - 1 && String(S.request || '').trim();
+  a.textContent = done ? 'Open the contract you wrote last time'
+                       : 'Carry on where you left off, step ' + (Math.min(d.i || 0, STEPS.length - 1) + 1);
+  a.addEventListener('click', function(e){
+    e.preventDefault();
+    if (done) { result(); }
+    else { i = Math.min(d.i || 0, STEPS.length - 1); show('sq'); render(); }
+  });
+  note.innerHTML = ''; note.appendChild(a); note.style.display = '';
+})();
 </script>
-<!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "a9b056ed20bf4324b33f372dd69b5db4"}'></script><!-- End Cloudflare Web Analytics -->
-<script src="/assets/capture.js"></script>
 </body>
 </html>
