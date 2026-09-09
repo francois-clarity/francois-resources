@@ -318,6 +318,80 @@ def check_no_attraction_items():
     return True
 
 
+GIVEAWAY_SECTIONS = [
+    "Inflated verbs", "Copula-dodging verbs", "Corporate and brochure adjectives",
+    "Prestige and metaphor nouns", "Connective adverbs", "The softening adverbs family",
+]
+
+def _prose(path):
+    """Reader-facing words only: no script, no style, no comments, no URLs."""
+    t = path.read_text()
+    h = re.sub(r"<(script|style)[\s\S]*?</\1>", " ", t, flags=re.I)
+    h = re.sub(r"<!--[\s\S]*?-->", " ", h)
+    out = re.sub(r"<[^>]+>", " ", h)
+    for s in re.findall(r'"((?:[^"\\]|\\.){25,})"', t) + re.findall(r"'((?:[^'\\]|\\.){25,})'", t):
+        if re.search(r"https?://|\.js|\.css|rgba|[0-9]px|function|innerHTML|querySelector|addEventListener|<[a-z]", s):
+            continue
+        out += " " + s
+    return re.sub(r"\s+", " ", out)
+
+
+def check_ai_giveaways():
+    """Francois, 9 Sep 2026: "Almost all the assessments we have built reek of
+    AI. Reference the skill I created ... and ALWAYS apply that to creating
+    assessments or resources."
+
+    The blacklist itself says density is the tell, not any single word, and
+    that a hit is a flag for judgement rather than an auto-delete. So this
+    counts rather than bans, and fails only above a density no honest page
+    reaches. His own hard bans stay in check_banned_words, at zero tolerance.
+
+    Source of truth is the skill file, read at deploy time, so adding a term
+    there tightens every page here without touching this script.
+    """
+    import pathlib as _pl
+    gv = _pl.Path.home() / ".claude/skills/francois-copywriter/ai-giveaways.md"
+    if not gv.exists():
+        print("ok   ai-giveaways                     [local] blacklist not on this machine, skipped")
+        return True
+    text = gv.read_text()
+    terms = set()
+    for head in GIVEAWAY_SECTIONS:
+        m = re.search(r"### " + re.escape(head) + r"\n(.+?)\n", text, re.S)
+        if not m:
+            continue
+        for raw in m.group(1).split(","):
+            w = re.sub(r"\s*\(.*?\)\s*", "", raw.strip().strip('."')).strip().lower()
+            if 3 < len(w) < 30:
+                terms.add(w)
+
+    base = _pl.Path(__file__).parent
+    worst = []
+    for f in sorted(base.glob("*/index.html")) + sorted(base.glob("*/*/index.html")):
+        low = " " + _prose(f).lower() + " "
+        words = len(low.split())
+        if words < 200:
+            continue
+        hits = {}
+        for w in terms:
+            n = len(re.findall(r"\b" + re.escape(w) + r"\b", low))
+            if n:
+                hits[w] = n
+        total = sum(hits.values())
+        per1k = total / words * 1000
+        if per1k >= 4.0:
+            worst.append((per1k, f.relative_to(base), hits))
+
+    if worst:
+        for per1k, name, hits in sorted(worst, reverse=True)[:6]:
+            top = ", ".join("%s x%d" % (w, n) for w, n in sorted(hits.items(), key=lambda x: -x[1])[:5])
+            print("FAIL ai-giveaways                     [local] %s reads as machine writing: %.1f per 1k words (%s)"
+                  % (name, per1k, top))
+        return False
+    print("ok   ai-giveaways                     [local] %d blacklist terms, no page above the density threshold" % len(terms))
+    return True
+
+
 BANNED = {
     # Standing voice rules. These are not style preferences, they are rules he
     # has had to repeat, so the deploy enforces them rather than trusting memory.
@@ -362,6 +436,7 @@ def main():
     live = "--live" in sys.argv
     all_ok = check_goal_words()
     all_ok &= check_no_attraction_items()
+    all_ok &= check_ai_giveaways()
     all_ok &= check_banned_words()
     for name in GATES:
         html = (base / name / "index.html").read_text()
