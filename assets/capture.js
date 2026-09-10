@@ -173,11 +173,19 @@
         line: r.line || '', link: w.location.href
       };
 
-      var settle = function (sent) {
+      var settle = function (stored, emailed) {
         btn.classList.remove('busy');
-        if (sent) {
+        if (stored && emailed) {
           remember(opts.tool);
           form.style.display = 'none';
+          ok.textContent = 'Sent. Check your inbox in a minute or two.';
+          ok.classList.add('on');
+        } else if (stored) {
+          // saved, but the email did not go. Say the true thing.
+          remember(opts.tool);
+          form.style.display = 'none';
+          ok.textContent = 'You are on the list, but the email did not go out just now. Use the print button above to keep a copy and I will follow up.';
+          ok.style.color = '#E8B551';
           ok.classList.add('on');
         } else {
           btn.disabled = false; lab.textContent = opts.cta || 'Send it to me';
@@ -194,9 +202,13 @@
       }).then(function (res) {
         return res.json().catch(function () { return { ok: false }; });
       }).then(function (j) {
-        clearTimeout(timer); settle(!!(j && j.ok));
+        clearTimeout(timer);
+        // Only say "sent" when an email actually went. The endpoint reports
+        // `emailed` separately from `ok`, because for a long time this said
+        // Sent and nothing arrived.
+        settle(!!(j && j.ok), !!(j && j.emailed));
       }).catch(function () {
-        clearTimeout(timer); settle(false);
+        clearTimeout(timer); settle(false, false);
       });
     });
   }

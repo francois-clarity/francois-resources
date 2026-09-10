@@ -33,18 +33,39 @@
  */
 
 const TOOLS = {
-  'communication-styles': { merge: 'communication-styles' },
-  // Windows and Walls only ever posts here when the reader explicitly asks for
-  // the email AFTER seeing results. There is no gate on that tool on purpose.
-  'windows-and-walls':    { merge: 'windows-and-walls' },
-  'two-different-problems': { merge: 'two-different-problems' },
-  // The open tools. These captured nothing at all until 8 Sep 2026.
-  'invisible-contracts':     { merge: 'invisible-contracts' },
-  'tree-of-clarity':         { merge: 'tree-of-clarity' },
-  'belief-inventory':        { merge: 'belief-inventory' },
-  'four-voices':             { merge: 'four-voices' },
-  'emotional-language-wheel':{ merge: 'emotional-language-wheel' },
+  // subject: what lands in the inbox. `discreet: true` means the page promised
+  // a subject line that says nothing about the topic, because an inbox somebody
+  // else reads is the exact harm those two tools exist to avoid. If you change
+  // a discreet subject, you are breaking a promise made on the page.
+  'communication-styles':    { merge: 'communication-styles',    subject: 'Your communication styles results' },
+  'windows-and-walls':       { merge: 'windows-and-walls',       subject: 'The results you asked for', discreet: true },
+  'two-different-problems':  { merge: 'two-different-problems',  subject: 'The results you asked for', discreet: true },
+  'invisible-contracts':     { merge: 'invisible-contracts',     subject: 'Your invisible contract' },
+  'tree-of-clarity':         { merge: 'tree-of-clarity',         subject: 'Your Tree of Clarity' },
+  'belief-inventory':        { merge: 'belief-inventory',        subject: 'Your belief inventory' },
+  'four-voices':             { merge: 'four-voices',             subject: 'The four voices in your head' },
+  'emotional-language-wheel':{ merge: 'emotional-language-wheel',subject: 'Your check-in' },
 };
+
+/* The email itself. Kept here rather than in the Apps Script so the copy is in
+   version control and swept by the same voice rules as everything else. Short
+   on purpose: three or four lines and the link. */
+function buildEmail(tool, cfg, name, p) {
+  const link = String(p.link || '').slice(0, 900);
+  const result = clip(p.resultName, 80);
+  const lines = ['Hi ' + name, ''];
+  if (cfg.discreet) {
+    lines.push('Here is the link back to what you worked out. It opens exactly as you left it.');
+  } else if (result) {
+    lines.push('You came out as ' + result + '. Here is the whole thing again, in your own words.');
+  } else {
+    lines.push('Here is what you worked out, in your own words.');
+  }
+  lines.push('', link, '');
+  lines.push('Keep the link. It is the only copy.');
+  lines.push('', 'Much love,', 'Francois');
+  return lines.join('\n');
+}
 
 export async function onRequestPost({ request, env }) {
   let p;
@@ -103,10 +124,44 @@ export async function onRequestPost({ request, env }) {
     });
   } catch {
     // Swallow deliberately. The caller shows results either way.
-    return json({ ok: false, error: 'sync failed' }, 200);
+    return json({ ok: false, emailed: false, error: 'sync failed' }, 200);
   }
 
-  return json({ ok: true });
+  /* Actually send the email.
+   *
+   * Until 10 Sep 2026 this endpoint returned ok:true as soon as Mailchimp was
+   * tagged, and every tool then told the reader "Sent. Check your inbox." No
+   * email ever arrived, because sending depended on a Mailchimp journey that
+   * was never built. He gave a tool his details, nothing came, and he was
+   * right to call it.
+   *
+   * So the sending happens here, through a Gmail-backed Apps Script web app,
+   * and `emailed` reports what actually happened rather than what was hoped
+   * for. Resend cannot verify this domain while DNS sits on Wix, and a
+   * Mailchimp journey per tool is eight things to build and maintain instead
+   * of one.
+   */
+  let emailed = false;
+  if (env.RESULTS_MAILER_URL) {
+    try {
+      const res = await fetch(env.RESULTS_MAILER_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          to: email,
+          subject: TOOLS[tool].subject,
+          body: buildEmail(tool, TOOLS[tool], first, p),
+          key: env.RESULTS_MAILER_KEY || '',
+        }),
+      });
+      const out = await res.json().catch(() => null);
+      emailed = !!(res.ok && out && out.ok);
+    } catch {
+      emailed = false;
+    }
+  }
+
+  return json({ ok: true, emailed });
 }
 
 function clip(v, n) { return String(v == null ? '' : v).trim().slice(0, n); }

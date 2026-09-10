@@ -790,7 +790,7 @@ $('mail-form').addEventListener('submit', function(ev){
       link: resultUrl(lastResult)
     })
   }).then(function(r){ return r.json().catch(function(){ return {ok:false}; }); })
-    .then(function(j){ done(!!(j && j.ok)); })
+    .then(function(j){ done(!!(j && j.emailed)); })
     .catch(function(){ done(false); });
 
   function done(sent){

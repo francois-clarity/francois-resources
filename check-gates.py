@@ -392,6 +392,42 @@ def check_ai_giveaways():
     return True
 
 
+def check_discreet_subjects():
+    """Windows and Walls and Two Different Problems both promise the reader a
+    plain subject line that says nothing about the topic, because an inbox
+    somebody else reads is the harm those two tools exist to prevent.
+
+    That promise lives on the page, but keeping it depends on a subject line in
+    a different file. This checks the two have not drifted apart.
+    """
+    import pathlib as _pl
+    base = _pl.Path(__file__).parent
+    api = (base / "functions" / "api" / "assessment.js").read_text()
+    ok = True
+    for tool in ("windows-and-walls", "two-different-problems"):
+        m = re.search(r"'%s':\s*\{[^}]*\}" % re.escape(tool), api)
+        if not m:
+            print("FAIL discreet-subjects                [local] %s missing from the mailer table" % tool); ok = False; continue
+        block = m.group(0)
+        if "discreet: true" not in block:
+            print("FAIL discreet-subjects                [local] %s lost its discreet flag" % tool); ok = False
+        subj = re.search(r"subject:\s*'([^']*)'", block)
+        if not subj:
+            print("FAIL discreet-subjects                [local] %s has no subject line" % tool); ok = False; continue
+        # the subject must not name the topic
+        naming = ["affair", "porn", "secrecy", "windows", "walls", "cheat", "sex", "betray"]
+        hit = [w for w in naming if w in subj.group(1).lower()]
+        if hit:
+            print("FAIL discreet-subjects                [local] %s subject names the topic: %r" % (tool, subj.group(1))); ok = False
+        # and the page must still be making the promise
+        page = (base / tool / "index.html").read_text()
+        if "plain subject line" not in page:
+            print("FAIL discreet-subjects                [local] %s no longer promises a plain subject line" % tool); ok = False
+    if ok:
+        print("ok   discreet-subjects                [local] both sensitive tools keep their plain subject promise")
+    return ok
+
+
 BANNED = {
     # Standing voice rules. These are not style preferences, they are rules he
     # has had to repeat, so the deploy enforces them rather than trusting memory.
@@ -437,6 +473,7 @@ def main():
     all_ok = check_goal_words()
     all_ok &= check_no_attraction_items()
     all_ok &= check_ai_giveaways()
+    all_ok &= check_discreet_subjects()
     all_ok &= check_banned_words()
     for name in GATES:
         html = (base / name / "index.html").read_text()
