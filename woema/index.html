@@ -1,0 +1,447 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>WOEMA · Francois Esterhuizen</title>
+<meta name="description" content="WOEMA is a three-hour live workshop with Francois Esterhuizen. Understand your own potential, find what's blocking it, and reshape your paradigm, so you can get out of your own way.">
+<meta property="og:title" content="WOEMA: Get out of your own way">
+<meta property="og:description" content="A three-hour live workshop with Francois Esterhuizen, three Friday mornings every school term.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://resources.francoisesterhuizen.com/woema/">
+<meta property="og:image" content="https://resources.francoisesterhuizen.com/woema/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://resources.francoisesterhuizen.com/woema/og.png">
+<meta name="theme-color" content="#1B222D">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;500;600;700;800&family=Newsreader:ital,opsz,wght@1,6..72,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ground:#1B222D; --raise:#232B37; --line:#344050;
+    --text:#FFFFFF; --muted:#A9B3C0; --faint:#7D8898;
+    --teal:#18C0C0; --cream:#F1EFEA; --err:#E38070; --ok:#5FCB89;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'Manrope',system-ui,-apple-system,'Segoe UI',sans-serif;
+    background-color:var(--ground);
+    background-image:
+      radial-gradient(900px 620px at 92% -8%, rgba(24,192,192,.11), transparent 62%),
+      radial-gradient(760px 560px at 8% 4%, #2A3442, transparent 64%);
+    background-repeat:no-repeat;
+    color:var(--text);
+    -webkit-font-smoothing:antialiased;
+    padding-inline:24px; padding-block:48px 88px;
+    overflow-x:hidden;
+  }
+  .wrap{max-width:1040px;margin:0 auto;display:grid;grid-template-columns:minmax(0,1fr);gap:112px}
+  .wrap > *, .hero > *, h1 > *{min-width:0}
+  a{color:inherit}
+  :focus-visible{outline:2px solid var(--teal);outline-offset:3px;border-radius:6px}
+
+  /* ---------- hero ---------- */
+  .hero{display:grid;gap:22px;padding-top:12px}
+  .eyebrow{font-weight:700;font-size:13px;letter-spacing:4.5px;text-transform:uppercase;color:var(--teal)}
+  h1{display:grid;gap:14px;font-weight:800}
+  .word{
+    display:block;color:var(--cream);
+    font-size:clamp(88px,21vw,228px);line-height:.8;letter-spacing:-.055em;
+    margin-left:-.04em;
+    animation:settle 1.2s cubic-bezier(.16,1,.3,1) both;
+  }
+  @keyframes settle{from{letter-spacing:-.02em}to{letter-spacing:-.055em}}
+  .entry{
+    display:flex;flex-wrap:wrap;align-items:baseline;gap:.2em .5em;
+    font-size:17px;color:var(--muted);font-weight:500;
+    border-top:1px solid var(--line);padding-top:14px;max-width:640px;
+  }
+  .entry b{color:var(--text);font-weight:700}
+  .entry i{font-family:'Newsreader',Georgia,'Times New Roman',serif;font-style:italic;font-size:19px;color:var(--faint)}
+  .entry .say{color:var(--teal);font-weight:700}
+  .tagline{display:block;font-size:clamp(34px,5.6vw,58px);line-height:1.04;letter-spacing:-1.2px;text-wrap:balance}
+  .lede{color:var(--muted);font-weight:300;font-size:19px;line-height:1.6;max-width:600px}
+
+  .when{list-style:none;display:flex;flex-wrap:wrap;gap:10px 28px}
+  .when li{display:flex;align-items:center;gap:9px;font-size:15px;font-weight:600;color:rgba(255,255,255,.88);font-variant-numeric:tabular-nums}
+  .when svg{flex:none;stroke:var(--teal);stroke-width:1.8;fill:none;stroke-linecap:round;stroke-linejoin:round}
+
+  .act{display:flex;flex-wrap:wrap;align-items:center;gap:14px 22px;margin-top:6px}
+  .btn{
+    display:inline-flex;align-items:center;gap:10px;text-decoration:none;
+    background:var(--teal);color:var(--ground);font-weight:800;font-size:16px;
+    padding:15px 28px;border-radius:14px;border:0;cursor:pointer;font-family:inherit;
+    transition:filter .16s ease, transform .16s ease;
+  }
+  .btn:hover{filter:brightness(1.08);transform:translateY(-1px)}
+  .act .price{font-size:15px;color:var(--muted);font-weight:500}
+
+  /* ---------- sections ---------- */
+  h2{font-weight:800;font-size:clamp(28px,4.2vw,40px);letter-spacing:-.8px;line-height:1.12;text-wrap:balance}
+  .sec{display:grid;gap:26px}
+  .prose{display:grid;gap:18px;max-width:640px}
+  .prose p{color:var(--muted);font-weight:300;font-size:18px;line-height:1.7}
+  .prose p strong{color:var(--text);font-weight:600}
+  cite{font-style:normal;font-weight:600;color:var(--text)}
+
+  .steps{list-style:none;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:34px}
+  .steps li{display:grid;align-content:start;gap:12px;border-top:1px solid var(--line);padding-top:20px}
+  .steps .n{font-weight:800;font-size:15px;color:var(--teal);font-variant-numeric:tabular-nums;letter-spacing:1px}
+  .steps h3{font-weight:800;font-size:21px;line-height:1.25;letter-spacing:-.3px}
+  .steps p{color:var(--muted);font-weight:300;font-size:16px;line-height:1.65}
+  .so{font-weight:800;font-size:clamp(22px,3vw,28px);color:var(--teal);letter-spacing:-.4px}
+
+  /* the one lifted object: when it runs */
+  .board{
+    background:linear-gradient(140deg,rgba(38,46,59,.72),rgba(30,37,48,.62));
+    border:1px solid rgba(255,255,255,.10);border-radius:26px;
+    padding:34px clamp(22px,4vw,42px);display:grid;gap:34px;
+    box-shadow:0 24px 60px rgba(0,0,0,.28);
+  }
+  .board-h{font-weight:700;font-size:12.5px;letter-spacing:4px;text-transform:uppercase;color:rgba(255,255,255,.55)}
+  .stops{list-style:none;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;position:relative;padding-top:36px}
+  .stops::before{content:'';position:absolute;left:9px;right:9px;top:8px;height:2px;
+    background:linear-gradient(90deg,var(--teal),rgba(24,192,192,.18))}
+  .stops li{position:relative;display:grid;gap:4px}
+  .stops li::before{content:'';position:absolute;top:-36px;left:0;width:18px;height:18px;border-radius:50%;
+    background:var(--ground);border:2px solid var(--teal)}
+  .stops li:first-child::before{background:var(--teal);box-shadow:0 0 0 7px rgba(24,192,192,.16)}
+  .stops .d{font-weight:800;font-size:clamp(38px,6vw,56px);line-height:1;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+  .stops .m{font-weight:600;font-size:16px}
+  .stops .w{font-size:12px;color:var(--faint);letter-spacing:2px;text-transform:uppercase;font-weight:700}
+  .stops li:first-child .w{color:var(--teal)}
+  .stops li:first-child .w::after{content:' · next'}
+  .stops .tbc{grid-column:1 / -1;font-weight:600;color:var(--muted)}
+  .stops .tbc::before{display:none}
+
+  .facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;border-top:1px solid rgba(255,255,255,.08);padding-top:24px}
+  .facts dt{font-size:12px;letter-spacing:2.4px;text-transform:uppercase;color:var(--faint);font-weight:700;margin-bottom:6px}
+  .facts dd{font-size:16px;font-weight:600;line-height:1.45;font-variant-numeric:tabular-nums}
+  .facts dd small{display:block;font-size:14px;font-weight:300;color:var(--muted)}
+
+  .fit{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:40px}
+  .fit h3{font-weight:700;font-size:13px;letter-spacing:3.5px;text-transform:uppercase;margin-bottom:16px}
+  .fit .yes h3{color:var(--teal)}
+  .fit .no h3{color:rgba(255,255,255,.55)}
+  .fit ul{list-style:none;display:grid;gap:14px}
+  .fit li{position:relative;padding-left:28px;color:var(--muted);font-weight:300;font-size:17px;line-height:1.6}
+  .fit li::before{position:absolute;left:0;top:.05em;font-weight:800}
+  .fit .yes li::before{content:'✓';color:var(--teal)}
+  .fit .no li::before{content:'×';color:rgba(255,255,255,.45);font-size:1.15em;top:-.05em}
+
+  /* ---------- reserve ---------- */
+  .reserve{
+    border:1px solid rgba(24,192,192,.34);border-radius:26px;
+    background:linear-gradient(140deg,rgba(24,192,192,.07),rgba(30,37,48,.5));
+    padding:38px clamp(22px,4vw,44px);display:grid;gap:22px;
+    scroll-margin-top:24px;
+  }
+  .reserve .prose p{font-size:17px}
+  .form{display:grid;gap:14px;max-width:720px}
+  .form[hidden]{display:none}
+  .row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+  label{display:grid;gap:7px;font-size:13.5px;font-weight:600;color:rgba(255,255,255,.78)}
+  label .opt{font-weight:300;color:var(--faint)}
+  input,select,textarea{
+    width:100%;min-width:0;background:rgba(0,0,0,.24);border:1px solid rgba(255,255,255,.18);
+    border-radius:12px;padding:13px 15px;color:#fff;font-family:inherit;font-size:16px;
+  }
+  select{appearance:none;-webkit-appearance:none;cursor:pointer;
+    background-image:linear-gradient(45deg,transparent 50%,var(--teal) 50%),linear-gradient(135deg,var(--teal) 50%,transparent 50%);
+    background-position:calc(100% - 20px) 55%,calc(100% - 14px) 55%;background-size:6px 6px;background-repeat:no-repeat;padding-right:42px}
+  select option{background:var(--ground)}
+  textarea{resize:vertical;min-height:84px;line-height:1.5}
+  input:focus,select:focus,textarea:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 4px rgba(24,192,192,.12)}
+  [aria-invalid="true"]{border-color:var(--err)}
+  .go{justify-self:start}
+  .go:disabled{opacity:.55;cursor:progress;transform:none}
+  .sp{width:14px;height:14px;border:2px solid rgba(27,34,45,.3);border-top-color:var(--ground);border-radius:50%;animation:spin .7s linear infinite;display:none}
+  .go.busy .sp{display:block}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .fine{font-size:13.5px;color:var(--faint);font-weight:300}
+  .msg{font-size:16px;font-weight:600;display:none;line-height:1.5}
+  .msg.on{display:block}
+  .msg.err{color:var(--err)}
+  .msg.ok{color:var(--ok)}
+
+  /* ---------- questions ---------- */
+  .qs{display:grid;max-width:760px;border-top:1px solid var(--line)}
+  .qs details{border-bottom:1px solid var(--line)}
+  .qs summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:18px;
+    padding:20px 2px;font-weight:700;font-size:18px}
+  .qs summary::-webkit-details-marker{display:none}
+  .qs summary::after{content:'+';color:var(--teal);font-weight:800;font-size:22px;line-height:1}
+  .qs details[open] summary::after{content:'−'}
+  .qs details p{color:var(--muted);font-weight:300;font-size:17px;line-height:1.65;padding:0 2px 22px;max-width:640px}
+
+  .foot{display:flex;gap:26px;flex-wrap:wrap;border-top:1px solid rgba(255,255,255,.08);padding-top:26px;margin-top:-40px}
+  .foot a{color:rgba(255,255,255,.55);text-decoration:none;font-size:14px;font-weight:500}
+  .foot a:hover{color:var(--teal)}
+
+  @media (max-width:760px){
+    .wrap{gap:84px}
+    .steps,.fit{grid-template-columns:1fr;gap:28px}
+    .row{grid-template-columns:1fr}
+    .facts{grid-template-columns:1fr;gap:16px}
+  }
+  @media (max-width:480px){
+    body{padding-inline:18px;padding-block:36px 72px}
+    .stops .m{font-size:14px}
+    .stops .w{letter-spacing:1px;font-size:11px}
+  }
+  @media (prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
+    .word{animation:none}
+    .btn:hover{transform:none}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ============================================================
+       MACHINE MAINTAINED: every data-woema-* element on this page is
+       rewritten by launch/events.py in ~/francois-content-engine from
+       the "WOEMA workshop" events on his Google Calendar. Do not
+       hand-edit their contents; move the calendar event instead.
+       ============================================================ -->
+  <span data-woema-options hidden>Friday 16 October 2026|Friday 6 November 2026|Friday 27 November 2026</span>
+
+  <header class="hero">
+    <p class="eyebrow">A live workshop with Francois Esterhuizen</p>
+    <h1>
+      <span class="word">WOEMA</span>
+      <span class="tagline">Get out of your own way.</span>
+    </h1>
+    <p class="entry"><b>woema</b> <i>noun, Afrikaans.</i> <span>Say it <span class="say">vuma</span>.</span> <span>The energy that gets you moving.</span></p>
+    <p class="lede">Three hours on a Friday morning, live on Zoom, working through the one thing that keeps stopping you.</p>
+    <ul class="when">
+      <li><svg width="17" height="17" viewBox="0 0 18 18" aria-hidden="true"><rect x="2.5" y="3.5" width="13" height="12" rx="2"/><path d="M2.5 7h13M6 2v3M12 2v3"/></svg><span data-woema-date>Friday 16 October 2026</span></li>
+      <li><svg width="17" height="17" viewBox="0 0 18 18" aria-hidden="true"><circle cx="9" cy="9" r="6.5"/><path d="M9 5.4V9l2.4 1.6"/></svg><span data-woema-time>09:00 to 12:00 SAST</span></li>
+      <li><svg width="17" height="17" viewBox="0 0 18 18" aria-hidden="true"><rect x="1.8" y="4.2" width="10" height="9.6" rx="2"/><path d="M11.8 8l4.4-2.4v6.8L11.8 10z"/></svg><span data-woema-where>Online, on Zoom</span></li>
+    </ul>
+    <div class="act">
+      <a class="btn" href="#reserve">Reserve your seat</a>
+      <span class="price">R1,500 per person</span>
+    </div>
+  </header>
+
+  <section class="sec">
+    <h2>You already know what to do.</h2>
+    <div class="prose">
+      <p>You've probably known for a while. You've read the books, made the plan, and you can explain your own patterns better than anyone around you.</p>
+      <p>And yet here you are, a year later, in the same place and doing the same thing.</p>
+      <p><strong>Nothing's wrong with you.</strong> Your belief system has been practising to keep you safe and comfortable for years. It's sneaky and clever, and it's good at its job.</p>
+      <p>Reading about it only takes you so far, because the belief lives in your everyday choices, and that's where you have to catch it. That's what WOEMA is for: three hours of finding it in your own life, with me there to point out what you'd otherwise explain away.</p>
+    </div>
+  </section>
+
+  <section class="sec">
+    <h2>Three steps, in order.</h2>
+    <ol class="steps">
+      <li>
+        <span class="n">1</span>
+        <h3>Understand your own potential.</h3>
+        <p>We start with what you're capable of in your own life, and what you would be doing if nothing held you back. That picture comes first, because it's what we measure everything else against.</p>
+      </li>
+      <li>
+        <span class="n">2</span>
+        <h3>Find what's blocking it.</h3>
+        <p>Then we look at the gap between what you know and what you actually do. There's usually a belief sitting in that gap, often an old one that made perfect sense when you learned it. We find yours and put it into plain words.</p>
+      </li>
+      <li>
+        <span class="n">3</span>
+        <h3>Reshape your paradigm.</h3>
+        <p>Your paradigm is the set of beliefs you look at your life through. Once a belief is written down, you can question it and see what it has been costing you. Before we finish, you choose the first small action that starts building evidence for something different.</p>
+      </li>
+    </ol>
+    <p class="so">So you can get out of your own way.</p>
+  </section>
+
+  <section class="sec">
+    <h2>When it runs</h2>
+    <div class="prose">
+      <p>WOEMA runs three times every school term, three weeks apart, on a Friday morning. The first one is in the second week of the term.</p>
+    </div>
+    <div class="board">
+      <p class="board-h">Coming up</p>
+      <ol class="stops" data-woema-stops><li><span class="d">16</span><span class="m">October</span><span class="w">Friday</span></li><li><span class="d">6</span><span class="m">November</span><span class="w">Friday</span></li><li><span class="d">27</span><span class="m">November</span><span class="w">Friday</span></li></ol>
+      <dl class="facts">
+        <div><dt>Time</dt><dd><span data-woema-time>09:00 to 12:00 SAST</span><small>Three hours, live</small></dd></div>
+        <div><dt>Where</dt><dd><span data-woema-where>Online, on Zoom</span><small>Now and then in person, in Stellenbosch</small></dd></div>
+        <div><dt>Price</dt><dd>R1,500<small>per person</small></dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="sec">
+    <h2>Is this for you?</h2>
+    <div class="fit">
+      <div class="yes">
+        <h3>Come if</h3>
+        <ul>
+          <li>There's something you keep saying you'll change, and you keep not changing it.</li>
+          <li>You're willing to look at your own part in it.</li>
+          <li>You can clear the whole Friday morning and stay for all three hours.</li>
+        </ul>
+      </div>
+      <div class="no">
+        <h3>Rather wait if</h3>
+        <ul>
+          <li>You're hoping for three hours of motivation. That usually wears off by Tuesday, and this is a working morning.</li>
+          <li>You're in a crisis right now. A group workshop is the wrong place to start. Please call SADAG on 0800 567 567, or WhatsApp me on 082 444 1831 and we'll find the right help.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <h2>Who you'll be working with</h2>
+    <div class="prose">
+      <p>I'm Francois Esterhuizen, a coach in Stellenbosch. I work with people who know exactly what they want and keep not doing it, and I've been in that place myself.</p>
+      <p>I wrote <cite>The Empowering Truth of Responsibility</cite> and <cite>10 Habits of Happy Relationships</cite>. I teach Personal Growth Weekly every Wednesday morning, and I run the Clarity Quest, a ten-week process for when you want more than one morning.</p>
+      <p>Expect a working morning. I'll help you find the belief, and before we finish I'll ask you what you're going to do about it.</p>
+    </div>
+  </section>
+
+  <section class="reserve" id="reserve">
+    <h2>Reserve your seat</h2>
+    <div class="prose">
+      <p>Choose your date and leave your details. The confirmation lands in your inbox straight away, and I'll send the payment details and the Zoom link myself.</p>
+    </div>
+    <form class="form" id="w-form" novalidate>
+      <label for="w-date">Your date
+        <select id="w-date" name="date">
+          <option value="Friday 16 October 2026">Friday 16 October 2026</option>
+        </select>
+      </label>
+      <div class="row">
+        <label for="w-name">Name
+          <input id="w-name" name="name" type="text" autocomplete="name">
+        </label>
+        <label for="w-email">Email
+          <input id="w-email" name="email" type="email" autocomplete="email" inputmode="email">
+        </label>
+        <label for="w-phone">Phone
+          <input id="w-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel">
+        </label>
+      </div>
+      <label for="w-notes">What keeps getting in your way? <span class="opt">Optional. A sentence is plenty.</span>
+        <textarea id="w-notes" name="notes" maxlength="600"></textarea>
+      </label>
+      <button class="btn go" id="w-go" type="submit"><span class="sp"></span><span class="lab">Reserve my seat</span></button>
+      <p class="fine">R1,500 per person. There's no payment on this page.</p>
+    </form>
+    <p class="msg" id="w-msg" tabindex="-1" role="status"></p>
+  </section>
+
+  <section class="sec">
+    <h2>Questions</h2>
+    <div class="qs">
+      <details>
+        <summary>How do I pay?</summary>
+        <p>After you reserve, I'll email you the payment details. South African cards and EFT both work. Paying from outside South Africa? Reply to that email and we'll find the simplest way.</p>
+      </details>
+      <details>
+        <summary>What time is that where I am?</summary>
+        <p>The workshop runs on South African time. In the Netherlands it's the same time in summer and an hour earlier in winter. In the UK it's an hour earlier in summer and two hours earlier in winter.</p>
+      </details>
+      <details>
+        <summary>Will there be in-person workshops?</summary>
+        <p>Now and then, in Stellenbosch. When one is set, it shows up on this page with its date.</p>
+      </details>
+    </div>
+  </section>
+
+  <div class="foot">
+    <a href="/events/">Events</a>
+    <a href="/">Resources</a>
+    <a href="https://www.francoisesterhuizen.com" target="_blank" rel="noopener">francoisesterhuizen.com</a>
+  </div>
+
+</div>
+
+<script>
+/* Reserve a seat. The date list comes from the machine-maintained options
+   span above, so the choices always match his calendar. Posts to
+   /api/woema, which saves to KV first, then Mailchimp, then sends the
+   confirmation and the note to Francois. */
+(function(){
+  var form = document.getElementById('w-form');
+  var sel  = document.getElementById('w-date');
+  var msg  = document.getElementById('w-msg');
+  var go   = document.getElementById('w-go');
+  var lab  = go.querySelector('.lab');
+
+  var src = document.querySelector('[data-woema-options]');
+  var dates = (src ? src.textContent : '').split('|')
+    .map(function(s){ return s.trim(); }).filter(Boolean);
+  sel.innerHTML = '';
+  if (!dates.length) {
+    add('To be confirmed', 'Next date to be confirmed');
+    lab.textContent = 'Put me on the list';
+  }
+  dates.forEach(function(d){ add(d, d); });
+  function add(v, t){
+    var o = document.createElement('option');
+    o.value = v; o.textContent = t; sel.appendChild(o);
+  }
+
+  function val(id){ return document.getElementById(id).value.trim(); }
+  function say(t, k){ msg.textContent = t; msg.className = 'msg on ' + k; }
+  function bad(id, t){
+    var el = document.getElementById(id);
+    el.setAttribute('aria-invalid', 'true'); el.focus(); say(t, 'err');
+  }
+  form.querySelectorAll('input,textarea').forEach(function(i){
+    i.addEventListener('input', function(){ i.removeAttribute('aria-invalid'); msg.className = 'msg'; });
+  });
+
+  form.addEventListener('submit', function(ev){
+    ev.preventDefault();
+    if (go.disabled) return;
+    var f = { date: sel.value, name: val('w-name'), email: val('w-email'),
+              phone: val('w-phone'), notes: val('w-notes'), source: 'woema page' };
+    if (!f.name) return bad('w-name', 'I need your name.');
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(f.email)) return bad('w-email', 'That email does not look right.');
+    if (f.phone.replace(/\D/g, '').length < 9) return bad('w-phone', 'That phone number looks too short.');
+
+    var idle = lab.textContent;
+    go.disabled = true; go.classList.add('busy'); lab.textContent = 'Reserving';
+    msg.className = 'msg';
+
+    fetch('/api/woema', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(f)
+    }).then(function(r){ return r.json().catch(function(){ return { ok: false }; }); })
+      .then(function(j){
+        go.classList.remove('busy');
+        if (j && j.ok) {
+          form.hidden = true;
+          if (f.date === 'To be confirmed') {
+            say('You are on the list. I will email you as soon as the next date is set.', 'ok');
+          } else if (j.emailed) {
+            say('Your seat for ' + f.date + ' is reserved. The confirmation is on its way to ' + f.email + '.', 'ok');
+          } else {
+            say('Your seat for ' + f.date + ' is reserved. I will be in touch by email with the payment details.', 'ok');
+          }
+          msg.focus();
+        } else {
+          go.disabled = false; lab.textContent = idle;
+          say((j && j.error) || 'That did not go through. Try again in a moment, or WhatsApp me on 082 444 1831.', 'err');
+        }
+      }).catch(function(){
+        go.classList.remove('busy'); go.disabled = false; lab.textContent = idle;
+        say('That did not go through. Try again in a moment, or WhatsApp me on 082 444 1831.', 'err');
+      });
+  });
+})();
+</script>
+<!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "a9b056ed20bf4324b33f372dd69b5db4"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>

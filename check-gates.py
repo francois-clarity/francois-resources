@@ -46,7 +46,7 @@ GATES = {
         # Unlisted events page. Every workshop must offer a waiting list, and
         # the page must always carry a general one, so somebody arriving when
         # nothing is scheduled still has somewhere to put their name.
-        "must": ["Join the waiting list", 'data-wl="couples-communication"',
+        "must": ["Join the waiting list", "data-woema-date", "/woema/", 'data-wl="couples-communication"',
                  'data-wl="confidence-with-claude"', 'data-wl="general"',
                  "/api/waitlist", 'name="phone"', 'name="email"', 'name="name"',
                  "noindex"],
@@ -222,6 +222,18 @@ GATES = {
         "must": ["backbtn", "trail", "Back", "Ten-Year", "ten years", "MMERGE2=ten-year-question",
                  "youtube-nocookie", "placeholder="],
         "must_not": ["Headlights", "two-minute test", "Pattern Breaker"],
+    },
+    # WOEMA, the paid three-hour workshop (R1,500), built 15 Sep 2026. Its
+    # dates are rewritten from his calendar by launch/events.py, so the
+    # markers must survive every edit or the page freezes on an old date.
+    # Public and shareable, unlike /events/: it must never pick up noindex.
+    "woema": {
+        "must": ["WOEMA", "Get out of your own way", "Understand your own potential",
+                 "Find what's blocking it", "Reshape your paradigm",
+                 "data-woema-date", "data-woema-time", "data-woema-where",
+                 "data-woema-options", "data-woema-stops",
+                 "/api/woema", "R1,500", "woema/og.png", 'id="reserve"', "0800 567 567"],
+        "must_not": ["noindex", "mailto:", "Pattern Breaker", "once a month"],
     },
 }
 
