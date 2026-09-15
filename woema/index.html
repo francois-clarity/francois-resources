@@ -170,16 +170,6 @@
   .msg.err{color:var(--err)}
   .msg.ok{color:var(--ok)}
 
-  /* ---------- questions ---------- */
-  .qs{display:grid;max-width:760px;border-top:1px solid var(--line)}
-  .qs details{border-bottom:1px solid var(--line)}
-  .qs summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:18px;
-    padding:20px 2px;font-weight:700;font-size:18px}
-  .qs summary::-webkit-details-marker{display:none}
-  .qs summary::after{content:'+';color:var(--teal);font-weight:800;font-size:22px;line-height:1}
-  .qs details[open] summary::after{content:'−'}
-  .qs details p{color:var(--muted);font-weight:300;font-size:17px;line-height:1.65;padding:0 2px 22px;max-width:640px}
-
   .foot{display:flex;gap:26px;flex-wrap:wrap;border-top:1px solid rgba(255,255,255,.08);padding-top:26px;margin-top:-40px}
   .foot a{color:rgba(255,255,255,.55);text-decoration:none;font-size:14px;font-weight:500}
   .foot a:hover{color:var(--teal)}
@@ -339,24 +329,6 @@
       <p class="fine">R1,500 per person. There's no payment on this page.</p>
     </form>
     <p class="msg" id="w-msg" tabindex="-1" role="status"></p>
-  </section>
-
-  <section class="sec">
-    <h2>Questions</h2>
-    <div class="qs">
-      <details>
-        <summary>How do I pay?</summary>
-        <p>After you reserve, I'll email you the payment details. South African cards and EFT both work. Paying from outside South Africa? Reply to that email and we'll find the simplest way.</p>
-      </details>
-      <details>
-        <summary>What time is that where I am?</summary>
-        <p>The workshop runs on South African time. In the Netherlands it's the same time in summer and an hour earlier in winter. In the UK it's an hour earlier in summer and two hours earlier in winter.</p>
-      </details>
-      <details>
-        <summary>Will there be in-person workshops?</summary>
-        <p>Now and then, in Stellenbosch. When one is set, it shows up on this page with its date.</p>
-      </details>
-    </div>
   </section>
 
   <div class="foot">
