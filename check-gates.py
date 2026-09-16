@@ -231,7 +231,9 @@ GATES = {
         "must": ["WOEMA", "Get out of your own way", "Understand your own potential",
                  "Find what's blocking it", "Reshape your paradigm",
                  "data-woema-date", "data-woema-time", "data-woema-where",
-                 "data-woema-options", "data-woema-stops",
+                 # one next date, the member reveal, bring a friend, the waiting list (16 Sep 2026)
+                 "Are you part of one of my programmes?", "Bring a friend for R500 more", "action: 'quote'",
+                 "/api/waitlist", "event: 'woema'",
                  "/api/woema", "R1,500", "woema/og.png", 'id="reserve"', "0800 567 567",
                  # card payment and the member price, added 16 Sep 2026
                  "R900", "action: 'verify'",
@@ -241,7 +243,8 @@ GATES = {
                  "https://events.francoisesterhuizen.com/woema/"],
         "must_not": ["noindex", "mailto:", "Pattern Breaker", "once a month",
                      "resources.francoisesterhuizen.com/woema", "no payment on this page",
-                     "How would you like to pay", "EFT, or I'm outside South Africa"],
+                     "How would you like to pay", "EFT, or I'm outside South Africa",
+                     "three times", "three weeks apart", "every school term", "data-woema-stops"],
     },
 }
 

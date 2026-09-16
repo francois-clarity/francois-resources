@@ -31,6 +31,7 @@ const EVENTS = {
   'couples-communication': 'The Couples Communication Workshop',
   'confidence-with-claude': 'Confidence with Claude',
   'general': 'Anything new',
+  'woema': 'WOEMA workshop',
 };
 
 export async function onRequestPost({ request, env }) {

@@ -1,48 +1,61 @@
 /* Cloudflare Pages Function: POST /api/woema
  *
- * Seat reservations for WOEMA, the three-hour live workshop (R1,500, three
- * Friday mornings every school term, three weeks apart). Built 15 Sep 2026.
+ * Seat reservations for WOEMA, the three-hour live workshop. Built 15 Sep 2026.
  * Card payment through Paystack and the member price added 16 Sep 2026.
  * Same afternoon, his call: one card option on the page (Paystack's popup,
  * no choice of methods), and when the card does not go through, "Having
  * trouble with the payment? No problem. Make your booking to secure your
  * spot, and I'll send you an invoice."
+ * Later still, his redesign: only the next date on the page, a programme
+ * question that reveals the member saving, and "bring a friend for R500
+ * more" so two people pay R1,000 each.
  *
- * Three actions:
+ * Prices, decided HERE and never in the browser:
+ *   R1,500 a seat; R900 when the email belongs to a Clarity Quest or Personal
+ *   Growth Weekly member (memberPrice below); plus R500 for a friend's seat.
+ *   A member bringing a friend pays R900 + R500.
  *
- *   {action: 'reserve', pay: 'card'|'invoice', date, name, email, phone, notes}
+ * Four actions:
+ *
+ *   {action: 'quote', email}
+ *     Is this email a member? Powers the "Surprise" reveal on the page. Capped
+ *     per IP address so nobody can run a list of emails through it.
+ *
+ *   {action: 'reserve', pay: 'card'|'invoice', date, name, email, phone, notes,
+ *    programme, friend, friend_name, friend_email}
  *     1. KV first, always. A reservation is somebody's intention to pay him,
  *        and it must not depend on Mailchimp, Gmail or Paystack being up.
- *     2. The price is decided HERE, never in the browser: R1,500, or R900
- *        (40% off) when the email belongs to a Clarity Quest or Personal
- *        Growth Weekly member. See memberPrice() for what counts.
- *     3. pay 'card': Paystack initialises a transaction for that amount. The
+ *     2. pay 'card': Paystack initialises a transaction for the total. The
  *        page opens it in Paystack's popup with the access_code (the
  *        authorization_url is the fallback if the popup script fails).
  *        Nothing is emailed yet, because nothing is paid yet.
- *     4. pay 'invoice' (a date still to be set, or a card that never
- *        started): Mailchimp tags, the confirmation to the person, and a
- *        note to Francois, who sends the invoice by hand.
+ *     3. pay 'invoice' (a date still to be set, or a card that never
+ *        started): Mailchimp tags, the confirmation, the friend's
+ *        confirmation, and a note to Francois, who sends the invoice by hand.
  *
  *   {action: 'invoice', booking}
  *     The card did not go through and they chose "Make my booking". Turns the
- *     same KV row into an invoice booking and sends the same two emails as
- *     pay 'invoice'. Paystack refuses foreign cards on this account (closed
- *     since 31 Jul 2026), so this is also how overseas people book.
+ *     same KV row into an invoice booking and sends the same emails as pay
+ *     'invoice'. Paystack refuses foreign cards on this account (closed since
+ *     31 Jul 2026), so this is also how overseas people book.
  *
  *   {action: 'verify', reference}
- *     Paystack sends people back to /woema/?reference=... and the page calls
- *     this. It asks Paystack whether that reference really was paid, in ZAR,
- *     for at least the amount stored with the reservation, then marks the KV
- *     row paid, tags Mailchimp, and sends the confirmation and the note. A
- *     second call for the same reference changes nothing and sends nothing.
+ *     After Paystack's popup (or its own page) the page calls this. It asks
+ *     Paystack whether that reference really was paid, in ZAR, for at least
+ *     the amount stored with the reservation, then marks the KV row paid,
+ *     tags Mailchimp, and sends the confirmations and the note. A second call
+ *     for the same reference changes nothing and sends nothing.
+ *
+ * The friend's email is a booking confirmation, because they now have a seat.
+ * They go into Mailchimp as transactional, never as a marketing subscriber.
  *
  * Card attempts are capped per IP address, because the old public Paystack
  * payment page was hit by a card-testing attack on 31 Jul 2026.
  *
  * His own address is a test (standing rule): stored, tagged test and never
- * the real WOEMA tags, the confirmation still comes to him so he can see
- * it, and the note to him says TEST in the subject.
+ * the real WOEMA tags, the confirmation still comes to him so he can see it,
+ * the note to him says TEST, and a friend's confirmation goes to him instead
+ * of the friend.
  *
  * Env (already set on the project): MAILCHIMP_API_KEY, MAILCHIMP_AUDIENCE,
  * RESULTS_MAILER_URL, RESULTS_MAILER_KEY, PAYSTACK_SECRET_KEY.
@@ -54,9 +67,11 @@ const NOTIFY = 'francois@francoisesterhuizen.com';
 const MONTHS = ['january', 'february', 'march', 'april', 'may', 'june', 'july',
   'august', 'september', 'october', 'november', 'december'];
 const TBC = 'To be confirmed';
+const EMAIL = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
 
 const FULL_CENTS = 150000;    // R1,500
-const MEMBER_CENTS = 90000;   // R900, 40% off
+const MEMBER_CENTS = 90000;   // R900, R600 off
+const FRIEND_CENTS = 50000;   // R500 for a friend's seat
 // Paystack plans whose subscribers pay the member price, matched on the plan
 // name, and the subscription states that still count. 'attention' is a
 // failed renewal, which is what the overseas members' cards show since July.
@@ -66,18 +81,29 @@ const MEMBER_STATES = ['active', 'non-renewing', 'attention'];
 // with this, and they get the member price too.
 const MEMBER_TAG = 'member-price';
 const CARD_TRIES_PER_HOUR = 6;
+const QUOTES_PER_HOUR = 20;
 
 export async function onRequestPost({ request, env }) {
   let p;
   try { p = await request.json(); }
   catch { return json({ ok: false, error: 'bad json' }, 400); }
 
+  if (p.action === 'quote') return quote(p, request, env);
   if (p.action === 'verify') return verify(p, env);
   if (p.action === 'invoice') return invoice(p, env);
   return reserve(p, request, env);
 }
 
 export async function onRequestGet() { return json({ ok: true, use: 'POST' }); }
+
+async function quote(p, request, env) {
+  const email = String(p.email || '').trim().toLowerCase();
+  if (!EMAIL.test(email)) return json({ ok: false, error: 'That email does not look right.' }, 400);
+  if (!(await underLimit(env, request, 'rl:woemaq:', QUOTES_PER_HOUR))) {
+    return json({ ok: false, error: 'Too many checks from here. Try again in an hour.' }, 429);
+  }
+  return json({ ok: true, member: await memberPrice(env, email) });
+}
 
 async function reserve(p, request, env) {
   const name  = clip(p.name, 80);
@@ -86,38 +112,43 @@ async function reserve(p, request, env) {
   const notes = clip(p.notes, 600);
   const date  = clip(p.date, 40);
   const pay   = p.pay === 'card' ? 'card' : 'invoice';
+  const programme = clip(p.programme, 40);
+  const withFriend = !!p.friend;
+  const friendName = withFriend ? clip(p.friend_name, 80) : '';
+  const friendEmail = withFriend ? String(p.friend_email || '').trim().toLowerCase() : '';
 
   if (!name) return json({ ok: false, error: 'I need your name.' }, 400);
-  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
-    return json({ ok: false, error: 'That email does not look right.' }, 400);
-  }
+  if (!EMAIL.test(email)) return json({ ok: false, error: 'That email does not look right.' }, 400);
   if (phone.replace(/\D/g, '').length < 9) {
     return json({ ok: false, error: 'That phone number looks too short.' }, 400);
   }
+  if (withFriend && !friendName) return json({ ok: false, error: "I need your friend's name." }, 400);
+  if (withFriend && !EMAIL.test(friendEmail)) {
+    return json({ ok: false, error: "Your friend's email does not look right." }, 400);
+  }
+  if (withFriend && friendEmail === email) {
+    return json({ ok: false, error: 'Your friend needs their own email address.' }, 400);
+  }
   const iso = date === TBC ? 'tbc' : isoDate(date);
-  if (!iso) return json({ ok: false, error: 'Choose one of the dates in the list.' }, 400);
+  if (!iso) return json({ ok: false, error: 'That date is not one I recognise. Refresh the page and try again.' }, 400);
   if (!env.FUNNEL) return json({ ok: false, error: 'not configured' }, 503);
 
   // nobody can pay for a date that is not set yet
   const card = pay === 'card' && iso !== 'tbc';
-  if (card) {
-    const ip = request.headers.get('CF-Connecting-IP') || 'unknown';
-    const rl = 'rl:woema:' + ip + ':' + new Date().toISOString().slice(0, 13);
-    const tries = parseInt(await env.FUNNEL.get(rl) || '0', 10);
-    if (tries >= CARD_TRIES_PER_HOUR) {
-      return json({ ok: false, error: 'Too many attempts from here. Try again in an hour, or WhatsApp me on 082 444 1831.' }, 429);
-    }
-    await env.FUNNEL.put(rl, String(tries + 1), { expirationTtl: 7200 });
+  if (card && !(await underLimit(env, request, 'rl:woema:', CARD_TRIES_PER_HOUR))) {
+    return json({ ok: false, error: 'Too many attempts from here. Try again in an hour, or WhatsApp me on 082 444 1831.' }, 429);
   }
 
   const isTest = email.indexOf('francois@') === 0;
   const member = await memberPrice(env, email);
-  const cents = member ? MEMBER_CENTS : FULL_CENTS;
+  const cents = (member ? MEMBER_CENTS : FULL_CENTS) + (withFriend ? FRIEND_CENTS : 0);
   const first = name.split(/\s+/)[0];
   const row = {
     timestamp: new Date().toISOString(),
     date, iso, name, email, phone, notes, test: isTest,
-    pay: card ? 'card' : 'invoice', member, amount: cents / 100, paid: false,
+    programme, member, seats: withFriend ? 2 : 1,
+    friend: withFriend ? { name: friendName, email: friendEmail } : null,
+    pay: card ? 'card' : 'invoice', amount: cents / 100, paid: false,
     source: clip(p.source, 80) || 'woema page',
   };
 
@@ -145,9 +176,11 @@ async function reserve(p, request, env) {
           metadata: {
             purpose: 'WOEMA workshop',
             woema_key: key,
-            date, name, phone, member,
+            date, name, phone, member, seats: row.seats,
+            friend_name: friendName || undefined,
             custom_fields: [
               { display_name: 'Workshop', variable_name: 'workshop', value: 'WOEMA ' + date },
+              { display_name: 'Seats', variable_name: 'seats', value: String(row.seats) },
               { display_name: 'Price', variable_name: 'price', value: member ? 'Member price' : 'Full price' },
             ],
           },
@@ -159,7 +192,7 @@ async function reserve(p, request, env) {
       await env.FUNNEL.put(key, JSON.stringify(row));
       await tag(env, email, first, isTest ? ['test'] : ['woema-checkout']);
       return json({ ok: true, pay: 'card', access_code: d.data.access_code, url: d.data.authorization_url,
-                    booking: key, amount: cents / 100, member });
+                    booking: key, amount: cents / 100, member, seats: row.seats });
     } catch {
       // the page offers the invoice booking for this same row
       return json({ ok: false, trouble: true, booking: key }, 502);
@@ -176,37 +209,42 @@ async function invoice(p, env) {
   const raw = await env.FUNNEL.get(key);
   if (!raw) return json({ ok: false, error: 'That booking was not found.' }, 404);
   const row = JSON.parse(raw);
-  if (row.paid) return json({ ok: true, paid: true, date: row.date });
-  if (row.pay === 'invoice') return json({ ok: true, date: row.date, again: true });
+  if (row.paid) return json({ ok: true, paid: true, date: row.date, seats: row.seats || 1 });
+  if (row.pay === 'invoice') return json({ ok: true, date: row.date, seats: row.seats || 1, again: true });
   row.pay = 'invoice';
   row.invoice_at = new Date().toISOString();
   await env.FUNNEL.put(key, JSON.stringify(row));
   return confirmInvoice(env, key, row, true);
 }
 
-/* The booking stands without payment: tags, the confirmation to the person
-   and the note to Francois, who sends the invoice. */
+/* The booking stands without payment: tags, the confirmations and the note to
+   Francois, who sends the invoice. */
 async function confirmInvoice(env, key, row, afterCard) {
   const { date, iso, name, email, phone, notes, member } = row;
   const isTest = row.test;
   const first = name.split(/\s+/)[0];
   const tags = isTest ? ['test']
-    : ['woema-reserved', 'woema-' + iso].concat(iso === 'tbc' ? [] : ['woema-invoice'], member ? ['woema-member'] : []);
+    : ['woema-reserved', 'woema-' + iso].concat(iso === 'tbc' ? [] : ['woema-invoice'], member ? ['woema-member'] : [],
+                                                row.friend ? ['woema-brought-friend'] : []);
   const captured = await tag(env, email, first, tags);
 
   const short = date === TBC ? '' : date.replace(/\s\d{4}$/, '');
-  const price = member ? 'R900, the member price' : 'R1,500';
   const subject = iso === 'tbc' ? "WOEMA: you're on the list" : 'Your WOEMA seat: ' + short;
+  const seatLine = row.friend
+    ? 'Your seats at WOEMA on ' + date + ' are reserved, one for you and one for ' + row.friend.name + '.'
+    : 'Your seat at WOEMA on ' + date + ' is reserved.';
   const body = iso === 'tbc'
     ? ['Hi ' + first, '',
        "You're on the list for the next WOEMA workshop. As soon as the date is set, I'll email you.",
        '', 'Much love,', 'Francois'].join('\n')
     : ['Hi ' + first, '',
-       'Your seat at WOEMA on ' + date + ' is reserved. We start at 09:00 South African time and finish at 12:00, on Zoom.',
+       seatLine + ' We start at 09:00 South African time and finish at 12:00, on Zoom.',
        '',
-       "I'll send you an invoice (" + price + ') and the Zoom link in a separate email.',
+       "I'll send you an invoice (" + priceText(row) + ') and the Zoom link in a separate email.' +
+         (row.friend ? " I've let " + row.friend.name.split(/\s+/)[0] + ' know too.' : ''),
        '', 'See you there.', '', 'Much love,', 'Francois'].join('\n');
   const emailed = await mail(env, email, subject, body);
+  const friendTold = iso === 'tbc' ? false : await tellFriend(env, row, false);
 
   const note = [
     (isTest ? 'TEST reservation, from your own address. Nothing real to do.'
@@ -217,18 +255,22 @@ async function confirmInvoice(env, key, row, afterCard) {
     'Name: ' + name,
     'Email: ' + email,
     'Phone: ' + phone,
-    'Price: ' + (member ? 'R900 (member)' : 'R1,500'),
+    'Programme they chose: ' + (row.programme || 'none') + (member ? ' (member price confirmed)' : ''),
+    row.friend ? 'Friend: ' + row.friend.name + ', ' + row.friend.email : 'Friend: none',
+    'Total: ' + rand(row.amount) + ' for ' + (row.seats || 1) + (row.seats === 2 ? ' seats' : ' seat'),
     'What keeps getting in their way: ' + (notes || '(left blank)'),
     '',
     iso === 'tbc' ? 'Next step: let them know when the next date is set.'
-                  : 'Next step: send the invoice (' + (member ? 'R900' : 'R1,500') + ') and the Zoom link.',
+                  : 'Next step: send the invoice (' + rand(row.amount) + ') and the Zoom link' + (row.friend ? ' to both of them.' : '.'),
     'Confirmation email to them: ' + (emailed ? 'sent' : 'NOT sent, the mailer failed'),
+    row.friend ? 'Confirmation to the friend: ' + (friendTold ? 'sent' : 'NOT sent') : '',
     'Mailchimp: ' + (captured ? 'tagged ' + tags.join(', ') : 'NOT tagged'),
     'Saved in KV as ' + key,
-  ].join('\n');
+  ].filter(l => l !== '').join('\n');
   await mail(env, NOTIFY, (isTest ? 'TEST ' : '') + 'WOEMA reservation: ' + name + ', ' + (short || 'next date TBC'), note);
 
-  return json({ ok: true, pay: 'invoice', emailed, captured, member, amount: row.amount, date, test: isTest });
+  return json({ ok: true, pay: 'invoice', emailed, captured, member, amount: row.amount, seats: row.seats || 1,
+                friend: row.friend ? row.friend.name : null, date, test: isTest });
 }
 
 async function verify(p, env) {
@@ -252,11 +294,12 @@ async function verify(p, env) {
   const raw = key && String(key).indexOf('woema:') === 0 ? await env.FUNNEL.get(key) : null;
   if (!raw) return json({ ok: true, paid: false });
   const row = JSON.parse(raw);
+  const out = { date: row.date, seats: row.seats || 1, friend: row.friend ? row.friend.name : null };
 
   const expected = Math.round(row.amount * 100);
   const paid = tx.status === 'success' && tx.currency === 'ZAR' && tx.amount >= expected;
-  if (!paid) return json({ ok: true, paid: false, date: row.date, booking: key });
-  if (row.paid) return json({ ok: true, paid: true, date: row.date, again: true });
+  if (!paid) return json(Object.assign({ ok: true, paid: false, booking: key }, out));
+  if (row.paid) return json(Object.assign({ ok: true, paid: true, again: true }, out));
 
   row.paid = true;
   row.paid_at = tx.paid_at || new Date().toISOString();
@@ -265,17 +308,22 @@ async function verify(p, env) {
 
   const first = row.name.split(/\s+/)[0];
   const tags = row.test ? ['test']
-    : ['woema-reserved', 'woema-paid', 'woema-' + row.iso].concat(row.member ? ['woema-member'] : []);
+    : ['woema-reserved', 'woema-paid', 'woema-' + row.iso].concat(row.member ? ['woema-member'] : [],
+                                                                   row.friend ? ['woema-brought-friend'] : []);
   const captured = await tag(env, row.email, first, tags);
 
   const short = row.date.replace(/\s\d{4}$/, '');
-  const price = row.member ? 'R900, the member price' : 'R1,500';
+  const seatLine = row.friend
+    ? 'Your payment of ' + priceText(row) + ' came through, so your seats at WOEMA on ' + row.date +
+      ' are confirmed, one for you and one for ' + row.friend.name + '.'
+    : 'Your payment of ' + priceText(row) + ' came through, so your seat at WOEMA on ' + row.date + ' is confirmed.';
   const body = ['Hi ' + first, '',
-    'Your payment of ' + price + ' came through, so your seat at WOEMA on ' + row.date + ' is confirmed. We start at 09:00 South African time and finish at 12:00, on Zoom.',
+    seatLine + ' We start at 09:00 South African time and finish at 12:00, on Zoom.',
     '',
-    "I'll send you the Zoom link before the day.",
+    "I'll send you the Zoom link before the day." + (row.friend ? " I've let " + row.friend.name.split(/\s+/)[0] + ' know too.' : ''),
     '', 'See you there.', '', 'Much love,', 'Francois'].join('\n');
   const emailed = await mail(env, row.email, 'Your WOEMA seat is confirmed: ' + short, body);
+  const friendTold = await tellFriend(env, row, true);
 
   const note = [
     (row.test ? 'TEST payment, from your own address.' : 'WOEMA seat PAID by card.'),
@@ -284,18 +332,61 @@ async function verify(p, env) {
     'Name: ' + row.name,
     'Email: ' + row.email,
     'Phone: ' + row.phone,
-    'Paid: R' + (tx.amount / 100) + (row.member ? ' (member price)' : ''),
+    'Programme they chose: ' + (row.programme || 'none') + (row.member ? ' (member price confirmed)' : ''),
+    row.friend ? 'Friend: ' + row.friend.name + ', ' + row.friend.email : 'Friend: none',
+    'Paid: R' + (tx.amount / 100) + ' for ' + (row.seats || 1) + (row.seats === 2 ? ' seats' : ' seat'),
     'Paystack reference: ' + tx.reference,
     'What keeps getting in their way: ' + (row.notes || '(left blank)'),
     '',
-    'Next step: send the Zoom link before the day.',
+    'Next step: send the Zoom link before the day' + (row.friend ? ', to both of them.' : '.'),
     'Confirmation email to them: ' + (emailed ? 'sent' : 'NOT sent, the mailer failed'),
+    row.friend ? 'Confirmation to the friend: ' + (friendTold ? 'sent' : 'NOT sent') : '',
     'Mailchimp: ' + (captured ? 'tagged ' + tags.join(', ') : 'NOT tagged'),
     'Saved in KV as ' + key,
-  ].join('\n');
+  ].filter(l => l !== '').join('\n');
   await mail(env, NOTIFY, (row.test ? 'TEST ' : '') + 'WOEMA PAID: ' + row.name + ', ' + short, note);
 
-  return json({ ok: true, paid: true, date: row.date, emailed });
+  return json(Object.assign({ ok: true, paid: true, emailed }, out));
+}
+
+/* The friend has a seat, so they get their own confirmation. For a test booking
+   it goes to Francois instead, and the friend is never added to Mailchimp. */
+async function tellFriend(env, row, paid) {
+  if (!row.friend) return false;
+  const f = row.friend;
+  const friendFirst = f.name.split(/\s+/)[0];
+  const bookerFirst = row.name.split(/\s+/)[0];
+  if (!row.test) {
+    await tag(env, f.email, friendFirst,
+      ['woema-reserved', 'woema-friend', 'woema-' + row.iso].concat(paid ? ['woema-paid'] : []), 'transactional');
+  }
+  const body = ['Hi ' + friendFirst, '',
+    row.name + ' has booked you a seat at WOEMA, my three-hour live workshop on getting out of your own way. ' +
+      "It's on " + row.date + ', from 09:00 to 12:00 South African time, on Zoom.',
+    '',
+    "I'll send you the Zoom link before the day.",
+    '', 'See you there.', '', 'Much love,', 'Francois'].join('\n');
+  return mail(env, row.test ? NOTIFY : f.email,
+    (row.test ? 'TEST ' : '') + bookerFirst + ' booked you a seat at WOEMA', body);
+}
+
+function priceText(row) {
+  if (row.friend) return rand(row.amount) + ' for two seats';
+  return row.member ? 'R900, the member price' : 'R1,500';
+}
+
+function rand(amount) {
+  return 'R' + String(Math.round(amount)).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+}
+
+async function underLimit(env, request, prefix, max) {
+  if (!env.FUNNEL) return true;
+  const ip = request.headers.get('CF-Connecting-IP') || 'unknown';
+  const k = prefix + ip + ':' + new Date().toISOString().slice(0, 13);
+  const n = parseInt(await env.FUNNEL.get(k) || '0', 10);
+  if (n >= max) return false;
+  await env.FUNNEL.put(k, String(n + 1), { expirationTtl: 7200 });
+  return true;
 }
 
 /* True when this email pays the member price. Paystack first: a customer with
@@ -332,7 +423,7 @@ async function memberPrice(env, email) {
 }
 
 /* Upsert the person in Mailchimp and add tags. Best effort: KV has it. */
-async function tag(env, email, first, tags) {
+async function tag(env, email, first, tags, status = 'subscribed') {
   try {
     const apiKey = env.MAILCHIMP_API_KEY || '', aud = env.MAILCHIMP_AUDIENCE || '';
     if (!apiKey || !aud) return false;
@@ -342,7 +433,7 @@ async function tag(env, email, first, tags) {
     const put = await fetch(memberUrl, {
       method: 'PUT',
       headers: { Authorization: auth, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email_address: email, status_if_new: 'subscribed', merge_fields: { FNAME: first } }),
+      body: JSON.stringify({ email_address: email, status_if_new: status, merge_fields: { FNAME: first } }),
     });
     if (!put.ok) return false;
     const tr = await fetch(memberUrl + '/tags', {
