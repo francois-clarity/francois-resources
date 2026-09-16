@@ -232,8 +232,12 @@ GATES = {
                  "Find what's blocking it", "Reshape your paradigm",
                  "data-woema-date", "data-woema-time", "data-woema-where",
                  "data-woema-options", "data-woema-stops",
-                 "/api/woema", "R1,500", "woema/og.png", 'id="reserve"', "0800 567 567"],
-        "must_not": ["noindex", "mailto:", "Pattern Breaker", "once a month"],
+                 "/api/woema", "R1,500", "woema/og.png", 'id="reserve"', "0800 567 567",
+                 # card payment and the member price, added 16 Sep 2026
+                 "R900", 'name="pay"', "action: 'verify'",
+                 "https://events.francoisesterhuizen.com/woema/"],
+        "must_not": ["noindex", "mailto:", "Pattern Breaker", "once a month",
+                     "resources.francoisesterhuizen.com/woema", "no payment on this page"],
     },
 }
 
@@ -479,6 +483,11 @@ def check_banned_words():
     print("ok   banned-words                      [local] no banned wording on any page")
     return True
 
+LIVE_AT = {
+    "events": "https://events.francoisesterhuizen.com/",
+    "woema": "https://events.francoisesterhuizen.com/woema/",
+}
+
 def main():
     base = pathlib.Path(__file__).parent
     live = "--live" in sys.argv
@@ -492,7 +501,8 @@ def main():
         all_ok &= check(name, html, "local")
         if live:
             try:
-                url = "https://resources.francoisesterhuizen.com/" + (name + "/" if name else "")
+                # /events/ and /woema/ live on their own address since 16 Sep 2026
+                url = LIVE_AT.get(name) or "https://resources.francoisesterhuizen.com/" + (name + "/" if name else "")
                 req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (Macintosh) gate-check"})
                 h = urllib.request.urlopen(req, timeout=20).read().decode("utf-8", "ignore")
                 all_ok &= check(name, h, "live")
