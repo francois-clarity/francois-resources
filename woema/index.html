@@ -165,14 +165,16 @@
   .go.busy .sp{display:block}
   @keyframes spin{to{transform:rotate(360deg)}}
   .fine{font-size:13.5px;color:var(--faint);font-weight:300}
-  .pay{border:0;display:grid;gap:10px}
-  .pay[hidden]{display:none}
-  .pay legend{font-size:13.5px;font-weight:600;color:rgba(255,255,255,.78);margin-bottom:7px}
-  .pay label{display:flex;gap:12px;align-items:flex-start;font-size:15px;font-weight:600;color:#fff;
-    background:rgba(0,0,0,.24);border:1px solid rgba(255,255,255,.18);border-radius:12px;padding:13px 15px;cursor:pointer}
-  .pay label:has(input:checked){border-color:var(--teal)}
-  .pay input{width:auto;padding:0;margin-top:4px;accent-color:var(--teal);flex:none}
-  .pay small{display:block;font-weight:300;color:var(--faint);font-size:13.5px;margin-top:3px}
+  .trouble{margin:auto;width:100%;max-width:min(460px,calc(100vw - 32px));border:1px solid rgba(24,192,192,.45);
+    border-radius:22px;background:var(--raise);color:var(--text);padding:30px clamp(20px,5vw,34px);display:none}
+  .trouble[open]{display:grid;gap:14px}
+  .trouble::backdrop{background:rgba(10,14,20,.72)}
+  .trouble h3{font-size:22px;font-weight:800;letter-spacing:-.01em;line-height:1.2}
+  .trouble p{color:var(--muted);font-size:16.5px;line-height:1.55}
+  .trouble-act{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:6px}
+  .again{background:none;border:0;color:var(--muted);font:inherit;font-size:15px;font-weight:600;
+    text-decoration:underline;text-underline-offset:4px;cursor:pointer;padding:10px 4px}
+  .again:hover{color:var(--teal)}
   .msg{font-size:16px;font-weight:600;display:none;line-height:1.5}
   .msg.on{display:block}
   .msg.err{color:var(--err)}
@@ -333,15 +335,19 @@
       <label for="w-notes">What keeps getting in your way? <span class="opt">Optional. A sentence is plenty.</span>
         <textarea id="w-notes" name="notes" maxlength="600"></textarea>
       </label>
-      <fieldset class="pay">
-        <legend>How would you like to pay?</legend>
-        <label><input type="radio" name="pay" value="card" checked><span>Card, now<small>South African cards. You pay on Paystack's page and come straight back here.</small></span></label>
-        <label><input type="radio" name="pay" value="eft"><span>EFT, or I'm outside South Africa<small>Your seat is reserved now, and I'll email you the payment details.</small></span></label>
-      </fieldset>
       <button class="btn go" id="w-go" type="submit"><span class="sp"></span><span class="lab">Reserve and pay</span></button>
-      <p class="fine">R1,500 per person, or R900 for members. Card payments go through Paystack.</p>
+      <p class="fine">R1,500 per person, or R900 for members. Card payments are handled by Paystack.</p>
     </form>
     <p class="msg" id="w-msg" tabindex="-1" role="status"></p>
+    <dialog class="trouble" id="w-trouble" aria-labelledby="w-trouble-h">
+      <h3 id="w-trouble-h">Having trouble with the payment?</h3>
+      <p>No problem. Make your booking to secure your spot, and I'll send you an invoice.</p>
+      <div class="trouble-act">
+        <button class="btn go" id="w-book" type="button"><span class="sp"></span><span class="lab">Make my booking</span></button>
+        <button class="again" id="w-again" type="button">Try the card again</button>
+      </div>
+      <p class="msg" id="w-tmsg" role="status"></p>
+    </dialog>
   </section>
 
   <div class="foot">
@@ -352,21 +358,28 @@
 
 </div>
 
+<script src="https://js.paystack.co/v2/inline.js"></script>
 <script>
-/* Reserve a seat. The date list comes from the machine-maintained options
-   span above, so the choices always match his calendar. Posts to
-   /api/woema, which decides the price (member or not), saves to KV first,
-   then either hands over to Paystack (card) or sends the confirmation and
-   the note to Francois (EFT). Paystack sends people back here with
-   ?reference=..., and this page asks /api/woema to verify that payment. */
+/* Reserve a seat and pay. The date list comes from the machine-maintained
+   options span above, so the choices always match his calendar.
+   One card option, his call on 16 Sep 2026: /api/woema decides the price
+   and sets up the Paystack transaction, Paystack's popup takes the card on
+   this page, and /api/woema verifies the payment before anything is
+   confirmed. When the card does not go through (declined, closed, a foreign
+   card Paystack refuses, or the popup never loads), the trouble dialog
+   offers the booking with an invoice instead. */
 (function(){
   var form = document.getElementById('w-form');
   var sel  = document.getElementById('w-date');
   var msg  = document.getElementById('w-msg');
   var go   = document.getElementById('w-go');
   var lab  = go.querySelector('.lab');
-  var box  = form.querySelector('.pay');
-  var tbc  = false;
+  var dlg  = document.getElementById('w-trouble');
+  var book = document.getElementById('w-book');
+  var bookLab = book.querySelector('.lab');
+  var tmsg = document.getElementById('w-tmsg');
+  var tbc = false, booking = null, details = null;
+  var FAIL = 'That did not go through. Try again in a moment, or WhatsApp me on 082 444 1831.';
 
   var src = document.querySelector('[data-woema-options]');
   var dates = (src ? src.textContent : '').split('|')
@@ -375,23 +388,14 @@
   if (!dates.length) {
     add('To be confirmed', 'Next date to be confirmed');
     tbc = true;
-    if (box) box.hidden = true;
   }
   dates.forEach(function(d){ add(d, d); });
   function add(v, t){
     var o = document.createElement('option');
     o.value = v; o.textContent = t; sel.appendChild(o);
   }
-
-  function way(){
-    var c = form.querySelector('input[name="pay"]:checked');
-    return tbc ? 'eft' : (c ? c.value : 'card');
-  }
-  function label(){
-    lab.textContent = tbc ? 'Put me on the list' : (way() === 'card' ? 'Reserve and pay' : 'Reserve my seat');
-  }
-  form.querySelectorAll('input[name="pay"]').forEach(function(r){ r.addEventListener('change', label); });
-  label();
+  var READY = tbc ? 'Put me on the list' : 'Reserve and pay';
+  lab.textContent = READY;
 
   function val(id){ return document.getElementById(id).value.trim(); }
   function say(t, k){ msg.textContent = t; msg.className = 'msg on ' + k; }
@@ -404,71 +408,122 @@
       method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body)
     }).then(function(r){ return r.json().catch(function(){ return { ok: false }; }); });
   }
+  function idle(){ go.classList.remove('busy'); go.disabled = false; lab.textContent = READY; }
+  function done(text){ form.hidden = true; say(text, 'ok'); msg.focus(); }
   form.querySelectorAll('input,textarea').forEach(function(i){
     i.addEventListener('input', function(){ i.removeAttribute('aria-invalid'); msg.className = 'msg'; });
   });
 
-  form.addEventListener('submit', function(ev){
-    ev.preventDefault();
-    if (go.disabled) return;
-    var f = { action: 'reserve', pay: way(), date: sel.value, name: val('w-name'), email: val('w-email'),
-              phone: val('w-phone'), notes: val('w-notes'), source: 'woema page' };
-    if (!f.name) return bad('w-name', 'I need your name.');
-    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(f.email)) return bad('w-email', 'That email does not look right.');
-    if (f.phone.replace(/\D/g, '').length < 9) return bad('w-phone', 'That phone number looks too short.');
-
-    var idle = lab.textContent;
-    go.disabled = true; go.classList.add('busy');
-    lab.textContent = f.pay === 'card' ? 'Opening the payment' : 'Reserving';
+  /* The card did not go through: offer the booking with an invoice. */
+  function trouble(b){
+    if (b) booking = b;
+    idle();
+    form.hidden = false;
     msg.className = 'msg';
+    tmsg.className = 'msg';
+    book.disabled = false; book.classList.remove('busy'); bookLab.textContent = 'Make my booking';
+    if (dlg.showModal) { if (!dlg.open) dlg.showModal(); } else { dlg.setAttribute('open', ''); }
+  }
+  function closeTrouble(){ if (dlg.close) dlg.close(); else dlg.removeAttribute('open'); }
+  document.getElementById('w-again').addEventListener('click', function(){ closeTrouble(); go.focus(); });
 
-    post(f).then(function(j){
-      if (j && j.ok && j.pay === 'card' && j.url) {
-        say((j.member ? 'You pay the member price of R900. ' : '') + 'Taking you to Paystack.', 'ok');
-        window.location.href = j.url;
-        return;
-      }
-      go.classList.remove('busy');
+  book.addEventListener('click', function(){
+    if (book.disabled) return;
+    book.disabled = true; book.classList.add('busy'); bookLab.textContent = 'Booking';
+    tmsg.className = 'msg';
+    var body = booking ? { action: 'invoice', booking: booking }
+                       : Object.assign({ action: 'reserve', pay: 'invoice' }, details || {});
+    post(body).then(function(j){
       if (j && j.ok) {
-        form.hidden = true;
-        if (f.date === 'To be confirmed') {
-          say('You are on the list. I will email you as soon as the next date is set.', 'ok');
-        } else if (j.emailed) {
-          say('Your seat for ' + f.date + ' is reserved' + (j.member ? ', at the member price of R900' : '') +
-              '. The confirmation is on its way to ' + f.email + '.', 'ok');
-        } else {
-          say('Your seat for ' + f.date + ' is reserved. I will be in touch by email with the payment details.', 'ok');
-        }
-        msg.focus();
+        closeTrouble();
+        var d = j.date || (details && details.date) || 'the workshop';
+        done(j.paid ? 'Your payment came through, and your seat for ' + d + ' is confirmed.'
+                    : 'Your spot for ' + d + ' is secured. I will send you an invoice and the Zoom link by email.');
       } else {
-        go.disabled = false; lab.textContent = idle;
-        say((j && j.error) || 'That did not go through. Try again in a moment, or WhatsApp me on 082 444 1831.', 'err');
+        book.disabled = false; book.classList.remove('busy'); bookLab.textContent = 'Make my booking';
+        tmsg.textContent = (j && j.error) || FAIL; tmsg.className = 'msg on err';
       }
     }).catch(function(){
-      go.classList.remove('busy'); go.disabled = false; lab.textContent = idle;
-      say('That did not go through. Try again in a moment, or WhatsApp me on 082 444 1831.', 'err');
+      book.disabled = false; book.classList.remove('busy'); bookLab.textContent = 'Make my booking';
+      tmsg.textContent = FAIL; tmsg.className = 'msg on err';
     });
   });
 
-  /* Back from Paystack. The reference stays in the address until Paystack
-     has answered, so a refresh after a dropped connection checks again. */
+  function checkPayment(ref){
+    say('Checking your payment.', 'ok');
+    return post({ action: 'verify', reference: ref }).then(function(j){
+      if (!j || !j.ok) throw new Error('verify');
+      if (j.paid) {
+        done('Your payment came through, and your seat' + (j.date ? ' for ' + j.date : '') +
+             ' is confirmed. The confirmation is on its way to your inbox.');
+      } else {
+        trouble(j.booking);
+      }
+      return j;
+    });
+  }
+
+  form.addEventListener('submit', function(ev){
+    ev.preventDefault();
+    if (go.disabled) return;
+    details = { date: sel.value, name: val('w-name'), email: val('w-email'),
+                phone: val('w-phone'), notes: val('w-notes'), source: 'woema page' };
+    if (!details.name) return bad('w-name', 'I need your name.');
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(details.email)) return bad('w-email', 'That email does not look right.');
+    if (details.phone.replace(/\D/g, '').length < 9) return bad('w-phone', 'That phone number looks too short.');
+
+    booking = null;
+    go.disabled = true; go.classList.add('busy');
+    lab.textContent = tbc ? 'Adding you' : 'Opening the payment';
+    msg.className = 'msg';
+
+    if (tbc) {
+      post(Object.assign({ action: 'reserve', pay: 'invoice' }, details)).then(function(j){
+        if (j && j.ok) return done('You are on the list. I will email you as soon as the next date is set.');
+        idle(); say((j && j.error) || FAIL, 'err');
+      }).catch(function(){ idle(); say(FAIL, 'err'); });
+      return;
+    }
+
+    post(Object.assign({ action: 'reserve', pay: 'card' }, details)).then(function(j){
+      if (j && j.ok && j.access_code) {
+        booking = j.booking;
+        if (j.member) say('You pay the member price of R900.', 'ok');
+        if (window.PaystackPop) {
+          try {
+            new PaystackPop().resumeTransaction(j.access_code, {
+              onSuccess: function(tx){
+                lab.textContent = 'Confirming';
+                checkPayment(tx.reference).catch(function(){
+                  idle();
+                  say('I could not confirm your payment just now. If money left your account, WhatsApp me on 082 444 1831 and I will confirm your seat.', 'err');
+                });
+              },
+              onCancel: function(){ trouble(); },
+              onError: function(){ trouble(); }
+            });
+            return;
+          } catch (e) { /* no popup: Paystack's own page instead */ }
+        }
+        window.location.href = j.url;
+        return;
+      }
+      if (j && j.trouble) return trouble(j.booking);
+      idle();
+      say((j && j.error) || FAIL, 'err');
+    }).catch(function(){ trouble(); });
+  });
+
+  /* Back from Paystack's own page (only when the popup could not open). The
+     reference stays in the address until Paystack has answered, so a
+     refresh after a dropped connection checks again. */
   var q = new URLSearchParams(location.search);
   var ref = q.get('reference') || q.get('trxref');
   if (ref) {
     form.hidden = true;
-    say('Checking your payment.', 'ok');
     document.getElementById('reserve').scrollIntoView();
-    post({ action: 'verify', reference: ref }).then(function(j){
-      if (!j || !j.ok) throw new Error('verify');
+    checkPayment(ref).then(function(){
       history.replaceState(null, '', location.pathname + '#reserve');
-      if (j.paid) {
-        say('Your payment came through, and your seat' + (j.date ? ' for ' + j.date : '') +
-            ' is confirmed. The confirmation is on its way to your inbox.', 'ok');
-      } else {
-        form.hidden = false;
-        say('That payment did not go through, so your seat is not confirmed yet. Try again, or choose EFT and I will email you the payment details.', 'err');
-      }
-      msg.focus();
     }).catch(function(){
       say('I could not check your payment just now. Refresh this page in a minute, or WhatsApp me on 082 444 1831.', 'err');
     });

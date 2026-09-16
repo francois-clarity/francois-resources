@@ -3,22 +3,32 @@
  * Seat reservations for WOEMA, the three-hour live workshop (R1,500, three
  * Friday mornings every school term, three weeks apart). Built 15 Sep 2026.
  * Card payment through Paystack and the member price added 16 Sep 2026.
+ * Same afternoon, his call: one card option on the page (Paystack's popup,
+ * no choice of methods), and when the card does not go through, "Having
+ * trouble with the payment? No problem. Make your booking to secure your
+ * spot, and I'll send you an invoice."
  *
- * Two actions:
+ * Three actions:
  *
- *   {action: 'reserve', pay: 'card'|'eft', date, name, email, phone, notes}
+ *   {action: 'reserve', pay: 'card'|'invoice', date, name, email, phone, notes}
  *     1. KV first, always. A reservation is somebody's intention to pay him,
  *        and it must not depend on Mailchimp, Gmail or Paystack being up.
  *     2. The price is decided HERE, never in the browser: R1,500, or R900
  *        (40% off) when the email belongs to a Clarity Quest or Personal
  *        Growth Weekly member. See memberPrice() for what counts.
- *     3. pay 'card': Paystack initialises a transaction for that amount and
- *        the caller is sent to Paystack's own checkout. Nothing is emailed
- *        yet, because nothing is paid yet; the emails go out on 'verify'.
- *        Paystack refuses foreign cards on this account (closed since
- *        31 Jul 2026), which is why the page keeps the EFT route.
- *     4. pay 'eft': the old flow. Mailchimp tags, the confirmation to the
- *        person, and a note to Francois, who sends payment details by hand.
+ *     3. pay 'card': Paystack initialises a transaction for that amount. The
+ *        page opens it in Paystack's popup with the access_code (the
+ *        authorization_url is the fallback if the popup script fails).
+ *        Nothing is emailed yet, because nothing is paid yet.
+ *     4. pay 'invoice' (a date still to be set, or a card that never
+ *        started): Mailchimp tags, the confirmation to the person, and a
+ *        note to Francois, who sends the invoice by hand.
+ *
+ *   {action: 'invoice', booking}
+ *     The card did not go through and they chose "Make my booking". Turns the
+ *     same KV row into an invoice booking and sends the same two emails as
+ *     pay 'invoice'. Paystack refuses foreign cards on this account (closed
+ *     since 31 Jul 2026), so this is also how overseas people book.
  *
  *   {action: 'verify', reference}
  *     Paystack sends people back to /woema/?reference=... and the page calls
@@ -63,6 +73,7 @@ export async function onRequestPost({ request, env }) {
   catch { return json({ ok: false, error: 'bad json' }, 400); }
 
   if (p.action === 'verify') return verify(p, env);
+  if (p.action === 'invoice') return invoice(p, env);
   return reserve(p, request, env);
 }
 
@@ -74,7 +85,7 @@ async function reserve(p, request, env) {
   const phone = clip(p.phone, 40);
   const notes = clip(p.notes, 600);
   const date  = clip(p.date, 40);
-  const pay   = p.pay === 'card' ? 'card' : 'eft';
+  const pay   = p.pay === 'card' ? 'card' : 'invoice';
 
   if (!name) return json({ ok: false, error: 'I need your name.' }, 400);
   if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
@@ -94,7 +105,7 @@ async function reserve(p, request, env) {
     const rl = 'rl:woema:' + ip + ':' + new Date().toISOString().slice(0, 13);
     const tries = parseInt(await env.FUNNEL.get(rl) || '0', 10);
     if (tries >= CARD_TRIES_PER_HOUR) {
-      return json({ ok: false, error: 'Too many attempts from here. Try again in an hour, or choose EFT.' }, 429);
+      return json({ ok: false, error: 'Too many attempts from here. Try again in an hour, or WhatsApp me on 082 444 1831.' }, 429);
     }
     await env.FUNNEL.put(rl, String(tries + 1), { expirationTtl: 7200 });
   }
@@ -106,7 +117,7 @@ async function reserve(p, request, env) {
   const row = {
     timestamp: new Date().toISOString(),
     date, iso, name, email, phone, notes, test: isTest,
-    pay: card ? 'card' : 'eft', member, amount: cents / 100, paid: false,
+    pay: card ? 'card' : 'invoice', member, amount: cents / 100, paid: false,
     source: clip(p.source, 80) || 'woema page',
   };
 
@@ -118,9 +129,9 @@ async function reserve(p, request, env) {
     return json({ ok: false, error: 'That did not save. Try again in a moment.' }, 500);
   }
 
-  // 2. card: hand over to Paystack, and say nothing to anyone until it is paid
+  // 2. card: set up the Paystack transaction, and say nothing to anyone until it is paid
   if (card) {
-    if (!env.PAYSTACK_SECRET_KEY) return json({ ok: false, error: 'Card payments are not set up. Choose EFT for now.' }, 503);
+    if (!env.PAYSTACK_SECRET_KEY) return json({ ok: false, trouble: true, booking: key }, 503);
     try {
       const origin = new URL(request.url).origin;
       const r = await fetch('https://api.paystack.co/transaction/initialize', {
@@ -147,14 +158,40 @@ async function reserve(p, request, env) {
       row.reference = d.data.reference;
       await env.FUNNEL.put(key, JSON.stringify(row));
       await tag(env, email, first, isTest ? ['test'] : ['woema-checkout']);
-      return json({ ok: true, pay: 'card', url: d.data.authorization_url, amount: cents / 100, member });
+      return json({ ok: true, pay: 'card', access_code: d.data.access_code, url: d.data.authorization_url,
+                    booking: key, amount: cents / 100, member });
     } catch {
-      return json({ ok: false, error: 'The card payment did not start. Try again, or choose EFT.' }, 502);
+      // the page offers the invoice booking for this same row
+      return json({ ok: false, trouble: true, booking: key }, 502);
     }
   }
 
-  // 3. EFT, or a date still to be set: the reservation stands on its own
-  const tags = isTest ? ['test'] : ['woema-reserved', 'woema-' + iso].concat(member ? ['woema-member'] : []);
+  // 3. invoice, or a date still to be set: the reservation stands on its own
+  return confirmInvoice(env, key, row);
+}
+
+async function invoice(p, env) {
+  const key = clip(p.booking, 120);
+  if (!env.FUNNEL || key.indexOf('woema:') !== 0) return json({ ok: false, error: 'That booking was not found.' }, 400);
+  const raw = await env.FUNNEL.get(key);
+  if (!raw) return json({ ok: false, error: 'That booking was not found.' }, 404);
+  const row = JSON.parse(raw);
+  if (row.paid) return json({ ok: true, paid: true, date: row.date });
+  if (row.pay === 'invoice') return json({ ok: true, date: row.date, again: true });
+  row.pay = 'invoice';
+  row.invoice_at = new Date().toISOString();
+  await env.FUNNEL.put(key, JSON.stringify(row));
+  return confirmInvoice(env, key, row, true);
+}
+
+/* The booking stands without payment: tags, the confirmation to the person
+   and the note to Francois, who sends the invoice. */
+async function confirmInvoice(env, key, row, afterCard) {
+  const { date, iso, name, email, phone, notes, member } = row;
+  const isTest = row.test;
+  const first = name.split(/\s+/)[0];
+  const tags = isTest ? ['test']
+    : ['woema-reserved', 'woema-' + iso].concat(iso === 'tbc' ? [] : ['woema-invoice'], member ? ['woema-member'] : []);
   const captured = await tag(env, email, first, tags);
 
   const short = date === TBC ? '' : date.replace(/\s\d{4}$/, '');
@@ -167,12 +204,14 @@ async function reserve(p, request, env) {
     : ['Hi ' + first, '',
        'Your seat at WOEMA on ' + date + ' is reserved. We start at 09:00 South African time and finish at 12:00, on Zoom.',
        '',
-       "I'll send you the payment details (" + price + ') and the Zoom link in a separate email.',
+       "I'll send you an invoice (" + price + ') and the Zoom link in a separate email.',
        '', 'See you there.', '', 'Much love,', 'Francois'].join('\n');
   const emailed = await mail(env, email, subject, body);
 
   const note = [
-    (isTest ? 'TEST reservation, from your own address. Nothing real to do.' : 'New WOEMA reservation, paying by EFT.'),
+    (isTest ? 'TEST reservation, from your own address. Nothing real to do.'
+            : afterCard ? 'New WOEMA booking. The card payment did not go through, so they asked for an invoice.'
+                        : 'New WOEMA reservation, to be invoiced.'),
     '',
     'Date: ' + date,
     'Name: ' + name,
@@ -182,14 +221,14 @@ async function reserve(p, request, env) {
     'What keeps getting in their way: ' + (notes || '(left blank)'),
     '',
     iso === 'tbc' ? 'Next step: let them know when the next date is set.'
-                  : 'Next step: send the payment details (' + (member ? 'R900' : 'R1,500') + ') and the Zoom link.',
+                  : 'Next step: send the invoice (' + (member ? 'R900' : 'R1,500') + ') and the Zoom link.',
     'Confirmation email to them: ' + (emailed ? 'sent' : 'NOT sent, the mailer failed'),
     'Mailchimp: ' + (captured ? 'tagged ' + tags.join(', ') : 'NOT tagged'),
     'Saved in KV as ' + key,
   ].join('\n');
   await mail(env, NOTIFY, (isTest ? 'TEST ' : '') + 'WOEMA reservation: ' + name + ', ' + (short || 'next date TBC'), note);
 
-  return json({ ok: true, pay: 'eft', emailed, captured, member, amount: cents / 100, test: isTest });
+  return json({ ok: true, pay: 'invoice', emailed, captured, member, amount: row.amount, date, test: isTest });
 }
 
 async function verify(p, env) {
@@ -216,7 +255,7 @@ async function verify(p, env) {
 
   const expected = Math.round(row.amount * 100);
   const paid = tx.status === 'success' && tx.currency === 'ZAR' && tx.amount >= expected;
-  if (!paid) return json({ ok: true, paid: false, date: row.date });
+  if (!paid) return json({ ok: true, paid: false, date: row.date, booking: key });
   if (row.paid) return json({ ok: true, paid: true, date: row.date, again: true });
 
   row.paid = true;

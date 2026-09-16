@@ -234,10 +234,14 @@ GATES = {
                  "data-woema-options", "data-woema-stops",
                  "/api/woema", "R1,500", "woema/og.png", 'id="reserve"', "0800 567 567",
                  # card payment and the member price, added 16 Sep 2026
-                 "R900", 'name="pay"', "action: 'verify'",
+                 "R900", "action: 'verify'",
+                 # one card option in Paystack's popup, and the invoice fallback
+                 "js.paystack.co/v2/inline.js", "resumeTransaction", "Having trouble with the payment?",
+                 "action: 'invoice'",
                  "https://events.francoisesterhuizen.com/woema/"],
         "must_not": ["noindex", "mailto:", "Pattern Breaker", "once a month",
-                     "resources.francoisesterhuizen.com/woema", "no payment on this page"],
+                     "resources.francoisesterhuizen.com/woema", "no payment on this page",
+                     "How would you like to pay", "EFT, or I'm outside South Africa"],
     },
 }
 
