@@ -78,6 +78,13 @@ function buildEmail(tool, cfg, name, p) {
   return lines.join('\n');
 }
 
+/* His own address in any client form means a test. It is stored and tagged
+   test so it never lands in the real segment, and the subject is prefixed so
+   it is obvious in the inbox. The email still goes, because sending it to
+   himself is how any of this gets tested at all. His standing rule, applied
+   here so it covers every tool on this endpoint rather than one. */
+const TEST_ADDRESS = 'francois@francoisesterhuizen.com';
+
 export async function onRequestPost({ request, env }) {
   let p;
   try { p = await request.json(); }
@@ -127,6 +134,7 @@ export async function onRequestPost({ request, env }) {
       { name: 'assessment:' + tool, status: 'active' },
     ];
     if (key) tags.push({ name: `result:${tool}:${key}`, status: 'active' });
+    if (email === TEST_ADDRESS) tags.push({ name: 'test', status: 'active' });
 
     await fetch(memberUrl + '/tags', {
       method: 'POST',
@@ -160,7 +168,7 @@ export async function onRequestPost({ request, env }) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           to: email,
-          subject: TOOLS[tool].subject,
+          subject: (email === TEST_ADDRESS ? 'TEST: ' : '') + TOOLS[tool].subject,
           body: buildEmail(tool, TOOLS[tool], first, p),
           key: env.RESULTS_MAILER_KEY || '',
         }),
