@@ -125,6 +125,10 @@
   .facts dd{font-size:16px;font-weight:600;line-height:1.45;font-variant-numeric:tabular-nums}
   .facts dd small{display:block;font-size:14px;font-weight:300;color:var(--muted)}
 
+  .take{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:36px}
+  .take .pain{display:block;font-size:12.5px;font-weight:700;letter-spacing:3.2px;text-transform:uppercase;color:var(--teal);margin-bottom:10px}
+  .take h3{font-size:21px;font-weight:800;letter-spacing:-.01em;line-height:1.3;margin-bottom:10px}
+  .take p{color:var(--muted);font-weight:300;font-size:17px;line-height:1.6}
   .fit{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:40px}
   .fit h3{font-weight:700;font-size:13px;letter-spacing:3.5px;text-transform:uppercase;margin-bottom:16px}
   .fit .yes h3{color:var(--teal)}
@@ -195,7 +199,7 @@
 
   @media (max-width:760px){
     .wrap{gap:84px}
-    .steps,.fit{grid-template-columns:1fr;gap:28px}
+    .steps,.fit,.take{grid-template-columns:1fr;gap:28px}
     .row,.row.two{grid-template-columns:1fr}
     .facts{grid-template-columns:1fr;gap:16px}
   }
@@ -272,6 +276,28 @@
       </li>
     </ol>
     <p class="so">So you can get out of your own way.</p>
+  </section>
+
+  <section class="sec">
+    <h2>What you walk away with</h2>
+    <div class="take">
+      <div>
+        <span class="pain">Procrastination</span>
+        <h3>The job you keep putting off, named.</h3>
+        <p>By the end you will know which belief makes that one job feel heavier than everything else on the list, and you will have chosen the first move you are making this week.</p>
+      </div>
+      <div>
+        <span class="pain">Time management</span>
+        <h3>A week you actually chose.</h3>
+        <p>Diaries fill up with things nobody sat down and decided on. You leave having written what your weeks are for, and what comes out of them to make the room.</p>
+      </div>
+      <div>
+        <span class="pain">Self-doubt</span>
+        <h3>Something to say back to it.</h3>
+        <p>The doubt is usually one old sentence on repeat. You leave with yours written down, where you learned it, and the line you are going to use when it turns up again on Monday.</p>
+      </div>
+    </div>
+    <p class="so">All three on one page, in your own handwriting, before we finish.</p>
   </section>
 
   <section class="sec">
