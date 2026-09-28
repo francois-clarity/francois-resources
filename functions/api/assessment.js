@@ -45,6 +45,10 @@ const TOOLS = {
   'belief-inventory':        { merge: 'belief-inventory',        subject: 'Your belief inventory' },
   'four-voices':             { merge: 'four-voices',             subject: 'The four voices in your head' },
   'emotional-language-wheel':{ merge: 'emotional-language-wheel',subject: 'Your check-in' },
+  /* Lives on its own subdomain and posts here through a small proxy on that
+     site, rather than carrying its own copy of these four secrets. Added
+     28 Sep 2026: Francois asked for the version where he sets nothing up. */
+  'what-keeps-you-stuck':    { merge: 'what-keeps-you-stuck',    subject: 'What keeps you stuck: your result', assessment: true },
 };
 
 /* The email itself. Kept here rather than in the Apps Script so the copy is in
@@ -56,13 +60,20 @@ function buildEmail(tool, cfg, name, p) {
   const lines = ['Hi ' + name, ''];
   if (cfg.discreet) {
     lines.push('Here is the link back to what you worked out. It opens exactly as you left it.');
+  } else if (result && cfg.assessment) {
+    /* An assessment hands somebody a result. A tool hands back what they
+       worked out themselves. Saying "in your own words" about a result they
+       did not write is the sort of small wrongness a reader notices. */
+    lines.push('Your result came back as ' + result + '. Here it is again, whole:');
   } else if (result) {
     lines.push('You came out as ' + result + '. Here is the whole thing again, in your own words.');
   } else {
     lines.push('Here is what you worked out, in your own words.');
   }
   lines.push('', link, '');
-  lines.push('Keep the link. It is the only copy.');
+  lines.push(cfg.assessment
+    ? 'It opens exactly as you left it, on any device. Keep the link.'
+    : 'Keep the link. It is the only copy.');
   lines.push('', 'Much love,', 'Francois');
   return lines.join('\n');
 }
