@@ -168,12 +168,6 @@
   .nextdate{font-weight:800;font-size:clamp(34px,6vw,60px);letter-spacing:-.03em;line-height:1.05;margin-top:10px}
   .seat-date{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px;font-weight:700;font-size:17px;color:var(--text);font-variant-numeric:tabular-nums}
   .seat-date .dot{color:var(--teal)}
-  .reveal{border-radius:14px;padding:14px 16px;font-size:15.5px;line-height:1.5;color:var(--muted);
-    background:rgba(0,0,0,.22);border:1px solid rgba(255,255,255,.12)}
-  .reveal[hidden]{display:none}
-  .reveal.win{color:#fff;border-color:rgba(24,192,192,.7);
-    background:linear-gradient(120deg,rgba(24,192,192,.24),rgba(24,192,192,.06));animation:pop .55s cubic-bezier(.16,1,.3,1)}
-  .reveal.win b{color:var(--teal);font-weight:800}
   @keyframes pop{0%{transform:scale(.96);opacity:0}100%{transform:none;opacity:1}}
   .gift{display:grid;gap:12px}
   .toggle{display:flex;gap:12px;align-items:flex-start;cursor:pointer;background:rgba(0,0,0,.22);
@@ -183,25 +177,10 @@
   .toggle small{display:block;font-weight:300;color:var(--muted);font-size:14px;margin-top:3px}
   .row.two{grid-template-columns:repeat(2,minmax(0,1fr))}
   .row[hidden]{display:none}
-  .total{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px;border-top:1px solid rgba(255,255,255,.1);
-    padding-top:16px;font-variant-numeric:tabular-nums}
-  .t-label{width:100%;font-size:12px;letter-spacing:2.4px;text-transform:uppercase;color:var(--faint);font-weight:700}
-  .t-was{color:var(--faint);text-decoration:line-through;font-size:20px;font-weight:600}
-  .t-now{font-size:34px;font-weight:800;letter-spacing:-.02em}
-  .t-seats{color:var(--muted);font-size:15px}
-  .t-save{width:100%;color:var(--teal);font-weight:700;font-size:15px}
-  .t-was[hidden],.t-save[hidden]{display:none}
   .wl{display:grid;gap:12px;border-top:1px solid rgba(255,255,255,.1);padding-top:22px}
   .wl-line{color:var(--muted);font-size:16px;line-height:1.55;max-width:640px}
   .wl-line strong{color:var(--text)}
   .wl .again{justify-self:start;padding-left:0}
-  .trouble{margin:auto;width:100%;max-width:min(460px,calc(100vw - 32px));border:1px solid rgba(24,192,192,.45);
-    border-radius:22px;background:var(--raise);color:var(--text);padding:30px clamp(20px,5vw,34px);display:none}
-  .trouble[open]{display:grid;gap:14px}
-  .trouble::backdrop{background:rgba(10,14,20,.72)}
-  .trouble h3{font-size:22px;font-weight:800;letter-spacing:-.01em;line-height:1.2}
-  .trouble p{color:var(--muted);font-size:16.5px;line-height:1.55}
-  .trouble-act{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:6px}
   .again{background:none;border:0;color:var(--muted);font:inherit;font-size:15px;font-weight:600;
     text-decoration:underline;text-underline-offset:4px;cursor:pointer;padding:10px 4px}
   .again:hover{color:var(--teal)}
@@ -259,7 +238,7 @@
     </ul>
     <div class="act">
       <a class="btn" href="#reserve">Reserve your seat</a>
-      <span class="price">R1,500 per person</span>
+      <span class="price">Free</span>
     </div>
   </header>
 
@@ -305,7 +284,7 @@
       <dl class="facts">
         <div><dt>Time</dt><dd><span data-woema-time>09:00 to 12:00 SAST</span><small>Three hours, live</small></dd></div>
         <div><dt>Where</dt><dd><span data-woema-where>Online, on Zoom</span><small>Now and then in person, in Stellenbosch</small></dd></div>
-        <div><dt>Price</dt><dd>R1,500<small>R900 for Clarity Quest and Personal Growth Weekly members. Bring a friend and you each pay R1,000.</small></dd></div>
+        <div><dt>Price</dt><dd>Free<small>No charge, and you can invite a friend to join you.</small></dd></div>
       </dl>
     </div>
   </section>
@@ -357,43 +336,19 @@
         </label>
       </div>
 
-      <label for="w-prog">Are you part of one of my programmes?
-        <select id="w-prog" name="programme">
-          <option value="">No, not yet</option>
-          <option value="Clarity Quest">Clarity Quest</option>
-          <option value="Personal Growth Weekly">Personal Growth Weekly</option>
-        </select>
-      </label>
-      <div class="reveal" id="w-reveal" role="status" hidden></div>
-
       <div class="gift">
-        <label class="toggle" for="w-friend">
-          <input type="checkbox" id="w-friend" name="friend">
-          <span><b>Bring a friend for R500 more.</b><small>Two seats for R2,000, so you each pay R1,000. I'll send them their own confirmation.</small></span>
+        <label class="toggle" for="w-gift">
+          <input type="checkbox" id="w-gift" name="gift">
+          <span><b>I'd like to invite a friend.</b><small>I'll send you the flyer, by email and on WhatsApp, ready to pass on to whoever came to mind just now.</small></span>
         </label>
-        <div class="row two" id="w-friend-fields" hidden>
-          <label for="w-fname">Your friend's name
-            <input id="w-fname" name="friend_name" type="text" autocomplete="off">
-          </label>
-          <label for="w-femail">Your friend's email
-            <input id="w-femail" name="friend_email" type="email" inputmode="email" autocomplete="off">
-          </label>
-        </div>
       </div>
 
       <label for="w-notes">What keeps getting in your way? <span class="opt">Optional. A sentence is plenty.</span>
         <textarea id="w-notes" name="notes" maxlength="600"></textarea>
       </label>
 
-      <div class="total" aria-live="polite">
-        <span class="t-label">Your total</span>
-        <span class="t-was" id="w-was" hidden>R1,500</span>
-        <span class="t-now" id="w-now">R1,500</span>
-        <span class="t-seats" id="w-seats">for one seat</span>
-        <span class="t-save" id="w-save" hidden></span>
-      </div>
-      <button class="btn go" id="w-go" type="submit"><span class="sp"></span><span class="lab">Reserve and pay R1,500</span></button>
-      <p class="fine">Card payments are handled by Paystack.</p>
+      <button class="btn go" id="w-go" type="submit"><span class="sp"></span><span class="lab">Reserve my seat</span></button>
+      <p class="fine">Free. Bring three hours and something to write with.</p>
     </form>
     <p class="msg" id="w-msg" tabindex="-1" role="status"></p>
 
@@ -417,15 +372,6 @@
       <p class="msg" id="wl-msg" tabindex="-1" role="status"></p>
     </div>
 
-    <dialog class="trouble" id="w-trouble" aria-labelledby="w-trouble-h">
-      <h3 id="w-trouble-h">Having trouble with the payment?</h3>
-      <p>No problem. Make your booking to secure your spot, and I'll send you an invoice.</p>
-      <div class="trouble-act">
-        <button class="btn go" id="w-book" type="button"><span class="sp"></span><span class="lab">Make my booking</span></button>
-        <button class="again" id="w-again" type="button">Try the card again</button>
-      </div>
-      <p class="msg" id="w-tmsg" role="status"></p>
-    </dialog>
   </section>
 
   <div class="foot">
@@ -436,32 +382,24 @@
 
 </div>
 
-<script src="https://js.paystack.co/v2/inline.js"></script>
 <script>
-/* Reserve a seat and pay. One date only: the next WOEMA, written into the
+/* Register for WOEMA. One date only: the next one, written into the
    data-woema-date spans by launch/events.py from his calendar. If that date
    does not work, the waiting list is the other door.
-   The price is decided by /api/woema, never here. This page only shows the
-   total so people can see what they are choosing:
-     R1,500 a seat; R900 when the membership checks out (the "Surprise");
-     plus R500 for a friend's seat.
-   Paystack's popup takes the card on this page and /api/woema verifies it
-   before anything is confirmed. When the card does not go through, the
-   trouble dialog offers the booking with an invoice instead. */
+
+   Free since 28 Sep 2026, so there is no price to show, no card to take and
+   nothing that can fail halfway. Name, email, phone, and a question about
+   inviting somebody. /api/woema does the rest. */
 (function(){
-  var FULL = 1500, MEMBER = 900, FRIEND = 500;
   var $ = function(id){ return document.getElementById(id); };
   var form = $('w-form'), msg = $('w-msg'), go = $('w-go'), lab = go.querySelector('.lab');
-  var prog = $('w-prog'), reveal = $('w-reveal'), friend = $('w-friend'), ffields = $('w-friend-fields');
-  var dlg = $('w-trouble'), book = $('w-book'), bookLab = book.querySelector('.lab'), tmsg = $('w-tmsg');
+  var gift = $('w-gift');
   var dateEl = document.querySelector('.seat-date [data-woema-date]');
   var DATE = dateEl ? dateEl.textContent.trim() : '';
   var TBC = !DATE || DATE === 'To be confirmed';
-  var member = false, checkedEmail = '', checking = null, booking = null, details = null;
   var FAIL = 'That did not go through. Try again in a moment, or WhatsApp me on 082 444 1831.';
 
   function val(id){ return $(id).value.trim(); }
-  function rand(n){ return 'R' + String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
   function okEmail(e){ return /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e); }
   function say(el, t, k){ el.textContent = t; el.className = 'msg on ' + k; }
   function post(url, body){
@@ -472,138 +410,27 @@
   document.querySelectorAll('input,textarea').forEach(function(i){
     i.addEventListener('input', function(){ i.removeAttribute('aria-invalid'); msg.className = 'msg'; });
   });
+  function idle(){ go.classList.remove('busy'); go.disabled = false; lab.textContent = 'Reserve my seat'; }
 
-  /* ---------- the live total ---------- */
-  function total(){
-    var seats = friend.checked ? 2 : 1;
-    var amount = (member ? MEMBER : FULL) + (friend.checked ? FRIEND : 0);
-    var save = FULL * seats - amount;
-    $('w-now').textContent = rand(amount);
-    $('w-seats').textContent = seats === 2 ? 'for two seats' : 'for one seat';
-    $('w-was').textContent = rand(FULL * seats);
-    $('w-was').hidden = save <= 0;
-    $('w-save').hidden = save <= 0;
-    $('w-save').textContent = 'You save ' + rand(save) + (seats === 2 ? ' between you' : '');
-    lab.textContent = 'Reserve and pay ' + rand(amount);
-  }
-
-  /* ---------- the member reveal ---------- */
-  function showReveal(html, win){
-    reveal.innerHTML = html; reveal.className = 'reveal' + (win ? ' win' : ''); reveal.hidden = false;
-  }
-  function checkMember(){
-    var p = prog.value, email = val('w-email').toLowerCase();
-    if (!p) { member = false; reveal.hidden = true; total(); return; }
-    if (!okEmail(email)) { member = false; total();
-      showReveal('Add the email address your ' + p + ' membership is under, and I\'ll check it.', false); return; }
-    if (email === checkedEmail && checking === null) { return; }
-    checkedEmail = email;
-    showReveal('Checking your membership…', false);
-    var mine = checking = post('/api/woema', { action: 'quote', email: email }).then(function(j){
-      if (mine !== checking) return;
-      checking = null;
-      member = !!(j && j.ok && j.member);
-      if (member) {
-        showReveal('<b>Surprise.</b> As a ' + p + ' member you save R600. Your seat is R900 instead of R1,500.', true);
-      } else if (j && j.error) {
-        showReveal(j.error, false);
-      } else {
-        showReveal('I can\'t find a membership under this email. Use the address you signed up with, or WhatsApp me on 082 444 1831 and I\'ll sort it out.', false);
-      }
-      total();
-    }).catch(function(){ checking = null; member = false; total(); reveal.hidden = true; });
-  }
-  prog.addEventListener('change', function(){ checkedEmail = ''; checkMember(); });
-  $('w-email').addEventListener('change', function(){ if (prog.value) checkMember(); });
-
-  /* ---------- bring a friend ---------- */
-  friend.addEventListener('change', function(){
-    ffields.hidden = !friend.checked; total();
-    if (friend.checked) $('w-fname').focus();
-  });
-
-  /* ---------- the trouble dialog ---------- */
-  function idle(){ go.classList.remove('busy'); go.disabled = false; total(); }
-  function done(text){ form.hidden = true; $('w-wl').hidden = true; say(msg, text, 'ok'); msg.focus(); }
-  function trouble(b){
-    if (b) booking = b;
-    idle(); form.hidden = false; msg.className = 'msg'; tmsg.className = 'msg';
-    book.disabled = false; book.classList.remove('busy'); bookLab.textContent = 'Make my booking';
-    if (dlg.showModal) { if (!dlg.open) dlg.showModal(); } else { dlg.setAttribute('open', ''); }
-  }
-  function closeTrouble(){ if (dlg.close) dlg.close(); else dlg.removeAttribute('open'); }
-  $('w-again').addEventListener('click', function(){ closeTrouble(); go.focus(); });
-  function confirmedText(j, paid){
-    var d = j.date || DATE, two = (j.seats || 1) === 2;
-    if (paid) return 'Your payment came through, and your ' + (two ? 'seats' : 'seat') + ' for ' + d + (two ? ' are' : ' is') +
-      ' confirmed. ' + (two ? 'You and ' + (j.friend || 'your friend') + ' each get a confirmation by email.' : 'The confirmation is on its way to your inbox.');
-    return 'Your ' + (two ? 'spots' : 'spot') + ' for ' + d + (two ? ' are' : ' is') + ' secured. I will send you an invoice and the Zoom link by email.';
-  }
-  book.addEventListener('click', function(){
-    if (book.disabled) return;
-    book.disabled = true; book.classList.add('busy'); bookLab.textContent = 'Booking'; tmsg.className = 'msg';
-    var body = booking ? { action: 'invoice', booking: booking } : Object.assign({ action: 'reserve', pay: 'invoice' }, details || {});
-    post('/api/woema', body).then(function(j){
-      if (j && j.ok) { closeTrouble(); done(confirmedText(j, !!j.paid)); return; }
-      book.disabled = false; book.classList.remove('busy'); bookLab.textContent = 'Make my booking';
-      tmsg.textContent = (j && j.error) || FAIL; tmsg.className = 'msg on err';
-    }).catch(function(){
-      book.disabled = false; book.classList.remove('busy'); bookLab.textContent = 'Make my booking';
-      tmsg.textContent = FAIL; tmsg.className = 'msg on err';
-    });
-  });
-
-  function checkPayment(ref){
-    say(msg, 'Checking your payment.', 'ok');
-    return post('/api/woema', { action: 'verify', reference: ref }).then(function(j){
-      if (!j || !j.ok) throw new Error('verify');
-      if (j.paid) done(confirmedText(j, true)); else trouble(j.booking);
-      return j;
-    });
-  }
-
-  /* ---------- reserve and pay ---------- */
+  /* ---------- register ---------- */
   form.addEventListener('submit', function(ev){
     ev.preventDefault();
     if (go.disabled) return;
-    details = { date: DATE, name: val('w-name'), email: val('w-email'), phone: val('w-phone'), notes: val('w-notes'),
-                programme: prog.value, friend: friend.checked, friend_name: val('w-fname'), friend_email: val('w-femail'),
-                source: 'woema page' };
-    if (!details.name) return bad('w-name', 'I need your name.');
-    if (!okEmail(details.email)) return bad('w-email', 'That email does not look right.');
-    if (details.phone.replace(/\D/g, '').length < 9) return bad('w-phone', 'That phone number looks too short.');
-    if (details.friend && !details.friend_name) return bad('w-fname', "I need your friend's name.");
-    if (details.friend && !okEmail(details.friend_email)) return bad('w-femail', "Your friend's email does not look right.");
-    if (details.friend && details.friend_email.toLowerCase() === details.email.toLowerCase()) return bad('w-femail', 'Your friend needs their own email address.');
+    var d = { action: 'reserve', date: DATE, name: val('w-name'), email: val('w-email'),
+              phone: val('w-phone'), notes: val('w-notes'), gift: gift.checked, source: 'woema page' };
+    if (!d.name) return bad('w-name', 'I need your name.');
+    if (!okEmail(d.email)) return bad('w-email', 'That email does not look right.');
+    if (d.phone.replace(/\D/g, '').length < 9) return bad('w-phone', 'That phone number looks too short.');
 
-    booking = null;
-    go.disabled = true; go.classList.add('busy'); lab.textContent = 'Opening the payment'; msg.className = 'msg';
-
-    post('/api/woema', Object.assign({ action: 'reserve', pay: 'card' }, details)).then(function(j){
-      if (j && j.ok && j.access_code) {
-        booking = j.booking;
-        member = !!j.member; total();
-        if (window.PaystackPop) {
-          try {
-            new PaystackPop().resumeTransaction(j.access_code, {
-              onSuccess: function(tx){
-                lab.textContent = 'Confirming';
-                checkPayment(tx.reference).catch(function(){
-                  idle(); say(msg, 'I could not confirm your payment just now. If money left your account, WhatsApp me on 082 444 1831 and I will confirm your seat.', 'err');
-                });
-              },
-              onCancel: function(){ trouble(); },
-              onError: function(){ trouble(); }
-            });
-            return;
-          } catch (e) { /* no popup: Paystack's own page instead */ }
-        }
-        window.location.href = j.url;
-        return;
-      }
-      if (j && j.trouble) return trouble(j.booking);
-      idle(); say(msg, (j && j.error) || FAIL, 'err');
-    }).catch(function(){ trouble(); });
+    go.disabled = true; go.classList.add('busy'); lab.textContent = 'Booking your seat'; msg.className = 'msg';
+    post('/api/woema', d).then(function(j){
+      if (!j || !j.ok) { idle(); return say(msg, (j && j.error) || FAIL, 'err'); }
+      form.hidden = true; $('w-wl').hidden = true;
+      var t = 'Your seat for ' + (j.date || DATE) + ' is booked, and it costs you nothing. '
+            + "I'll send the Zoom link closer to the day.";
+      if (j.gift) t += ' The flyer is in your inbox now, ready to send on to your friend.';
+      say(msg, t, 'ok'); msg.focus();
+    }).catch(function(){ idle(); say(msg, FAIL, 'err'); });
   });
 
   /* ---------- the waiting list ---------- */
@@ -631,17 +458,6 @@
     document.querySelector('.seat-date').hidden = true;
     $('w-wl-line').innerHTML = '<strong>The next date is being set.</strong> Join the waiting list and I\'ll let you know as soon as it\'s scheduled.';
     openList();
-  }
-  total();
-
-  /* ---------- back from Paystack's own page (only when the popup could not open) ---------- */
-  var q = new URLSearchParams(location.search);
-  var ref = q.get('reference') || q.get('trxref');
-  if (ref) {
-    form.hidden = true;
-    $('reserve').scrollIntoView();
-    checkPayment(ref).then(function(){ history.replaceState(null, '', location.pathname + '#reserve'); })
-      .catch(function(){ say(msg, 'I could not check your payment just now. Refresh this page in a minute, or WhatsApp me on 082 444 1831.', 'err'); });
   }
 })();
 </script>

@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>WOEMA flyer</title>
+<!-- The source of woema/flyer.png, 1080x1350, the square-ish portrait that
+     WhatsApp and Instagram both show without cropping the date off.
+     Rebuild it with:  /usr/bin/python3 woema/make_flyer.py
+     Free since 28 Sep 2026, so the two money cells became the free line and
+     the invitation. The dates come from the same calendar as the page, so
+     when the next WOEMA moves, change NEXT below and re-run. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;500;600;700;800&family=Newsreader:ital,opsz,wght@1,6..72,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0E141B; --navy:#121A24; --text:#ECEFF3; --muted:#9AA6B5;
+    --faint:#6F7C8C; --teal:#18C0C0;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{width:1080px;height:1350px;overflow:hidden;
+    font-family:'Manrope',system-ui,sans-serif;color:var(--text);
+    background:
+      radial-gradient(900px 700px at 88% 6%, rgba(24,192,192,.16), transparent 60%),
+      radial-gradient(700px 600px at 4% 96%, rgba(24,192,192,.10), transparent 62%),
+      linear-gradient(160deg, #16202B 0%, var(--navy) 46%, var(--ink) 100%);
+    padding:70px;display:flex;flex-direction:column}
+  .kicker{font-size:21px;font-weight:800;letter-spacing:4.6px;text-transform:uppercase;color:var(--teal)}
+  .word{font-size:200px;font-weight:800;letter-spacing:-6px;line-height:.96;margin:64px 0 0}
+  .rule{height:1px;background:rgba(255,255,255,.14);margin:34px 0 26px}
+  .entry{font-size:25px;color:var(--muted);line-height:1.4}
+  .entry b,.entry i{margin-right:7px}
+  .entry b{color:var(--text);font-weight:800}
+  .entry i{font-family:'Newsreader',Georgia,serif;font-style:italic;color:var(--faint)}
+  .entry .say{color:var(--teal);font-weight:700}
+  .head{font-size:60px;font-weight:800;letter-spacing:-1.6px;margin:52px 0 30px}
+  .steps{font-size:34px;font-weight:600;line-height:1.55;color:var(--text)}
+  .steps .last{color:var(--teal);font-weight:800}
+  .facts{margin-top:auto;display:grid;grid-template-columns:1fr 1fr;gap:30px 40px}
+  .facts dt{font-size:31px;font-weight:800;letter-spacing:-.4px}
+  .facts dd{font-size:26px;color:var(--muted);margin-top:4px}
+  .foot{margin-top:46px;display:flex;align-items:center;justify-content:space-between;gap:24px}
+  .next{background:var(--teal);color:#0B1016;border-radius:10px;padding:18px 28px;
+    font-size:30px;font-weight:800;letter-spacing:-.4px;display:flex;align-items:baseline;gap:16px}
+  .next span{font-size:19px;font-weight:800;letter-spacing:3.4px;text-transform:uppercase;opacity:.72}
+  .url{font-size:26px;font-weight:600;color:var(--text)}
+</style>
+</head>
+<body>
+  <p class="kicker">A live workshop with Francois Esterhuizen</p>
+  <h1 class="word">WOEMA</h1>
+  <div class="rule"></div>
+  <p class="entry"><b>woema</b> <i>noun, Afrikaans.</i> Say it <span class="say">vuma</span>. The energy that gets you moving.</p>
+  <h2 class="head">Get out of your own way.</h2>
+  <p class="steps">
+    Understand your own potential.<br>
+    Find what's blocking it.<br>
+    Reshape your paradigm.<br>
+    <span class="last">So you can get out of your own way.</span>
+  </p>
+  <dl class="facts">
+    <div><dt>Fridays</dt><dd>09:00 to 12:00 SAST</dd></div>
+    <div><dt>Live on Zoom</dt><dd>Three hours</dd></div>
+    <div><dt>Free</dt><dd>No charge to attend</dd></div>
+    <div><dt>Bring a friend</dt><dd>Free for them too</dd></div>
+  </dl>
+  <div class="foot">
+    <p class="next"><span>Next</span> <b data-woema-date>Friday 16 October</b></p>
+    <p class="url">events.francoisesterhuizen.com/woema</p>
+  </div>
+</body>
+</html>

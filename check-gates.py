@@ -231,20 +231,19 @@ GATES = {
         "must": ["WOEMA", "Get out of your own way", "Understand your own potential",
                  "Find what's blocking it", "Reshape your paradigm",
                  "data-woema-date", "data-woema-time", "data-woema-where",
-                 # one next date, the member reveal, bring a friend, the waiting list (16 Sep 2026)
-                 "Are you part of one of my programmes?", "Bring a friend for R500 more", "action: 'quote'",
+                 # one next date and the waiting list (16 Sep 2026)
                  "/api/waitlist", "event: 'woema'",
-                 "/api/woema", "R1,500", "woema/og.png", 'id="reserve"', "0800 567 567",
-                 # card payment and the member price, added 16 Sep 2026
-                 "R900", "action: 'verify'",
-                 # one card option in Paystack's popup, and the invoice fallback
-                 "js.paystack.co/v2/inline.js", "resumeTransaction", "Having trouble with the payment?",
-                 "action: 'invoice'",
+                 "/api/woema", "woema/og.png", 'id="reserve"', "0800 567 567",
+                 # free, and the invitation to bring somebody (28 Sep 2026)
+                 "Free", "I'd like to invite a friend", 'id="w-gift"', "action: 'reserve'",
                  "https://events.francoisesterhuizen.com/woema/"],
         "must_not": ["noindex", "mailto:", "Pattern Breaker", "once a month",
                      "resources.francoisesterhuizen.com/woema", "no payment on this page",
                      "How would you like to pay", "EFT, or I'm outside South Africa",
-                     "three times", "three weeks apart", "every school term", "data-woema-stops"],
+                     "three times", "three weeks apart", "every school term", "data-woema-stops",
+                     # it is free now: no price, no card, no invoice, anywhere on the page
+                     "R1,500", "R900", "R1,000", "R2,000", "paystack", "invoice",
+                     "Are you part of one of my programmes?"],
     },
 }
 
