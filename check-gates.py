@@ -494,6 +494,31 @@ LIVE_AT = {
     "woema": "https://events.francoisesterhuizen.com/woema/",
 }
 
+def fetch_live(url, tries=3):
+    """Fetch a live page, retrying a connection failure before calling it broken.
+
+    This connection drops TLS every so often, which is a fault of the route
+    rather than of the deploy. A single attempt failing made the deploy script
+    announce that a page was not serving what it should and tell Francois to
+    roll back a deployment that was in fact fine. A check that cries wolf is
+    worse than no check, because it teaches you to ignore it.
+
+    A page that answers and is missing its markers still fails, immediately.
+    Only the not-answering case is retried.
+    """
+    import time
+    last = None
+    for attempt in range(tries):
+        try:
+            req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (Macintosh) gate-check"})
+            return urllib.request.urlopen(req, timeout=20).read().decode("utf-8", "ignore"), None
+        except Exception as e:
+            last = e
+            if attempt < tries - 1:
+                time.sleep(2 + attempt * 3)
+    return None, last
+
+
 def main():
     base = pathlib.Path(__file__).parent
     live = "--live" in sys.argv
@@ -506,14 +531,13 @@ def main():
         html = (base / name / "index.html").read_text()
         all_ok &= check(name, html, "local")
         if live:
-            try:
-                # /events/ and /woema/ live on their own address since 16 Sep 2026
-                url = LIVE_AT.get(name) or "https://resources.francoisesterhuizen.com/" + (name + "/" if name else "")
-                req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (Macintosh) gate-check"})
-                h = urllib.request.urlopen(req, timeout=20).read().decode("utf-8", "ignore")
+            # /events/ and /woema/ live on their own address since 16 Sep 2026
+            url = LIVE_AT.get(name) or "https://resources.francoisesterhuizen.com/" + (name + "/" if name else "")
+            h, err = fetch_live(url)
+            if h is None:
+                print("FAIL %-32s [live] unreachable after 3 tries: %s" % (name, err)); all_ok = False
+            else:
                 all_ok &= check(name, h, "live")
-            except Exception as e:
-                print("FAIL %-32s [live] unreachable: %s" % (name, e)); all_ok = False
     sys.exit(0 if all_ok else 1)
 
 main()
