@@ -42,13 +42,22 @@ function doPost(e) {
       return out({ ok: false, error: 'missing fields' });
     }
 
-    MailApp.sendEmail({
+    var msg = {
       to: d.to,
       subject: d.subject,
       body: d.body,
       name: 'Francois Esterhuizen',
       replyTo: 'francois@francoisesterhuizen.com'
-    });
+    };
+
+    // Added 30 Sep 2026. His rule: "Emails should also always have
+    // hyperlinks." Plain text cannot put a link on words, so a caller that
+    // wants one sends an `html` field as well. Both parts go out together:
+    // the mail client shows the HTML, anything that cannot falls back to
+    // d.body. Callers that send no html are unaffected.
+    if (d.html) { msg.htmlBody = d.html; }
+
+    MailApp.sendEmail(msg);
 
     return out({ ok: true });
   } catch (err) {
@@ -62,6 +71,15 @@ function out(obj) {
     .setMimeType(ContentService.MimeType.JSON);
 }
 ```
+
+> **If you already have this script deployed, it needs updating.** The
+> `if (d.html)` line above is new, added 30 Sep 2026. Without it the open day
+> confirmation still sends, but the Zoom link arrives as a bare URL on its own
+> line instead of sitting on the words "Join the open day here". Open the
+> project at script.google.com, paste the block above over what is there,
+> keep your existing KEY, and deploy a **new version** of the existing
+> deployment so the URL does not change. If the URL changes, the
+> `RESULTS_MAILER_URL` secret has to change in Cloudflare too.
 
 Replace `PUT_YOUR_LONG_RANDOM_STRING_HERE` with something long and random.
 Anything unguessable will do.

@@ -112,22 +112,38 @@ export async function onRequestPost({ request, env }) {
   const tags = isTest ? ['test'] : ['openday-registered', TAG_DAY];
   const captured = await tag(env, email, first, tags);
 
-  // 3. the confirmation
-  const body = ['Hi ' + first, '',
+  // 3. the confirmation, in both parts
+  const P = [
+    'Hi ' + first,
     'You have a seat at the Clarity Quest Open Day on ' + WHEN + '. It is online, it is free, and it runs for one hour.',
-    '',
     'What happens in that hour: I walk you through 7 Weeks to Clarity, the seven Tuesday mornings that start on 20 October. ' +
       'A few people who have done it will tell you what it was actually like. Then you can ask me anything you want, ' +
       'including whether it is right for you, and I will tell you honestly if it is not.',
-    '',
+  ];
+  const plain = P.concat([
     ZOOM_JOIN
-      ? 'Here is your joining link. Put the hour in your diary now, with the link in it, so something else does not take it.\n\n' +
+      ? 'Put the hour in your diary now, with the joining link in it, so something else does not take it.\n\n' +
         ZOOM_JOIN +
         '\n\nThe hour is recorded. If something comes up on the morning, come anyway if you can, and if you cannot I will send you the recording.'
       : 'I will send you the Zoom link closer to the day. Put the hour in your diary now so something else does not take it.',
-    '',
-    'See you there.', '', 'Much love,', 'Francois'].join('\n');
-  const emailed = await mail(env, email, 'Your seat at the Clarity Quest Open Day', body);
+    'See you there.', 'Much love,\nFrancois',
+  ]).join('\n\n');
+
+  const htmlBody = html([
+    ...P.map(t => '<p>' + esc(t) + '</p>'),
+    ZOOM_JOIN
+      ? '<p>Put the hour in your diary now, with ' + link(ZOOM_JOIN, 'your joining link') +
+        ' in it, so something else does not take it.</p>' +
+        '<p>' + link(ZOOM_JOIN, 'Join the open day here') + '</p>' +
+        '<p>The hour is recorded. If something comes up on the morning, come anyway if you can, ' +
+        'and if you cannot I will send you the recording.</p>'
+      : '<p>I will send you the Zoom link closer to the day. Put the hour in your diary now so ' +
+        'something else does not take it.</p>',
+    '<p>See you there.</p>',
+    '<p>Much love,<br>Francois</p>',
+  ].join(''));
+
+  const emailed = await mail(env, email, 'Your seat at the Clarity Quest Open Day', plain, htmlBody);
 
   // 4. the note to him
   const note = [
@@ -186,13 +202,41 @@ async function tag(env, email, first, tags, status = 'subscribed') {
   }
 }
 
-async function mail(env, to, subject, body) {
+/* His standing rule, restated 30 Sep: "Emails should also always have
+ * hyperlinks." A bare URL on its own line is the thing he called terrible on
+ * 17 Sep, and this confirmation had one.
+ *
+ * So every send now carries two parts, built from the same sentences above so
+ * they cannot drift: `body`, plain text, where a URL has to be written out in
+ * full because plain text has no anchors, and `html`, where the link sits on
+ * words. Mail clients show the HTML part; anything that cannot still gets a
+ * working email.
+ *
+ * The Apps Script must pass `html` to MailApp as `htmlBody` for this to show.
+ * Until he redeploys it (docs/results-mailer-apps-script.md) the extra field
+ * is ignored and people keep getting exactly what they get today, which is
+ * why this is safe to ship before the script is updated.
+ */
+function esc(t) {
+  return String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+function link(url, words) {
+  return '<a href="' + esc(url) + '" style="color:#1a6f6f;font-weight:600">' + esc(words) + '</a>';
+}
+function html(inner) {
+  return '<div style="font-family:-apple-system,Segoe UI,Helvetica,Arial,sans-serif;' +
+    'font-size:16px;line-height:1.6;color:#1d2430;max-width:560px">' + inner + '</div>';
+}
+
+async function mail(env, to, subject, body, htmlBody) {
   if (!env.RESULTS_MAILER_URL) return false;
   try {
+    const payload = { to, subject, body, key: env.RESULTS_MAILER_KEY || '' };
+    if (htmlBody) payload.html = htmlBody;
     const res = await fetch(env.RESULTS_MAILER_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ to, subject, body, key: env.RESULTS_MAILER_KEY || '' }),
+      body: JSON.stringify(payload),
     });
     const out = await res.json().catch(() => null);
     return !!(res.ok && out && out.ok);
