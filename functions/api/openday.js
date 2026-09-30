@@ -41,6 +41,19 @@ const TAG_DAY = 'openday-2026-10-13';
 const PAGE = 'https://clarityquest.francoisesterhuizen.com/7-weeks/';
 const SIGNUPS_PER_HOUR = 8;
 
+/* The open day join link. Empty until the Zoom room exists, and while it is
+ * empty the confirmation says the link follows closer to the day, which is
+ * what it said before. Put the join URL here and every confirmation from that
+ * moment carries it, along with the recording promise.
+ *
+ * Anybody who registered while this was empty still has to be sent the link by
+ * hand. They are in KV under the prefix openday:2026-10-13:
+ *
+ * Settings for the room are in the content engine, at
+ * marketing/campaigns/2026-t4-cohort/zoom-setup.md
+ */
+const ZOOM_JOIN = 'https://us02web.zoom.us/j/81623485167?pwd=TXAmKbQH6HSsQAqhGGKGRcv4y3lF2n.1';
+
 function cors(origin) {
   return {
     'Access-Control-Allow-Origin': origin === ALLOWED ? ALLOWED : ALLOWED,
@@ -107,7 +120,11 @@ export async function onRequestPost({ request, env }) {
       'A few people who have done it will tell you what it was actually like. Then you can ask me anything you want, ' +
       'including whether it is right for you, and I will tell you honestly if it is not.',
     '',
-    'I will send you the Zoom link closer to the day. Put the hour in your diary now so something else does not take it.',
+    ZOOM_JOIN
+      ? 'Here is your joining link. Put the hour in your diary now, with the link in it, so something else does not take it.\n\n' +
+        ZOOM_JOIN +
+        '\n\nThe hour is recorded. If something comes up on the morning, come anyway if you can, and if you cannot I will send you the recording.'
+      : 'I will send you the Zoom link closer to the day. Put the hour in your diary now so something else does not take it.',
     '',
     'See you there.', '', 'Much love,', 'Francois'].join('\n');
   const emailed = await mail(env, email, 'Your seat at the Clarity Quest Open Day', body);
