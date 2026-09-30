@@ -53,6 +53,26 @@ export async function onRequestGet({ request, env }) {
 
   const book = BOOKS[slug];
   if (!book) return deny('Unknown book.');
+
+  /* The gift path. Responsibility became the free lead magnet on 30 Sep 2026,
+     so /api/ebook mints a single-use token against an email address and sends
+     the reader here with it. The token is spent on use, which stops a
+     download URL being pasted somewhere and quietly replacing the page that
+     asks for the email. It is not a payment check, because there is nothing
+     left to pay. */
+  const gift = String(url.searchParams.get('gift') || '').trim();
+  if (gift) {
+    if (!env.FUNNEL) return oops('Delivery is not configured yet.');
+    if (!env.BOOKS)  return oops('Delivery is not configured yet.');
+    if (!/^[a-f0-9]{32}$/.test(gift)) return deny('That link is not valid.');
+    const raw = await env.FUNNEL.get('gift:' + gift);
+    if (!raw) return deny('That link has been used already, or it has expired.');
+    let claim; try { claim = JSON.parse(raw); } catch { return deny('That link is not valid.'); }
+    if (claim.book !== slug) return deny('That link is for a different book.');
+    await env.FUNNEL.delete('gift:' + gift);
+    return release(env, book);
+  }
+
   if (!ref)  return deny('No payment reference.');
   if (!env.PAYSTACK_SECRET_KEY) return oops('Delivery is not configured yet.');
   if (!env.BOOKS)               return oops('Delivery is not configured yet.');
@@ -90,6 +110,10 @@ export async function onRequestGet({ request, env }) {
   }
 
   // 4. release the file
+  return release(env, book);
+}
+
+async function release(env, book) {
   const body = await env.BOOKS.get(book.key, { type: 'stream' });
   if (!body) return oops('The file is missing. Email francois@francoisesterhuizen.com and I will send it.');
 
@@ -97,7 +121,7 @@ export async function onRequestGet({ request, env }) {
   headers.set('Content-Type', 'application/pdf');
   headers.set('Content-Disposition',
     'attachment; filename="' + book.filename.replace(/"/g, '') + '"');
-  // never let a proxy or a browser keep a copy of a paid file
+  // never let a proxy or a browser keep a copy
   headers.set('Cache-Control', 'private, no-store');
   headers.set('X-Robots-Tag', 'noindex, nofollow');
   return new Response(body, { headers });

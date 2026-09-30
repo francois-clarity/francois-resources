@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>The Empowering Truth of Responsibility · Francois Esterhuizen</title>
-<meta name="description" content="It might not be your fault, but it is your responsibility. Ten chapters on taking responsibility for the right things, and letting go of the wrong ones. The complete ebook, R270.">
+<meta name="description" content="It might not be your fault, but it is your responsibility. Ten chapters on taking responsibility for the right things, and letting go of the wrong ones. The complete ebook, free.">
 <meta property="og:title" content="The Empowering Truth of Responsibility">
 <meta property="og:description" content="You have the life you have because of who you have been up to now. It might not be your fault, but it is your responsibility.">
 <meta property="og:type" content="book">
@@ -36,16 +36,25 @@
   <p class="say">I wrote it anyway, for one reason. In all my years of working with people I have not found anything else that transforms a life or a relationship the way responsibility does. <b>That is, if you take responsibility for the right things.</b> Taking responsibility for the wrong things will wreck you slowly, and almost nobody is taught the difference.</p>
   <p class="say">This book is that difference, in ten chapters. What is actually yours to carry, what was never yours, and what changes on the day you stop waiting for someone else to fix it.</p>
 
+  <!-- Free from 30 Sep 2026. His call: the book becomes the lead magnet, so
+       somebody who is about to leave a page still has a reason to say who they
+       are. The R270 Paystack link is gone; /api/ebook mints a single-use token
+       and /api/download trades it for the PDF. -->
   <div class="buy">
-    <div class="price"><span class="amt">R270</span><span class="what">The complete ebook, yours to keep</span></div>
+    <div class="price"><span class="amt">Free</span><span class="what">The complete ebook, yours to keep</span></div>
     <ul class="gets">
       <li>The complete ebook
         <span>All ten chapters, plus the bonus section on new techniques</span></li>
-      <li>Delivered the moment you pay
-        <span>No account to make, no subscription, nothing recurring</span></li>
+      <li>Sent the moment you ask for it
+        <span>No account to make, no card, nothing recurring</span></li>
     </ul>
-    <a class="btn" id="buy" href="https://paystack.com/buy/the-empowering-truth-of-responsibility" rel="noopener">Buy the ebook, R270</a>
-    <p class="fine">Secure payment through Paystack. Card or instant EFT. If anything goes wrong, email me at francois@francoisesterhuizen.com and I will sort it out personally.</p>
+    <form id="gift" novalidate>
+      <label for="g-name">Your name<input id="g-name" type="text" autocomplete="name" placeholder="First name is plenty"></label>
+      <label for="g-email">Your email<input id="g-email" type="email" inputmode="email" autocomplete="email" placeholder="you@example.com"></label>
+      <button class="btn" id="g-go" type="submit">Send me the book</button>
+    </form>
+    <p class="msg" id="g-msg" role="status" tabindex="-1"></p>
+    <p class="fine">I send the book and the occasional letter about this kind of thing. Leave whenever you like, every email has an unsubscribe link.</p>
   </div>
 
   <div class="sect"><span>What is inside</span></div>
@@ -86,5 +95,45 @@
   </footer>
 </div>
 <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "a9b056ed20bf4324b33f372dd69b5db4"}'></script><!-- End Cloudflare Web Analytics -->
+
+<script>
+/* The free ebook. Email in, book out.
+   The PDF is not at a public URL: /api/ebook tags the address in Mailchimp,
+   mints a single-use token, and /api/download trades that token for the file.
+   The same link goes out by email, so a closed tab does not lose the book. */
+(function () {
+  var form = document.getElementById('gift');
+  if (!form) return;
+  var msg = document.getElementById('g-msg'), go = document.getElementById('g-go');
+  function say(t, k) { msg.textContent = t; msg.className = 'msg on ' + k; }
+  form.addEventListener('submit', function (ev) {
+    ev.preventDefault();
+    if (go.disabled) return;
+    var name = document.getElementById('g-name').value.trim();
+    var email = document.getElementById('g-email').value.trim();
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
+      return say('That email does not look right.', 'err');
+    }
+    go.disabled = true; go.textContent = 'Sending';
+    fetch('/api/ebook', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: name, email: email, source: 'responsibility page' }) })
+      .then(function (r) { return r.json().catch(function () { return { ok: false }; }); })
+      .then(function (j) {
+        if (!j || !j.ok) {
+          go.disabled = false; go.textContent = 'Send me the book';
+          return say((j && j.error) || 'That did not go through. Try again in a moment.', 'err');
+        }
+        form.style.display = 'none';
+        say('On its way. Check your inbox, and your download is starting now.', 'ok');
+        msg.focus();
+        if (j.url) { window.location.href = j.url; }
+      })
+      .catch(function () {
+        go.disabled = false; go.textContent = 'Send me the book';
+        say('That did not go through. Try again in a moment.', 'err');
+      });
+  });
+})();
+</script>
 </body>
 </html>

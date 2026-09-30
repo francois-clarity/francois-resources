@@ -121,3 +121,20 @@ h1.m-in{animation-delay:.14s}
 
 .warn{margin-top:14px;font-size:13.5px;line-height:1.6;color:rgba(255,255,255,.5);
   font-weight:500;max-width:52ch}
+
+/* The free ebook gate, added 30 Sep 2026 when Responsibility became the lead
+   magnet. The buy block used to be a price and a button; it is now a price
+   that says Free and two fields. Styled here rather than inline so the other
+   book keeps a single stylesheet. */
+#gift{display:grid;gap:14px;margin-top:18px;text-align:left}
+#gift label{display:grid;gap:7px;font-size:14px;font-weight:700;color:#fff}
+#gift input{width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.18);
+  border-radius:12px;padding:14px 15px;color:#fff;font-family:inherit;font-size:16.5px;font-weight:400}
+#gift input::placeholder{color:rgba(255,255,255,.34)}
+#gift input:focus{outline:none;border-color:#18C0C0;background:rgba(24,192,192,.10)}
+#gift .btn{width:100%;margin-top:4px}
+#gift .btn[disabled]{opacity:.6;cursor:default}
+.msg{display:none;font-size:16px;line-height:1.6;margin-top:14px}
+.msg.on{display:block}
+.msg.ok{color:#18C0C0}
+.msg.err{color:#E4737A}
