@@ -71,10 +71,15 @@ GATES = {
                  "Cracking the Conflict Code", "R1 200", "oto_view"],
         "must_not": ["files/d/", "Pattern Breaker"],
     },
+    # Free from 30 Sep 2026: this book became the lead magnet, so the page
+    # captures an email instead of taking R270. The guard was asserting the
+    # old truth and correctly refused the deploy until it was told.
     "books/responsibility": {
-        "must": ["paystack.com/buy/the-empowering-truth-of-responsibility", "R270",
+        "must": ["/api/ebook", 'id="gift"', "Send me the book",
                  "responsibility-inside.png"],
-        "must_not": ["noindex", "read free", "10-habits-of-happy"],
+        "must_not": ["noindex", "10-habits-of-happy",
+                     # the price and the buy link must not creep back
+                     "paystack.com/buy/the-empowering-truth-of-responsibility", "R270"],
     },
     "books/habits": {
         "must": ["paystack.com/buy/10-habits-of-happy-relationships", "R270",
