@@ -153,6 +153,7 @@ export async function onRequestPost({ request, env }) {
     'Name: ' + name,
     'Email: ' + email,
     'Phone: ' + phone,
+    'Source: ' + row.source,
     '',
     'What is keeping them from their potential:',
     stuck || '(left blank)',
