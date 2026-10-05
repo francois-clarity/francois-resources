@@ -499,7 +499,7 @@ LIVE_AT = {
     "woema": "https://events.francoisesterhuizen.com/woema/",
 }
 
-def fetch_live(url, tries=3):
+def fetch_live(url, tries=5):
     """Fetch a live page, retrying a connection failure before calling it broken.
 
     This connection drops TLS every so often, which is a fault of the route
@@ -510,6 +510,11 @@ def fetch_live(url, tries=3):
 
     A page that answers and is missing its markers still fails, immediately.
     Only the not-answering case is retried.
+
+    Raised from three tries to five on 5 Oct 2026. Three was not enough: the
+    route dropped every attempt inside one seven-second window and the deploy
+    announced a failure that passed cleanly on a re-run minutes later. Five
+    tries spread over about 26 seconds covers the outages seen so far.
     """
     import time
     last = None
@@ -520,7 +525,7 @@ def fetch_live(url, tries=3):
         except Exception as e:
             last = e
             if attempt < tries - 1:
-                time.sleep(2 + attempt * 3)
+                time.sleep(2 + attempt * 3)   # 2, 5, 8, 11s
     return None, last
 
 
@@ -540,7 +545,7 @@ def main():
             url = LIVE_AT.get(name) or "https://resources.francoisesterhuizen.com/" + (name + "/" if name else "")
             h, err = fetch_live(url)
             if h is None:
-                print("FAIL %-32s [live] unreachable after 3 tries: %s" % (name, err)); all_ok = False
+                print("FAIL %-32s [live] unreachable after 5 tries: %s" % (name, err)); all_ok = False
             else:
                 all_ok &= check(name, h, "live")
     sys.exit(0 if all_ok else 1)
