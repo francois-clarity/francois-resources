@@ -97,7 +97,7 @@ GATES = {
     "books/responsibility": {
         "must": ['data-book="responsibility"', 'data-price="14700"',
                  'data-bump-price="29700"', "assets/buy.js",
-                 "Say what you want out loud", "responsibility-inside.png"],
+                 "The part where you actually do it", "responsibility-inside.png"],
         "must_not": ["noindex", "10-habits-of-happy", "paystack.com/buy/", "R270",
                      # the bump must never read as the book again
                      "based on the book", "course version"],
@@ -517,6 +517,34 @@ def check_buybox():
     print("ok   buy-box                           [local] name, email and phone, named and autofillable")
     return True
 
+def check_bump_counts():
+    """A bump may only promise what the course delivers. The responsibility
+    page said seventeen lessons for sixteen weeks after the course was
+    attached, and its bump described asking for what you want, which is one
+    lesson out of sixteen. A buyer who counts is a buyer who writes to you.
+
+    These numbers come from the platform, where the courses live:
+    clarity-fundamentals has 16 published lessons, relationship-growth has 5.
+    If a course gains or loses a lesson, change it here and on the page in the
+    same breath."""
+    import pathlib as _pl
+    base = _pl.Path(__file__).parent
+    bad = []
+    r = (base / "books" / "responsibility" / "index.html").read_text()
+    h = (base / "books" / "habits" / "index.html").read_text()
+    if "sixteen short" not in r.lower():
+        bad.append("books/responsibility does not say sixteen lessons")
+    if "seventeen" in r.lower():
+        bad.append("books/responsibility still promises seventeen lessons; the course has sixteen")
+    if "five short" not in h.lower():
+        bad.append("books/habits does not say five lessons")
+    if bad:
+        for b in bad:
+            print("FAIL bump-counts                       [local] %s" % b)
+        return False
+    print("ok   bump-counts                       [local] each bump promises what its course delivers")
+    return True
+
 def check_free_book_off():
     """The free book and the paid book are the same book. Francois switched
     the free route off on 10 Oct 2026, once the paid funnel worked end to end
@@ -627,6 +655,7 @@ def main():
     all_ok &= check_banned_words()
     all_ok &= check_buybox()
     all_ok &= check_free_book_off()
+    all_ok &= check_bump_counts()
     for name in GATES:
         html = (base / name / "index.html").read_text()
         all_ok &= check(name, html, "local")
