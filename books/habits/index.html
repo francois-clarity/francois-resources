@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>10 Habits of Happy Relationships · Francois Esterhuizen</title>
-<meta name="description" content="Ten small habits that happy couples keep, written for real relationships rather than perfect ones. One chapter each, all of them doable this week. The complete ebook, R270.">
+<meta name="description" content="Ten small habits that happy couples keep, written for real relationships rather than perfect ones. One chapter each, all of them doable this week. The complete ebook, R197.">
 <meta property="og:title" content="10 Habits of Happy Relationships">
 <meta property="og:description" content="People who are happily married do not marry once. They marry again and again, to the person their partner has become.">
 <meta property="og:type" content="book">
@@ -36,17 +36,23 @@
   <p class="say"><b>Every one of them is small enough to start this week.</b> A twenty second hug instead of a quick kiss. Three silly questions a day. Reading to each other instead of scrolling in bed. Holding hands, on purpose, the way you used to.</p>
   <p class="say">The last few chapters ask more of you, because they are about what you do with your own frustration rather than your partner's behaviour. That is the part that changes things, and it is also the part nobody wants to hear. I have written it as kindly as I can and as honestly as I have to.</p>
 
-  <div class="buy">
-    <div class="price"><span class="amt">R270</span><span class="what">The complete ebook, yours to keep</span></div>
-    <ul class="gets">
-      <li>The complete ebook
-        <span>All ten habits, one chapter each, with the exercises</span></li>
-      <li>Delivered the moment you pay
-        <span>No account to make, no subscription, nothing recurring</span></li>
-    </ul>
-    <a class="btn" id="buy" href="https://paystack.com/buy/10-habits-of-happy-relationships" rel="noopener">Buy the ebook, R270</a>
-    <p class="fine">Secure payment through Paystack. Card or instant EFT. If anything goes wrong, email me at francois@francoisesterhuizen.com and I will sort it out personally.</p>
-  </div>
+  <!-- Paid again from 10 Oct 2026, with a one-click course added. Prices and
+       the names of the two courses come from the low-ticket work that day:
+       the book is the hook, the bump is where the margin is, so the bump is
+       priced at or above the book rather than as a cheap accessory.
+       The amount here is for the reader. What they pay is worked out in
+       /api/checkout from its own price list and nothing the browser sends
+       can change it.
+       The bump must never be described as a restatement of the book. A bump
+       that reads as the same thing again is the one mistake that kills it,
+       and the deploy gate refuses that wording. -->
+  <div class="buybox"
+       data-book="habits"
+       data-title="10 Habits of Happy Relationships"
+       data-price="19700"
+       data-bump-price="29700"
+       data-bump-title="Why you keep having the same fight"
+       data-bump-body="Five short lessons on what sits underneath the argument: what you are each actually asking for, and why the two of you chose each other."></div>
 
   <div class="sect"><span>The ten habits</span></div>
   <div class="toc">
@@ -85,5 +91,6 @@
   </footer>
 </div>
 <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "a9b056ed20bf4324b33f372dd69b5db4"}'></script><!-- End Cloudflare Web Analytics -->
+  <script src="/assets/buy.js" defer></script>
 </body>
 </html>

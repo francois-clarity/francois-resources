@@ -74,17 +74,25 @@ GATES = {
     # Free from 30 Sep 2026: this book became the lead magnet, so the page
     # captures an email instead of taking R270. The guard was asserting the
     # old truth and correctly refused the deploy until it was told.
+    # Both books are paid again from 10 Oct 2026, each with a one-click course
+    # added at checkout. The old prices and the old Paystack buy links must not
+    # creep back: the amount is worked out in /api/checkout now, and a stray buy
+    # link would take money this site could not deliver against.
     "books/responsibility": {
-        "must": ["/api/ebook", 'id="gift"', "Send me the book",
-                 "responsibility-inside.png"],
-        "must_not": ["noindex", "10-habits-of-happy",
-                     # the price and the buy link must not creep back
-                     "paystack.com/buy/the-empowering-truth-of-responsibility", "R270"],
+        "must": ['data-book="responsibility"', 'data-price="14700"',
+                 'data-bump-price="29700"', "assets/buy.js",
+                 "Say what you want out loud", "responsibility-inside.png"],
+        "must_not": ["noindex", "10-habits-of-happy", "paystack.com/buy/", "R270",
+                     # the bump must never read as the book again
+                     "based on the book", "course version"],
     },
     "books/habits": {
-        "must": ["paystack.com/buy/10-habits-of-happy-relationships", "R270",
-                 "habits-inside.png"],
-        "must_not": ["noindex", "read free", "the-empowering-truth"],
+        "must": ['data-book="habits"', 'data-price="19700"',
+                 'data-bump-price="29700"', "assets/buy.js",
+                 "Why you keep having the same fight", "habits-inside.png"],
+        "must_not": ["noindex", "read free", "the-empowering-truth",
+                     "paystack.com/buy/", "R270",
+                     "based on the book", "course version"],
     },
     "communication-styles": {
         # Free front door for the relational ladder. Built on the Romantic

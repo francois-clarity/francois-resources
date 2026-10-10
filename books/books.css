@@ -138,3 +138,40 @@ h1.m-in{animation-delay:.14s}
 .msg.on{display:block}
 .msg.ok{color:#18C0C0}
 .msg.err{color:#E4737A}
+
+/* ---------- The buy box with the one-click course added (10 Oct 2026) ----------
+   Both books went paid, and each carries an order bump: the course that goes
+   with that book, added by ticking one box on the same page the card details
+   are about to go into. A second click or a redirect loses more buyers than
+   the price does. The tick starts empty on purpose. */
+.buybox{margin-top:44px;border:1px solid rgba(24,192,192,.3);border-radius:24px;
+  padding:30px 32px;background:linear-gradient(180deg,rgba(24,192,192,.07),rgba(255,255,255,.015))}
+.bx-row,.bx-total{display:flex;align-items:baseline;justify-content:space-between;gap:16px;
+  font-size:16.5px;color:var(--muted)}
+.bx-row{padding-bottom:16px}
+.bx-amt{font-weight:800;color:var(--white);white-space:nowrap;letter-spacing:-.4px}
+
+.bx-bump{display:flex;align-items:flex-start;gap:14px;padding:18px 20px;margin:0 0 18px;
+  border:1px dashed rgba(24,192,192,.45);border-radius:14px;background:rgba(24,192,192,.07);
+  cursor:pointer;transition:border-color 160ms ease,background 160ms ease}
+.bx-bump:hover{border-color:var(--teal)}
+.buybox.has-bump .bx-bump{border-style:solid;border-color:var(--teal);background:rgba(24,192,192,.14)}
+.bx-bump input{margin:3px 0 0;width:18px;height:18px;accent-color:var(--teal);flex:none;cursor:pointer}
+.bx-bump-text{flex:1;min-width:0}
+.bx-bump-text strong{display:block;color:var(--white);font-size:17px;font-weight:800;margin-bottom:4px;letter-spacing:-.2px}
+.bx-bump-body{display:block;font-size:15px;line-height:1.5;color:var(--muted);font-weight:500}
+
+.bx-total{border-top:1px solid var(--line);padding-top:18px;font-size:18px;color:var(--white)}
+.bx-total .bx-amt{font-size:26px}
+
+.bx-fields{display:flex;gap:10px;flex-wrap:wrap;margin:20px 0 14px}
+.bx-fields input{flex:1 1 180px;min-width:0;font:inherit;font-size:16px;padding:14px 16px;
+  border-radius:999px;border:1px solid rgba(255,255,255,.18);background:rgba(0,0,0,.2);color:var(--white)}
+.bx-fields input::placeholder{color:rgba(255,255,255,.3)}
+.bx-fields input:focus{outline:none;border-color:var(--teal)}
+
+.buybox .btn{width:100%;justify-content:center;text-align:center}
+.bx-err{color:#E8B551;font-size:14.5px;margin:12px 0 0;min-height:1px}
+.bx-fine{margin-top:16px;font-size:13px;line-height:1.6;color:rgba(255,255,255,.42)}
+
+@media(max-width:560px){.buybox{padding:24px 20px}.bx-bump{padding:16px}}

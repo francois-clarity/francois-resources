@@ -36,26 +36,23 @@
   <p class="say">I wrote it anyway, for one reason. In all my years of working with people I have not found anything else that transforms a life or a relationship the way responsibility does. <b>That is, if you take responsibility for the right things.</b> Taking responsibility for the wrong things will wreck you slowly, and almost nobody is taught the difference.</p>
   <p class="say">This book is that difference, in ten chapters. What is actually yours to carry, what was never yours, and what changes on the day you stop waiting for someone else to fix it.</p>
 
-  <!-- Free from 30 Sep 2026. His call: the book becomes the lead magnet, so
-       somebody who is about to leave a page still has a reason to say who they
-       are. The old Paystack buy link is gone; /api/ebook mints a single-use token
-       and /api/download trades it for the PDF. -->
-  <div class="buy">
-    <div class="price"><span class="amt">Free</span><span class="what">The complete ebook, yours to keep</span></div>
-    <ul class="gets">
-      <li>The complete ebook
-        <span>All ten chapters, plus the bonus section on new techniques</span></li>
-      <li>Sent the moment you ask for it
-        <span>No account to make, no card, nothing recurring</span></li>
-    </ul>
-    <form id="gift" novalidate>
-      <label for="g-name">Your name<input id="g-name" type="text" autocomplete="name" placeholder="First name is plenty"></label>
-      <label for="g-email">Your email<input id="g-email" type="email" inputmode="email" autocomplete="email" placeholder="you@example.com"></label>
-      <button class="btn" id="g-go" type="submit">Send me the book</button>
-    </form>
-    <p class="msg" id="g-msg" role="status" tabindex="-1"></p>
-    <p class="fine">I send the book and the occasional letter about this kind of thing. Leave whenever you like, every email has an unsubscribe link.</p>
-  </div>
+  <!-- Paid again from 10 Oct 2026, with a one-click course added. Prices and
+       the names of the two courses come from the low-ticket work that day:
+       the book is the hook, the bump is where the margin is, so the bump is
+       priced at or above the book rather than as a cheap accessory.
+       The amount here is for the reader. What they pay is worked out in
+       /api/checkout from its own price list and nothing the browser sends
+       can change it.
+       The bump must never be described as a restatement of the book. A bump
+       that reads as the same thing again is the one mistake that kills it,
+       and the deploy gate refuses that wording. -->
+  <div class="buybox"
+       data-book="responsibility"
+       data-title="The Empowering Truth of Responsibility"
+       data-price="14700"
+       data-bump-price="29700"
+       data-bump-title="Say what you want out loud"
+       data-bump-body="Seventeen short lessons with an exercise each, on working out what you actually want and then asking the people in your life for it."></div>
 
   <div class="sect"><span>What is inside</span></div>
   <!-- chapter titles are verbatim from the book, not copy to be rewritten -->
@@ -96,44 +93,6 @@
 </div>
 <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "a9b056ed20bf4324b33f372dd69b5db4"}'></script><!-- End Cloudflare Web Analytics -->
 
-<script>
-/* The free ebook. Email in, book out.
-   The PDF is not at a public URL: /api/ebook tags the address in Mailchimp,
-   mints a single-use token, and /api/download trades that token for the file.
-   The same link goes out by email, so a closed tab does not lose the book. */
-(function () {
-  var form = document.getElementById('gift');
-  if (!form) return;
-  var msg = document.getElementById('g-msg'), go = document.getElementById('g-go');
-  function say(t, k) { msg.textContent = t; msg.className = 'msg on ' + k; }
-  form.addEventListener('submit', function (ev) {
-    ev.preventDefault();
-    if (go.disabled) return;
-    var name = document.getElementById('g-name').value.trim();
-    var email = document.getElementById('g-email').value.trim();
-    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
-      return say('That email does not look right.', 'err');
-    }
-    go.disabled = true; go.textContent = 'Sending';
-    fetch('/api/ebook', { method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name: name, email: email, source: 'responsibility page' }) })
-      .then(function (r) { return r.json().catch(function () { return { ok: false }; }); })
-      .then(function (j) {
-        if (!j || !j.ok) {
-          go.disabled = false; go.textContent = 'Send me the book';
-          return say((j && j.error) || 'That did not go through. Try again in a moment.', 'err');
-        }
-        form.style.display = 'none';
-        say('On its way. Check your inbox, and your download is starting now.', 'ok');
-        msg.focus();
-        if (j.url) { window.location.href = j.url; }
-      })
-      .catch(function () {
-        go.disabled = false; go.textContent = 'Send me the book';
-        say('That did not go through. Try again in a moment.', 'err');
-      });
-  });
-})();
-</script>
+  <script src="/assets/buy.js" defer></script>
 </body>
 </html>

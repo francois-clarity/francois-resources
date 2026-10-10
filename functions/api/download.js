@@ -33,13 +33,16 @@ const BOOKS = {
     filename: 'The Empowering Truth of Responsibility - Francois Esterhuizen.pdf',
     // matched case-insensitively against the Paystack line item / metadata
     match: 'empowering truth',
-    minorUnits: 27000, // R270 in cents
+    /* R147. Dropped from R270 on 10 Oct 2026 on the low-ticket coach's
+       recommendation. The check below is "at least this much", so an order
+       that also took the R297 course still passes. */
+    minorUnits: 14700,
   },
   habits: {
     key: 'habits.pdf',
     filename: '10 Habits of Happy Relationships - Francois Esterhuizen.pdf',
     match: '10 habits',
-    minorUnits: 27000,
+    minorUnits: 19700,   // R197, same change
   },
 };
 
