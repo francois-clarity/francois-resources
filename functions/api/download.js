@@ -17,7 +17,7 @@
  * Env (Pages → Settings → Variables and secrets, as a Secret):
  *   PAYSTACK_SECRET_KEY   the sk_live_... key from the Paystack dashboard
  * Bindings (Pages → Settings → Bindings → KV namespace):
- *   BOOKS                 the KV namespace holding the two PDFs
+ *   FUNNEL                holds the PDFs under a book: prefix. See store().
  *
  * KV rather than R2 because R2 needs a paid subscription and KV does not.
  * Both books sit under the 25 MiB per-value limit: 19.8 and 8.9.
@@ -63,7 +63,7 @@ export async function onRequestGet({ request, env }) {
   const gift = String(url.searchParams.get('gift') || '').trim();
   if (gift) {
     if (!env.FUNNEL) return oops('Delivery is not configured yet.');
-    if (!env.BOOKS)  return oops('Delivery is not configured yet.');
+    if (!store(env)) return oops('Delivery is not configured yet.');
     if (!/^[a-f0-9]{32}$/.test(gift)) return deny('That link is not valid.');
     const raw = await env.FUNNEL.get('gift:' + gift);
     if (!raw) return deny('That link has been used already, or it has expired.');
@@ -75,7 +75,7 @@ export async function onRequestGet({ request, env }) {
 
   if (!ref)  return deny('No payment reference.');
   if (!env.PAYSTACK_SECRET_KEY) return oops('Delivery is not configured yet.');
-  if (!env.BOOKS)               return oops('Delivery is not configured yet.');
+  if (!store(env))              return oops('Delivery is not configured yet.');
 
   // 1. ask Paystack whether this reference was really paid
   let tx;
@@ -113,8 +113,30 @@ export async function onRequestGet({ request, env }) {
   return release(env, book);
 }
 
+/* Where the PDFs live.
+ *
+ * They are in FUNNEL under a book: prefix, not in the BOOKS namespace the
+ * name suggests. BOOKS exists and holds the same two files, but it was never
+ * bound to this Pages project, so env.BOOKS is undefined at runtime and every
+ * download answered "Delivery is not configured yet" from the day it was
+ * built. Binding it needs the Cloudflare dashboard, and the session with that
+ * login was not the one that could reach it.
+ *
+ * Rather than leave the whole book funnel waiting on a dashboard trip, the
+ * files were copied into the namespace that IS already bound. Both are well
+ * under the 25 MiB per-value limit, at 19.8 and 8.9.
+ *
+ * If BOOKS is ever bound properly, this prefers it and nothing else changes.
+ * Delete the FUNNEL half when that happens. */
+function store(env) {
+  if (env.BOOKS) return { kv: env.BOOKS, prefix: '' };
+  if (env.FUNNEL) return { kv: env.FUNNEL, prefix: 'book:' };
+  return null;
+}
+
 async function release(env, book) {
-  const body = await env.BOOKS.get(book.key, { type: 'stream' });
+  const s = store(env);
+  const body = s && await s.kv.get(s.prefix + book.key, { type: 'stream' });
   if (!body) return oops('The file is missing. Email francois@francoisesterhuizen.com and I will send it.');
 
   const headers = new Headers();
