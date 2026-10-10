@@ -26,17 +26,42 @@
     var bumpTitle = box.dataset.bumpTitle || '';
     var bumpBody = box.dataset.bumpBody || '';
 
+    /* The shape comes from three of Maria Wendt's live checkouts, read on
+       10 Oct 2026, not from a guess. What they do that the first version
+       did not:
+
+         the bump sits OUTSIDE the order list, in its own bordered block,
+           because a name-and-price row under the book reads as an invoice
+           line, so the eye takes it as something already being charged
+         it carries a recommendation, because a neutral box gets skipped
+         it uses the verb: you upgrade your order to include the thing
+         the tick itself says add, so the box says what ticking does twice
+         the body leads with the help and puts the count at the end
+
+       Two deliberate departures. Her button stays "Place Order Now" even
+       when the bump is ticked; this one changes to the new amount, because
+       Francois would rather nobody was ever surprised by a number. And her
+       bump is always a done-for-you pack rather than a course, which is the
+       stronger shape and a thing to fix in the product, not the page. */
     box.innerHTML =
       '<div class="bx-row"><span>' + esc(box.dataset.title || 'The book') + '</span>' +
         '<span class="bx-amt">' + rands(price) + '</span></div>' +
-      '<label class="bx-bump">' +
-        '<input type="checkbox" id="bump">' +
-        '<span class="bx-bump-text">' +
+
+      '<div class="bx-bump-wrap">' +
+        '<p class="bx-flag">Recommended</p>' +
+        '<div class="bx-bump-head">' +
           '<strong>' + esc(bumpTitle) + '</strong>' +
-          '<span class="bx-bump-body">' + esc(bumpBody) + '</span>' +
-        '</span>' +
-        '<span class="bx-amt">' + rands(bumpPrice) + '</span>' +
-      '</label>' +
+          '<span class="bx-amt">' + rands(bumpPrice) + '</span>' +
+        '</div>' +
+        (box.dataset.bumpImage
+          ? '<img class="bx-bump-img" src="' + esc(box.dataset.bumpImage) + '" alt="">' : '') +
+        '<p class="bx-bump-body">' + esc(bumpBody) + '</p>' +
+        '<label class="bx-tick">' +
+          '<input type="checkbox" id="bump">' +
+          '<span>Yes, add this to my order for ' + rands(bumpPrice) + '</span>' +
+        '</label>' +
+      '</div>' +
+
       '<div class="bx-total"><span>Total</span><span class="bx-amt" id="total">' + rands(price) + '</span></div>' +
       '<div class="bx-fields">' +
         '<input type="text" id="bx-name" placeholder="Your name" autocomplete="name" maxlength="80">' +
