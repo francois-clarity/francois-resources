@@ -203,4 +203,9 @@ h1.m-in{animation-delay:.14s}
 .bx-lab{display:block;font-size:12px;font-weight:600;letter-spacing:.4px;
   color:rgba(255,255,255,.52);margin:14px 0 6px}
 .bx-lab:first-child{margin-top:0}
-.bx-fields{display:block}
+/* One field per line now that each has a label above it. The old two-up
+   row made the labels sit beside the wrong boxes, and a checkout that asks
+   three short things reads better as three short things. */
+.bx-fields{display:block;margin:20px 0 0}
+.bx-fields input{display:block;width:100%;flex:none}
+.bx-fields .bx-go{margin-top:18px;width:100%}
