@@ -84,6 +84,7 @@ export async function onRequestPost({ request, env }) {
     /* The course was paid for, so never deny it. Leave it for him to grant
        by hand and tell the buyer the truth. */
     await mark(env, ref, { course, enrolled: false });
+    await alert(env, ref, order);
     return json({ ok: true, course, enrolled: false });
   }
 
@@ -103,7 +104,33 @@ export async function onRequestPost({ request, env }) {
   } catch { /* fall through: the panel still appears, he grants it by hand */ }
 
   await mark(env, ref, { course, enrolled });
+  /* Paid for and not handed over. The buyer is told on the page, and he is
+     told by email, because the one thing that must not happen is nobody
+     knowing. */
+  if (!enrolled) await alert(env, ref, order);
   return json({ ok: true, course, enrolled });
+}
+
+async function alert(env, ref, order) {
+  await env.FUNNEL.put('stuck:' + ref, JSON.stringify({ what: 'enrolment refused or unreachable', at: Date.now() }),
+    { expirationTtl: 60 * 60 * 24 * 180 }).catch(() => {});
+  if (!env.RESULTS_MAILER_URL) return;
+  const lines = ['A book order paid for a course and did not get it.', '',
+    'Reference: ' + ref,
+    'Buyer: ' + (order.name || '') + ' <' + (order.email || '') + '>',
+    'Book: ' + (order.book || '') + ', course: ' + (order.programme || ''), '',
+    'They have the book. Open the course by hand on Clarity, under People,',
+    'and add them to the group for that course. Then reply to them.'];
+  try {
+    await fetch(env.RESULTS_MAILER_URL, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        to: env.REPORT_TO || 'francois@francoisesterhuizen.com',
+        subject: 'Book order needs you: course not opened (' + ref + ')',
+        body: lines.join('\n'), key: env.RESULTS_MAILER_KEY || '',
+      }),
+    });
+  } catch { /* KV already has it */ }
 }
 
 /* Ninety days, longer than the order record, so a buyer who comes back to
