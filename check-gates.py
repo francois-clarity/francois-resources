@@ -57,18 +57,26 @@ GATES = {
         "must": ["thankyou_view_", "tool_open_", "paid_tease_click_", "wa.me/27824441831"],
         "must_not": ["Story of Us", "/library/"],
     },
+    # Each must deliver the book AND open the course, if one was added at
+    # checkout. The panel is empty markup until /api/claim fills it in, so
+    # the guard checks the markup and the script that reaches for it: without
+    # both, a buyer pays R297 for a course and never hears about it again.
     "thanks/responsibility": {
-        # Post-purchase delivery + one upsell (Foundations of Clarity).
+        # Post-purchase delivery + the added course + one upsell.
         "must": ["Download the ebook", "/api/download?book=responsibility",
                  "noindex", "Download your copy", "Save it somewhere",
-                 "The Foundations of Clarity", "oto_view"],
+                 "The Foundations of Clarity", "oto_view",
+                 'id="opened"', 'id="op-title"', 'id="op-body"', 'id="op-cta"',
+                 "/assets/claim.js"],
         "must_not": ["files/d/", "Pattern Breaker"],
     },
     "thanks/habits": {
-        # Post-purchase delivery + one upsell (Cracking the Conflict Code).
+        # Post-purchase delivery + the added course + one upsell.
         "must": ["Download the ebook", "/api/download?book=habits",
                  "noindex", "Download your copy", "Save it somewhere",
-                 "Cracking the Conflict Code", "R1 200", "oto_view"],
+                 "Cracking the Conflict Code", "R1 200", "oto_view",
+                 'id="opened"', 'id="op-title"', 'id="op-body"', 'id="op-cta"',
+                 "/assets/claim.js"],
         "must_not": ["files/d/", "Pattern Breaker"],
     },
     # Free from 30 Sep 2026: this book became the lead magnet, so the page
@@ -477,11 +485,24 @@ BANNED = {
     "\u2013": "en dash, never used",
 }
 
+# Reader-facing copy in a .js file lives in its string literals. Comments and
+# code are not shown to anybody, so only the literals are judged: a comment
+# explaining that something fails quietly is not a voice breach, and a line of
+# copy inside quotes is.
+STRINGS = re.compile(r"'(?:\\.|[^'\\\n])*'|\"(?:\\.|[^\"\\\n])*\"|`(?:\\.|[^`\\])*`", re.S)
+
 def check_banned_words():
-    """Fail the deploy if a banned word reaches a page. Born 21 Aug 2026, after
-    'quietly' turned up in a live sales page and two assessment results despite
-    being a standing rule."""
-    import pathlib as _pl, glob as _glob
+    """Fail the deploy if a banned word reaches a reader. Born 21 Aug 2026,
+    after 'quietly' turned up in a live sales page and two assessment results
+    despite being a standing rule.
+
+    Widened 10 Oct 2026 to the scripts. The guard only ever read index.html
+    with its <script> blocks stripped, which was right when every page was
+    static. It is not right any more: the buy box, the order bump and the
+    course panel are all built by assets/*.js, and the words a buyer reads at
+    the moment of paying were the one place on this site nothing checked.
+    """
+    import pathlib as _pl
     base = _pl.Path(__file__).parent
     bad = []
     for f in sorted(base.glob("*/index.html")) + sorted(base.glob("*/*/index.html")) + [base / "index.html"]:
@@ -494,12 +515,20 @@ def check_banned_words():
             for m in re.finditer(re.escape(word), body, re.I):
                 snippet = " ".join(body[max(0, m.start()-40):m.start()+40].split())
                 bad.append((f.relative_to(base), word, why, snippet))
+    for f in sorted(base.glob("assets/*.js")) + sorted(base.glob("functions/**/*.js")):
+        try: text = f.read_text()
+        except Exception: continue
+        for lit in STRINGS.finditer(strip_verbatim(text)):
+            body = lit.group(0)
+            for word, why in BANNED.items():
+                for m in re.finditer(re.escape(word), body, re.I):
+                    bad.append((f.relative_to(base), word, why, " ".join(body.split())[:110]))
     if bad:
         for f, w, why, sn in bad[:12]:
             print("FAIL banned-words                      [local] %s uses %r (%s)" % (f, w, why))
             print("       ...%s..." % sn)
         return False
-    print("ok   banned-words                      [local] no banned wording on any page")
+    print("ok   banned-words                      [local] no banned wording on any page or in any script")
     return True
 
 LIVE_AT = {

@@ -116,21 +116,13 @@ export async function onRequestGet({ request, env }) {
   return release(env, book);
 }
 
-/* Where the PDFs live.
+/* Where the PDFs live: the BOOKS namespace, bound 10 Oct 2026.
  *
- * They are in FUNNEL under a book: prefix, not in the BOOKS namespace the
- * name suggests. BOOKS exists and holds the same two files, but it was never
- * bound to this Pages project, so env.BOOKS is undefined at runtime and every
- * download answered "Delivery is not configured yet" from the day it was
- * built. Binding it needs the Cloudflare dashboard, and the session with that
- * login was not the one that could reach it.
- *
- * Rather than leave the whole book funnel waiting on a dashboard trip, the
- * files were copied into the namespace that IS already bound. Both are well
- * under the 25 MiB per-value limit, at 19.8 and 8.9.
- *
- * If BOOKS is ever bound properly, this prefers it and nothing else changes.
- * Delete the FUNNEL half when that happens. */
+ * Until that binding existed env.BOOKS was undefined at runtime and every
+ * download answered "Delivery is not configured yet", which is why this book
+ * funnel had never delivered a single copy. The files were copied into FUNNEL
+ * as a stopgap; that half is gone now, and the fallback stays only so a
+ * binding that goes missing fails loudly here rather than silently. */
 function store(env) {
   if (env.BOOKS) return { kv: env.BOOKS, prefix: '' };
   if (env.FUNNEL) return { kv: env.FUNNEL, prefix: 'book:' };

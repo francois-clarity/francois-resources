@@ -182,3 +182,16 @@ h1.m-in{animation-delay:.14s}
 .bx-why{margin:18px 2px 0;font-size:15.5px;line-height:1.62;color:rgba(255,255,255,.6);max-width:62ch}
 
 @media(max-width:560px){.buybox{padding:24px 20px}.bx-bump-wrap{padding:18px 16px}}
+
+/* The course panel on a thank-you page, shown only when the buyer added one.
+   Gold rather than teal, so the thing they paid extra for is the brightest
+   thing on the page. */
+.opened{margin-top:34px;max-width:640px;border:1px solid rgba(246,195,92,.45);border-radius:22px;
+  padding:34px 36px;background:linear-gradient(180deg,rgba(246,195,92,.14),rgba(246,195,92,.04));
+  box-shadow:0 12px 44px rgba(246,195,92,.12)}
+.opened .kick{font-weight:500;font-size:11px;letter-spacing:4px;text-transform:uppercase;
+  color:#F6C35C;margin-bottom:10px}
+.opened .big{font-weight:800;font-size:clamp(21px,3vw,27px);letter-spacing:-.5px;line-height:1.25}
+.opened p{font-size:16px;line-height:1.65;color:rgba(255,255,255,.72);margin-top:12px;font-weight:300}
+.opened .btn{margin-top:22px;background:#F6C35C;color:#14202B}
+@media (max-width:640px){.opened{padding:26px 22px}}
