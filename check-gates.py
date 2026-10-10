@@ -545,6 +545,92 @@ def check_bump_counts():
     print("ok   bump-counts                       [local] each bump promises what its course delivers")
     return True
 
+def check_prices_agree():
+    """One price per book, everywhere a reader can see it. The books index
+    sat at R270 for weeks after the change, and /library/ was still showing
+    R270 after that was fixed, because nobody swept the second place. Every
+    page that names a price is checked against the one in /api/checkout,
+    which is the only place the amount is really decided.
+
+    Also Francois, 10 Oct 2026: everything on the resources site is a low
+    ticket offer. Anything over R500 shown here needs a reason."""
+    import pathlib as _pl, re as _re
+    base = _pl.Path(__file__).parent
+    api = (base / "functions" / "api" / "checkout.js").read_text()
+    want = {}
+    for slug, cents in _re.findall(r"(\w+):\s*\{[^}]*?price:\s*(\d+)", api, _re.S):
+        if slug in ("responsibility", "habits"):
+            want[slug] = "R%d" % (int(cents) / 100)
+    bad = []
+    if set(want) != {"responsibility", "habits"}:
+        bad.append("could not read both prices out of /api/checkout")
+    stale = set()
+    for f in sorted(base.glob("*/index.html")) + sorted(base.glob("*/*/index.html")) + [base / "index.html"]:
+        try: t = f.read_text()
+        except Exception: continue
+        for m in _re.findall(r"R ?\d[\d  ,]{1,7}", t):
+            v = m.replace(" ", "").replace("\u00a0", "").rstrip(",")
+            if v in want.values():
+                continue
+            stale.add("%s shows %s" % (f.relative_to(base), v))
+# Named exceptions. Each one is a price on this site that is not a book
+    # price, left standing on purpose and not by accident. 
+    # Named exceptions. Each one is a price on this site that is not a book
+    # price, standing on purpose rather than by accident.
+    OK_OVER = {
+        # Cracking the Conflict Code, the upsell on the habits thank-you page.
+        # Francois made everything on this site a low ticket offer on
+        # 10 Oct 2026, and R1 200 is not that. Waiting on Q28: drop the price,
+        # or move that upsell off this site and sell it somewhere else.
+        "thanks/habits/index.html shows R1200",
+    }
+    for row in sorted(stale):
+        amount = int(_re.search(r"R(\d+)", row.split()[-1]).group(1))
+        if row in OK_OVER:
+            continue
+        bad.append("%s, which is not one of %s" % (row, ", ".join(sorted(want.values()))))
+    if bad:
+        for b in bad[:8]:
+            print("FAIL prices-agree                      [local] %s" % b)
+        return False
+    print("ok   prices-agree                      [local] every page shows %s" % ", ".join(sorted(want.values())))
+    return True
+
+def check_oneclick_rail():
+    """The rail that bumps two and three ride on. It is built and switched
+    off: every offer in /api/upsell has enabled=false and the page shows
+    nothing until one is turned on. The guard holds the pieces together so a
+    half-wired rail cannot ship, and it counts how many offers are live so
+    turning one on is a deliberate act somebody notices.
+
+    When Francois picks what goes in bump two and three, set enabled true,
+    give the offer a deliver, and update EXPECT_LIVE below."""
+    import pathlib as _pl, re as _re
+    base = _pl.Path(__file__).parent
+    EXPECT_LIVE = 0
+    bad = []
+    api = (base / "functions" / "api" / "upsell.js").read_text()
+    js = (base / "assets" / "upsell.js").read_text()
+    live = len(_re.findall(r"enabled:\s*true", api))
+    if live != EXPECT_LIVE:
+        bad.append("%d offer(s) are switched on in /api/upsell but EXPECT_LIVE is %d" % (live, EXPECT_LIVE))
+    for n in ("onRequestGet", "onRequestPost", "charge_authorization", "WINDOW_MINUTES", "reusable !== true"):
+        if n not in api:
+            bad.append("functions/api/upsell.js is missing %s" % n)
+    if "needsCheckout" not in js:
+        bad.append("assets/upsell.js does not handle a card that cannot be charged again")
+    for slug in ("habits", "responsibility"):
+        page = (base / "thanks" / slug / "index.html").read_text()
+        for n in ('id="oneclick"', 'id="oc-title"', 'id="oc-go"', "/assets/upsell.js"):
+            if n not in page:
+                bad.append("thanks/%s is missing %s" % (slug, n))
+    if bad:
+        for b in bad:
+            print("FAIL oneclick-rail                    [local] %s" % b)
+        return False
+    print("ok   oneclick-rail                    [local] built, wired, and %d offers live" % live)
+    return True
+
 def check_free_book_off():
     """The free book and the paid book are the same book. Francois switched
     the free route off on 10 Oct 2026, once the paid funnel worked end to end
@@ -656,6 +742,8 @@ def main():
     all_ok &= check_buybox()
     all_ok &= check_free_book_off()
     all_ok &= check_bump_counts()
+    all_ok &= check_prices_agree()
+    all_ok &= check_oneclick_rail()
     for name in GATES:
         html = (base / name / "index.html").read_text()
         all_ok &= check(name, html, "local")

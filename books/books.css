@@ -229,3 +229,18 @@ h1.m-in{animation-delay:.14s}
 .bx-fields{display:block;margin:20px 0 0}
 .bx-fields input{display:block;width:100%;flex:none}
 .bx-fields .bx-go{margin-top:18px;width:100%}
+
+/* The one-click offer after payment. Deliberately plainer than the course
+   panel above it: this is a second ask, not the thing they came for, and it
+   should not shout over what they have just bought. */
+.oneclick{margin-top:30px;max-width:640px;border:1px solid var(--glass-line);border-radius:var(--r-lg);
+  padding:30px 32px;background:var(--glass);box-shadow:var(--lift)}
+.oneclick .kick{font-weight:800;font-size:11px;letter-spacing:2px;text-transform:uppercase;
+  color:rgba(255,255,255,.56);margin-bottom:10px}
+.oneclick .big{font-weight:800;font-size:clamp(19px,2.6vw,23px);letter-spacing:-.5px;line-height:1.25}
+.oneclick p{font-size:15.5px;line-height:1.65;color:var(--muted);margin-top:10px;font-weight:300}
+.oneclick .btn{margin-top:20px}
+.oneclick .btn:disabled{opacity:.6;cursor:default}
+.oneclick .oc-note{font-size:13.5px;color:var(--gold);margin-top:12px;font-weight:500}
+.oneclick.done{border-color:rgba(24,192,192,.4)}
+@media (max-width:640px){.oneclick{padding:24px 22px}}
