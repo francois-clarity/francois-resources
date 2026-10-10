@@ -82,7 +82,7 @@
         '<button class="btn bx-go" id="bx-go" type="submit">Pay ' + rands(price) + '</button>' +
       '</form>' +
       '<p class="bx-err" id="bx-err" role="alert"></p>' +
-      '<p class="bx-fine">Card payment through Paystack. The book downloads the moment the payment clears, and the link is emailed to you as well.</p>';
+      '<p class="bx-fine">Card payment through Paystack. You will be able to download the book, access the course, and the links will also be in your inbox.</p>';
 
     var bump = box.querySelector('#bump');
     var go = box.querySelector('#bx-go');
@@ -105,7 +105,7 @@
       err.textContent = '';
       if (!name) { err.textContent = 'I need a name for the receipt.'; return; }
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { err.textContent = 'That email does not look right.'; return; }
-      if (!phone) { err.textContent = 'I need a phone number, so I can reach you if anything goes wrong.'; return; }
+      if (!phone) { err.textContent = 'I need a phone number.'; return; }
       go.disabled = true;
       go.textContent = 'One moment';
       fetch('/api/checkout', {

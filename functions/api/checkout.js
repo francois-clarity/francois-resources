@@ -56,7 +56,7 @@ export async function onRequestPost({ request, env }) {
   if (!EMAIL.test(email)) return json({ ok: false, error: 'That email does not look right.' }, 400);
   if (!name) return json({ ok: false, error: 'I need a name for the receipt.' }, 400);
   if (phoneDigits.length < 9 || phoneDigits.length > 15) {
-    return json({ ok: false, error: 'I need a phone number, so I can reach you if anything goes wrong.' }, 400);
+    return json({ ok: false, error: 'I need a phone number.' }, 400);
   }
 
   const wantsBump = p.bump === true;
