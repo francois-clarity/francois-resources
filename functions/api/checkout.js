@@ -111,7 +111,16 @@ export async function onRequestPost({ request, env }) {
     } catch { /* the Paystack metadata is the real record */ }
   }
 
-  return json({ ok: true, url: out.data.authorization_url, reference, amount });
+  /* access_code opens Paystack in a box on top of the page, which keeps the
+     reader where they are. url is the full redirect, kept as the fallback for
+     when the Paystack script has not loaded. */
+  return json({
+    ok: true,
+    accessCode: out.data.access_code,
+    url: out.data.authorization_url,
+    reference,
+    amount,
+  });
 }
 
 function rid() {

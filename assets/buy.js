@@ -73,9 +73,32 @@
         body: JSON.stringify({ book: book, bump: bump.checked, name: name, email: email }),
       }).then(function (r) { return r.json(); }).catch(function () { return null; })
         .then(function (out) {
-          if (out && out.ok && out.url) { location.href = out.url; return; }
+          if (!out || !out.ok) {
+            go.disabled = false; retotal();
+            err.textContent = (out && out.error) || 'That did not go through. Try again in a moment.';
+            return;
+          }
+          /* Paystack in a box on top of the page, so nobody leaves the page
+             they were reading. If the script did not load, send them to the
+             full page instead rather than stranding them. */
+          if (out.accessCode && window.PaystackPop) {
+            try {
+              new window.PaystackPop().resumeTransaction(out.accessCode, {
+                onCancel: function () {
+                  go.disabled = false; retotal();
+                  err.textContent = 'No payment was taken. The book is still here when you want it.';
+                },
+                onError: function () {
+                  go.disabled = false; retotal();
+                  err.textContent = 'The payment box had a problem. Try again, or email me.';
+                },
+              });
+              return;
+            } catch (e) { /* fall through to the redirect */ }
+          }
+          if (out.url) { location.href = out.url; return; }
           go.disabled = false; retotal();
-          err.textContent = (out && out.error) || 'That did not go through. Try again in a moment.';
+          err.textContent = 'That did not go through. Try again in a moment.';
         });
     });
   }
