@@ -57,13 +57,15 @@ export async function onRequestGet({ request, env }) {
   const book = BOOKS[slug];
   if (!book) return deny('Unknown book.');
 
-  /* The gift path. Responsibility became the free lead magnet on 30 Sep 2026,
-     so /api/ebook mints a single-use token against an email address and sends
-     the reader here with it. The token is spent on use, which stops a
-     download URL being pasted somewhere and quietly replacing the page that
-     asks for the email. It is not a payment check, because there is nothing
-     left to pay. */
+  /* The gift path, switched off 10 Oct 2026 along with /api/ebook: the book
+     is R147 again, so giving the same book away undercut the page selling it.
+     No token was outstanding when it went off, and they only lasted a day, so
+     no one was left holding a dead link.
+     The branch stays, refusing, so an old link says what happened rather than
+     handing over a paid book. Delete GIFTS_OFF to turn it back on. */
+  const GIFTS_OFF = true;
   const gift = String(url.searchParams.get('gift') || '').trim();
+  if (gift && GIFTS_OFF) return deny('The free book has ended. Both books are at ' + new URL(request.url).origin + '/books/');
   if (gift) {
     if (!env.FUNNEL) return oops('Delivery is not configured yet.');
     if (!store(env)) return oops('Delivery is not configured yet.');

@@ -25,6 +25,24 @@
  * RESULTS_MAILER_KEY. KV binding: FUNNEL.
  */
 
+/* SWITCHED OFF 10 Oct 2026. Francois: "switch off anything that points to
+   the free book pages."
+ *
+ * The book is R147 again and the paid funnel works end to end, so giving the
+ * same book away undercut the page selling it. The two Wix pages that fed
+ * this now redirect to /books/, and this refuses rather than minting another
+ * token. Checked before switching it off: no gift token was outstanding, and
+ * they only ever lasted a day, so nobody was left holding a dead link.
+ *
+ * It answers 410 rather than 404 on purpose. Anything still calling this
+ * fails loudly and says where the book went, instead of looking like a bug.
+ *
+ * To turn it back on, delete this constant and the guard below. Everything
+ * else still works. */
+const OFF = true;
+const GONE = 'The free book has ended. Both books are at ' +
+  'https://resources.francoisesterhuizen.com/books/';
+
 const NOTIFY = 'francois@francoisesterhuizen.com';
 const EMAIL = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
 const BOOK = 'responsibility';
@@ -37,10 +55,12 @@ export async function onRequestOptions() {
   return new Response(null, { status: 204, headers: cors() });
 }
 export async function onRequestGet({ request }) {
+  if (OFF) return json({ ok: false, gone: true, error: GONE, books: SITE + '/books/' }, 410);
   return json({ ok: true, use: 'POST' }, 200);
 }
 
 export async function onRequestPost({ request, env }) {
+  if (OFF) return json({ ok: false, gone: true, error: GONE, books: SITE + '/books/' }, 410);
   let p;
   try { p = await request.json(); } catch { return json({ ok: false, error: 'Bad request.' }, 400); }
 

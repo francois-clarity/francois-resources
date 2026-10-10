@@ -517,6 +517,31 @@ def check_buybox():
     print("ok   buy-box                           [local] name, email and phone, named and autofillable")
     return True
 
+def check_free_book_off():
+    """The free book and the paid book are the same book. Francois switched
+    the free route off on 10 Oct 2026, once the paid funnel worked end to end
+    and the two Wix pages feeding it were redirected. If either guard goes
+    back to false, the site starts giving away a R147 book again and nothing
+    would say so."""
+    import pathlib as _pl
+    base = _pl.Path(__file__).parent
+    bad = []
+    if "const OFF = true;" not in (base / "functions" / "api" / "ebook.js").read_text():
+        bad.append("functions/api/ebook.js is minting free gift links again")
+    if "const GIFTS_OFF = true;" not in (base / "functions" / "api" / "download.js").read_text():
+        bad.append("functions/api/download.js is honouring free gift links again")
+    for f in sorted(base.glob("*/index.html")) + sorted(base.glob("*/*/index.html")) + [base / "index.html"]:
+        try: t = f.read_text()
+        except Exception: continue
+        if "/api/ebook" in t:
+            bad.append("%s still points at the free book" % f.relative_to(base))
+    if bad:
+        for b in bad:
+            print("FAIL free-book-off                     [local] %s" % b)
+        return False
+    print("ok   free-book-off                     [local] nothing gives the paid book away")
+    return True
+
 def check_banned_words():
     """Fail the deploy if a banned word reaches a reader. Born 21 Aug 2026,
     after 'quietly' turned up in a live sales page and two assessment results
@@ -601,6 +626,7 @@ def main():
     all_ok &= check_discreet_subjects()
     all_ok &= check_banned_words()
     all_ok &= check_buybox()
+    all_ok &= check_free_book_off()
     for name in GATES:
         html = (base / name / "index.html").read_text()
         all_ok &= check(name, html, "local")
