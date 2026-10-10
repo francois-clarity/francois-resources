@@ -48,8 +48,16 @@ export async function onRequestPost({ request, env }) {
 
   const email = String(p.email || '').trim().toLowerCase();
   const name = String(p.name || '').trim().slice(0, 80);
+  /* Asked for from 10 Oct 2026 so he can follow a buyer up by phone. The
+     browser sends it already tidied; this only checks it is a number and
+     never trusts the shape. */
+  const phone = String(p.phone || '').replace(/[^\d+]/g, '').slice(0, 24);
+  const phoneDigits = phone.replace(/\D/g, '');
   if (!EMAIL.test(email)) return json({ ok: false, error: 'That email does not look right.' }, 400);
   if (!name) return json({ ok: false, error: 'I need a name for the receipt.' }, 400);
+  if (phoneDigits.length < 9 || phoneDigits.length > 15) {
+    return json({ ok: false, error: 'I need a phone number, so I can reach you if anything goes wrong.' }, 400);
+  }
 
   const wantsBump = p.bump === true;
   const amount = item.price + (wantsBump ? item.bump.price : 0);
@@ -80,11 +88,13 @@ export async function onRequestPost({ request, env }) {
           bump: wantsBump ? item.bump.key : null,
           programme: wantsBump ? item.bump.programme : null,
           name,
+          phone,
           /* Shown to him in the Paystack dashboard, so a transaction is
              readable without looking anything up. */
           custom_fields: [
             { display_name: 'Book', variable_name: 'book', value: item.title },
             { display_name: 'Course added', variable_name: 'bump', value: wantsBump ? 'Yes' : 'No' },
+            { display_name: 'Phone', variable_name: 'phone', value: phone },
           ],
         },
       }),
@@ -106,7 +116,7 @@ export async function onRequestPost({ request, env }) {
       await env.FUNNEL.put('order:' + reference, JSON.stringify({
         book: slug, bump: wantsBump ? item.bump.key : null,
         programme: wantsBump ? item.bump.programme : null,
-        amount, email, name, at: Date.now(),
+        amount, email, name, phone, at: Date.now(),
       }), { expirationTtl: 60 * 60 * 24 * 30 });
     } catch { /* the Paystack metadata is the real record */ }
   }

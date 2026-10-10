@@ -57,6 +57,14 @@ GATES = {
         "must": ["thankyou_view_", "tool_open_", "paid_tease_click_", "wa.me/27824441831"],
         "must_not": ["Story of Us", "/library/"],
     },
+    # The page that shows both books. It sat at R270 on both of them for
+    # weeks after the prices changed, which is how somebody arrives at a
+    # checkout that asks for a different number than the page promised.
+    "books": {
+        "must": ["The Empowering Truth of Responsibility", "10 Habits of Happy Relationships",
+                 "/books/responsibility/", "/books/habits/", "R147", "R197"],
+        "must_not": ["R270", "Free", "free ebook", "paystack.com/buy/"],
+    },
     # Each must deliver the book AND open the course, if one was added at
     # checkout. The panel is empty markup until /api/claim fills it in, so
     # the guard checks the markup and the script that reaches for it: without
@@ -491,6 +499,24 @@ BANNED = {
 # copy inside quotes is.
 STRINGS = re.compile(r"'(?:\\.|[^'\\\n])*'|\"(?:\\.|[^\"\\\n])*\"|`(?:\\.|[^`\\])*`", re.S)
 
+def check_buybox():
+    """The buy box is built in JavaScript, so nothing in the HTML proves the
+    fields are there. Francois asked for a phone number on 10 Oct 2026 so he
+    can follow a buyer up, and asked for the browser to fill all three in.
+    Autofill only happens for named fields inside a real form, so the form
+    and the names are the feature, not decoration."""
+    import pathlib as _pl
+    js = (_pl.Path(__file__).parent / "assets" / "buy.js").read_text()
+    need = ['id="bx-form"', 'name="name"', 'name="email"', 'name="tel"',
+            'autocomplete="name"', 'autocomplete="email"', 'autocomplete="tel"',
+            'type="submit"', 'tidyPhone']
+    missing = [n for n in need if n not in js]
+    if missing:
+        print("FAIL buy-box                           [local] assets/buy.js is missing: %s" % ", ".join(missing))
+        return False
+    print("ok   buy-box                           [local] name, email and phone, named and autofillable")
+    return True
+
 def check_banned_words():
     """Fail the deploy if a banned word reaches a reader. Born 21 Aug 2026,
     after 'quietly' turned up in a live sales page and two assessment results
@@ -574,6 +600,7 @@ def main():
     all_ok &= check_ai_giveaways()
     all_ok &= check_discreet_subjects()
     all_ok &= check_banned_words()
+    all_ok &= check_buybox()
     for name in GATES:
         html = (base / name / "index.html").read_text()
         all_ok &= check(name, html, "local")

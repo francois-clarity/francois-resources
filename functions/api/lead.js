@@ -12,6 +12,15 @@
  *   tool:<tool-key>
  *   answer:<answer-key>
  *
+ * A sibling assessment on its own subdomain may instead send
+ *   { name, email, assessment: <allowlisted key>, currentClient: 'yes'|'no' }
+ * and gets that assessment's own tags rather than the funnel's. This is here
+ * so a site with no Mailchimp credentials of its own does not need a second
+ * copy of them: it posts here, worker to worker, and there stays one place
+ * where the list lives. The allowlist is the whole point. Without it this
+ * endpoint would let anybody on the internet write any tag they liked onto
+ * any address they liked.
+ *
  * Env (set in Cloudflare Pages → Settings → Environment variables):
  *   MAILCHIMP_API_KEY, MAILCHIMP_AUDIENCE
  *
@@ -20,6 +29,12 @@
  */
 
 const BASE_TAG = 'resources-funnel';
+
+/* Each sibling assessment and the tags it owns. Adding a key here is a
+   deliberate act; nothing else may name a tag. */
+const ASSESSMENTS = {
+  'attachment-style': { base: 'attachment-style', client: 'current-client', lead: 'new-lead' },
+};
 
 export async function onRequestPost({ request, env }) {
   let payload;
@@ -31,6 +46,7 @@ export async function onRequestPost({ request, env }) {
   const path   = payload.path === 'relational' ? 'relational' : 'personal';
   const tool   = sanitizeKey(payload.tool);
   const answer = sanitizeKey(payload.answer);
+  const sibling = ASSESSMENTS[sanitizeKey(payload.assessment)] || null;
 
   if (!isEmail(email)) {
     return json({ ok: false, error: 'Invalid email' }, 400);
@@ -53,9 +69,16 @@ export async function onRequestPost({ request, env }) {
   const subscriberHash = await md5(email);
   const memberUrl = `${base}/lists/${audienceId}/members/${subscriberHash}`;
 
-  const tags = [BASE_TAG, `path:${path}`];
-  if (tool)   tags.push(`tool:${tool}`);
-  if (answer) tags.push(`answer:${answer}`);
+  const tags = [];
+  if (sibling) {
+    tags.push(sibling.base);
+    if (payload.currentClient === 'yes') tags.push(sibling.client);
+    else if (payload.currentClient === 'no') tags.push(sibling.lead);
+  } else {
+    tags.push(BASE_TAG, `path:${path}`);
+    if (tool)   tags.push(`tool:${tool}`);
+    if (answer) tags.push(`answer:${answer}`);
+  }
 
   try {
     const lookup = await fetch(memberUrl, { headers: { Authorization: auth } });

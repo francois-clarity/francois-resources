@@ -195,3 +195,12 @@ h1.m-in{animation-delay:.14s}
 .opened p{font-size:16px;line-height:1.65;color:rgba(255,255,255,.72);margin-top:12px;font-weight:300}
 .opened .btn{margin-top:22px;background:#F6C35C;color:#14202B}
 @media (max-width:640px){.opened{padding:26px 22px}}
+
+/* The buy box labels. They were placeholder-only, which reads fine and
+   autofills badly: a browser decides whether to offer a saved card and
+   address from the form's labels and field names, so the labels earn their
+   place even though the placeholder repeats them. */
+.bx-lab{display:block;font-size:12px;font-weight:600;letter-spacing:.4px;
+  color:rgba(255,255,255,.52);margin:14px 0 6px}
+.bx-lab:first-child{margin-top:0}
+.bx-fields{display:block}
