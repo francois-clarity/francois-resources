@@ -175,3 +175,7 @@ h1.m-in{animation-delay:.14s}
 .bx-fine{margin-top:16px;font-size:13px;line-height:1.6;color:rgba(255,255,255,.42)}
 
 @media(max-width:560px){.buybox{padding:24px 20px}.bx-bump{padding:16px}}
+/* Sits under the buy box on the responsibility page and answers the one
+   objection that kills that bump: I am buying the book, is this the course
+   of the book again. */
+.bx-why{margin:18px 2px 0;font-size:15.5px;line-height:1.62;color:rgba(255,255,255,.6);max-width:62ch}
