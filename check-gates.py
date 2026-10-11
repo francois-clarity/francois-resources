@@ -509,7 +509,11 @@ def check_buybox():
     js = (_pl.Path(__file__).parent / "assets" / "buy.js").read_text()
     need = ['id="bx-form"', 'name="name"', 'name="email"', 'name="tel"',
             'autocomplete="name"', 'autocomplete="email"', 'autocomplete="tel"',
-            'type="submit"', 'tidyPhone']
+            'type="submit"', 'tidyPhone',
+            # Without onSuccess a paid popup closes and nothing happens. It
+            # took real money on 11 Oct 2026 and handed over no book. It does
+            # not get to go missing twice.
+            'onSuccess', "location.href = '/thanks/"]
     missing = [n for n in need if n not in js]
     if missing:
         print("FAIL buy-box                           [local] assets/buy.js is missing: %s" % ", ".join(missing))

@@ -118,7 +118,18 @@ export async function onRequestPost({ request, env }) {
         programme: wantsBump ? item.bump.programme : null,
         amount, email, name, phone, at: Date.now(),
       }), { expirationTtl: 60 * 60 * 24 * 30 });
-    } catch { /* the Paystack metadata is the real record */ }
+    } catch (e) {
+      /* This used to be swallowed on the grounds that the Paystack metadata
+         is the real record. It is, but losing our copy means the thank-you
+         page cannot tell what was ordered and the course is never granted,
+         and nothing anywhere says so. Now it is recorded and he is told. */
+      try {
+        await env.FUNNEL.put('stuck:' + reference, JSON.stringify({
+          what: 'the order record did not save, so delivery has nothing to read',
+          email, book: slug, amount, at: Date.now(),
+        }), { expirationTtl: 60 * 60 * 24 * 180 });
+      } catch { /* nothing left to try */ }
+    }
   }
 
   /* access_code opens Paystack in a box on top of the page, which keeps the

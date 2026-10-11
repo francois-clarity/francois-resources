@@ -125,6 +125,21 @@
           if (out.accessCode && window.PaystackPop) {
             try {
               new window.PaystackPop().resumeTransaction(out.accessCode, {
+                /* THE ONE THAT MATTERS. Without it a successful payment did
+                   nothing at all: the box closed, the button stayed on One
+                   moment, and the buyer was left having paid with no book.
+                   Francois found it the first time real money went through,
+                   by SnapScan, on 11 Oct 2026.
+
+                   Paystack only uses callback_url when it takes over the whole
+                   page. In a popup it calls this instead, and it is on us to
+                   go somewhere. */
+                onSuccess: function (tx) {
+                  var paid = (tx && (tx.reference || tx.trxref)) || out.reference;
+                  go.textContent = 'Opening your book';
+                  location.href = '/thanks/' + encodeURIComponent(book)
+                                + '/?reference=' + encodeURIComponent(paid);
+                },
                 onCancel: function () {
                   go.disabled = false; retotal();
                   err.textContent = 'No payment was taken. The book is still here when you want it.';
