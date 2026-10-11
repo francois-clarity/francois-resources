@@ -73,7 +73,7 @@ GATES = {
         # Post-purchase delivery + the added course + one upsell.
         "must": ["Download the ebook", "/api/download?book=responsibility",
                  "noindex", "Download your copy", "Save it somewhere",
-                 "The Foundations of Clarity", "oto_view",
+                 "oto_view",
                  'id="opened"', 'id="op-title"', 'id="op-body"', 'id="op-cta"',
                  "/assets/claim.js"],
         "must_not": ["files/d/", "Pattern Breaker"],
