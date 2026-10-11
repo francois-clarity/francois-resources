@@ -607,7 +607,7 @@ def check_oneclick_rail():
     give the offer a deliver, and update EXPECT_LIVE below."""
     import pathlib as _pl, re as _re
     base = _pl.Path(__file__).parent
-    EXPECT_LIVE = 0
+    EXPECT_LIVE = 2
     bad = []
     api = (base / "functions" / "api" / "upsell.js").read_text()
     js = (base / "assets" / "upsell.js").read_text()

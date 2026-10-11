@@ -7,11 +7,14 @@
  * through a checkout, which is the whole point: a second yes should cost one
  * click, not a second set of card details.
  *
- * THE RAIL IS BUILT, THE PRODUCTS ARE NOT ATTACHED. Every offer below is
- * disabled. Nothing on this endpoint can take a cent until Francois picks
- * what goes in bump two and bump three, and `enabled` is set to true with a
- * `deliver` that actually hands the thing over. A disabled offer refuses and
- * says so, rather than charging for something nobody can deliver.
+ * BUMP THREE IS LIVE, BUMP TWO IS NOT. He said yes to the other book at R97
+ * on 11 Oct 2026, and that one can ship because the rail already knows how to
+ * hand over a book: /api/download verifies the new reference with Paystack
+ * exactly as it does a first purchase.
+ *
+ * Bump two is an assessment, and nothing here knows how to hand one of those
+ * over yet. Those offers stay disabled, and a disabled offer refuses and says
+ * so rather than charging for something nobody can deliver.
  *
  * What it checks, in order, refusing on the first failure:
  *   1. the offer exists, is enabled, and belongs to the book that was bought
@@ -54,7 +57,7 @@ const OFFERS = {
   },
   /* Bump three, the other book. Waiting on Q17. */
   'other-book-habits': {
-    enabled: false,
+    enabled: true,
     forBooks: ['responsibility'],
     price: 9700,
     title: '10 Habits of Happy Relationships',
@@ -62,7 +65,7 @@ const OFFERS = {
     deliver: { kind: 'book', book: 'habits', match: '10 habits' },
   },
   'other-book-responsibility': {
-    enabled: false,
+    enabled: true,
     forBooks: ['habits'],
     price: 9700,
     title: 'The Empowering Truth of Responsibility',
@@ -168,6 +171,7 @@ export async function onRequestPost({ request, env }) {
         reference: upRef,
         metadata: {
           upsell: key, parent: ref, book: offer.deliver.book || null,
+          title: offer.title,
           name: order.name || null, phone: order.phone || null,
           custom_fields: [
             { display_name: 'Added after paying', variable_name: 'upsell', value: offer.title },

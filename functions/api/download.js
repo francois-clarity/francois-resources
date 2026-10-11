@@ -27,6 +27,11 @@
  * reference exists.
  */
 
+/* The least an upsell may pay for a book. Bump three sells the other book at
+   R97; this is the floor that allows it, and it must stay in step with the
+   prices in functions/api/upsell.js. Anything below this is refused. */
+const UPSELL_FLOOR = 9700;
+
 const BOOKS = {
   responsibility: {
     key: 'responsibility.pdf',
@@ -109,8 +114,22 @@ export async function onRequestGet({ request, env }) {
   const namesOther = other ? haystack.includes(other.match) : false;
   if (namesOther && !namesThis) return deny('That payment was for the other book.');
 
-  // 3. and that enough was actually paid
-  if (typeof tx.amount === 'number' && tx.amount < book.minorUnits) {
+  /* 3. and that enough was actually paid.
+   *
+   * An upsell is the exception, and it has to be, because bump three sells
+   * the other book at R97 against a list price of R147 or R197. Without this
+   * the site would take the R97 and then refuse the book, which is the worst
+   * outcome on the whole funnel.
+   *
+   * It is still a real check. The transaction has to be one WE started, with
+   * our own metadata naming this exact book as an upsell, and it still has to
+   * clear the upsell floor. Metadata is set by /api/upsell when it charges
+   * the card, never by anything a buyer can reach.
+   */
+  const meta = tx.metadata || {};
+  const isUpsell = !!meta.upsell && String(meta.book || '').toLowerCase() === slug;
+  const floor = isUpsell ? UPSELL_FLOOR : book.minorUnits;
+  if (typeof tx.amount === 'number' && tx.amount < floor) {
     return deny('Payment amount does not match.');
   }
 
