@@ -82,7 +82,7 @@ GATES = {
         # Post-purchase delivery + the added course + one upsell.
         "must": ["Download the ebook", "/api/download?book=habits",
                  "noindex", "Download your copy", "Save it somewhere",
-                 "Cracking the Conflict Code", "R1 200", "oto_view",
+                 "oto_view",
                  'id="opened"', 'id="op-title"', 'id="op-body"', 'id="op-cta"',
                  "/assets/claim.js"],
         "must_not": ["files/d/", "Pattern Breaker"],
@@ -97,7 +97,7 @@ GATES = {
     "books/responsibility": {
         "must": ['data-book="responsibility"', 'data-price="14700"',
                  'data-bump-price="29700"', "assets/buy.js",
-                 "The part where you actually do it", "responsibility-inside.png"],
+                 "For when you already know and still do not move", "responsibility-inside.png"],
         "must_not": ["noindex", "10-habits-of-happy", "paystack.com/buy/", "R270",
                      # the bump must never read as the book again
                      "based on the book", "course version"],
@@ -105,7 +105,7 @@ GATES = {
     "books/habits": {
         "must": ['data-book="habits"', 'data-price="19700"',
                  'data-bump-price="29700"', "assets/buy.js",
-                 "Why you keep having the same fight", "habits-inside.png"],
+                 "Why one of you chases and the other goes silent", "habits-inside.png"],
         "must_not": ["noindex", "read free", "the-empowering-truth",
                      "paystack.com/buy/", "R270",
                      "based on the book", "course version"],
@@ -575,15 +575,13 @@ def check_prices_agree():
             stale.add("%s shows %s" % (f.relative_to(base), v))
 # Named exceptions. Each one is a price on this site that is not a book
     # price, left standing on purpose and not by accident. 
-    # Named exceptions. Each one is a price on this site that is not a book
-    # price, standing on purpose rather than by accident.
-    OK_OVER = {
-        # Cracking the Conflict Code, the upsell on the habits thank-you page.
-        # Francois made everything on this site a low ticket offer on
-        # 10 Oct 2026, and R1 200 is not that. Waiting on Q28: drop the price,
-        # or move that upsell off this site and sell it somewhere else.
-        "thanks/habits/index.html shows R1200",
-    }
+    # Named exceptions, each a price on this site that is not a book price and
+    # stands on purpose. Empty since 11 Oct 2026: the R1 200 Cracking the
+    # Conflict Code upsell came off the habits thank-you page on his word,
+    # "it will no longer use that funnel because we now have a different
+    # landing page with the bumps for the book". Nothing on this site is above
+    # the low ticket line any more. Adding to this set is a deliberate act.
+    OK_OVER = set()
     for row in sorted(stale):
         amount = int(_re.search(r"R(\d+)", row.split()[-1]).group(1))
         if row in OK_OVER:
