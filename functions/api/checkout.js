@@ -22,6 +22,17 @@
    The bump is priced at or above the book on purpose: the book is the hook,
    the bump is where the margin is. That is the opposite of retail, where a
    bump is a cheap accessory, and it is deliberate. */
+/* BUMPS OFF, 12 Oct 2026. Francois: if I am not certain the whole funnel
+   works, sell only the books and only what is known to work.
+   What is known: the page, the checkout, the Paystack popup, and the book
+   itself releasing against a real payment. All four were proven on his own
+   R147 on 11 Oct.
+   What is not: no bump has ever been bought with real money, so the tick
+   came off both pages and this refuses one even if a request asks for it.
+   To put it back, restore the bump object here and paste the three
+   data-bump attributes back onto the page. Nothing else changed. */
+const BUMPS_ON = false;
+
 const CATALOGUE = {
   responsibility: {
     title: 'The Empowering Truth of Responsibility',
@@ -59,7 +70,7 @@ export async function onRequestPost({ request, env }) {
     return json({ ok: false, error: 'I need a phone number.' }, 400);
   }
 
-  const wantsBump = p.bump === true;
+  const wantsBump = BUMPS_ON && p.bump === true;
   const amount = item.price + (wantsBump ? item.bump.price : 0);
 
   if (!env.PAYSTACK_SECRET_KEY) return json({ ok: false, error: 'Checkout is not configured yet.' }, 503);

@@ -25,6 +25,13 @@
     var bumpPrice = parseInt(box.dataset.bumpPrice, 10);
     var bumpTitle = box.dataset.bumpTitle || '';
     var bumpBody = box.dataset.bumpBody || '';
+    /* No bump unless the page carries one. Francois, 12 Oct 2026: if I am
+       not certain the whole funnel works, sell only the books and only what
+       is known to work. The course bump has never been bought with real
+       money, so its data-bump attributes came off the two book pages and
+       this box quietly becomes a one-line checkout. Put the attributes back
+       and the bump returns exactly as it was. */
+    var hasBump = bumpPrice > 0 && !!bumpTitle;
 
     /* The shape comes from three of Maria Wendt's live checkouts, read on
        10 Oct 2026, not from a guess. What they do that the first version
@@ -47,6 +54,7 @@
       '<div class="bx-row"><span>' + esc(box.dataset.title || 'The book') + '</span>' +
         '<span class="bx-amt">' + rands(price) + '</span></div>' +
 
+      (!hasBump ? '' :
       '<div class="bx-bump-wrap">' +
         '<p class="bx-flag">Recommended</p>' +
         '<div class="bx-bump-head">' +
@@ -60,7 +68,7 @@
           '<input type="checkbox" id="bump">' +
           '<span>Yes, add this to my order for ' + rands(bumpPrice) + '</span>' +
         '</label>' +
-      '</div>' +
+      '</div>') +
 
       '<div class="bx-total"><span>Total</span><span class="bx-amt" id="total">' + rands(price) + '</span></div>' +
       /* A real <form>, with a name on every field and the matching
@@ -84,13 +92,13 @@
       '<p class="bx-err" id="bx-err" role="alert"></p>' +
       '<p class="bx-fine">Card payment through Paystack. You will be able to download the book, access the course, and the links will also be in your inbox.</p>';
 
-    var bump = box.querySelector('#bump');
+    var bump = box.querySelector('#bump') || { checked: false, addEventListener: function () {} };
     var go = box.querySelector('#bx-go');
     var total = box.querySelector('#total');
     var err = box.querySelector('#bx-err');
 
     function retotal() {
-      var t = price + (bump.checked ? bumpPrice : 0);
+      var t = price + (hasBump && bump.checked ? bumpPrice : 0);
       total.textContent = rands(t);
       go.textContent = 'Pay ' + rands(t);
       box.classList.toggle('has-bump', bump.checked);
@@ -111,7 +119,7 @@
       fetch('/api/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ book: book, bump: bump.checked, name: name, email: email, phone: phone }),
+        body: JSON.stringify({ book: book, bump: hasBump && bump.checked, name: name, email: email, phone: phone }),
       }).then(function (r) { return r.json(); }).catch(function () { return null; })
         .then(function (out) {
           if (!out || !out.ok) {

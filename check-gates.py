@@ -96,16 +96,16 @@ GATES = {
     # link would take money this site could not deliver against.
     "books/responsibility": {
         "must": ['data-book="responsibility"', 'data-price="14700"',
-                 'data-bump-price="29700"', "assets/buy.js",
-                 "For when you already know and still do not move", "responsibility-inside.png"],
+                 "assets/buy.js",
+                 "responsibility-inside.png"],
         "must_not": ["noindex", "10-habits-of-happy", "paystack.com/buy/", "R270",
                      # the bump must never read as the book again
                      "based on the book", "course version"],
     },
     "books/habits": {
         "must": ['data-book="habits"', 'data-price="19700"',
-                 'data-bump-price="29700"', "assets/buy.js",
-                 "Why one of you chases and the other goes silent", "habits-inside.png"],
+                 "assets/buy.js",
+                 "habits-inside.png"],
         "must_not": ["noindex", "read free", "the-empowering-truth",
                      "paystack.com/buy/", "R270",
                      "based on the book", "course version"],
@@ -534,8 +534,23 @@ def check_bump_counts():
     import pathlib as _pl
     base = _pl.Path(__file__).parent
     bad = []
+    api = (base / "functions" / "api" / "checkout.js").read_text()
+    on = "const BUMPS_ON = true" in api
     r = (base / "books" / "responsibility" / "index.html").read_text()
     h = (base / "books" / "habits" / "index.html").read_text()
+    live_r = 'data-bump-price' in r.split("</div>")[0] if 'class="buybox"' in r else False
+    if not on:
+        # Switched off 12 Oct 2026. The page must not offer what the server
+        # refuses to sell, which is the mismatch that takes money for nothing.
+        for name, page in (("responsibility", r), ("habits", h)):
+            i = page.find('class="buybox"')
+            if i >= 0 and "data-bump-" in page[i:page.find("</div>", i)]:
+                bad.append("books/%s still offers a bump the checkout refuses to sell" % name)
+        if bad:
+            pass
+        else:
+            print("ok   bump-counts                       [local] bumps are off, and no page offers one")
+            return True
     if "sixteen short" not in r.lower():
         bad.append("books/responsibility does not say sixteen lessons")
     if "seventeen" in r.lower():
@@ -609,7 +624,7 @@ def check_oneclick_rail():
     give the offer a deliver, and update EXPECT_LIVE below."""
     import pathlib as _pl, re as _re
     base = _pl.Path(__file__).parent
-    EXPECT_LIVE = 2
+    EXPECT_LIVE = 0
     bad = []
     api = (base / "functions" / "api" / "upsell.js").read_text()
     js = (base / "assets" / "upsell.js").read_text()

@@ -7,7 +7,16 @@
  * through a checkout, which is the whole point: a second yes should cost one
  * click, not a second set of card details.
  *
- * BUMP THREE IS LIVE, BUMP TWO IS NOT. He said yes to the other book at R97
+ * EVERYTHING OFF, 12 Oct 2026. Francois: if I am not certain the whole
+ * funnel works, sell only the books.
+ *
+ * Bump three was switched on yesterday and its charge has never actually
+ * run: charge_authorization has not been executed once, against anybody's
+ * card. The offer appeared correctly on his real purchase, which proves the
+ * lookup, and proves nothing about the charge. That is the kind of thing
+ * that should be found with his own card, not a buyer's.
+ *
+ * Previously: BUMP THREE IS LIVE, BUMP TWO IS NOT. He said yes to the other book at R97
  * on 11 Oct 2026, and that one can ship because the rail already knows how to
  * hand over a book: /api/download verifies the new reference with Paystack
  * exactly as it does a first purchase.
@@ -57,7 +66,7 @@ const OFFERS = {
   },
   /* Bump three, the other book. Waiting on Q17. */
   'other-book-habits': {
-    enabled: true,
+    enabled: false,
     forBooks: ['responsibility'],
     price: 9700,
     title: '10 Habits of Happy Relationships',
@@ -65,7 +74,7 @@ const OFFERS = {
     deliver: { kind: 'book', book: 'habits', match: '10 habits' },
   },
   'other-book-responsibility': {
-    enabled: true,
+    enabled: false,
     forBooks: ['habits'],
     price: 9700,
     title: 'The Empowering Truth of Responsibility',
