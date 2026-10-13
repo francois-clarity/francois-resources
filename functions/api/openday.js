@@ -52,7 +52,7 @@ const SIGNUPS_PER_HOUR = 8;
  * Settings for the room are in the content engine, at
  * marketing/campaigns/2026-t4-cohort/zoom-setup.md
  */
-const ZOOM_JOIN = 'https://us02web.zoom.us/j/81623485167?pwd=TXAmKbQH6HSsQAqhGGKGRcv4y3lF2n.1';
+const ZOOM_JOIN = 'https://us02web.zoom.us/j/84956451223?pwd=4m5hlm9ezKvOvoYpvmcSqlRH3CESHX.1'; // 13 Oct 03:45, Mark: the room on his calendar and in Circle (849 5645 1223); 816 2348 5167 was the earlier one
 
 function cors(origin) {
   return {
