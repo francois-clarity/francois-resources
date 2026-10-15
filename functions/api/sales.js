@@ -1,22 +1,26 @@
 /* Cloudflare Pages Function: GET /api/sales
  *
- * What the books have actually earned, read from Paystack, which is the only
- * thing that knows what was really paid.
+ * What the books have earned, read from a ledger we write ourselves.
  *
- * Not from our own order records. Those are written when a checkout STARTS,
- * so counting them would count abandoned carts as sales and tell Francois he
- * had made money he had not. On 12 Oct there were five order records and one
- * real payment.
+ * Two earlier attempts are worth recording, because both looked right.
  *
- * Protected, because this is revenue. Send the key as a bearer token. It is a
- * key of its own, not the automation key, so the page that shows the numbers
- * never needs the one that can enrol people.
+ * Paystack's transaction list: asked on 15 Oct 2026 it returned 99
+ * transactions, every one carrying Paystack's own reference and not one of
+ * ours, and it skipped the day of the only real book sale. Wrong source.
  *
- * Env: PAYSTACK_SECRET_KEY, SALES_KEY.
+ * Reconciling our order records against verify: an order record is written
+ * when a checkout STARTS, so the set is full of abandoned carts, and asking
+ * Paystack about each one is a pile of calls to learn mostly nothing.
  *
- * Returns totals per book, what the bumps added, and the most recent sales,
- * all in cents, with `since` echoed back so a number can never be read
- * without knowing the window it covers.
+ * So a sale is written down at the moment it is known to be a sale, by the
+ * two places that already prove a payment: /api/download, which verifies
+ * before releasing a book, and the Paystack webhook, which is signed. Both
+ * key on the reference, so a sale recorded twice is still one sale.
+ *
+ * That makes this endpoint a read, nothing more. No Paystack calls, no
+ * guessing, and it cannot report money that was not taken.
+ *
+ * Env: SALES_KEY. Bindings: FUNNEL.
  */
 
 const BOOKS = {
@@ -29,63 +33,23 @@ export async function onRequestGet({ request, env }) {
   if (!env.SALES_KEY || !given || given !== env.SALES_KEY) {
     return json({ ok: false, error: 'Not allowed.' }, 401);
   }
-  if (!env.PAYSTACK_SECRET_KEY) return json({ ok: false, error: 'Not configured.' }, 503);
-
-  const url = new URL(request.url);
   if (!env.FUNNEL) return json({ ok: false, error: 'Not configured.' }, 503);
 
-  /* Every order we ever started, then ask Paystack about each one.
-   *
-   * The obvious way was Paystack's transaction list, and it does not work
-   * here: asked on 15 Oct 2026 it returned 99 transactions, all carrying
-   * Paystack's own references (T3004..., long hex), none of ours, and it
-   * skipped the day of his real book purchase entirely. Meanwhile verify on
-   * that same reference answers success, which is how his book was released.
-   *
-   * So this reconciles the other way round. We know every reference we
-   * minted, because we wrote it down when the checkout started, and verify
-   * is the call already proven to work on them. A record with no successful
-   * payment is an abandoned checkout and counts as nothing.
-   */
-  const keys = [];
+  const names = [];
   let cursor;
   for (let round = 0; round < 10; round++) {
-    const page = await env.FUNNEL.list({ prefix: 'order:', limit: 1000, cursor });
-    keys.push(...page.keys.map(k => k.name));
+    const page = await env.FUNNEL.list({ prefix: 'sale:', limit: 1000, cursor });
+    names.push(...page.keys.map(k => k.name));
     if (page.list_complete) break;
     cursor = page.cursor;
   }
 
-  const scanned = keys.length;
-  const mine = [];
-  /* A handful at a time, so a worker is never waiting on a hundred calls
-     at once. */
-  for (let i = 0; i < keys.length; i += 6) {
-    const batch = keys.slice(i, i + 6);
-    const got = await Promise.all(batch.map(async (name) => {
-      const ref = name.slice('order:'.length);
-      let order = null;
-      try { order = JSON.parse(await env.FUNNEL.get(name) || 'null'); } catch { /* keep going */ }
-      try {
-        const res = await fetch('https://api.paystack.co/transaction/verify/' + encodeURIComponent(ref),
-          { headers: { Authorization: 'Bearer ' + env.PAYSTACK_SECRET_KEY } });
-        const v = await res.json();
-        if (!res.ok || !v || v.status !== true || !v.data) return null;
-        const t = v.data;
-        if (String(t.status).toLowerCase() !== 'success') return null;
-        return {
-          reference: ref,
-          amount: Number(t.amount) || 0,
-          at: t.paid_at || t.created_at || null,
-          channel: t.channel || null,
-          book: (order && order.book) || (t.metadata || {}).book || null,
-          bump: (order && order.bump) || null,
-          name: (order && order.name) || null,
-          upsell: (t.metadata || {}).upsell || null,
-        };
-      } catch { return null; }
+  const sales = [];
+  for (let i = 0; i < names.length; i += 20) {
+    const batch = await Promise.all(names.slice(i, i + 20).map(async (n) => {
+      try { return JSON.parse(await env.FUNNEL.get(n) || 'null'); } catch { return null; }
     }));
-    mine.push(...got.filter(Boolean));
+    sales.push(...batch.filter(Boolean));
   }
 
   const perBook = {};
@@ -93,55 +57,31 @@ export async function onRequestGet({ request, env }) {
     perBook[slug] = { title: BOOKS[slug].title, sales: 0, gross: 0, withCourse: 0 };
   }
   let gross = 0, bumpGross = 0, upsellGross = 0, unmatched = 0;
-  for (const t of mine) {
-    gross += t.amount;
-    const slug = String(t.book || '').toLowerCase();
-    if (!perBook[slug]) { unmatched += t.amount; continue; }
+  for (const s of sales) {
+    const amount = Number(s.amount) || 0;
+    gross += amount;
+    const slug = String(s.book || '').toLowerCase();
+    if (!perBook[slug]) { unmatched += amount; continue; }
     perBook[slug].sales += 1;
-    perBook[slug].gross += t.amount;
-    if (t.upsell) { upsellGross += t.amount; continue; }
-    const over = t.amount - BOOKS[slug].price;
+    perBook[slug].gross += amount;
+    if (s.upsell) { upsellGross += amount; continue; }
+    const over = amount - BOOKS[slug].price;
     if (over > 0) { perBook[slug].withCourse += 1; bumpGross += over; }
   }
 
-  if (url.searchParams.get('debug') === '1') {
-    return json({ ok: true, scanned, matched: mine.length,
-      sample: mine.slice(0, 25).map(t => ({ reference: t.reference, at: (t.at || '').slice(0, 10), book: t.book })) });
-  }
-
-  const recent = mine
+  const recent = sales
     .slice()
-    .sort((a, b) => String(b.paid_at || b.created_at || '').localeCompare(String(a.paid_at || a.created_at || '')))
+    .sort((a, b) => String(b.at || '').localeCompare(String(a.at || '')))
     .slice(0, 12)
-    .map(t => ({
-      at: t.paid_at || t.created_at || null,
-      amount: Number(t.amount) || 0,
-      channel: t.channel || null,
-      book: (t.metadata || {}).book || null,
-      upsell: (t.metadata || {}).upsell || null,
-      name: (t.metadata || {}).name || null,
-      reference: t.reference,
+    .map(s => ({
+      at: s.at || null, amount: Number(s.amount) || 0, channel: s.channel || null,
+      book: s.book || null, upsell: s.upsell || null, name: s.name || null,
+      reference: s.reference || null, via: s.via || null,
     }));
-
-  /* With ?debug=1, the references and dates it looked at and nothing else.
-     No amounts, no names. It exists because the first run scanned 99
-     transactions and matched none, and a count cannot tell you why. */
-  if (url.searchParams.get('debug') === '1') {
-    return json({
-      ok: true, scanned, matched: mine.length, since: from,
-      sample: rows.slice(0, 25).map(t => ({
-        reference: t.reference,
-        at: (t.paid_at || t.created_at || '').slice(0, 10),
-        status: t.status,
-      })),
-    });
-  }
 
   return json({
     ok: true,
-    since: 'every order recorded, which is thirty days of them',
-    scanned,
-    counted: mine.length,
+    sales: sales.length,
     gross,
     bookGross: gross - bumpGross - upsellGross - unmatched,
     bumpGross,
@@ -149,10 +89,10 @@ export async function onRequestGet({ request, env }) {
     unmatched,
     perBook,
     recent,
-    note: 'Every amount is in cents, and every one of them was really paid. '
-        + 'Each one was checked with Paystack one at a time, so an abandoned '
-        + 'checkout counts as nothing. Order records last thirty days, so this '
-        + 'is the last thirty days of sales.',
+    note: 'Every amount is in cents and every one was really paid. A sale is '
+        + 'written down when a payment is proven, either by the download '
+        + 'releasing a book or by Paystack telling us directly, so nothing '
+        + 'here is a checkout somebody abandoned.',
   });
 }
 

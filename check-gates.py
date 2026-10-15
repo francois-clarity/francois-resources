@@ -663,10 +663,15 @@ def check_sales_locked():
     # It used to filter Paystack's list down to our references. That list
     # never returns them, so it now starts from our own order records and
     # verifies each one, which is the call proven to work on them.
-    if "prefix: 'order:'" not in api:
-        bad.append("functions/api/sales.js does not start from our own order records")
-    if "transaction/verify" not in api:
-        bad.append("functions/api/sales.js does not verify each order with Paystack")
+    # It reads a ledger now. Paystack's list never returns our references,
+    # and order records are checkouts that started, not sales. A sale is
+    # written down by the two places that prove a payment.
+    if "prefix: 'sale:'" not in api:
+        bad.append("functions/api/sales.js does not read the sale ledger")
+    base = _pl.Path(__file__).parent
+    for f in ("download.js", "paystack-hook.js"):
+        if "'sale:' + ref" not in (base / "functions" / "api" / f).read_text():
+            bad.append("functions/api/%s does not write the sale down" % f)
     if bad:
         for b in bad:
             print("FAIL sales-locked                      [local] %s" % b)

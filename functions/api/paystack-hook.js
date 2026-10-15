@@ -46,6 +46,20 @@ export async function onRequestPost({ request, env }) {
   const ref = String(ev.data.reference || '').trim();
   if (!ref || !env.FUNNEL) return new Response('ok');
 
+  /* Write the sale down first, whatever else this event is for. Paystack
+     signed it, so it is proof, and this is the half of the ledger that
+     catches somebody who pays and never downloads. */
+  if (/^(bk_|up_)/.test(ref) && !(await env.FUNNEL.get('sale:' + ref))) {
+    const m = ev.data.metadata || {};
+    await env.FUNNEL.put('sale:' + ref, JSON.stringify({
+      reference: ref, amount: Number(ev.data.amount) || 0, book: m.book || null,
+      at: ev.data.paid_at || ev.data.created_at || new Date().toISOString(),
+      channel: ev.data.channel || null, name: m.name || null,
+      email: (ev.data.customer || {}).email || null,
+      upsell: m.upsell || null, via: 'webhook',
+    })).catch(() => {});
+  }
+
   // The thank-you page may have got there first. Either is fine, neither twice.
   if (await env.FUNNEL.get('claimed:' + ref)) return new Response('ok');
 

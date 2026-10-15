@@ -133,7 +133,24 @@ export async function onRequestGet({ request, env }) {
     return deny('Payment amount does not match.');
   }
 
-  // 4. release the file
+  /* 4. write the sale down before releasing. This is one of only two places
+        that can prove a payment, and the ledger /api/sales reads is built
+        from here. Keyed on the reference, so a second download is still one
+        sale. Never allowed to block the book: if the note fails, the reader
+        still gets what they paid for. */
+  try {
+    if (env.FUNNEL && !(await env.FUNNEL.get('sale:' + ref))) {
+      const m = tx.metadata || {};
+      await env.FUNNEL.put('sale:' + ref, JSON.stringify({
+        reference: ref, amount: Number(tx.amount) || 0, book: slug,
+        at: tx.paid_at || tx.created_at || new Date().toISOString(),
+        channel: tx.channel || null, name: m.name || null, email: tx.customer && tx.customer.email || null,
+        upsell: m.upsell || null, via: 'download',
+      }));
+    }
+  } catch { /* the book matters more than the bookkeeping */ }
+
+  // 5. release the file
   return release(env, book);
 }
 
