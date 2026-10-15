@@ -648,6 +648,27 @@ def check_oneclick_rail():
     print("ok   oneclick-rail                    [local] built, wired, and %d offers live" % live)
     return True
 
+def check_sales_locked():
+    """Revenue is behind a key of its own. /api/sales reads Paystack, which
+    is the only thing that knows what was really paid, and it must never be
+    readable without the key and must never share the key that can enrol
+    people. Born 15 Oct 2026 with the sales tracker."""
+    import pathlib as _pl
+    api = (_pl.Path(__file__).parent / "functions" / "api" / "sales.js").read_text()
+    bad = []
+    if "env.SALES_KEY" not in api:
+        bad.append("functions/api/sales.js does not check a key")
+    if "AUTOMATION_KEY" in api:
+        bad.append("functions/api/sales.js reuses the automation key; revenue gets its own")
+    if "/^(bk_|up_)/" not in api:
+        bad.append("functions/api/sales.js does not filter to our own references")
+    if bad:
+        for b in bad:
+            print("FAIL sales-locked                      [local] %s" % b)
+        return False
+    print("ok   sales-locked                      [local] revenue needs its own key, and counts only our references")
+    return True
+
 def check_free_book_off():
     """The free book and the paid book are the same book. Francois switched
     the free route off on 10 Oct 2026, once the paid funnel worked end to end
@@ -757,6 +778,7 @@ def main():
     all_ok &= check_discreet_subjects()
     all_ok &= check_banned_words()
     all_ok &= check_buybox()
+    all_ok &= check_sales_locked()
     all_ok &= check_free_book_off()
     all_ok &= check_bump_counts()
     all_ok &= check_prices_agree()
