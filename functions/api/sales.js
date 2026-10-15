@@ -32,57 +32,81 @@ export async function onRequestGet({ request, env }) {
   if (!env.PAYSTACK_SECRET_KEY) return json({ ok: false, error: 'Not configured.' }, 503);
 
   const url = new URL(request.url);
-  const days = Math.min(Math.max(parseInt(url.searchParams.get('days') || '365', 10) || 365, 1), 3650);
-  const from = new Date(Date.now() - days * 86400000).toISOString();
+  if (!env.FUNNEL) return json({ ok: false, error: 'Not configured.' }, 503);
 
-  /* Paystack pages at 100. Books sell in ones and twos, so five pages is
-     ample and the cap stops a runaway loop on a worker. */
-  const rows = [];
-  for (let page = 1; page <= 5; page++) {
-    let res, out;
-    try {
-      res = await fetch('https://api.paystack.co/transaction?status=success&perPage=100&page=' + page
-                        + '&from=' + encodeURIComponent(from),
-        { headers: { Authorization: 'Bearer ' + env.PAYSTACK_SECRET_KEY } });
-      out = await res.json();
-    } catch {
-      return json({ ok: false, error: 'Could not reach Paystack.' }, 502);
-    }
-    if (!res.ok || !out || out.status !== true || !Array.isArray(out.data)) {
-      return json({ ok: false, error: 'Paystack did not answer with a list.' }, 502);
-    }
-    rows.push(...out.data);
-    if (out.data.length < 100) break;
+  /* Every order we ever started, then ask Paystack about each one.
+   *
+   * The obvious way was Paystack's transaction list, and it does not work
+   * here: asked on 15 Oct 2026 it returned 99 transactions, all carrying
+   * Paystack's own references (T3004..., long hex), none of ours, and it
+   * skipped the day of his real book purchase entirely. Meanwhile verify on
+   * that same reference answers success, which is how his book was released.
+   *
+   * So this reconciles the other way round. We know every reference we
+   * minted, because we wrote it down when the checkout started, and verify
+   * is the call already proven to work on them. A record with no successful
+   * payment is an abandoned checkout and counts as nothing.
+   */
+  const keys = [];
+  let cursor;
+  for (let round = 0; round < 10; round++) {
+    const page = await env.FUNNEL.list({ prefix: 'order:', limit: 1000, cursor });
+    keys.push(...page.keys.map(k => k.name));
+    if (page.list_complete) break;
+    cursor = page.cursor;
   }
 
-  /* Kept in the answer on purpose. A zero is ambiguous without it: it could
-     mean nothing sold, or that Paystack handed back nothing to look at, and
-     those need different fixing. */
-  const scanned = rows.length;
-
-  /* Only ours. A reference we minted starts bk_ for a book and up_ for a
-     one-click, so nothing else he sells through Paystack can land in here
-     and inflate the number. */
-  const mine = rows.filter(t => /^(bk_|up_)/.test(String(t.reference || '')));
+  const scanned = keys.length;
+  const mine = [];
+  /* A handful at a time, so a worker is never waiting on a hundred calls
+     at once. */
+  for (let i = 0; i < keys.length; i += 6) {
+    const batch = keys.slice(i, i + 6);
+    const got = await Promise.all(batch.map(async (name) => {
+      const ref = name.slice('order:'.length);
+      let order = null;
+      try { order = JSON.parse(await env.FUNNEL.get(name) || 'null'); } catch { /* keep going */ }
+      try {
+        const res = await fetch('https://api.paystack.co/transaction/verify/' + encodeURIComponent(ref),
+          { headers: { Authorization: 'Bearer ' + env.PAYSTACK_SECRET_KEY } });
+        const v = await res.json();
+        if (!res.ok || !v || v.status !== true || !v.data) return null;
+        const t = v.data;
+        if (String(t.status).toLowerCase() !== 'success') return null;
+        return {
+          reference: ref,
+          amount: Number(t.amount) || 0,
+          at: t.paid_at || t.created_at || null,
+          channel: t.channel || null,
+          book: (order && order.book) || (t.metadata || {}).book || null,
+          bump: (order && order.bump) || null,
+          name: (order && order.name) || null,
+          upsell: (t.metadata || {}).upsell || null,
+        };
+      } catch { return null; }
+    }));
+    mine.push(...got.filter(Boolean));
+  }
 
   const perBook = {};
   for (const slug of Object.keys(BOOKS)) {
     perBook[slug] = { title: BOOKS[slug].title, sales: 0, gross: 0, withCourse: 0 };
   }
   let gross = 0, bumpGross = 0, upsellGross = 0, unmatched = 0;
-
   for (const t of mine) {
-    const amount = Number(t.amount) || 0;
-    gross += amount;
-    const meta = t.metadata || {};
-    const slug = String(meta.book || '').toLowerCase();
-    const isUpsell = !!meta.upsell;
-    if (!perBook[slug]) { unmatched += amount; continue; }
+    gross += t.amount;
+    const slug = String(t.book || '').toLowerCase();
+    if (!perBook[slug]) { unmatched += t.amount; continue; }
     perBook[slug].sales += 1;
-    perBook[slug].gross += amount;
-    if (isUpsell) { upsellGross += amount; continue; }
-    const over = amount - BOOKS[slug].price;
+    perBook[slug].gross += t.amount;
+    if (t.upsell) { upsellGross += t.amount; continue; }
+    const over = t.amount - BOOKS[slug].price;
     if (over > 0) { perBook[slug].withCourse += 1; bumpGross += over; }
+  }
+
+  if (url.searchParams.get('debug') === '1') {
+    return json({ ok: true, scanned, matched: mine.length,
+      sample: mine.slice(0, 25).map(t => ({ reference: t.reference, at: (t.at || '').slice(0, 10), book: t.book })) });
   }
 
   const recent = mine
@@ -115,8 +139,7 @@ export async function onRequestGet({ request, env }) {
 
   return json({
     ok: true,
-    since: from,
-    days,
+    since: 'every order recorded, which is thirty days of them',
     scanned,
     counted: mine.length,
     gross,
@@ -127,7 +150,9 @@ export async function onRequestGet({ request, env }) {
     perBook,
     recent,
     note: 'Every amount is in cents, and every one of them was really paid. '
-        + 'Paystack is asked directly, so an abandoned checkout never counts.',
+        + 'Each one was checked with Paystack one at a time, so an abandoned '
+        + 'checkout counts as nothing. Order records last thirty days, so this '
+        + 'is the last thirty days of sales.',
   });
 }
 

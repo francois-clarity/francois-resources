@@ -660,8 +660,13 @@ def check_sales_locked():
         bad.append("functions/api/sales.js does not check a key")
     if "AUTOMATION_KEY" in api:
         bad.append("functions/api/sales.js reuses the automation key; revenue gets its own")
-    if "/^(bk_|up_)/" not in api:
-        bad.append("functions/api/sales.js does not filter to our own references")
+    # It used to filter Paystack's list down to our references. That list
+    # never returns them, so it now starts from our own order records and
+    # verifies each one, which is the call proven to work on them.
+    if "prefix: 'order:'" not in api:
+        bad.append("functions/api/sales.js does not start from our own order records")
+    if "transaction/verify" not in api:
+        bad.append("functions/api/sales.js does not verify each order with Paystack")
     if bad:
         for b in bad:
             print("FAIL sales-locked                      [local] %s" % b)
