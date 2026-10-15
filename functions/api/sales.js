@@ -99,6 +99,20 @@ export async function onRequestGet({ request, env }) {
       reference: t.reference,
     }));
 
+  /* With ?debug=1, the references and dates it looked at and nothing else.
+     No amounts, no names. It exists because the first run scanned 99
+     transactions and matched none, and a count cannot tell you why. */
+  if (url.searchParams.get('debug') === '1') {
+    return json({
+      ok: true, scanned, matched: mine.length, since: from,
+      sample: rows.slice(0, 25).map(t => ({
+        reference: t.reference,
+        at: (t.paid_at || t.created_at || '').slice(0, 10),
+        status: t.status,
+      })),
+    });
+  }
+
   return json({
     ok: true,
     since: from,
