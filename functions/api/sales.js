@@ -33,7 +33,7 @@ export async function onRequestGet({ request, env }) {
 
   const url = new URL(request.url);
   const days = Math.min(Math.max(parseInt(url.searchParams.get('days') || '365', 10) || 365, 1), 3650);
-  const from = new Date(Date.now() - days * 86400000).toISOString().slice(0, 10);
+  const from = new Date(Date.now() - days * 86400000).toISOString();
 
   /* Paystack pages at 100. Books sell in ones and twos, so five pages is
      ample and the cap stops a runaway loop on a worker. */
@@ -42,7 +42,7 @@ export async function onRequestGet({ request, env }) {
     let res, out;
     try {
       res = await fetch('https://api.paystack.co/transaction?status=success&perPage=100&page=' + page
-                        + '&from=' + from,
+                        + '&from=' + encodeURIComponent(from),
         { headers: { Authorization: 'Bearer ' + env.PAYSTACK_SECRET_KEY } });
       out = await res.json();
     } catch {
@@ -54,6 +54,11 @@ export async function onRequestGet({ request, env }) {
     rows.push(...out.data);
     if (out.data.length < 100) break;
   }
+
+  /* Kept in the answer on purpose. A zero is ambiguous without it: it could
+     mean nothing sold, or that Paystack handed back nothing to look at, and
+     those need different fixing. */
+  const scanned = rows.length;
 
   /* Only ours. A reference we minted starts bk_ for a book and up_ for a
      one-click, so nothing else he sells through Paystack can land in here
@@ -98,6 +103,7 @@ export async function onRequestGet({ request, env }) {
     ok: true,
     since: from,
     days,
+    scanned,
     counted: mine.length,
     gross,
     bookGross: gross - bumpGross - upsellGross - unmatched,
