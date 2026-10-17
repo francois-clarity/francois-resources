@@ -215,6 +215,8 @@
     .word{animation:none}
     .btn:hover{transform:none}
   }
+  .seats{margin:-6px 0 18px;font-weight:700;color:var(--teal)}
+  .seats.full{color:var(--muted)}
 </style>
 </head>
 <body>
@@ -236,13 +238,13 @@
     <p class="entry"><b>woema</b> <i>noun, Afrikaans.</i> <span>Say it <span class="say">vuma</span>.</span> <span>The energy that gets you moving.</span></p>
     <p class="lede">Three hours on a Friday morning, live on Zoom, working through the one thing that keeps stopping you.</p>
     <ul class="when">
-      <li><svg width="17" height="17" viewBox="0 0 18 18" aria-hidden="true"><rect x="2.5" y="3.5" width="13" height="12" rx="2"/><path d="M2.5 7h13M6 2v3M12 2v3"/></svg><span data-woema-date>Friday 16 October 2026</span></li>
+      <li><svg width="17" height="17" viewBox="0 0 18 18" aria-hidden="true"><rect x="2.5" y="3.5" width="13" height="12" rx="2"/><path d="M2.5 7h13M6 2v3M12 2v3"/></svg><span data-woema-date>Friday 6 November 2026</span></li>
       <li><svg width="17" height="17" viewBox="0 0 18 18" aria-hidden="true"><circle cx="9" cy="9" r="6.5"/><path d="M9 5.4V9l2.4 1.6"/></svg><span data-woema-time>09:00 to 12:00 SAST</span></li>
       <li><svg width="17" height="17" viewBox="0 0 18 18" aria-hidden="true"><rect x="1.8" y="4.2" width="10" height="9.6" rx="2"/><path d="M11.8 8l4.4-2.4v6.8L11.8 10z"/></svg><span data-woema-where>Online, on Zoom</span></li>
     </ul>
     <div class="act">
       <a class="btn" href="#reserve">Reserve your seat</a>
-      <span class="price">Free</span>
+      <span class="price">R970</span>
     </div>
   </header>
 
@@ -305,12 +307,12 @@
     <div class="board">
       <div class="next">
         <p class="board-h">Next workshop</p>
-        <p class="nextdate" data-woema-date>Friday 16 October 2026</p>
+        <p class="nextdate" data-woema-date>Friday 6 November 2026</p>
       </div>
       <dl class="facts">
         <div><dt>Time</dt><dd><span data-woema-time>09:00 to 12:00 SAST</span><small>Three hours, live</small></dd></div>
         <div><dt>Where</dt><dd><span data-woema-where>Online, on Zoom</span><small>Now and then in person, in Stellenbosch</small></dd></div>
-        <div><dt>Price</dt><dd>Free<small>No charge, and you can invite a friend to join you.</small></dd></div>
+        <div><dt>Price</dt><dd>R970<small>Four seats, paid by card when you book.</small></dd></div>
       </dl>
     </div>
   </section>
@@ -347,7 +349,8 @@
 
   <section class="reserve" id="reserve">
     <h2>Reserve your seat</h2>
-    <p class="seat-date"><span data-woema-date>Friday 16 October 2026</span><span class="dot">·</span><span data-woema-time>09:00 to 12:00 SAST</span><span class="dot">·</span><span data-woema-where>Online, on Zoom</span></p>
+    <p class="seat-date"><span data-woema-date>Friday 6 November 2026</span><span class="dot">·</span><span data-woema-time>09:00 to 12:00 SAST</span><span class="dot">·</span><span data-woema-where>Online, on Zoom</span></p>
+    <p class="seats" id="w-seats" hidden></p>
 
     <form class="form" id="w-form" novalidate>
       <div class="row">
@@ -373,13 +376,14 @@
         <textarea id="w-notes" name="notes" maxlength="600"></textarea>
       </label>
 
-      <button class="btn go" id="w-go" type="submit"><span class="sp"></span><span class="lab">Reserve my seat</span></button>
-      <p class="fine">Free. Bring three hours and something to write with.</p>
+      <button class="btn go" id="w-go" type="submit"><span class="sp"></span><span class="lab">Pay R970 and reserve my seat</span></button>
+      <p class="fine">R970. Bring three hours and something to write with.</p>
+      <p class="fine">If you run into any problem paying, <a href="https://wa.me/27824441831" target="_blank" rel="noopener">WhatsApp me here</a>.</p>
     </form>
     <p class="msg" id="w-msg" tabindex="-1" role="status"></p>
 
     <div class="wl" id="w-wl">
-      <p class="wl-line" id="w-wl-line"><strong>Can't make <span data-woema-date>Friday 16 October 2026</span>?</strong> Join the waiting list and I'll let you know as soon as the next one is scheduled.</p>
+      <p class="wl-line" id="w-wl-line"><strong>Can't make <span data-woema-date>Friday 6 November 2026</span>?</strong> Join the waiting list and I'll let you know as soon as the next one is scheduled.</p>
       <button class="again" type="button" id="w-wl-open">Join the waiting list</button>
       <form class="form" id="w-wl-form" novalidate hidden>
         <div class="row">
@@ -409,20 +413,22 @@
 </div>
 
 <script>
-/* Register for WOEMA. One date only: the next one, written into the
+/* Book WOEMA. One date only: the next one, written into the
    data-woema-date spans by launch/events.py from his calendar. If that date
    does not work, the waiting list is the other door.
 
-   Free since 28 Sep 2026, so there is no price to show, no card to take and
-   nothing that can fail halfway. Name, email, phone, and a question about
-   inviting somebody. /api/woema does the rest. */
+   Paid again from 17 Oct 2026, his word: "It's 970 Rand ... And I'm only going
+   to do four spots." The price lives on the server (/api/woema); this page
+   asks it how many seats are left, starts the payment there, opens Paystack's
+   popup on the page, and asks the server to verify before it says booked. */
 (function(){
   var $ = function(id){ return document.getElementById(id); };
   var form = $('w-form'), msg = $('w-msg'), go = $('w-go'), lab = go.querySelector('.lab');
-  var gift = $('w-gift');
+  var gift = $('w-gift'), seats = $('w-seats');
   var dateEl = document.querySelector('.seat-date [data-woema-date]');
   var DATE = dateEl ? dateEl.textContent.trim() : '';
   var TBC = !DATE || DATE === 'To be confirmed';
+  var LABEL = 'Pay R970 and reserve my seat';
   var FAIL = 'That did not go through. Try again in a moment, or WhatsApp me on 082 444 1831.';
 
   function val(id){ return $(id).value.trim(); }
@@ -436,26 +442,66 @@
   document.querySelectorAll('input,textarea').forEach(function(i){
     i.addEventListener('input', function(){ i.removeAttribute('aria-invalid'); msg.className = 'msg'; });
   });
-  function idle(){ go.classList.remove('busy'); go.disabled = false; lab.textContent = 'Reserve my seat'; }
+  function idle(){ go.classList.remove('busy'); go.disabled = false; lab.textContent = LABEL; }
+  function loadPaystack(){
+    return new Promise(function(res, rej){
+      if (window.PaystackPop) return res();
+      var sc = document.createElement('script'); sc.src = 'https://js.paystack.co/v2/inline.js';
+      sc.onload = res; sc.onerror = rej; document.head.appendChild(sc);
+    });
+  }
 
-  /* ---------- register ---------- */
+  /* ---------- seats left ---------- */
+  function full(){
+    form.hidden = true;
+    seats.hidden = false; seats.className = 'seats full';
+    seats.textContent = 'This workshop is full.';
+    $('w-wl-line').innerHTML = '<strong>All four seats are taken.</strong> Join the waiting list and I\'ll let you know as soon as the next one is scheduled.';
+  }
+  if (!TBC) {
+    fetch('/api/woema?date=' + encodeURIComponent(DATE), { cache: 'no-store' })
+      .then(function(r){ return r.json(); })
+      .then(function(j){
+        if (!j || typeof j.left !== 'number') return;
+        if (j.left <= 0) return full();
+        seats.hidden = false;
+        seats.textContent = j.left === 1 ? 'One seat left' : (j.left === j.seats ? 'Four seats' : j.left + ' seats left');
+      }).catch(function(){});
+  }
+
+  /* ---------- book and pay ---------- */
   form.addEventListener('submit', function(ev){
     ev.preventDefault();
     if (go.disabled) return;
-    var d = { action: 'reserve', date: DATE, name: val('w-name'), email: val('w-email'),
+    var d = { action: 'init', date: DATE, name: val('w-name'), email: val('w-email'),
               phone: val('w-phone'), notes: val('w-notes'), gift: gift.checked, source: 'woema page' };
     if (!d.name) return bad('w-name', 'I need your name.');
     if (!okEmail(d.email)) return bad('w-email', 'That email does not look right.');
     if (d.phone.replace(/\D/g, '').length < 9) return bad('w-phone', 'That phone number looks too short.');
 
-    go.disabled = true; go.classList.add('busy'); lab.textContent = 'Booking your seat'; msg.className = 'msg';
-    post('/api/woema', d).then(function(j){
-      if (!j || !j.ok) { idle(); return say(msg, (j && j.error) || FAIL, 'err'); }
-      form.hidden = true; $('w-wl').hidden = true;
-      var t = 'Your seat for ' + (j.date || DATE) + ' is booked, and it costs you nothing. '
-            + "I'll send the Zoom link closer to the day.";
-      if (j.gift) t += ' The flyer is in your inbox now, ready to send on to your friend.';
-      say(msg, t, 'ok'); msg.focus();
+    go.disabled = true; go.classList.add('busy'); lab.textContent = 'Opening the payment'; msg.className = 'msg';
+    Promise.all([post('/api/woema', d), loadPaystack()]).then(function(a){
+      var j = a[0];
+      if (!j || !j.ok) { idle(); if (j && j.full) full(); return say(msg, (j && j.error) || FAIL, 'err'); }
+      new window.PaystackPop().resumeTransaction(j.access_code, {
+        onSuccess: function(t){
+          say(msg, 'Payment received. Booking your seat.', 'ok');
+          post('/api/woema', { action: 'verify', reference: (t && t.reference) || j.reference }).then(function(v){
+            if (v && v.ok && v.paid) {
+              form.hidden = true; $('w-wl').hidden = true; seats.hidden = true;
+              var m = 'Your seat for ' + (v.date || DATE) + ' is booked and paid. Check your inbox for the details, and I\'ll send the Zoom link closer to the day.';
+              if (v.gift) m += ' The flyer is in your inbox too, ready to send on to your friend.';
+              say(msg, m, 'ok');
+            } else { idle(); say(msg, 'That payment did not complete. Nothing was taken. Try again, or WhatsApp me on 082 444 1831.', 'err'); }
+            msg.focus();
+          }).catch(function(){
+            form.hidden = true;
+            say(msg, 'Your payment went through, but I could not confirm your seat from here. WhatsApp me on 082 444 1831 and I\'ll sort it out.', 'ok');
+          });
+        },
+        onCancel: function(){ idle(); say(msg, 'No payment was taken. You can try again whenever you\'re ready.', 'err'); },
+        onError: function(){ idle(); say(msg, FAIL, 'err'); }
+      });
     }).catch(function(){ idle(); say(msg, FAIL, 'err'); });
   });
 

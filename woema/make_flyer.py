@@ -15,10 +15,12 @@ the old flyer had to go. The old PNG had no source; this one does.
 import pathlib, shutil, subprocess, sys, tempfile, time
 
 HERE = pathlib.Path(__file__).resolve().parent
-SRC = HERE / 'flyer.html'
-OUT = HERE / 'flyer.png'
+# `make_flyer.py og` renders the share image (og.html -> og.png, 1200x630) the same way.
+OG = len(sys.argv) > 1 and sys.argv[1] == 'og'
+SRC = HERE / ('og.html' if OG else 'flyer.html')
+OUT = HERE / ('og.png' if OG else 'flyer.png')
 CHROME = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
-W, H = 1080, 1350
+W, H = (1200, 630) if OG else (1080, 1350)
 
 if not pathlib.Path(CHROME).exists():
     sys.exit('Chrome is not where I expected it: ' + CHROME)

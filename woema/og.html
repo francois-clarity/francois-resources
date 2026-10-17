@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>WOEMA share image</title>
+<!-- The source of woema/og.png, 1200x630: the preview WhatsApp, LinkedIn and
+     Facebook show when the page link is shared. Made 17 Oct 2026 when the
+     workshop went to R970 with four seats; the old PNG said R1,500 and the
+     resources address, and had no source. Rebuild with:
+       /usr/bin/python3 woema/make_flyer.py og -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{ --ink:#0E141B; --navy:#121A24; --text:#ECEFF3; --muted:#9AA6B5; --teal:#18C0C0; }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{width:1200px;height:630px;overflow:hidden;
+    font-family:'Manrope',system-ui,sans-serif;color:var(--text);
+    background:
+      radial-gradient(800px 520px at 92% 4%, rgba(24,192,192,.18), transparent 60%),
+      linear-gradient(160deg, #16202B 0%, var(--navy) 50%, var(--ink) 100%);
+    padding:62px 72px;display:flex;flex-direction:column}
+  .kicker{font-size:19px;font-weight:800;letter-spacing:4.2px;text-transform:uppercase;color:var(--teal)}
+  .word{font-size:176px;font-weight:800;letter-spacing:-5px;line-height:.95;margin-top:26px}
+  .entry{font-size:23px;color:var(--muted);margin-top:22px}
+  .entry b{color:var(--text);font-weight:800;margin-right:8px}
+  .entry .say{color:var(--teal);font-weight:700}
+  .head{font-size:50px;font-weight:800;letter-spacing:-1.2px;margin-top:14px}
+  .rule{height:1px;background:rgba(255,255,255,.14);margin:auto 0 20px}
+  .facts{font-size:23px;font-weight:600}
+  .facts .dot{color:var(--teal);margin:0 10px}
+  .url{font-size:23px;font-weight:700;color:var(--teal);margin-top:6px}
+</style>
+</head>
+<body>
+  <p class="kicker">A live workshop with Francois Esterhuizen</p>
+  <h1 class="word">WOEMA</h1>
+  <p class="entry"><b>woema</b>noun, Afrikaans. Say it <span class="say">vuma</span>. The energy that gets you moving.</p>
+  <h2 class="head">Get out of your own way.</h2>
+  <div class="rule"></div>
+  <p class="facts">Live on Zoom<span class="dot">·</span>Friday 6 November, 09:00 to 12:00 SAST<span class="dot">·</span>R970<span class="dot">·</span>Four seats</p>
+  <p class="url">events.francoisesterhuizen.com/woema</p>
+</body>
+</html>
