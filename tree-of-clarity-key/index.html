@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>The Tree of Clarity AI key · Francois Esterhuizen</title>
+<meta name="description" content="A free AI key by Francois Esterhuizen. You slot it into your AI and it unlocks a guided session that finds the limiting beliefs running your life." />
+<meta property="og:title" content="The Tree of Clarity AI key" />
+<meta property="og:description" content="You slot it into your AI and it unlocks a guided session that finds the limiting beliefs running your life." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://resources.francoisesterhuizen.com/tree-of-clarity-key/" />
+<meta name="theme-color" content="#1B222D" />
+<link rel="icon" href="/favicon-32.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300;400;600;700;800&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --navy:#262E3B; --navy-deep:#1B222D; --navy-elev:#35415A;
+    --white:#FFFFFF; --muted:rgba(255,255,255,.66); --muted-2:rgba(255,255,255,.42);
+    --line:rgba(255,255,255,.10); --line-strong:rgba(255,255,255,.18);
+    --teal:#18C0C0; --teal-soft:rgba(24,192,192,.18); --teal-tint:rgba(24,192,192,.10); --teal-glow:rgba(24,192,192,.35);
+    --red:#E38070;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0;min-height:100vh;color:var(--white);
+    font-family:'Source Sans 3',system-ui,-apple-system,'Segoe UI',sans-serif;
+    background:radial-gradient(ellipse at 26% 22%, var(--navy-elev) 0%, var(--navy) 56%, var(--navy-deep) 100%) fixed;
+    background-color:var(--navy-deep);
+  }
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+    background-image:radial-gradient(rgba(255,255,255,.045) 1px, transparent 1px);
+    background-size:22px 22px;
+  }
+  .orb{position:fixed;border-radius:50%;filter:blur(90px);pointer-events:none;z-index:0;opacity:.55}
+  .orb.a{width:420px;height:420px;background:rgba(24,192,192,.22);top:-140px;right:-120px}
+  .orb.b{width:360px;height:360px;background:rgba(24,192,192,.14);bottom:-140px;left:-120px}
+  main{position:relative;z-index:1;max-width:640px;margin:0 auto;padding:72px 24px 96px;animation:fadeUp .5s ease both}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .eyebrow{font-size:12px;font-weight:600;letter-spacing:5px;text-transform:uppercase;color:var(--teal);margin:0 0 18px}
+  h1{font-size:clamp(38px,6vw,58px);font-weight:800;letter-spacing:-1.2px;line-height:1.06;margin:0 0 20px}
+  .teal{color:var(--teal)}
+  .lede{font-size:20px;font-weight:300;line-height:1.6;color:var(--muted);margin:0 0 40px;max-width:52ch}
+  .card{
+    border:1px solid var(--line);border-radius:22px;padding:28px;margin:0 0 28px;
+    background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.01));
+    -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+  }
+  .steps{list-style:none;margin:0;padding:0;counter-reset:s}
+  .steps li{counter-increment:s;display:flex;gap:16px;align-items:flex-start;font-size:18px;font-weight:300;line-height:1.55;color:var(--muted);padding:12px 0}
+  .steps li+li{border-top:1px solid var(--line)}
+  .steps li::before{
+    content:counter(s);flex:0 0 30px;height:30px;border-radius:50%;margin-top:1px;
+    display:flex;align-items:center;justify-content:center;
+    background:var(--teal-soft);border:1px solid var(--teal);color:var(--white);font-weight:700;font-size:14px;
+  }
+  .panel{
+    border:1px solid var(--teal);border-radius:22px;padding:30px 28px;
+    background:linear-gradient(180deg,rgba(24,192,192,.14),rgba(24,192,192,.04));
+    box-shadow:0 18px 60px -24px var(--teal-glow);
+  }
+  .panel h2{font-size:clamp(24px,3.6vw,30px);font-weight:800;letter-spacing:-.02em;margin:0 0 20px;line-height:1.15}
+  label.f{display:block;font-size:14px;font-weight:600;color:var(--muted);margin:0 0 8px}
+  input[type=text],input[type=email]{
+    width:100%;font:inherit;font-size:17px;color:var(--white);
+    background:rgba(0,0,0,.20);border:1px solid var(--line-strong);border-radius:14px;
+    padding:14px 16px;margin:0 0 18px;outline:none;transition:border-color .16s,box-shadow .16s,background .16s;
+  }
+  input::placeholder{color:var(--muted-2)}
+  input[type=text]:focus,input[type=email]:focus{border-color:var(--teal);box-shadow:0 0 0 4px var(--teal-tint);background:rgba(0,0,0,.28)}
+  .check{display:flex;gap:12px;align-items:flex-start;font-size:16px;font-weight:400;color:var(--muted);line-height:1.45;margin:2px 0 22px;cursor:pointer}
+  .check input{
+    -webkit-appearance:none;appearance:none;width:22px;height:22px;margin:0;flex:0 0 auto;cursor:pointer;
+    border:1px solid var(--line-strong);border-radius:6px;background:rgba(0,0,0,.20);transition:background .16s,border-color .16s;
+  }
+  .check input:checked{
+    border-color:var(--teal);background:var(--teal) no-repeat center/14px
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3 8.5l3 3 7-7' fill='none' stroke='%231B222D' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  }
+  .check input:focus-visible{box-shadow:0 0 0 4px var(--teal-tint);border-color:var(--teal)}
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:10px;width:100%;
+    font:inherit;font-size:18px;font-weight:800;color:var(--navy-deep);text-decoration:none;
+    background:var(--teal);border:0;border-radius:14px;padding:16px 22px;cursor:pointer;
+    box-shadow:0 10px 30px -10px var(--teal-glow);transition:filter .16s,transform .16s;
+  }
+  .btn:hover{filter:brightness(1.08)}
+  .btn:active{transform:translateY(1px)}
+  .btn[disabled]{opacity:.6;cursor:default}
+  .note{font-size:15px;font-weight:300;color:var(--muted-2);line-height:1.5;margin:16px 0 0}
+  .err{font-size:15px;color:var(--red);margin:-8px 0 16px;display:none}
+  .done p{font-size:18px;font-weight:300;line-height:1.6;color:var(--muted);margin:0 0 22px}
+  .signoff{font-size:19px;font-weight:300;color:var(--muted);margin:40px 0 0}
+  .signoff .teal{font-weight:600}
+  footer{position:relative;z-index:1;text-align:center;padding:0 24px 40px;font-size:14px;color:var(--muted-2)}
+  footer a{color:var(--muted-2);text-decoration:none;border-bottom:1px solid var(--line-strong)}
+  [hidden]{display:none !important}
+  @media (max-width:600px){
+    main{padding:44px 20px 72px}
+    .card,.panel{padding:22px 20px}
+    .lede{font-size:18px;margin-bottom:32px}
+    .steps li{font-size:17px}
+  }
+  @media (prefers-reduced-motion:reduce){main{animation:none}.btn{transition:none}}
+</style>
+</head>
+<body>
+<main>
+  <p class="eyebrow">Free AI key</p>
+  <h1>The Tree of <span class="teal">Clarity</span></h1>
+  <p class="lede">You slot it into your AI and it unlocks a guided session that finds the limiting beliefs running your life.</p>
+
+  <div class="card">
+    <ol class="steps">
+      <li>Slot this AI key into ChatGPT or Claude and press Send.</li>
+      <li>Set aside 45 to 60 minutes somewhere you won't be interrupted.</li>
+      <li>Bring one real challenge, and be honest.</li>
+    </ol>
+  </div>
+
+  <section class="panel" id="ask">
+    <h2>Your free key</h2>
+    <form id="form" novalidate>
+      <label class="f" for="name">Your first name</label>
+      <input type="text" id="name" name="name" autocomplete="given-name" maxlength="60" />
+      <label class="f" for="email">Your email</label>
+      <input type="email" id="email" name="email" autocomplete="email" inputmode="email" required />
+      <p class="err" id="err">Please check your email address.</p>
+      <label class="check"><input type="checkbox" id="letter" /> <span>Also send me Francois's weekly letter.</span></label>
+      <button class="btn" type="submit" id="go">Get the key</button>
+      <p class="note">The key opens right here. I'll only write to you if you tick the box.</p>
+    </form>
+  </section>
+
+  <section class="panel done" id="done" hidden>
+    <h2>Your key is ready</h2>
+    <p>Open ChatGPT or Claude, attach the PDF and press Send. The session starts by itself.</p>
+    <a class="btn" id="dl" href="/tree-of-clarity-key/tree-of-clarity-ai-key.pdf" download="The Tree of Clarity AI Key.pdf">Download the AI key</a>
+  </section>
+
+  <p class="signoff">Much love, <span class="teal">Francois</span></p>
+</main>
+<footer><a href="https://www.francoisesterhuizen.com/">francoisesterhuizen.com</a></footer>
+<div class="orb a"></div>
+<div class="orb b"></div>
+<script>
+(function () {
+  var form = document.getElementById('form');
+  var go = document.getElementById('go');
+  var err = document.getElementById('err');
+  function show(url) {
+    if (url) document.getElementById('dl').setAttribute('href', url);
+    document.getElementById('ask').hidden = true;
+    var done = document.getElementById('done');
+    done.hidden = false;
+    done.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var email = document.getElementById('email').value.trim();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) { err.style.display = 'block'; return; }
+    err.style.display = 'none';
+    go.disabled = true;
+    go.textContent = 'One moment';
+    fetch('/api/aikey', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        key: 'tree-of-clarity',
+        email: email,
+        name: document.getElementById('name').value.trim(),
+        letter: document.getElementById('letter').checked
+      })
+    })
+      .then(function (r) { return r.json().catch(function () { return {}; }); })
+      .then(function (d) {
+        if (d && d.error === 'email') {
+          err.style.display = 'block'; go.disabled = false; go.textContent = 'Get the key'; return;
+        }
+        show(d && d.url);
+      })
+      // never stand between the person and the key
+      .catch(function () { show(); });
+  });
+})();
+</script>
+</body>
+</html>
