@@ -4,8 +4,10 @@
  * Paystack from 16 Sep, free from 28 Sep, and PAID AGAIN from 17 Oct 2026, his
  * word: "the Vuma workshop is not free. It's 970 Rand. So make sure that you
  * set up Paystack payment there. And I'm only going to do four spots."
+ * 29 Oct 2026, his word via Mark: R297 as an impulse buy, and 30 seats,
+ * because a workshop needs about 30 people to justify the time.
  *
- * One price for everyone, R970, decided here and never in the browser. Four
+ * One price for everyone, R297, decided here and never in the browser. Thirty
  * seats a date. Paystack's inline popup on the page, the same pattern as the
  * 7 Weeks checkout (clarity-quest functions/api/enrol7.js):
  *
@@ -15,14 +17,14 @@
  *        transaction and returns its access_code for the popup.
  *   POST {action: 'verify', reference}
  *        asks Paystack whether that reference really was paid, in ZAR, for at
- *        least R970, then: KV first, Mailchimp tags, the confirmation (with the
+ *        least R297, then: KV first, Mailchimp tags, the confirmation (with the
  *        flyer when they want to invite somebody), and a note to him. A second
  *        verify of the same reference sends nothing. If two people pay for the
  *        last seat at once, the second is honoured, marked OVER CAPACITY and
  *        flagged to him: add a seat or refund, his call.
  *
  * Seats taken = paid rows for that date that are not his tests. The free
- * sign-ups from before 17 Oct do not count against the four.
+ * sign-ups from before 17 Oct do not count against the seats.
  *
  * His own address (francois@francoisesterhuizen.com) pays R10 as a test, is
  * tagged test, never takes a seat, and the note says TEST so he refunds it.
@@ -33,10 +35,10 @@
  */
 
 const NOTIFY = 'francois@francoisesterhuizen.com';
-const PRICE_CENTS = 97000;      // R970, his word 17 Oct 2026
+const PRICE_CENTS = 29700;      // R297, his word 29 Oct 2026 (was R970 from 17 Oct)
 const TEST_CENTS = 1000;        // R10, his own address only; refund it in Paystack
 const CURRENCY = 'ZAR';
-const SEATS = 4;                // his word 17 Oct 2026: "only going to do four spots"
+const SEATS = 30;               // his word 29 Oct 2026 (was four from 17 Oct)
 const PURPOSE = 'WOEMA';
 const MONTHS = ['january', 'february', 'march', 'april', 'may', 'june', 'july',
   'august', 'september', 'october', 'november', 'december'];
@@ -63,7 +65,7 @@ export async function onRequestPost({ request, env }) {
   if (action === 'verify') return verify(p, env);
   // The free 'reserve' action ended on 17 Oct 2026. A page cached from before
   // then lands here instead of booking a seat nobody paid for.
-  return json({ ok: false, error: 'Seats are R970 now. Refresh the page to book yours.' }, 410);
+  return json({ ok: false, error: 'Seats are R297 now. Refresh the page to book yours.' }, 410);
 }
 
 async function init(p, request, env) {
@@ -161,7 +163,7 @@ async function verify(p, env) {
   // 3. the confirmation, with the flyer when they want to invite somebody
   const short = date.replace(/\s\d{4}$/, '');
   const share = 'https://wa.me/?text=' + encodeURIComponent(
-    'Join me at WOEMA on ' + date + ', 09:00 to 12:00 on Zoom. Three hours on getting out of your own way. There are only four seats. ' + PAGE);
+    'Join me at WOEMA on ' + date + ', 09:00 to 12:00 on Zoom. Three hours on getting out of your own way. There are 30 seats. ' + PAGE);
   const lines = ['Hi ' + first, '',
     'Your seat at WOEMA on ' + date + ' is booked and paid. We start at 09:00 South African time and finish at 12:00, on Zoom.',
     '',
@@ -173,7 +175,7 @@ async function verify(p, env) {
     'Send it to them on WhatsApp in one tap:',
     share,
     '',
-    'There are only four seats, so tell them to book soon. Doing this next to somebody you trust is worth more than doing it alone.',
+    'There are 30 seats, so tell them to book soon. Doing this next to somebody you trust is worth more than doing it alone.',
     ''] : []).concat(['See you there.', '', 'Much love,', 'Francois']);
   const emailed = await mail(env, email, 'Your WOEMA seat: ' + short, lines.join('\n'));
 

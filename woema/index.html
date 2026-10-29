@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>WOEMA · Francois Esterhuizen</title>
-<meta name="description" content="WOEMA is a three-hour live workshop with Francois Esterhuizen. Understand your own potential and find what's blocking it, so you can get out of your own way.">
+<meta name="description" content="WOEMA is a three-hour live workshop for business owners who've become the bottleneck in their own business. Find the belief that keeps everything waiting for you, and get out of your own way.">
 <meta property="og:title" content="WOEMA: Get out of your own way">
-<meta property="og:description" content="A three-hour live workshop with Francois Esterhuizen, on a Friday morning, live on Zoom.">
+<meta property="og:description" content="For business owners who've become the bottleneck. Three hours with Francois Esterhuizen, on a Friday morning, live on Zoom.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://events.francoisesterhuizen.com/woema/">
 <meta property="og:image" content="https://events.francoisesterhuizen.com/woema/og.png">
@@ -14,199 +14,170 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://events.francoisesterhuizen.com/woema/og.png">
-<meta name="theme-color" content="#1B222D">
+<meta name="theme-color" content="#121813">
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;500;600;700;800&family=Newsreader:ital,opsz,wght@1,6..72,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,600;125,700;125,800&family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,500&display=swap" rel="stylesheet">
 <style>
+  /* Land Rover look (21 Oct 2026, his request): moody landscape photo,
+     frosted glass panels, wide capitals, cream accent. Same class names
+     as before, so the booking script is untouched. */
   :root{
-    --ground:#1B222D; --raise:#232B37; --line:#344050;
-    --text:#FFFFFF; --muted:#A9B3C0; --faint:#7D8898;
-    --teal:#18C0C0; --cream:#F1EFEA; --err:#E38070; --ok:#5FCB89;
+    --ground:#121813; --glass:rgba(255,255,255,.11); --edge:rgba(255,255,255,.26);
+    --text:#FFFFFF; --muted:rgba(255,255,255,.76); --faint:rgba(255,255,255,.54);
+    --cream:#E6DCC3; --ink:#1D2419; --teal:#E6DCC3; --err:#F0A08F; --ok:#B7D9A8;
   }
   *{box-sizing:border-box;margin:0;padding:0}
   html{scroll-behavior:smooth}
   body{
-    font-family:'Manrope',system-ui,-apple-system,'Segoe UI',sans-serif;
-    background-color:var(--ground);
-    background-image:
-      radial-gradient(900px 620px at 92% -8%, rgba(24,192,192,.11), transparent 62%),
-      radial-gradient(760px 560px at 8% 4%, #2A3442, transparent 64%);
-    background-repeat:no-repeat;
-    color:var(--text);
-    -webkit-font-smoothing:antialiased;
-    padding-inline:24px; padding-block:48px 88px;
-    overflow-x:hidden;
+    font-family:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
+    background:var(--ground);color:var(--text);-webkit-font-smoothing:antialiased;
+    padding-inline:24px;padding-block:44px 88px;overflow-x:hidden;
   }
-  .wrap{max-width:1040px;margin:0 auto;display:grid;grid-template-columns:minmax(0,1fr);gap:112px}
+  body::before{content:'';position:fixed;inset:0;z-index:-2;background:url(/woema/bg.jpg) 60% 40%/cover;filter:saturate(.8) brightness(.6)}
+  body::after{content:'';position:fixed;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(10,14,10,.5) 0%,rgba(10,14,10,.25) 30%,rgba(10,14,10,.72) 100%)}
+  .cap,h2,h3,.eyebrow,.board-h,.btn,.tagline,.so{font-family:'Archivo',sans-serif;font-stretch:125%}
+  .wrap{max-width:1040px;margin:0 auto;display:grid;grid-template-columns:minmax(0,1fr);gap:96px}
   .wrap > *, .hero > *, h1 > *{min-width:0}
   a{color:inherit}
-  :focus-visible{outline:2px solid var(--teal);outline-offset:3px;border-radius:6px}
+  :focus-visible{outline:2px solid var(--cream);outline-offset:3px;border-radius:6px}
+  .glass,.sec,.board,.reserve{background:var(--glass);border:1.5px solid var(--edge);backdrop-filter:blur(22px) saturate(1.15);-webkit-backdrop-filter:blur(22px) saturate(1.15);border-radius:26px;box-shadow:0 20px 50px rgba(0,0,0,.25)}
+  .sec{padding:38px clamp(22px,4vw,46px)}
 
   /* ---------- hero ---------- */
-  .hero{display:grid;gap:22px;padding-top:12px}
-  .eyebrow{font-weight:700;font-size:13px;letter-spacing:4.5px;text-transform:uppercase;color:var(--teal)}
+  .hero{display:grid;gap:22px;padding-top:8vh}
+  .eyebrow{font-weight:700;font-size:12.5px;letter-spacing:.3em;text-transform:uppercase;color:var(--cream)}
   h1{display:grid;gap:14px;font-weight:800}
   .word{
-    display:block;color:var(--cream);
-    font-size:clamp(88px,21vw,228px);line-height:.8;letter-spacing:-.055em;
-    margin-left:-.04em;
+    display:block;color:#fff;font-family:'Archivo',sans-serif;font-stretch:125%;font-weight:800;
+    font-size:clamp(76px,18vw,196px);line-height:.86;letter-spacing:.01em;text-transform:uppercase;
     animation:settle 1.2s cubic-bezier(.16,1,.3,1) both;
   }
-  @keyframes settle{from{letter-spacing:-.02em}to{letter-spacing:-.055em}}
+  @keyframes settle{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
   .entry{
     display:flex;flex-wrap:wrap;align-items:baseline;gap:.2em .5em;
-    font-size:17px;color:var(--muted);font-weight:500;
-    border-top:1px solid var(--line);padding-top:14px;max-width:640px;
+    font-size:16px;color:var(--muted);font-weight:500;
+    border-top:1px solid var(--edge);padding-top:14px;max-width:640px;
   }
   .entry b{color:var(--text);font-weight:700}
-  .entry i{font-family:'Newsreader',Georgia,'Times New Roman',serif;font-style:italic;font-size:19px;color:var(--faint)}
-  .entry .say{color:var(--teal);font-weight:700}
-  .tagline{display:block;font-size:clamp(34px,5.6vw,58px);line-height:1.04;letter-spacing:-1.2px;text-wrap:balance}
-  .lede{color:var(--muted);font-weight:300;font-size:19px;line-height:1.6;max-width:600px}
+  .entry i{font-style:italic;font-size:16px;color:var(--faint)}
+  .entry .say{color:var(--cream);font-weight:700}
+  .tagline{display:block;font-weight:800;text-transform:uppercase;color:var(--cream);font-size:clamp(28px,5vw,52px);line-height:1.04;letter-spacing:.005em;text-wrap:balance}
+  .lede{color:var(--text);font-weight:400;font-size:19px;line-height:1.6;max-width:620px}
+  .lede strong{font-weight:700}
 
-  .when{list-style:none;display:flex;flex-wrap:wrap;gap:10px 28px}
-  .when li{display:flex;align-items:center;gap:9px;font-size:15px;font-weight:600;color:rgba(255,255,255,.88);font-variant-numeric:tabular-nums}
-  .when svg{flex:none;stroke:var(--teal);stroke-width:1.8;fill:none;stroke-linecap:round;stroke-linejoin:round}
+  .when{list-style:none;display:flex;flex-wrap:wrap;gap:10px}
+  .when li{display:flex;align-items:center;gap:9px;font-size:14px;font-weight:600;color:#fff;font-variant-numeric:tabular-nums;background:var(--glass);border:1.5px solid var(--edge);border-radius:999px;padding:9px 14px;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+  .when svg{flex:none;stroke:var(--cream);stroke-width:1.8;fill:none;stroke-linecap:round;stroke-linejoin:round}
 
   .act{display:flex;flex-wrap:wrap;align-items:center;gap:14px 22px;margin-top:6px}
   .btn{
     display:inline-flex;align-items:center;gap:10px;text-decoration:none;
-    background:var(--teal);color:var(--ground);font-weight:800;font-size:16px;
-    padding:15px 28px;border-radius:14px;border:0;cursor:pointer;font-family:inherit;
+    background:var(--cream);color:var(--ink);font-weight:800;font-size:14px;letter-spacing:.18em;text-transform:uppercase;
+    padding:17px 30px;border-radius:999px;border:0;cursor:pointer;
     transition:filter .16s ease, transform .16s ease;
   }
-  .btn:hover{filter:brightness(1.08);transform:translateY(-1px)}
+  .btn:hover{filter:brightness(1.05);transform:translateY(-1px)}
   .act .price{font-size:15px;color:var(--muted);font-weight:500}
 
   /* ---------- sections ---------- */
-  h2{font-weight:800;font-size:clamp(28px,4.2vw,40px);letter-spacing:-.8px;line-height:1.12;text-wrap:balance}
+  h2{font-weight:800;font-size:clamp(24px,3.6vw,36px);line-height:1.08;text-transform:uppercase;letter-spacing:.005em;text-wrap:balance}
   .sec{display:grid;gap:26px}
-  .prose{display:grid;gap:18px;max-width:640px}
-  .prose p{color:var(--muted);font-weight:300;font-size:18px;line-height:1.7}
+  .prose{display:grid;gap:16px;max-width:660px}
+  .prose p{color:var(--muted);font-weight:400;font-size:17.5px;line-height:1.65}
   .prose p strong{color:var(--text);font-weight:600}
   cite{font-style:normal;font-weight:600;color:var(--text)}
 
-  .steps{list-style:none;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:34px}
-  .steps li{display:grid;align-content:start;gap:12px;border-top:1px solid var(--line);padding-top:20px}
-  .steps .n{font-weight:800;font-size:15px;color:var(--teal);font-variant-numeric:tabular-nums;letter-spacing:1px}
-  .steps h3{font-weight:800;font-size:21px;line-height:1.25;letter-spacing:-.3px}
-  .steps p{color:var(--muted);font-weight:300;font-size:16px;line-height:1.65}
-  .so{font-weight:800;font-size:clamp(22px,3vw,28px);color:var(--teal);letter-spacing:-.4px}
+  .steps{list-style:none;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:30px}
+  .steps li{display:grid;align-content:start;gap:12px;border-top:1px solid var(--edge);padding-top:20px}
+  .steps .n{font-family:'Archivo',sans-serif;font-stretch:125%;font-weight:800;font-size:30px;color:var(--cream);font-variant-numeric:tabular-nums;line-height:1}
+  .steps h3{font-weight:800;font-size:18px;line-height:1.2;text-transform:uppercase}
+  .steps p{color:var(--muted);font-weight:400;font-size:16px;line-height:1.6}
+  .so{font-weight:800;font-size:clamp(18px,2.6vw,24px);color:var(--cream);text-transform:uppercase;letter-spacing:.02em}
 
-  /* the one lifted object: when it runs */
-  .board{
-    background:linear-gradient(140deg,rgba(38,46,59,.72),rgba(30,37,48,.62));
-    border:1px solid rgba(255,255,255,.10);border-radius:26px;
-    padding:34px clamp(22px,4vw,42px);display:grid;gap:34px;
-    box-shadow:0 24px 60px rgba(0,0,0,.28);
-  }
-  .board-h{font-weight:700;font-size:12.5px;letter-spacing:4px;text-transform:uppercase;color:rgba(255,255,255,.55)}
-  .stops{list-style:none;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;position:relative;padding-top:36px}
-  .stops::before{content:'';position:absolute;left:9px;right:9px;top:8px;height:2px;
-    background:linear-gradient(90deg,var(--teal),rgba(24,192,192,.18))}
-  .stops li{position:relative;display:grid;gap:4px}
-  .stops li::before{content:'';position:absolute;top:-36px;left:0;width:18px;height:18px;border-radius:50%;
-    background:var(--ground);border:2px solid var(--teal)}
-  .stops li:first-child::before{background:var(--teal);box-shadow:0 0 0 7px rgba(24,192,192,.16)}
-  .stops .d{font-weight:800;font-size:clamp(38px,6vw,56px);line-height:1;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
-  .stops .m{font-weight:600;font-size:16px}
-  .stops .w{font-size:12px;color:var(--faint);letter-spacing:2px;text-transform:uppercase;font-weight:700}
-  .stops li:first-child .w{color:var(--teal)}
-  .stops li:first-child .w::after{content:' · next'}
-  .stops .tbc{grid-column:1 / -1;font-weight:600;color:var(--muted)}
-  .stops .tbc::before{display:none}
-
-  .facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;border-top:1px solid rgba(255,255,255,.08);padding-top:24px}
-  .facts dt{font-size:12px;letter-spacing:2.4px;text-transform:uppercase;color:var(--faint);font-weight:700;margin-bottom:6px}
+  .board{padding:34px clamp(22px,4vw,42px);display:grid;gap:30px}
+  .board-h{font-weight:700;font-size:12px;letter-spacing:.3em;text-transform:uppercase;color:var(--cream)}
+  .facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;border-top:1px solid var(--edge);padding-top:24px}
+  .facts dt{font-family:'Archivo',sans-serif;font-stretch:125%;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--faint);font-weight:700;margin-bottom:6px}
   .facts dd{font-size:16px;font-weight:600;line-height:1.45;font-variant-numeric:tabular-nums}
-  .facts dd small{display:block;font-size:14px;font-weight:300;color:var(--muted)}
+  .facts dd small{display:block;font-size:14px;font-weight:400;color:var(--muted)}
 
-  .take{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:36px}
-  .take .pain{display:block;font-size:12.5px;font-weight:700;letter-spacing:3.2px;text-transform:uppercase;color:var(--teal);margin-bottom:10px}
-  .take h3{font-size:21px;font-weight:800;letter-spacing:-.01em;line-height:1.3;margin-bottom:10px}
-  .take p{color:var(--muted);font-weight:300;font-size:17px;line-height:1.6}
-  .fit{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:40px}
-  .fit h3{font-weight:700;font-size:13px;letter-spacing:3.5px;text-transform:uppercase;margin-bottom:16px}
-  .fit .yes h3{color:var(--teal)}
-  .fit .no h3{color:rgba(255,255,255,.55)}
+  .take{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+  .take > div{background:rgba(0,0,0,.18);border:1.5px solid var(--edge);border-radius:20px;padding:22px}
+  .take .pain{display:block;font-family:'Archivo',sans-serif;font-stretch:125%;font-size:11.5px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:var(--cream);margin-bottom:10px}
+  .take h3{font-size:18px;font-weight:800;line-height:1.2;margin-bottom:10px;text-transform:uppercase}
+  .take p{color:var(--muted);font-weight:400;font-size:16px;line-height:1.6}
+  .fit{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:36px}
+  .fit h3{font-weight:700;font-size:13px;letter-spacing:.24em;text-transform:uppercase;margin-bottom:16px}
+  .fit .yes h3{color:var(--cream)}
+  .fit .no h3{color:var(--faint)}
   .fit ul{list-style:none;display:grid;gap:14px}
-  .fit li{position:relative;padding-left:28px;color:var(--muted);font-weight:300;font-size:17px;line-height:1.6}
+  .fit li{position:relative;padding-left:28px;color:var(--muted);font-weight:400;font-size:16.5px;line-height:1.6}
   .fit li::before{position:absolute;left:0;top:.05em;font-weight:800}
-  .fit .yes li::before{content:'✓';color:var(--teal)}
-  .fit .no li::before{content:'×';color:rgba(255,255,255,.45);font-size:1.15em;top:-.05em}
+  .fit .yes li::before{content:'✓';color:var(--cream)}
+  .fit .no li::before{content:'×';color:var(--faint);font-size:1.15em;top:-.05em}
 
   /* ---------- reserve ---------- */
-  .reserve{
-    border:1px solid rgba(24,192,192,.34);border-radius:26px;
-    background:linear-gradient(140deg,rgba(24,192,192,.07),rgba(30,37,48,.5));
-    padding:38px clamp(22px,4vw,44px);display:grid;gap:22px;
-    scroll-margin-top:24px;
-  }
+  .reserve{padding:38px clamp(22px,4vw,46px);display:grid;gap:22px;scroll-margin-top:24px;border-color:rgba(230,220,195,.55)}
   .reserve .prose p{font-size:17px}
   .form{display:grid;gap:14px;max-width:720px}
   .form[hidden]{display:none}
   .row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
-  label{display:grid;gap:7px;font-size:13.5px;font-weight:600;color:rgba(255,255,255,.78)}
-  label .opt{font-weight:300;color:var(--faint)}
+  label{display:grid;gap:7px;font-size:13.5px;font-weight:600;color:rgba(255,255,255,.82)}
+  label .opt{font-weight:400;color:var(--faint)}
   input,select,textarea{
-    width:100%;min-width:0;background:rgba(0,0,0,.24);border:1px solid rgba(255,255,255,.18);
-    border-radius:12px;padding:13px 15px;color:#fff;font-family:inherit;font-size:16px;
+    width:100%;min-width:0;background:rgba(0,0,0,.28);border:1.5px solid var(--edge);
+    border-radius:14px;padding:13px 15px;color:#fff;font-family:inherit;font-size:16px;
   }
-  select{appearance:none;-webkit-appearance:none;cursor:pointer;
-    background-image:linear-gradient(45deg,transparent 50%,var(--teal) 50%),linear-gradient(135deg,var(--teal) 50%,transparent 50%);
-    background-position:calc(100% - 20px) 55%,calc(100% - 14px) 55%;background-size:6px 6px;background-repeat:no-repeat;padding-right:42px}
-  select option{background:var(--ground)}
   textarea{resize:vertical;min-height:84px;line-height:1.5}
-  input:focus,select:focus,textarea:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 4px rgba(24,192,192,.12)}
+  input:focus,select:focus,textarea:focus{outline:none;border-color:var(--cream);box-shadow:0 0 0 4px rgba(230,220,195,.14)}
   [aria-invalid="true"]{border-color:var(--err)}
   .go{justify-self:start}
   .go:disabled{opacity:.55;cursor:progress;transform:none}
-  .sp{width:14px;height:14px;border:2px solid rgba(27,34,45,.3);border-top-color:var(--ground);border-radius:50%;animation:spin .7s linear infinite;display:none}
+  .sp{width:14px;height:14px;border:2px solid rgba(29,36,25,.3);border-top-color:var(--ink);border-radius:50%;animation:spin .7s linear infinite;display:none}
   .go.busy .sp{display:block}
   @keyframes spin{to{transform:rotate(360deg)}}
-  .fine{font-size:13.5px;color:var(--faint);font-weight:300}
-  .nextdate{font-weight:800;font-size:clamp(34px,6vw,60px);letter-spacing:-.03em;line-height:1.05;margin-top:10px}
-  .seat-date{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px;font-weight:700;font-size:17px;color:var(--text);font-variant-numeric:tabular-nums}
-  .seat-date .dot{color:var(--teal)}
-  @keyframes pop{0%{transform:scale(.96);opacity:0}100%{transform:none;opacity:1}}
+  .fine{font-size:13.5px;color:var(--faint);font-weight:400}
+  .nextdate{font-family:'Archivo',sans-serif;font-stretch:125%;font-weight:800;text-transform:uppercase;font-size:clamp(28px,5vw,50px);line-height:1.05;margin-top:10px}
+  .seat-date{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px;font-weight:700;font-size:16px;color:var(--text);font-variant-numeric:tabular-nums}
+  .seat-date .dot{color:var(--cream)}
   .gift{display:grid;gap:12px}
-  .toggle{display:flex;gap:12px;align-items:flex-start;cursor:pointer;background:rgba(0,0,0,.22);
-    border:1px dashed rgba(24,192,192,.55);border-radius:14px;padding:14px 16px;font-size:15.5px;color:#fff;font-weight:600}
-  .toggle:has(input:checked){border-style:solid;border-color:var(--teal);background:rgba(24,192,192,.10)}
-  .toggle input{width:18px;height:18px;padding:0;margin-top:2px;accent-color:var(--teal);flex:none}
-  .toggle small{display:block;font-weight:300;color:var(--muted);font-size:14px;margin-top:3px}
+  .toggle{display:flex;gap:12px;align-items:flex-start;cursor:pointer;background:rgba(0,0,0,.24);
+    border:1.5px dashed rgba(230,220,195,.55);border-radius:14px;padding:14px 16px;font-size:15.5px;color:#fff;font-weight:600}
+  .toggle:has(input:checked){border-style:solid;border-color:var(--cream);background:rgba(230,220,195,.10)}
+  .toggle input{width:18px;height:18px;padding:0;margin-top:2px;accent-color:var(--cream);flex:none}
+  .toggle small{display:block;font-weight:400;color:var(--muted);font-size:14px;margin-top:3px}
   .row.two{grid-template-columns:repeat(2,minmax(0,1fr))}
   .row[hidden]{display:none}
-  .wl{display:grid;gap:12px;border-top:1px solid rgba(255,255,255,.1);padding-top:22px}
+  .wl{display:grid;gap:12px;border-top:1px solid var(--edge);padding-top:22px}
   .wl-line{color:var(--muted);font-size:16px;line-height:1.55;max-width:640px}
   .wl-line strong{color:var(--text)}
   .wl .again{justify-self:start;padding-left:0}
   .again{background:none;border:0;color:var(--muted);font:inherit;font-size:15px;font-weight:600;
     text-decoration:underline;text-underline-offset:4px;cursor:pointer;padding:10px 4px}
-  .again:hover{color:var(--teal)}
+  .again:hover{color:var(--cream)}
   .msg{font-size:16px;font-weight:600;display:none;line-height:1.5}
   .msg.on{display:block}
   .msg.err{color:var(--err)}
   .msg.ok{color:var(--ok)}
 
-  .foot{display:flex;gap:26px;flex-wrap:wrap;border-top:1px solid rgba(255,255,255,.08);padding-top:26px;margin-top:-40px}
-  .foot a{color:rgba(255,255,255,.55);text-decoration:none;font-size:14px;font-weight:500}
-  .foot a:hover{color:var(--teal)}
+  .foot{display:flex;gap:26px;flex-wrap:wrap;border-top:1px solid var(--edge);padding-top:26px;margin-top:-40px}
+  .foot a{color:var(--faint);text-decoration:none;font-size:14px;font-weight:500}
+  .foot a:hover{color:var(--cream)}
 
   @media (max-width:760px){
-    .wrap{gap:84px}
-    .steps,.fit,.take{grid-template-columns:1fr;gap:28px}
+    .wrap{gap:28px}
+    .hero{padding-bottom:30px}
+    .steps,.fit,.take{grid-template-columns:1fr;gap:20px}
     .row,.row.two{grid-template-columns:1fr}
     .facts{grid-template-columns:1fr;gap:16px}
   }
   @media (max-width:480px){
-    body{padding-inline:18px;padding-block:36px 72px}
-    .stops .m{font-size:14px}
-    .stops .w{letter-spacing:1px;font-size:11px}
+    body{padding-inline:16px;padding-block:28px 72px}
+    .sec,.board,.reserve{padding:26px 20px}
     .seat-date{display:grid;gap:2px}
     .seat-date .dot{display:none}
   }
@@ -215,7 +186,7 @@
     .word{animation:none}
     .btn:hover{transform:none}
   }
-  .seats{margin:-6px 0 18px;font-weight:700;color:var(--teal)}
+  .seats{margin:-6px 0 18px;font-weight:700;color:var(--cream)}
   .seats.full{color:var(--muted)}
 </style>
 </head>
@@ -230,13 +201,13 @@
        ============================================================ -->
 
   <header class="hero">
-    <p class="eyebrow">A live workshop with Francois Esterhuizen</p>
+    <p class="eyebrow">A live workshop for business owners, with Francois Esterhuizen</p>
     <h1>
       <span class="word">WOEMA</span>
       <span class="tagline">Get out of your own way.</span>
     </h1>
     <p class="entry"><b>woema</b> <i>noun, Afrikaans.</i> <span>Say it <span class="say">vuma</span>.</span> <span>The energy that gets you moving.</span></p>
-    <p class="lede">Three hours on a Friday morning, live on Zoom, working through the one thing that keeps stopping you.</p>
+    <p class="lede">Three hours on a Friday morning, live on Zoom, for business owners who've become <strong>the bottleneck in their own business</strong>.</p>
     <ul class="when">
       <li><svg width="17" height="17" viewBox="0 0 18 18" aria-hidden="true"><rect x="2.5" y="3.5" width="13" height="12" rx="2"/><path d="M2.5 7h13M6 2v3M12 2v3"/></svg><span data-woema-date>Friday 6 November 2026</span></li>
       <li><svg width="17" height="17" viewBox="0 0 18 18" aria-hidden="true"><circle cx="9" cy="9" r="6.5"/><path d="M9 5.4V9l2.4 1.6"/></svg><span data-woema-time>09:00 to 12:00 SAST</span></li>
@@ -244,17 +215,18 @@
     </ul>
     <div class="act">
       <a class="btn" href="#reserve">Reserve your seat</a>
-      <span class="price">R970</span>
+      <span class="price">R297</span>
     </div>
   </header>
 
   <section class="sec">
     <h2>You already know what to do.</h2>
     <div class="prose">
-      <p>You've probably known for a while. You've read the books, made the plan, and you can explain your own patterns better than anyone around you.</p>
-      <p>And yet here you are, a year later, in the same place and doing the same thing.</p>
-      <p><strong>Nothing's wrong with you.</strong> Your belief system has been practising to keep you safe and comfortable for years. It's sneaky and clever, and it's good at its job.</p>
-      <p>Reading about it only takes you so far, because the belief lives in your everyday choices, and that's where you have to catch it. That's what WOEMA is for: three hours of finding it in your own life, with me there to point out what you'd otherwise explain away.</p>
+      <p>You've built something that works. Somewhere along the way, it started depending on you for almost everything.</p>
+      <p>You know you should hand more over, stop putting out every fire yourself, get what's in your head written down, and finish work before your family has gone to bed. You've probably known for a while.</p>
+      <p>And yet here you are, a year later, still the person everything waits on. If you can't step away from your business for two weeks, you are the bottleneck. And it isn't only costing you revenue and freedom. It's a tax on your health and the relationships that matter to you.</p>
+      <p><strong>Nothing's wrong with you.</strong> The habits that built your business are the ones keeping you stuck in it now. Your belief system has been practising to keep you safe for years. It's sneaky and clever, and it's good at its job.</p>
+      <p>Reading about it only takes you so far, because the belief lives in your everyday choices: the email you answer yourself, the task you take back, the evening you stay late. That's where you have to catch it. That's what WOEMA is for: three hours of finding it in your own business, with me there to point out what you'd otherwise explain away.</p>
     </div>
   </section>
 
@@ -264,17 +236,17 @@
       <li>
         <span class="n">1</span>
         <h3>Understand your own potential.</h3>
-        <p>We start with what you're capable of in your own life, and what you would be doing if nothing held you back. That picture comes first, because it's what we measure everything else against.</p>
+        <p>We start with what your business and your life could look like if you weren't holding everything up. That picture comes first, because it's what we measure everything else against.</p>
       </li>
       <li>
         <span class="n">2</span>
         <h3>Find what's blocking it.</h3>
-        <p>Then we look at the gap between what you know and what you actually do. There's usually a belief sitting in that gap, often an old one that made perfect sense when you learned it. We find yours and put it into plain words.</p>
+        <p>Then we look at the gap between what you know you should do as a leader and what you actually do on a Tuesday. There's usually a belief sitting in that gap, often an old one that made perfect sense when you learned it. "Nobody does it as well as I do." "I have to be available for everything." "If I slow down, I'll fall behind." We find yours and put it into plain words.</p>
       </li>
       <li>
         <span class="n">3</span>
         <h3>Reshape your paradigm.</h3>
-        <p>By that I mean the set of beliefs you look at your life through. Once a belief is written down, you can question it and see what it has been costing you. Before we finish, you choose the first small action that starts building evidence for something different.</p>
+        <p>By that I mean the set of beliefs you look at your business and your life through. Once a belief is written down, you can question it and see what it has been costing you. Before we finish, you choose the first small action that starts building evidence for something different.</p>
       </li>
     </ol>
     <p class="so">So you can get out of your own way.</p>
@@ -284,19 +256,19 @@
     <h2>What you walk away with</h2>
     <div class="take">
       <div>
-        <span class="pain">Procrastination</span>
-        <h3>The job you keep putting off, named.</h3>
-        <p>By the end you will know which belief makes that one job feel heavier than everything else on the list, and you will have chosen the first move you are making this week.</p>
+        <span class="pain">Your bottleneck</span>
+        <h3>The pattern, named.</h3>
+        <p>Whether you hold on to the work, fight every fire, carry all the knowledge or run on effort alone, you'll know which belief keeps that pattern running, and where you learned it.</p>
       </div>
       <div>
-        <span class="pain">Time management</span>
-        <h3>A week you actually chose.</h3>
-        <p>Diaries fill up with things nobody sat down and decided on. You leave having written what your weeks are for, and what comes out of them to make the room.</p>
+        <span class="pain">Delegation</span>
+        <h3>One thing off your plate.</h3>
+        <p>You leave having chosen the task, decision or piece of knowledge you're handing over first, who it goes to, and what "done" looks like.</p>
       </div>
       <div>
-        <span class="pain">Self-doubt</span>
-        <h3>Something to say back to it.</h3>
-        <p>The doubt is usually one old sentence on repeat. You leave with yours written down, where you learned it, and the line you are going to use when it turns up again on Monday.</p>
+        <span class="pain">Your week</span>
+        <h3>A finish line.</h3>
+        <p>You leave with the hours you're protecting this week: for the work only you can do, and for the people at home who've been getting what's left of you.</p>
       </div>
     </div>
     <p class="so">All three on one page, in your own handwriting, before we finish.</p>
@@ -312,7 +284,7 @@
       <dl class="facts">
         <div><dt>Time</dt><dd><span data-woema-time>09:00 to 12:00 SAST</span><small>Three hours, live</small></dd></div>
         <div><dt>Where</dt><dd><span data-woema-where>Online, on Zoom</span><small>Now and then in person, in Stellenbosch</small></dd></div>
-        <div><dt>Price</dt><dd>R970<small>Four seats, paid by card when you book.</small></dd></div>
+        <div><dt>Price</dt><dd>R297<small>30 seats, paid by card when you book.</small></dd></div>
       </dl>
     </div>
   </section>
@@ -323,15 +295,16 @@
       <div class="yes">
         <h3>Come if</h3>
         <ul>
-          <li>There's something you keep saying you'll change, and you keep not changing it.</li>
-          <li>You're willing to look at your own part in it.</li>
+          <li>Your business depends on you more than you'd like, and you're tired of being the reason you can't step away.</li>
+          <li>You're willing to look at your own part in it, as well as your team's.</li>
           <li>You can clear the whole Friday morning and stay for all three hours.</li>
         </ul>
       </div>
       <div class="no">
         <h3>Rather wait if</h3>
         <ul>
-          <li>You're hoping for three hours of motivation. That usually wears off by Tuesday, and this is a working morning.</li>
+          <li>You're hoping for three hours of business tactics or motivation. This is a working morning about the person running the business.</li>
+          <li>Your bottleneck is purely staff or cash right now. Those need practical fixes first, and I'd rather tell you that than take your money.</li>
           <li>You're in a crisis right now. A group workshop is the wrong place to start. Please call SADAG on 0800 567 567, or WhatsApp me on 082 444 1831 and we'll find the right help.</li>
         </ul>
       </div>
@@ -372,12 +345,12 @@
         </label>
       </div>
 
-      <label for="w-notes">What keeps getting in your way? <span class="opt">Optional. A sentence is plenty.</span>
+      <label for="w-notes">Which part of your business still waits on you? <span class="opt">Optional. A sentence is plenty.</span>
         <textarea id="w-notes" name="notes" maxlength="600"></textarea>
       </label>
 
-      <button class="btn go" id="w-go" type="submit"><span class="sp"></span><span class="lab">Pay R970 and reserve my seat</span></button>
-      <p class="fine">R970. Bring three hours and something to write with.</p>
+      <button class="btn go" id="w-go" type="submit"><span class="sp"></span><span class="lab">Pay R297 and reserve my seat</span></button>
+      <p class="fine">R297. Bring three hours and something to write with.</p>
       <p class="fine">If you run into any problem paying, <a href="https://wa.me/27824441831" target="_blank" rel="noopener">WhatsApp me here</a>.</p>
     </form>
     <p class="msg" id="w-msg" tabindex="-1" role="status"></p>
@@ -417,8 +390,8 @@
    data-woema-date spans by launch/events.py from his calendar. If that date
    does not work, the waiting list is the other door.
 
-   Paid again from 17 Oct 2026, his word: "It's 970 Rand ... And I'm only going
-   to do four spots." The price lives on the server (/api/woema); this page
+   Paid again from 17 Oct 2026; R297 and 30 seats from 29 Oct 2026, his
+   word via Mark. The price lives on the server (/api/woema); this page
    asks it how many seats are left, starts the payment there, opens Paystack's
    popup on the page, and asks the server to verify before it says booked. */
 (function(){
@@ -428,7 +401,7 @@
   var dateEl = document.querySelector('.seat-date [data-woema-date]');
   var DATE = dateEl ? dateEl.textContent.trim() : '';
   var TBC = !DATE || DATE === 'To be confirmed';
-  var LABEL = 'Pay R970 and reserve my seat';
+  var LABEL = 'Pay R297 and reserve my seat';
   var FAIL = 'That did not go through. Try again in a moment, or WhatsApp me on 082 444 1831.';
 
   function val(id){ return $(id).value.trim(); }
@@ -456,7 +429,7 @@
     form.hidden = true;
     seats.hidden = false; seats.className = 'seats full';
     seats.textContent = 'This workshop is full.';
-    $('w-wl-line').innerHTML = '<strong>All four seats are taken.</strong> Join the waiting list and I\'ll let you know as soon as the next one is scheduled.';
+    $('w-wl-line').innerHTML = '<strong>All 30 seats are taken.</strong> Join the waiting list and I\'ll let you know as soon as the next one is scheduled.';
   }
   if (!TBC) {
     fetch('/api/woema?date=' + encodeURIComponent(DATE), { cache: 'no-store' })
@@ -465,7 +438,7 @@
         if (!j || typeof j.left !== 'number') return;
         if (j.left <= 0) return full();
         seats.hidden = false;
-        seats.textContent = j.left === 1 ? 'One seat left' : (j.left === j.seats ? 'Four seats' : j.left + ' seats left');
+        seats.textContent = j.left === 1 ? 'One seat left' : (j.left === j.seats ? j.seats + ' seats' : j.left + ' seats left');
       }).catch(function(){});
   }
 

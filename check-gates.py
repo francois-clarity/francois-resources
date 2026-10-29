@@ -252,10 +252,20 @@ GATES = {
                  "youtube-nocookie", "placeholder="],
         "must_not": ["Headlights", "two-minute test", "Pattern Breaker"],
     },
-    # WOEMA, the paid three-hour workshop (R1,500), built 15 Sep 2026. Its
+    # Business Bottleneck Finder, the MicroMagnet for business owners (21 Oct 2026).
+    "bottleneck-finder": {
+        "must": ["Business Bottleneck Finder", "/api/bottleneck", "/api/assessment",
+                 "bottleneck-finder", "Reluctant Delegator", "Chief Firefighter",
+                 "Walking Encyclopedia", "Exhausted Achiever", "Your step for today", "I'll stop here for now"],
+        "must_not": ["Pattern Breaker", "Story of Us", "mailto:"],
+    },
+    # WOEMA, the paid three-hour workshop, built 15 Sep 2026. Its
     # dates are rewritten from his calendar by launch/events.py, so the
     # markers must survive every edit or the page freezes on an old date.
     # Public and shareable, unlike /events/: it must never pick up noindex.
+    # Paid again from 17 Oct (R970, four seats, Paystack on the page), R297
+    # with 30 seats from 29 Oct (his word, an impulse buy), and
+    # aimed at business owners, Land Rover look, from 21 Oct 2026.
     "woema": {
         "must": ["WOEMA", "Get out of your own way", "Understand your own potential",
                  "Find what's blocking it", "Reshape your paradigm",
@@ -263,15 +273,19 @@ GATES = {
                  # one next date and the waiting list (16 Sep 2026)
                  "/api/waitlist", "event: 'woema'",
                  "/api/woema", "woema/og.png", 'id="reserve"', "0800 567 567",
-                 # free, and the invitation to bring somebody (28 Sep 2026)
-                 "Free", "I'd like to invite a friend", 'id="w-gift"', "action: 'reserve'",
+                 # the invitation to bring somebody (28 Sep 2026)
+                 "I'd like to invite a friend", 'id="w-gift"',
+                 # paid by card on the page (17 Oct 2026)
+                 "Pay R297 and reserve my seat", "action: 'init'", "resumeTransaction",
+                 # for business owners (21 Oct 2026)
+                 "for business owners", "the bottleneck",
                  "https://events.francoisesterhuizen.com/woema/"],
         "must_not": ["noindex", "mailto:", "Pattern Breaker", "once a month",
                      "resources.francoisesterhuizen.com/woema", "no payment on this page",
                      "How would you like to pay", "EFT, or I'm outside South Africa",
                      "three times", "three weeks apart", "every school term", "data-woema-stops",
-                     # it is free now: no price, no card, no invoice, anywhere on the page
-                     "R1,500", "R900", "R1,000", "R2,000", "paystack", "invoice",
+                     # one price only, R297 (29 Oct 2026)
+                     "R970", "R1,500", "R900", "R1,000", "R2,000", "invoice",
                      "Are you part of one of my programmes?"],
     },
 }
@@ -600,7 +614,10 @@ def check_prices_agree():
     # "it will no longer use that funnel because we now have a different
     # landing page with the bumps for the book". Nothing on this site is above
     # the low ticket line any more. Adding to this set is a deliberate act.
-    OK_OVER = set()
+    # WOEMA went back to a paid workshop on his word on 17 Oct 2026 ("It's
+    # 970 Rand ... four spots"), and to R297 on 29 Oct 2026. The amount lives
+    # on the server in /api/woema.
+    OK_OVER = {"woema/index.html shows R297"}
     for row in sorted(stale):
         amount = int(_re.search(r"R(\d+)", row.split()[-1]).group(1))
         if row in OK_OVER:
