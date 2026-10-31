@@ -5,6 +5,7 @@
  *
  *   events.francoisesterhuizen.com/         the events page (events/index.html)
  *   events.francoisesterhuizen.com/woema/   the WOEMA page
+ *   events.francoisesterhuizen.com/confidence-with-claude/   Claudia's workshop page (31 Oct 2026)
  *   events.francoisesterhuizen.com/api/*    the functions both pages post to
  *
  * Anything else asked of the events address goes to the same path on
@@ -33,7 +34,8 @@ export async function onRequest(ctx) {
       return Response.redirect('https://' + EVENTS + '/' + url.search, 301);
     }
     if (path === '/woema') return Response.redirect('https://' + EVENTS + '/woema/' + url.search, 301);
-    if (path.startsWith('/woema/') || SHARED.test(path)) return ctx.next();
+    if (path === '/confidence-with-claude') return Response.redirect('https://' + EVENTS + '/confidence-with-claude/' + url.search, 301);
+    if (path.startsWith('/woema/') || path.startsWith('/confidence-with-claude/') || SHARED.test(path)) return ctx.next();
     return Response.redirect('https://' + RESOURCES + path + url.search, 302);
   }
 

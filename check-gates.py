@@ -617,7 +617,14 @@ def check_prices_agree():
     # WOEMA went back to a paid workshop on his word on 17 Oct 2026 ("It's
     # 970 Rand ... four spots"), and to R297 on 29 Oct 2026. The amount lives
     # on the server in /api/woema.
-    OK_OVER = {"woema/index.html shows R297"}
+    # 31 Oct 2026: the events page names the WOEMA price, and Confidence with
+    # Claude (Claudia's page, his approval, live Paystack pages) sits on the
+    # events address, not the low ticket resources site.
+    OK_OVER = {"woema/index.html shows R297", "events/index.html shows R297",
+               "events/index.html shows R2,500", "events/index.html shows R900",
+               "confidence-with-claude/index.html shows R2,500",
+               "confidence-with-claude/index.html shows R900",
+               "confidence-with-claude/index.html shows R38,000"}
     for row in sorted(stale):
         amount = int(_re.search(r"R(\d+)", row.split()[-1]).group(1))
         if row in OK_OVER:
