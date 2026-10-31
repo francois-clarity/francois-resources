@@ -140,6 +140,10 @@
     .tile{padding:24px 22px}
     .btn{width:100%;text-align:center}
   }
+  /* Inside the Clarity app (?embed=1, 31 Oct 2026): one events page for the website and the app.
+     The site's own footer goes; Clarity has its own. */
+  html.embed .foot { display: none; }
+  html.embed body { background: transparent; }
 </style>
 </head>
 <body>
@@ -427,5 +431,16 @@
 </script>
 <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "a9b056ed20bf4324b33f372dd69b5db4"}'></script><!-- End Cloudflare Web Analytics -->
   <script src="/assets/report.js" data-tool="events" defer></script>
+  <script>
+  /* One events page for the website and Clarity (Francois, 27 Oct 2026). In the app it shows inside an
+     events page: links open in a new tab, and it tells Clarity how tall it is so there's no inner scroll. */
+  (function () {
+    if (!/[?&]embed=1/.test(location.search) || window.parent === window) return;
+    document.documentElement.classList.add('embed');
+    document.querySelectorAll('a[href]').forEach(function (a) { if (!/^#/.test(a.getAttribute('href'))) { a.target = '_blank'; a.rel = 'noopener'; } });
+    var tell = function () { window.parent.postMessage({ clarityEventsHeight: document.documentElement.scrollHeight }, 'https://clarity.francoisesterhuizen.com'); };
+    window.addEventListener('load', tell); new ResizeObserver(tell).observe(document.body); tell();
+  })();
+  </script>
 </body>
 </html>
