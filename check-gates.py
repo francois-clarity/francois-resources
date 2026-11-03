@@ -624,6 +624,7 @@ def check_prices_agree():
                "events/index.html shows R2,500", "events/index.html shows R900",
                "confidence-with-claude/index.html shows R2,500",
                "confidence-with-claude/index.html shows R900",
+               "confidence-with-claude/index.html shows R500",
                "confidence-with-claude/index.html shows R38,000"}
     for row in sorted(stale):
         amount = int(_re.search(r"R(\d+)", row.split()[-1]).group(1))

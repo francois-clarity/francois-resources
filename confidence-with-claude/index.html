@@ -121,19 +121,8 @@ ul{margin:0;padding-left:20px;display:grid;gap:6px}
 .run.next .t{color:var(--accent)}
 .run b{font-family:var(--display);font-size:19px;font-weight:700;font-variant-numeric:tabular-nums}
 .run span{font-size:14.5px;color:var(--muted)}
-/* 2027 waiting list: same /api/waitlist as the events page (KV first, then the sheet) */
-.wl .wl-open{justify-self:start;margin-top:6px;cursor:pointer;font:600 15px/1.2 var(--body);padding:10px 16px;border-radius:4px;border:1px solid var(--accent);background:transparent;color:var(--fg)}
-.wl .wl-open:hover,.wl .wl-open:focus-visible{background:var(--accent-soft);outline:none}
-.wl form{display:none;gap:10px;margin-top:6px}
-.wl.open form{display:grid}
-.wl.open .wl-open{display:none}
-.wl input{min-width:0;background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:11px 12px;color:var(--fg);font:16px var(--body)}
-.wl input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
-.wl input[aria-invalid="true"]{border-color:#c0392b}
-.wl .wl-go{justify-self:start;border:0;cursor:pointer;font-family:var(--body)}
-.wl .wl-go:disabled{opacity:.55;cursor:progress}
-.wl .wl-msg{font-size:14.5px;color:var(--fg);font-weight:500}
-.wl .wl-msg.err{color:#c0392b}
+/* 2027 waiting list: a R500 deposit holds the seat (his word, 3 Nov) */
+.wl .wl-go{justify-self:start;margin-top:6px}
 .price{display:grid;grid-template-columns:auto 1fr;gap:12px 28px;align-items:center;padding:22px 24px;border:1px solid var(--line)}
 .price b{font-family:var(--display);font-size:46px;font-weight:800;line-height:1}
 .price p{color:var(--muted);max-width:56ch}
@@ -152,7 +141,7 @@ ul{margin:0;padding-left:20px;display:grid;gap:6px}
 <header class="hero">
   <div class="wrap">
     <div class="left">
-      <span class="eyebrow">Three Tuesday mornings · Live on Zoom · Twelve seats</span>
+      <span class="eyebrow">Three Tuesday mornings · Live on Zoom · No recording · Twelve seats</span>
       <h1>Confidence with Claude</h1>
       <div class="steps"><span>Set up.</span><span>Hand over.</span><span>Build.</span></div>
       <p class="lede">I don't speak tech. I built my website, my courses platform and my bookkeeping with Claude anyway. Three mornings to get some momentum in your own Claude game, with me next to you.</p>
@@ -261,7 +250,7 @@ ul{margin:0;padding-left:20px;display:grid;gap:6px}
         <ul>
           <li>You're a developer. You'll be bored.</li>
           <li>You already run your business on Claude. You don't need me.</li>
-          <li>You want a recording to watch later. There's a recording, but the point is the room.</li>
+          <li>You want a recording to watch later. There's no recording: it's live only.</li>
         </ul>
       </div>
     </div>
@@ -273,27 +262,20 @@ ul{margin:0;padding-left:20px;display:grid;gap:6px}
     <div><span class="eyebrow">Dates</span><h2>The next run</h2></div>
     <div class="dgrid">
       <div class="run next"><span class="t">Next · Term 4, 2026</span><b>17 Nov, 24 Nov, 1 Dec</b><span>Tuesdays, 09:30 to 12:00. Finish before December and play all holiday.</span></div>
-      <div class="run wl" data-wl="confidence-with-claude">
+      <div class="run wl">
         <span class="t">2027</span>
         <b>New dates for 2027</b>
-        <span>Can't make these dates? Join the waiting list and I'll let you know as soon as the 2027 dates are set.</span>
-        <button class="wl-open" type="button">Join the waiting list</button>
-        <form novalidate>
-          <input name="name" type="text" placeholder="Your name" autocomplete="name" aria-label="Your name">
-          <input name="email" type="email" placeholder="you@example.com" autocomplete="email" inputmode="email" aria-label="Your email">
-          <input name="phone" type="tel" placeholder="Phone number" autocomplete="tel" inputmode="tel" aria-label="Your phone number">
-          <button class="btn wl-go" type="submit">Add me to the list</button>
-        </form>
-        <p class="wl-msg" role="status" aria-live="polite"></p>
+        <span>Can't make these dates? Hold your seat on the 2027 waiting list with a R500 deposit. It comes off the price when you book, and I'll let you know as soon as the 2027 dates are set.</span>
+        <a class="btn wl-go" href="https://paystack.shop/pay/confidence-with-claude-2027-deposit">Pay the R500 deposit</a>
       </div>
     </div>
     <div class="price">
       <b>R2,500</b>
-      <p>All three mornings, the three AI keys, a WhatsApp group for the three weeks, and the recordings. Twelve seats so I can see every screen. <a href="https://paystack.shop/pay/confidence-with-claude">Book all three</a> and you'll get a short note on how to prepare.</p>
+      <p>All three mornings, the three AI keys and a WhatsApp group for the three weeks. There's no recording, so come live. Twelve seats so I can see every screen. <a href="https://paystack.shop/pay/confidence-with-claude">Book all three</a> and you'll get a short note on how to prepare.</p>
     </div>
     <div class="price">
       <b>R900</b>
-      <p>One morning on its own. Already set up and happy? Come for Hand over, or Build, or both. Each morning comes with its key and its recording. Pick the weeks you want on the booking page.</p>
+      <p>One morning on its own. Already set up and happy? Come for Hand over, or Build, or both. Each morning comes with its key. There's no recording. Pick the weeks you want on the booking page.</p>
     </div>
   </div>
 </section>
@@ -336,50 +318,6 @@ ul{margin:0;padding-left:20px;display:grid;gap:6px}
     if (!open && player && player.contentWindow) {
       player.contentWindow.postMessage('{"method":"pause"}', 'https://player.vimeo.com');
     }
-  });
-})();
-// 2027 waiting list. Posts to /api/waitlist like the events page; it keeps
-// every sign-up in KV first and passes it on to the waiting-list sheet.
-(function () {
-  var wl = document.querySelector('.wl');
-  var form = wl.querySelector('form');
-  var go = wl.querySelector('.wl-go');
-  var msg = wl.querySelector('.wl-msg');
-
-  wl.querySelector('.wl-open').addEventListener('click', function () {
-    wl.classList.add('open');
-    form.querySelector('[name=name]').focus();
-  });
-
-  function say(text, err) { msg.textContent = text; msg.className = 'wl-msg' + (err ? ' err' : ''); }
-  function bad(name, text) { say(text, true); form.querySelector('[name=' + name + ']').setAttribute('aria-invalid', 'true'); }
-
-  form.querySelectorAll('input').forEach(function (i) {
-    i.addEventListener('input', function () { i.removeAttribute('aria-invalid'); say(''); });
-  });
-
-  form.addEventListener('submit', function (ev) {
-    ev.preventDefault();
-    if (go.disabled) return;
-    var f = {};
-    form.querySelectorAll('input').forEach(function (i) { f[i.name] = i.value.trim(); });
-    if (!f.name) return bad('name', 'I need a name.');
-    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(f.email)) return bad('email', "That email doesn't look right.");
-    if (f.phone.replace(/\D/g, '').length < 9) return bad('phone', 'That phone number looks too short.');
-
-    go.disabled = true; go.textContent = 'Adding you';
-    function failed(text) {
-      go.disabled = false; go.textContent = 'Add me to the list';
-      say(text || "That didn't go through. Try again in a moment, or email me directly.", true);
-    }
-    fetch('/api/waitlist', {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ event: 'confidence-with-claude', name: f.name, email: f.email, phone: f.phone, source: 'Confidence with Claude page' })
-    }).then(function (r) { return r.json().catch(function () { return { ok: false }; }); })
-      .then(function (j) {
-        if (j && j.ok) { form.style.display = 'none'; say("You're on the list. I'll let you know as soon as the 2027 dates are set."); }
-        else failed(j && j.error);
-      }, function () { failed(); });
   });
 })();
 </script>
