@@ -48,8 +48,8 @@ echo "==> 2. Do the pages still say what they claim to?"
 python3 check-gates.py
 
 echo
-echo "==> 3. Publishing"
-npx wrangler pages deploy . --project-name=francois-resources --branch=main --commit-dirty=true
+echo "==> 3. Publishing (without the files in deploy-exclude.txt)"
+./stage-deploy.sh
 
 echo
 echo "==> 4. Checking the live site (a 200 proves nothing, so this reads content)"

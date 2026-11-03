@@ -26,7 +26,7 @@ for f in "$@"; do
 done
 [ "$fail" = 0 ] || { echo; echo "REFUSED: fix the files above. Nothing was published."; exit 1; }
 for f in "$@"; do cp "$f" "$DEST/"; done
-DEPLOY_OUT=$(cd "$SITE" && npx wrangler pages deploy . --project-name=francois-resources --branch=main --commit-dirty=true 2>&1) || { echo "$DEPLOY_OUT" | tail -5; echo "DEPLOY FAILED. Nothing verified."; exit 1; }
+DEPLOY_OUT=$("$SITE/stage-deploy.sh" 2>&1) || { echo "$DEPLOY_OUT" | tail -5; echo "DEPLOY FAILED. Nothing verified."; exit 1; }
 echo "$DEPLOY_OUT" | grep -q "Deployment complete" || { echo "$DEPLOY_OUT" | tail -5; echo "DEPLOY DID NOT CONFIRM. Nothing verified."; exit 1; }
 echo "$DEPLOY_OUT" | grep "Deployment complete"
 # verify the LIVE bytes, not the local ones

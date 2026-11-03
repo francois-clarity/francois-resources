@@ -1,0 +1,24 @@
+# Files in this folder that must never reach the live site.
+# Read by stage-deploy.sh, which every deploy goes through. rsync patterns,
+# one per line. Added 3 Nov 2026, when the AI-key PDFs, draft copy, handover
+# notes and these scripts were all found public.
+
+# working folders
+.git/
+.wrangler/
+node_modules/
+.DS_Store
+.env*
+
+# the AI keys and guides: his products, never hosted as files
+*-ai-key/
+*-ai-guide/
+
+# notes, drafts, handovers and docs
+*.md
+docs/
+
+# the tools that run this site
+*.py
+*.sh
+deploy-exclude.txt
