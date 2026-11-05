@@ -277,6 +277,40 @@ ul{margin:0;padding-left:20px;display:grid;gap:6px}
       <b>R900</b>
       <p>One morning on its own. Already set up and happy? Come for Hand over, or Build, or both. Each morning comes with its key. There's no recording. Pick the weeks you want on the booking page.</p>
     </div>
+    <div class="price cc" id="client-code">
+      <b>Client?</b>
+      <div>
+        <p>Already working with me, or on the Clarity Quest? Your seat is on me. Enter the code I gave you.</p>
+        <form class="cc-check"><input name="code" placeholder="Your code" autocomplete="off" required><button class="btn sm" type="submit">Use code</button></form>
+        <form class="cc-claim" hidden>
+          <input name="name" placeholder="Your name" autocomplete="name" required>
+          <input name="email" type="email" placeholder="Email" autocomplete="email" required>
+          <input name="phone" type="tel" placeholder="Phone (for the WhatsApp group)" autocomplete="tel" required>
+          <select name="run"><option value="nov-2026">17 Nov, 24 Nov, 1 Dec 2026</option><option value="2027">A 2027 run</option></select>
+          <button class="btn sm" type="submit">Claim my seat</button>
+        </form>
+        <p class="cc-msg" aria-live="polite"></p>
+      </div>
+    </div>
+<style>
+.cc form{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+.cc input,.cc select{font:inherit;padding:10px 12px;border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:8px;min-width:0;flex:1 1 200px}
+.cc .cc-msg{margin-top:10px;color:var(--fg)}
+.cc .cc-msg.err{color:var(--accent)}
+</style>
+<script>
+(function(){
+  var box=document.getElementById('client-code'); if(!box) return;
+  var check=box.querySelector('.cc-check'), claim=box.querySelector('.cc-claim'), msg=box.querySelector('.cc-msg'), code='';
+  function say(t,err){msg.textContent=t;msg.className='cc-msg'+(err?' err':'');}
+  function post(body){return fetch('/api/cwcclient',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}).then(function(r){return r.json();}).catch(function(){return {ok:false,error:'Something went wrong. Try again in a minute.'};});}
+  check.addEventListener('submit',function(e){e.preventDefault();code=check.code.value;say('Checking...');
+    post({action:'check',code:code}).then(function(o){ if(o.ok){check.hidden=true;claim.hidden=false;say('That works. Tell me who you are and which run.');} else say(o.error||'That code does not work.',true); });});
+  claim.addEventListener('submit',function(e){e.preventDefault();say('Saving your seat...');
+    post({action:'claim',code:code,name:claim.name.value,email:claim.email.value,phone:claim.phone.value,run:claim.run.value}).then(function(o){
+      if(o.ok){claim.hidden=true;say('Your seat is saved. I\'ll be in touch with a short note on how to prepare.');} else say(o.error||'Something went wrong.',true); });});
+})();
+</script>
   </div>
 </section>
 
