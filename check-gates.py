@@ -288,6 +288,16 @@ GATES = {
                      "R970", "R1,500", "R900", "R1,000", "R2,000", "invoice",
                      "Are you part of one of my programmes?"],
     },
+    # Big Dream Guides, merged in from their own site on 6 Nov 2026
+    # (bigdream.francoisesterhuizen.com forwards here once Cloudflare is done).
+    "big-dream": {"must": ["Big Dream", "guide-1/", "guide-4/"], "must_not": []},
+    "big-dream/guide-1": {"must": ["Name the Drift", "../shared/pdf-export.js"], "must_not": ["Explore Possible Futures</title>"]},
+    "big-dream/guide-2": {"must": ["Explore Possible Futures", "../shared/pdf-export.js"], "must_not": ["Name the Drift</title>"]},
+    "big-dream/guide-3": {"must": ["Clarify the Big Dream", "../shared/pdf-export.js"], "must_not": ["Build the First Process</title>"]},
+    "big-dream/guide-4": {"must": ["Build the First Process", "../shared/pdf-export.js"], "must_not": ["Clarify the Big Dream</title>"]},
+    # Tree of Clarity workshop worksheet, merged in on 6 Nov 2026 without the
+    # facilitator view. Distinct from the tree-of-clarity/ explainer.
+    "tree-of-clarity-workshop": {"must": ["The Tree of Clarity", "app.js", "pdf-report.js"], "must_not": ["facilitator.html", "The Belief System Model"]},
 }
 
 def check(name, html, where):
@@ -389,8 +399,10 @@ GIVEAWAY_SECTIONS = [
 ]
 
 def _prose(path):
-    """Reader-facing words only: no script, no style, no comments, no URLs."""
-    t = path.read_text()
+    """Reader-facing words only: no script, no style, no comments, no URLs.
+    His own words marked data-verbatim (a product's name, a book title) are
+    left out, as the banned-word check already does (added 6 Nov 2026)."""
+    t = strip_verbatim(path.read_text())
     h = re.sub(r"<(script|style)[\s\S]*?</\1>", " ", t, flags=re.I)
     h = re.sub(r"<!--[\s\S]*?-->", " ", h)
     out = re.sub(r"<[^>]+>", " ", h)

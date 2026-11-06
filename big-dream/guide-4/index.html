@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Big Dream Guide 4: Build the First Process</title>
+<meta name="description" content="An interactive guide to help you turn your Big Dream into a first seven-day process." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css?v=27" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='40' fill='%23a8d5d0'/%3E%3C/svg%3E">
+<script>
+  window.LEAD_CAPTURE_CONFIG = {
+    mailchimpUrl: "https://francoisesterhuizen.us5.list-manage.com/subscribe/post?u=097ed8fb3c6e3c943817d0d80&id=60456c1a4a&f_id=00a843edf0",
+    source: "big-dream-guides",
+    title: "Welcome",
+    subtitle: "Fill in your details once. That gives you access to all four guides, and lets you email your results to yourself or download a PDF insight document with what you discovered."
+  };
+</script>
+<script src="../shared/lead-capture.js?v=27" defer></script>
+</head>
+<body>
+
+<header class="topbar" id="topbar" hidden>
+  <div class="topbar-inner">
+    <a href="../index.html" class="brand brand-link" aria-label="Back to all guides">
+      <span class="brand-dot"></span>
+      <span class="brand-text">All guides</span>
+    </a>
+    <div class="progress-wrap">
+      <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+      <span class="progress-label" id="progressLabel">Step 1 of 13</span>
+    </div>
+  </div>
+</header>
+
+<main id="app" class="app"></main>
+
+<template id="tpl-welcome">
+  <section class="screen welcome">
+    <div class="hero">
+      <img src="../images/g4/hero_footprints.jpg" alt="" class="hero-img" />
+    </div>
+    <div class="container narrow">
+      <p class="back-link-wrap"><a href="../index.html" class="back-link">← All guides</a></p>
+      <h1 class="display">Big Dream Guide 4: <span class="italic">Build the First Process</span></h1>
+      <p class="lede">A Big Dream gives direction. The process gives movement. This guide helps you turn your Big Dream into a first seven-day process.</p>
+
+      <div class="callout">
+        <h3 class="callout-title">SEVEN DAYS, ONE PROCESS</h3>
+        <p>A dream usually stalls for one reason: the first repeatable process never gets built.</p>
+        <p>This guide is short and practical.</p>
+        <p>By the end of it, you will have one process you can run for seven days, an if-then plan for when friction shows up, and the first visible sign that this dream is becoming real.</p>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label" for="participant_name">Participant name <span class="req">*</span></label>
+        <input type="text" id="participant_name" class="text-input" data-key="participant_name" autocomplete="name" placeholder="Your name" />
+      </div>
+      <div class="field-group">
+        <label class="field-label" for="participant_email">Email <span class="req">*</span></label>
+        <input type="email" id="participant_email" class="text-input" data-key="participant_email" autocomplete="email" placeholder="you@example.com" />
+      </div>
+
+      <div class="actions">
+        <button class="btn-primary" data-action="next">Begin <span class="arrow">→</span></button>
+      </div>
+      <p class="tiny-note">Your answers are saved on your device as you go. You can leave and come back.</p>
+    </div>
+  </section>
+</template>
+
+<template id="tpl-examples">
+  <section class="screen">
+    <div class="container narrow">
+      <h2 class="section-title">Let's build your first process...</h2>
+
+      <figure class="figure">
+        <img src="../images/g4/characters.jpg" alt="" />
+      </figure>
+
+      <h3 class="sub-title">Optional Example Characters</h3>
+      <p class="muted">Pieter and Marietjie return as fictional example participants. Use their examples only if you feel stuck.</p>
+
+      <div class="character-block">
+        <h4>Pieter van der Merwe</h4>
+        <p>From Guide 3, Pieter's Big Dream: to become a present father, a healthier owner and a calm leader of his own life.</p>
+      </div>
+      <div class="character-block">
+        <h4>Marietjie Botha</h4>
+        <p>From Guide 3, Marietjie's Big Dream: to become a woman with her own voice, a teacher, a writer and a present mother.</p>
+      </div>
+
+      <figure class="figure">
+        <img src="../images/g4/method.jpg" alt="" />
+      </figure>
+
+      <h3 class="sub-title">The Method Behind This Guide</h3>
+      <p>This guide uses three practical methods:</p>
+      <ol class="method-list">
+        <li>
+          <strong>Mental contrasting</strong>
+          <p>Holding the Big Dream and the current reality together so you can see the gap clearly.</p>
+        </li>
+        <li>
+          <strong>Implementation intentions</strong>
+          <p>Designing if-then plans so friction does not derail you.</p>
+        </li>
+        <li>
+          <strong>Behavioural specificity</strong>
+          <p>Naming exactly what you will do, when, where and for how long.</p>
+        </li>
+      </ol>
+      <p class="instruction">A dream without a process becomes a feeling.<br/>A process without a dream becomes a chore.<br/><em>This guide brings the two together.</em></p>
+
+      <div class="actions split">
+        <button class="btn-secondary" data-action="prev"><span class="arrow">←</span> Back</button>
+        <button class="btn-primary" data-action="next">Continue <span class="arrow">→</span></button>
+      </div>
+    </div>
+  </section>
+</template>
+
+<template id="tpl-bigdream">
+  <section class="screen">
+    <div class="container narrow">
+      <div class="step-eyebrow">Step 1</div>
+      <h2 class="section-title">Write Your Big Dream</h2>
+      <p class="instruction">Carry your Big Dream from Guide 3 into this guide.<br/><em>One sentence is enough.</em></p>
+
+      <div class="field-group">
+        <label class="field-label" for="my_big_dream">My Big Dream:</label>
+        <textarea id="my_big_dream" class="textarea" data-key="my_big_dream" data-photo rows="4" placeholder="Bring it across from Guide 3, or write it again in your own words."></textarea>
+      </div>
+
+      <div class="actions split">
+        <button class="btn-secondary" data-action="prev"><span class="arrow">←</span> Back</button>
+        <button class="btn-primary" data-action="next">Continue <span class="arrow">→</span></button>
+      </div>
+    </div>
+  </section>
+</template>
+
+<template id="tpl-current">
+  <section class="screen">
+    <div class="container narrow">
+      <div class="step-eyebrow">Step 2</div>
+      <h2 class="section-title">Name Your Current Reality</h2>
+      <p class="instruction">Honest, not harsh. Describe where you actually are <em>right now</em> in the part of your life this dream is asking you to build.</p>
+
+      <figure class="figure">
+        <img src="../images/g4/current_reality.jpg" alt="" />
+      </figure>
+
+      <div class="field-group">
+        <label class="field-label" for="current_reality">My current reality is:</label>
+        <textarea id="current_reality" class="textarea long" data-key="current_reality" data-photo rows="6" placeholder="What is actually happening in your days, your body, your work, your relationships?"></textarea>
+      </div>
+
+      <details class="examples">
+        <summary>Show examples</summary>
+        <div class="example">
+          <strong>Pieter's example</strong>
+          <p>I am working in the business every day. I sleep poorly. I am short-tempered with my children. I have not exercised properly in months. I am the bottleneck of every decision.</p>
+        </div>
+        <div class="example">
+          <strong>Marietjie's example</strong>
+          <p>I teach all week, I take work home most evenings, I rarely write, I am tired, I say yes to everyone and I have stopped having any time that is mine alone.</p>
+        </div>
+      </details>
+
+      <div class="actions split">
+        <button class="btn-secondary" data-action="prev"><span class="arrow">←</span> Back</button>
+        <button class="btn-primary" data-action="next">Continue <span class="arrow">→</span></button>
+      </div>
+    </div>
+  </section>
+</template>
+
+<template id="tpl-gap">
+  <section class="screen">
+    <div class="container narrow">
+      <div class="step-eyebrow">Step 3</div>
+      <h2 class="section-title">Name the Gap</h2>
+      <p class="instruction">Between the Big Dream and the current reality there is a gap.<br/><em>The gap is not your enemy.</em> It is the field you will work in for the next seven days.</p>
+
+      <figure class="figure">
+        <img src="../images/g4/gap.jpg" alt="" />
+      </figure>
+
+      <fieldset class="check-group">
+        <legend class="field-label">What stands between me and my Big Dream right now? <span class="muted-inline">(tick all that apply)</span></legend>
+        <div class="checks values-grid" id="gapChecks"></div>
+        <label class="check-row">
+          <input type="checkbox" id="gap_other_box" data-key="gap_other_box" />
+          <span>Other:</span>
+          <input type="text" id="gap_other_text" class="text-input inline-text" data-key="gap_other_text" placeholder="Type your own…" />
+        </label>
+      </fieldset>
+
+      <div class="actions split">
+        <button class="btn-secondary" data-action="prev"><span class="arrow">←</span> Back</button>
+        <button class="btn-primary" data-action="next">Continue <span class="arrow">→</span></button>
+      </div>
+    </div>
+  </section>
+</template>
+
+<template id="tpl-process-area">
+  <section class="screen">
+    <div class="container narrow">
+      <div class="step-eyebrow">Step 4</div>
+      <h2 class="section-title">Choose One Process Area</h2>
+      <p class="instruction">You cannot work on the whole gap at once. Choose <em>one</em> area where a small, repeatable process will create the most movement towards your dream.</p>
+
+      <figure class="figure">
+        <img src="../images/g4/process_area.jpg" alt="" />
+      </figure>
+
+      <div class="field-group">
+        <label class="field-label" for="process_area_first">If I had to choose one process area to work on first, it would be:</label>
+        <input type="text" id="process_area_first" class="text-input" data-key="process_area_first" placeholder="A short name for the area" />
+      </div>
+
+      <fieldset class="check-group">
+        <legend class="field-label">Pick the category that fits best <span class="muted-inline">(choose one)</span></legend>
+        <div class="checks" id="processAreaChecks"></div>
+      </fieldset>
+
+      <div class="field-group">
+        <label class="field-label" for="process_why">This is the area I am choosing because:</label>
+        <textarea id="process_why" class="textarea" data-key="process_why" data-photo rows="4"></textarea>
+      </div>
+
+      <details class="examples">
+        <summary>Show examples</summary>
+        <div class="example">
+          <strong>Pieter's example</strong>
+          <p><em>Area:</em> Health and energy: rebuilding sleep, movement and meals.</p>
+          <p><em>Why:</em> because without a working body the rest of the dream cannot happen.</p>
+        </div>
+        <div class="example">
+          <strong>Marietjie's example</strong>
+          <p><em>Area:</em> Creative work: a small writing practice.</p>
+          <p><em>Why:</em> because writing is the practice that brings my own voice back.</p>
+        </div>
+      </details>
+
+      <div class="actions split">
+        <button class="btn-secondary" data-action="prev"><span class="arrow">←</span> Back</button>
+        <button class="btn-primary" data-action="next">Continue <span class="arrow">→</span></button>
+      </div>
+    </div>
+  </section>
+</template>
+
+<template id="tpl-friction">
+  <section class="screen">
+    <div class="container narrow">
+      <div class="step-eyebrow">Step 5</div>
+      <h2 class="section-title">Map the Friction</h2>
+      <p class="instruction">Friction is normal. Friction is information.<br/><em>When you imagine doing this process every day for seven days, what do you feel?</em></p>
+
+      <figure class="figure">
+        <img src="../images/g4/friction.jpg" alt="" />
+      </figure>
+
+      <fieldset class="check-group">
+        <legend class="field-label">When I imagine starting this process, the feelings that show up are: <span class="muted-inline">(tick all that apply)</span></legend>
+        <div class="checks values-grid" id="feelingsChecks"></div>
+        <label class="check-row">
+          <input type="checkbox" id="feelings_other_box" data-key="feelings_other_box" />
+          <span>Other:</span>
+          <input type="text" id="feelings_other_text" class="text-input inline-text" data-key="feelings_other_text" placeholder="Type your own…" />
+        </label>
+      </fieldset>
+
+      <div class="actions split">
+        <button class="btn-secondary" data-action="prev"><span class="arrow">←</span> Back</button>
+        <button class="btn-primary" data-action="next">Continue <span class="arrow">→</span></button>
+      </div>
+    </div>
+  </section>
+</template>
+
+<template id="tpl-voices">
+  <section class="screen">
+    <div class="container narrow">
+      <div class="step-eyebrow">Step 6</div>
+      <h2 class="section-title">Identify the Voice of Friction</h2>
+      <p class="instruction">Friction is rarely just a feeling.<br/>It usually arrives with <em>a voice that tells a story about you.</em></p>
+
+      <figure class="figure">
+        <img src="../images/g4/voices.jpg" alt="" />
+      </figure>
+
+      <div class="field-group">
+        <label class="field-label" for="friction_belief">When friction arrives, it tells me a story like:</label>
+        <textarea id="friction_belief" class="textarea" data-key="friction_belief" data-photo rows="3" placeholder="“I am not the kind of person who…”, “I will fail anyway…”"></textarea>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label" for="avoidance_behaviour">When that story arrives, my usual avoidance behaviour is:</label>
+        <textarea id="avoidance_behaviour" class="textarea" data-key="avoidance_behaviour" data-photo rows="3"></textarea>
+      </div>
+
+      <fieldset class="check-group">
+        <legend class="field-label">Which voice is most often speaking to me here?</legend>
+        <div class="checks">
+          <label class="check-row"><input type="radio" name="voice" value="Judge / Critic" data-radio-key="voice" /><span>Judge / Critic: tells me I am not enough</span></label>
+          <label class="check-row"><input type="radio" name="voice" value="Cheerleader" data-radio-key="voice" /><span>Cheerleader: promises this will be easier than it is</span></label>
+          <label class="check-row"><input type="radio" name="voice" value="Comforter" data-radio-key="voice" /><span>Comforter: keeps me safe and small</span></label>
+        </div>
+      </fieldset>
+
+      <div class="field-group">
+        <label class="field-label" for="voice_speaks">When this voice speaks, it usually says:</label>
+        <textarea id="voice_speaks" class="textarea" data-key="voice_speaks" data-photo rows="3"></textarea>
+      </div>
+
+      <details class="examples">
+        <summary>Show examples</summary>
+        <div class="example">
+          <strong>Pieter's example</strong>
+          <p><em>Story:</em> “If I don't handle it, no one will.”</p>
+          <p><em>Avoidance:</em> jumping into operational work instead of resting or training my team.</p>
+          <p><em>Voice:</em> Judge / Critic: telling me a real owner would just push harder.</p>
+        </div>
+        <div class="example">
+          <strong>Marietjie's example</strong>
+          <p><em>Story:</em> “I'm being selfish for taking writing time.”</p>
+          <p><em>Avoidance:</em> doing extra school work or housework instead of writing.</p>
+          <p><em>Voice:</em> Comforter: keeping me in roles that feel safe and approved.</p>
+        </div>
+      </details>
+
+      <div class="actions split">
+        <button class="btn-secondary" data-action="prev"><span class="arrow">←</span> Back</button>
+        <button class="btn-primary" data-action="next">Continue <span class="arrow">→</span></button>
+      </div>
+    </div>
+  </section>
+</template>
+
+<template id="tpl-popduh">
+  <section class="screen">
+    <div class="container narrow">
+      <div class="step-eyebrow">Step 7</div>
+      <h2 class="section-title">Identify Your POPDUH Pattern</h2>
+      <p class="instruction">POPDUH stands for six common patterns that block the people we want to become.<br/>Naming yours makes it easier to interrupt.</p>
+
+      <fieldset class="check-group">
+        <legend class="field-label">My most common POPDUH pattern is: <span class="muted-inline">(choose one)</span></legend>
+        <div class="checks" id="popduhChecks"></div>
+      </fieldset>
+
+      <div class="field-group">
+        <label class="field-label" for="popduh_shows_as">For me, this pattern usually shows up as:</label>
+        <textarea id="popduh_shows_as" class="textarea" data-key="popduh_shows_as" data-photo rows="3"></textarea>
+      </div>
+
+      <details class="examples">
+        <summary>Show examples</summary>
+        <div class="example">
+          <strong>Pieter's example</strong>
+          <p><em>Pattern:</em> Hustle: making myself feel worthy by being constantly busy.</p>
+          <p><em>Shows up as:</em> taking on operational fires instead of leading.</p>
+        </div>
+        <div class="example">
+          <strong>Marietjie's example</strong>
+          <p><em>Pattern:</em> Perfectionism: refusing to write anything that is not already “good enough”.</p>
+          <p><em>Shows up as:</em> editing in my head and never starting the page.</p>
+        </div>
+      </details>
+
+      <div class="actions split">
+        <button class="btn-secondary" data-action="prev"><span class="arrow">←</span> Back</button>
+        <button class="btn-primary" data-action="next">Continue <span class="arrow">→</span></button>
+      </div>
+    </div>
+  </section>
+</template>
+
+<template id="tpl-design">
+  <section class="screen">
+    <div class="container narrow">
+      <div class="step-eyebrow">Step 8</div>
+      <h2 class="section-title">Design the Seven-Day Process</h2>
+      <p class="instruction">Now design the actual process you will run every day for seven days.<br/><em>It should be small enough to be easy and clear enough to be measurable.</em></p>
+
+      <figure class="figure">
+        <img src="../images/g4/process.jpg" alt="" />
+      </figure>
+
+      <div class="field-group">
+        <label class="field-label" for="practise">For the next seven days, I will practise: <span class="req">*</span></label>
+        <textarea id="practise" class="textarea" data-key="practise" data-photo rows="3" placeholder="One sentence. The core practice."></textarea>
+      </div>
+      <div class="field-group">
+        <label class="field-label" for="what_will_do">What I will actually do:</label>
+        <textarea id="what_will_do" class="textarea" data-key="what_will_do" data-photo rows="3"></textarea>
+      </div>
+      <div class="field-group">
+        <label class="field-label" for="when_do">When I will do it:</label>
+        <input type="text" id="when_do" class="text-input" data-key="when_do" placeholder="A specific time of day" />
+      </div>
+      <div class="field-group">
+        <label class="field-label" for="where_do">Where I will do it:</label>
+        <input type="text" id="where_do" class="text-input" data-key="where_do" placeholder="A specific place" />
+      </div>
+      <div class="field-group">
+        <label class="field-label" for="how_long">How long it will take:</label>
+        <input type="text" id="how_long" class="text-input" data-key="how_long" placeholder="A specific duration" />
+      </div>
+      <div class="field-group">
+        <label class="field-label" for="what_remove">What I will remove or turn down so this can happen:</label>
+        <textarea id="what_remove" class="textarea" data-key="what_remove" data-photo rows="3"></textarea>
+      </div>
+      <div class="field-group">
+        <label class="field-label" for="visible_outcome">A visible outcome at the end of seven days will be:</label>
+        <textarea id="visible_outcome" class="textarea" data-key="visible_outcome" data-photo rows="3"></textarea>
+      </div>
+
+      <details class="examples">
+        <summary>Show examples</summary>
+        <div class="example">
+          <strong>Pieter's example</strong>
+          <p><em>Practice:</em> a daily morning routine that protects health and clear thinking before the business gets my attention.</p>
+          <p><em>What:</em> 20 minutes of movement and 10 minutes of planning the day's three priorities. <em>When:</em> 6:00 to 6:30 each morning. <em>Where:</em> in my study and the garden. <em>How long:</em> 30 minutes.</p>
+          <p><em>Remove:</em> phone off until 6:30. <em>Visible outcome:</em> seven days of mornings logged in a simple notebook.</p>
+        </div>
+        <div class="example">
+          <strong>Marietjie's example</strong>
+          <p><em>Practice:</em> a short, honest writing practice each morning.</p>
+          <p><em>What:</em> two pages of writing without editing. <em>When:</em> 6:15 to 6:45 each morning. <em>Where:</em> at the kitchen table before anyone else is up. <em>How long:</em> 30 minutes.</p>
+          <p><em>Remove:</em> no email or phone until after writing. <em>Visible outcome:</em> 14 pages of honest writing at the end of seven days.</p>
+        </div>
+      </details>
+
+      <div class="actions split">
+        <button class="btn-secondary" data-action="prev"><span class="arrow">←</span> Back</button>
+        <button class="btn-primary" data-action="next">Continue <span class="arrow">→</span></button>
+      </div>
+    </div>
+  </section>
+</template>
+
+<template id="tpl-ifthen">
+  <section class="screen">
+    <div class="container narrow">
+      <div class="step-eyebrow">Step 9</div>
+      <h2 class="section-title">Create an If-Then Plan</h2>
+      <p class="instruction">Friction will arrive. When it does, you do not want to be deciding in the moment. You want a plan you have already made.</p>
+
+      <figure class="figure">
+        <img src="../images/g4/ifthen.jpg" alt="" />
+      </figure>
+
+      <div class="ifthen-grid">
+        <div class="field-group">
+          <label class="field-label" for="if_text">If…</label>
+          <textarea id="if_text" class="textarea" data-key="if_text" data-photo rows="3" placeholder="If friction shows up like…"></textarea>
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="then_text">Then…</label>
+          <textarea id="then_text" class="textarea" data-key="then_text" data-photo rows="3" placeholder="Then I will…"></textarea>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label" for="complete_ifthen">My complete if-then plan in one sentence: <span class="req">*</span></label>
+        <textarea id="complete_ifthen" class="textarea" data-key="complete_ifthen" data-photo rows="3" placeholder="If X happens, then I will do Y."></textarea>
+      </div>
+
+      <details class="examples">
+        <summary>Show examples</summary>
+        <div class="example">
+          <strong>Pieter's example</strong>
+          <p>If I wake up tired and want to skip the morning routine, then I will still get up at 6:00, drink water and do five minutes of slow movement before I decide anything else.</p>
+        </div>
+        <div class="example">
+          <strong>Marietjie's example</strong>
+          <p>If I sit down to write and feel that it is selfish, then I will breathe slowly for thirty seconds, remind myself this is part of being a present mother, and write one honest sentence anyway.</p>
+        </div>
+      </details>
+
+      <div class="actions split">
+        <button class="btn-secondary" data-action="prev"><span class="arrow">←</span> Back</button>
+        <button class="btn-primary" data-action="next">Continue <span class="arrow">→</span></button>
+      </div>
+    </div>
+  </section>
+</template>
+
+<template id="tpl-firstsign">
+  <section class="screen">
+    <div class="container narrow">
+      <div class="step-eyebrow">Step 10</div>
+      <h2 class="section-title">The First Visible Sign</h2>
+      <p class="instruction">A dream becomes real the first time you can see it in your own life.<br/><em>Make the first sign small, soon and visible.</em></p>
+
+      <figure class="figure">
+        <img src="../images/g4/first_sign.jpg" alt="" />
+      </figure>
+
+      <div class="field-group">
+        <label class="field-label" for="first_visible_sign">The first visible sign that I am living this dream will be:</label>
+        <textarea id="first_visible_sign" class="textarea" data-key="first_visible_sign" data-photo rows="3"></textarea>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label" for="within_24h">Within the next 24 hours, the one small action I will take is: <span class="req">*</span></label>
+        <textarea id="within_24h" class="textarea" data-key="within_24h" data-photo rows="3" placeholder="Small. Specific. Doable today or tomorrow."></textarea>
+      </div>
+
+      <details class="examples">
+        <summary>Show examples</summary>
+        <div class="example">
+          <strong>Pieter's example</strong>
+          <p><em>First visible sign:</em> a notebook on my desk with seven mornings logged.</p>
+          <p><em>Within 24 hours:</em> set the alarm for 6:00 and put the notebook and pen on my bedside table tonight.</p>
+        </div>
+        <div class="example">
+          <strong>Marietjie's example</strong>
+          <p><em>First visible sign:</em> a small folder of writing on my laptop labelled “My voice, week one”.</p>
+          <p><em>Within 24 hours:</em> create the folder, write one honest paragraph and save it.</p>
+        </div>
+      </details>
+
+      <div class="actions split">
+        <button class="btn-secondary" data-action="prev"><span class="arrow">←</span> Back</button>
+        <button class="btn-primary" data-action="next">Continue <span class="arrow">→</span></button>
+      </div>
+    </div>
+  </section>
+</template>
+
+<template id="tpl-commitment">
+  <section class="screen">
+    <div class="container narrow">
+      <div class="step-eyebrow">Step 11</div>
+      <h2 class="section-title">Seven-Day Commitment</h2>
+      <p class="instruction">A commitment is a small, honest promise to yourself.<br/><em>Make it short enough to remember and clear enough to keep.</em></p>
+
+      <div class="field-group">
+        <label class="field-label" for="practising_this">For the next seven days I am practising:</label>
+        <textarea id="practising_this" class="textarea" data-key="practising_this" data-photo rows="3"></textarea>
+      </div>
+      <div class="field-group">
+        <label class="field-label" for="when_friction">When friction arrives, I will:</label>
+        <textarea id="when_friction" class="textarea" data-key="when_friction" data-photo rows="3"></textarea>
+      </div>
+
+      <h3 class="sub-title">Final Check</h3>
+      <p>Read your seven-day commitment. Then ask:</p>
+      <ol class="final-check">
+        <li>Is the practice small enough to do every day this week?</li>
+        <li>Is the practice clear: what, when, where, how long?</li>
+        <li>Do I have an if-then plan for friction?</li>
+        <li>Is there one small action I will take in the next 24 hours?</li>
+        <li>Does this process move me even one step towards my Big Dream?</li>
+      </ol>
+      <p class="muted">If yes, run it for seven days, then return to this guide and adjust.<br/>If not, soften the process until it is small enough to be kept.</p>
+      <p><em>A dream you can practise for seven days is a dream you can live for seven years.</em></p>
+      <p class="signoff">Much love,<br/><span class="signoff-name">Francois</span></p>
+
+      <div class="actions split">
+        <button class="btn-secondary" data-action="prev"><span class="arrow">←</span> Back</button>
+        <button class="btn-primary" data-action="next">See my insight document <span class="arrow">→</span></button>
+      </div>
+    </div>
+  </section>
+</template>
+
+<template id="tpl-summary">
+  <section class="screen summary">
+    <div class="summary-hero">
+      <img src="../images/g4/summary.jpg" alt="" class="summary-hero-img" />
+      <div class="summary-hero-overlay">
+        <div class="step-eyebrow light">Your reflection</div>
+        <h1 class="display"><span class="italic">My First Seven-Day Process</span></h1>
+        <p class="lede" id="summarySubtitle">An insight document for you to keep.</p>
+      </div>
+    </div>
+
+    <div class="container narrow summary-body" id="summaryBody">
+      <!-- populated by JS -->
+    </div>
+
+    <div class="container narrow">
+      <div class="actions split wrap">
+        <button class="btn-secondary" data-action="prev"><span class="arrow">←</span> Edit answers</button>
+        <button class="btn-primary" id="downloadPdf">Download PDF</button>
+        <button class="btn-ghost" id="startOver">Start over</button>
+      </div>
+      <p class="tiny-note">Your reflection is saved on this device. No one else can see it.</p>
+    </div>
+  </section>
+</template>
+
+<div class="modal" id="modal" hidden>
+  <div class="modal-card">
+    <h3 id="modalTitle">Are you sure?</h3>
+    <p id="modalBody"></p>
+    <div class="modal-actions">
+      <button class="btn-secondary" id="modalCancel">Cancel</button>
+      <button class="btn-primary" id="modalConfirm">Yes</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="../shared/photo-attach.js?v=27"></script>
+<script src="../shared/pdf-export.js?v=27"></script>
+<script src="../shared/step-validation.js?v=27"></script>
+<script src="../shared/nature-audio.js?v=27"></script>
+<script src="../shared/voice-input.js?v=27"></script>
+<script src="../shared/next-guide-cta.js?v=27"></script>
+<script src="../shared/email-self.js?v=27"></script>
+<script src="app.js?v=27"></script></body>
+</html>

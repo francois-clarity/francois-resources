@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Big Dream Guide 2: Explore Possible Futures</title>
+<meta name="description" content="An interactive guide to help you sketch three possible futures and notice which one has the most life in it." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css?v=27" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='40' fill='%23a8d5d0'/%3E%3C/svg%3E">
+<script>
+  window.LEAD_CAPTURE_CONFIG = {
+    mailchimpUrl: "https://francoisesterhuizen.us5.list-manage.com/subscribe/post?u=097ed8fb3c6e3c943817d0d80&id=60456c1a4a&f_id=00a843edf0",
+    source: "big-dream-guides",
+    title: "Welcome",
+    subtitle: "Fill in your details once. That gives you access to all four guides, and lets you email your results to yourself or download a PDF insight document with what you discovered."
+  };
+</script>
+<script src="../shared/lead-capture.js?v=27" defer></script>
+</head>
+<body>
+
+<!-- Progress bar (sticky) -->
+<header class="topbar" id="topbar" hidden>
+  <div class="topbar-inner">
+    <a href="../index.html" class="brand brand-link" aria-label="Back to all guides">
+      <span class="brand-dot"></span>
+      <span class="brand-text">All guides</span>
+    </a>
+    <div class="progress-wrap">
+      <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+      <span class="progress-label" id="progressLabel">Step 1 of 10</span>
+    </div>
+  </div>
+</header>
+
+<main id="app" class="app"></main>
+
+<!-- ============================================================
+     Templates
+     ============================================================ -->
+
+<template id="tpl-welcome">
+  <section class="screen welcome">
+    <div class="hero">
+      <img src="../images/g2/hero_crossroads.jpg" alt="" class="hero-img" />
+    </div>
+    <div class="container narrow">
+      <p class="back-link-wrap"><a href="../index.html" class="back-link">← All guides</a></p>
+      <h1 class="display">Big Dream Guide 2: <span class="italic">Explore Possible Futures</span></h1>
+      <p class="lede">Many people struggle to name what they want because they put too much pressure on the first answer.</p>
+
+      <div class="callout">
+        <h3 class="callout-title">THREE FUTURES</h3>
+        <p>They think there must be one perfect dream, one correct path, one grand answer arriving with soft lighting and a soundtrack.</p>
+        <p>That pressure shuts down imagination.</p>
+        <p>This guide helps you sketch several possible futures before you choose one.</p>
+        <p>The aim is not to decide immediately. The aim is to loosen the grip of <em>"I must get this right"</em> and create options that feel alive, meaningful and worth a closer look.</p>
+        <p>A Big Dream often becomes clearer when you compare it with other possible futures.</p>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label" for="participant_name">Participant name <span class="req">*</span></label>
+        <input type="text" id="participant_name" class="text-input" data-key="participant_name" autocomplete="name" placeholder="Your name" />
+      </div>
+      <div class="field-group">
+        <label class="field-label" for="participant_email">Email <span class="req">*</span></label>
+        <input type="email" id="participant_email" class="text-input" data-key="participant_email" autocomplete="email" placeholder="you@example.com" />
+      </div>
+
+      <div class="actions">
+        <button class="btn-primary" data-action="next">Begin <span class="arrow">→</span></button>
+      </div>
+      <p class="tiny-note">Your answers are saved on your device as you go. You can leave and come back.</p>
+    </div>
+  </section>
+</template>
+
+<template id="tpl-examples">
+  <section class="screen">
+    <div class="container narrow">
+      <h2 class="section-title">Let's begin...</h2>
+
+      <figure class="figure">
+        <img src="../images/g2/characters.jpg" alt="" />
+      </figure>
+
+      <h3 class="sub-title">Optional Example Characters</h3>
+      <p class="muted">Pieter and Marietjie are fictional example participants. Their examples are included only to help you if you feel stuck. You do not need to copy their style or answers. Use them only as a guide, then return to your own life and write what is true for you.</p>
+
+      <div class="character-block">
+        <h4>Pieter van der Merwe</h4>
+        <p>Pieter is 46. He runs a small business. He is responsible, capable and tired. He has built a life that works on paper, but he feels like he is slowly becoming emotionally absent, reactive and stuck in survival mode.</p>
+      </div>
+      <div class="character-block">
+        <h4>Marietjie Botha</h4>
+        <p>Marietjie is 39. She is a teacher and mother of two. She loves her family, but she feels she has disappeared into everyone else's needs. She wants a future with more honesty, energy, creative expression and personal direction.</p>
+      </div>
+
+      <div class="character-block">
+        <h4>From Guide 1</h4>
+        <p>Pieter discovered his Big Dread: becoming a tired provider who loses his health, presence and joy while maintaining a life that looks successful from the outside.</p>
+        <p>Marietjie discovered her Big Dread: becoming a useful, dependable person who slowly loses her own voice, creativity and sense of aliveness.</p>
+      </div>
+
+      <figure class="figure">
+        <img src="../images/g2/method.jpg" alt="" />
+      </figure>
+
+      <h3 class="sub-title">The Method Behind This Guide</h3>
+      <p>This guide uses three practical methods:</p>
+      <ol class="method-list">
+        <li>
+          <strong>Life Design and Odyssey Planning</strong>
+          <p>You sketch several possible futures instead of trying to force one perfect answer.</p>
+        </li>
+        <li>
+          <strong>Best Possible Self writing</strong>
+          <p>You imagine future versions of your life in concrete detail.</p>
+        </li>
+        <li>
+          <strong>Values clarification</strong>
+          <p>You look for the values and longings that repeat across the futures.</p>
+        </li>
+      </ol>
+      <p class="instruction">Do not judge the futures too early.<br/>First sketch.<br/>Then compare.<br/><em>Then notice which future has energy.</em></p>
+
+      <div class="actions split">
+        <button class="btn-secondary" data-action="prev"><span class="arrow">←</span> Back</button>
+        <button class="btn-primary" data-action="next">Continue <span class="arrow">→</span></button>
+      </div>
+    </div>
+  </section>
+</template>
+
+<!-- Reusable future template content gets specialized in JS render -->
+<template id="tpl-future1">
+  <section class="screen">
+    <div class="container narrow">
+      <div class="step-eyebrow">Step 1 · Future 1</div>
+      <h2 class="section-title">My Current Path Improved</h2>
+      <p class="instruction">You stay on your current path. You do not change everything. You change what needs a change or upgrade.<br/><em>This is the life you already have, but healthier, clearer, more aligned and less reactive.</em><br/>You keep what is working. You stop tolerating what is costing you.<br/>This is not a different life. It is the same life with the leaks fixed.</p>
+
+      <figure class="figure">
+        <img src="../images/g2/future1_current.jpg" alt="" />
+      </figure>
+
+      <div class="field-group">
+        <label class="field-label" for="f1_name">Name this future in 3 to 5 words:</label>
+        <input type="text" id="f1_name" class="text-input" data-key="f1_name" placeholder="A short, vivid name" />
+      </div>
+
+      <div class="field-group">
+        <label class="field-label" for="f1_week">Describe a normal week in this future (3 or 4 sentences):</label>
+        <textarea id="f1_week" class="textarea" data-key="f1_week" data-photo rows="6"></textarea>
+      </div>
+
+      <fieldset class="check-group">
+        <legend class="field-label">In this future, I stop tolerating… <span class="muted-inline">(tick all that apply)</span></legend>
+        <div class="checks" data-tolerate-checks="1"></div>
+        <label class="check-row">
+          <input type="checkbox" id="f1_tolerate_other_box" data-key="f1_tolerate_other_box" />
+          <span>Other:</span>
+          <input type="text" id="f1_tolerate_other_text" class="text-input inline-text" data-key="f1_tolerate_other_text" placeholder="Type your own…" />
+        </label>
+      </fieldset>
+
+      <fieldset class="check-group">
+        <legend class="field-label">This future makes possible… <span class="muted-inline">(tick all that apply)</span></legend>
+        <div class="checks" data-possible-checks="1"></div>
+        <label class="check-row">
+          <input type="checkbox" id="f1_possible_other_box" data-key="f1_possible_other_box" />
+          <span>Other:</span>
+          <input type="text" id="f1_possible_other_text" class="text-input inline-text" data-key="f1_possible_other_text" placeholder="Type your own…" />
+        </label>
+      </fieldset>
+
+      <details class="examples">
+        <summary>Show examples</summary>
+        <div class="example">
+          <strong>Pieter's example</strong>
+          <p><em>Name:</em> A Healthier Business, A Present Father</p>
+          <p><em>Normal week:</em> I still own the business, but I am not involved in every small decision. My team carries more, my calendar has space for health and family, and I am rarely in survival mode.</p>
+          <p><em>What I stop tolerating:</em> constant availability, rescuing every problem, scattered attention.</p>
+          <p><em>What this makes possible:</em> leadership, health, presence with my family, mentoring others.</p>
+        </div>
+        <div class="example">
+          <strong>Marietjie's example</strong>
+          <p><em>Name:</em> Steady Teacher with Honest Boundaries</p>
+          <p><em>Normal week:</em> I still teach, but I do not take so much work home. One evening a week is for my own learning. I am honest with my family about what I need.</p>
+          <p><em>What I stop tolerating:</em> being last on my own list, saying yes when I mean no, resentment as my baseline.</p>
+          <p><em>What this makes possible:</em> my own learning, creative work, depth in close relationships, real rest.</p>
+        </div>
+      </details>
+
+      <div class="actions split">
+        <button class="btn-secondary" data-action="prev"><span class="arrow">←</span> Back</button>
+        <button class="btn-primary" data-action="next">Continue <span class="arrow">→</span></button>
+      </div>
+    </div>
+  </section>
+</template>
+
+<template id="tpl-future2">
+  <section class="screen">
+    <div class="container narrow">
+      <div class="step-eyebrow">Step 2 · Future 2</div>
+      <h2 class="section-title">My Courageous Path</h2>
+      <p class="instruction">This is the path you have been avoiding.<br/>It may not be wild or dramatic. It may simply be <em>more truthful.</em><br/>The courageous path asks for honesty about what you actually want, even when it scares you.<br/>It may involve a hard conversation, a new direction, or a permission you have been refusing yourself.</p>
+
+      <figure class="figure">
+        <img src="../images/g2/future2_courage.jpg" alt="" />
+      </figure>
+
+      <div class="field-group">
+        <label class="field-label" for="f2_name">Name this future in 3 to 5 words:</label>
+        <input type="text" id="f2_name" class="text-input" data-key="f2_name" placeholder="A short, vivid name" />
+      </div>
+
+      <div class="field-group">
+        <label class="field-label" for="f2_week">Describe a normal week in this future (3 or 4 sentences):</label>
+        <textarea id="f2_week" class="textarea" data-key="f2_week" data-photo rows="6"></textarea>
+      </div>
+
+      <fieldset class="check-group">
+        <legend class="field-label">In this future, I stop tolerating… <span class="muted-inline">(tick all that apply)</span></legend>
+        <div class="checks" data-tolerate-checks="2"></div>
+        <label class="check-row">
+          <input type="checkbox" id="f2_tolerate_other_box" data-key="f2_tolerate_other_box" />
+          <span>Other:</span>
+          <input type="text" id="f2_tolerate_other_text" class="text-input inline-text" data-key="f2_tolerate_other_text" placeholder="Type your own…" />
+        </label>
+      </fieldset>
+
+      <fieldset class="check-group">
+        <legend class="field-label">This future makes possible… <span class="muted-inline">(tick all that apply)</span></legend>
+        <div class="checks" data-possible-checks="2"></div>
+        <label class="check-row">
+          <input type="checkbox" id="f2_possible_other_box" data-key="f2_possible_other_box" />
+          <span>Other:</span>
+          <input type="text" id="f2_possible_other_text" class="text-input inline-text" data-key="f2_possible_other_text" placeholder="Type your own…" />
+        </label>
+      </fieldset>
+
+      <details class="examples">
+        <summary>Show examples</summary>
+        <div class="example">
+          <strong>Pieter's example</strong>
+          <p><em>Name:</em> The Owner Who Leads, Not Rescues</p>
+          <p><em>Normal week:</em> I appoint or train a manager and simplify the business. I become an owner and leader, not the one who rescues every situation. This scares me because I am used to being needed.</p>
+          <p><em>What I stop tolerating:</em> over-functioning, being indispensable, rescuing every problem.</p>
+          <p><em>What this makes possible:</em> real leadership, depth in close relationships, health, mentoring.</p>
+        </div>
+        <div class="example">
+          <strong>Marietjie's example</strong>
+          <p><em>Name:</em> A Teacher with Her Own Voice</p>
+          <p><em>Normal week:</em> I start writing and teaching in my own voice, not only the school curriculum. I create workshops for parents or young women. I stop hiding behind "I am too busy."</p>
+          <p><em>What I stop tolerating:</em> hiding, performing for approval, saying yes when I mean no.</p>
+          <p><em>What this makes possible:</em> creative work that is mine, honest expression, work that grows me.</p>
+        </div>
+      </details>
+
+      <div class="actions split">
+        <button class="btn-secondary" data-action="prev"><span class="arrow">←</span> Back</button>
+        <button class="btn-primary" data-action="next">Continue <span class="arrow">→</span></button>
+      </div>
+    </div>
+  </section>
+</template>
+
+<template id="tpl-future3">
+  <section class="screen">
+    <div class="container narrow">
+      <div class="step-eyebrow">Step 3 · Future 3</div>
+      <h2 class="section-title">My Unexpected Path</h2>
+      <p class="instruction">This is the path you do not usually let yourself consider.<br/>It may be creative, simple, adventurous, slower, bolder, more spiritual, more entrepreneurial, or completely different from what people expect from you.<br/><em>You do not need to commit to this path. Just let it be possible for ten minutes.</em></p>
+
+      <figure class="figure">
+        <img src="../images/g2/future3_unexpected.jpg" alt="" />
+      </figure>
+
+      <div class="field-group">
+        <label class="field-label" for="f3_name">Name this future in 3 to 5 words:</label>
+        <input type="text" id="f3_name" class="text-input" data-key="f3_name" placeholder="A short, vivid name" />
+      </div>
+
+      <div class="field-group">
+        <label class="field-label" for="f3_week">Describe a normal week in this future (3 or 4 sentences):</label>
+        <textarea id="f3_week" class="textarea" data-key="f3_week" data-photo rows="6"></textarea>
+      </div>
+
+      <fieldset class="check-group">
+        <legend class="field-label">In this future, I stop tolerating… <span class="muted-inline">(tick all that apply)</span></legend>
+        <div class="checks" data-tolerate-checks="3"></div>
+        <label class="check-row">
+          <input type="checkbox" id="f3_tolerate_other_box" data-key="f3_tolerate_other_box" />
+          <span>Other:</span>
+          <input type="text" id="f3_tolerate_other_text" class="text-input inline-text" data-key="f3_tolerate_other_text" placeholder="Type your own…" />
+        </label>
+      </fieldset>
+
+      <fieldset class="check-group">
+        <legend class="field-label">This future makes possible… <span class="muted-inline">(tick all that apply)</span></legend>
+        <div class="checks" data-possible-checks="3"></div>
+        <label class="check-row">
+          <input type="checkbox" id="f3_possible_other_box" data-key="f3_possible_other_box" />
+          <span>Other:</span>
+          <input type="text" id="f3_possible_other_text" class="text-input inline-text" data-key="f3_possible_other_text" placeholder="Type your own…" />
+        </label>
+      </fieldset>
+
+      <details class="examples">
+        <summary>Show examples</summary>
+        <div class="example">
+          <strong>Pieter's example</strong>
+          <p><em>Name:</em> The Mentor and the Long Family Trip</p>
+          <p><em>Normal week:</em> I sell part of the business or change it so I can mentor younger entrepreneurs. I spend more time teaching, guiding and building people rather than constantly managing operations. I also take a few months to travel locally with my family before the children leave home.</p>
+          <p><em>What I stop tolerating:</em> letting urgency decide my day, treating my body like a rented machine.</p>
+          <p><em>What this makes possible:</em> mentoring or guiding others, real rest, adventure and play.</p>
+        </div>
+        <div class="example">
+          <strong>Marietjie's example</strong>
+          <p><em>Name:</em> A Small Studio, A Different Rhythm</p>
+          <p><em>Normal week:</em> I take a sabbatical or reduce my teaching load and create a small studio space where I write, facilitate groups and run creative retreats. Slower mornings. Deeper conversations. Work connected to who I am becoming.</p>
+          <p><em>What I stop tolerating:</em> financial avoidance, scattered attention, performing for approval.</p>
+          <p><em>What this makes possible:</em> creative work that is mine, a sense of direction, work that grows me.</p>
+        </div>
+      </details>
+
+      <div class="actions split">
+        <button class="btn-secondary" data-action="prev"><span class="arrow">←</span> Back</button>
+        <button class="btn-primary" data-action="next">Continue <span class="arrow">→</span></button>
+      </div>
+    </div>
+  </section>
+</template>
+
+<template id="tpl-values">
+  <section class="screen">
+    <div class="container narrow">
+      <div class="step-eyebrow">Step 4</div>
+      <h2 class="section-title">Values I See Repeating</h2>
+      <p class="instruction">Values determine behaviour.<br/>Goals tell you what you want. Values tell you who you are <em>becoming along the way.</em><br/>Look across the three futures. Do not ask which is most impressive. Ask which values keep showing up across the improved, the courageous and the unexpected.</p>
+
+      <figure class="figure">
+        <img src="../images/g2/values.jpg" alt="" />
+      </figure>
+
+      <fieldset class="check-group">
+        <legend class="field-label">Choose the values that keep showing up across your three futures <span class="muted-inline">(select up to 5)</span></legend>
+        <div class="checks values-grid" id="valuesChecks"></div>
+        <label class="check-row">
+          <input type="checkbox" id="values_other_box" data-key="values_other_box" />
+          <span>Other:</span>
+          <input type="text" id="values_other_text" class="text-input inline-text" data-key="values_other_text" placeholder="Type your own…" />
+        </label>
+        <p class="tiny-note left" id="valuesCounter">0 of 5 selected</p>
+      </fieldset>
+
+      <details class="examples">
+        <summary>Show examples</summary>
+        <div class="example">
+          <strong>Pieter's values:</strong>
+          <p>Presence. Leadership. Health. Family. Meaningful contribution.</p>
+        </div>
+        <div class="example">
+          <strong>Marietjie's values:</strong>
+          <p>Voice. Creativity. Freedom. Depth. Growth.</p>
+        </div>
+      </details>
+
+      <div class="actions split">
+        <button class="btn-secondary" data-action="prev"><span class="arrow">←</span> Back</button>
+        <button class="btn-primary" data-action="next">Continue <span class="arrow">→</span></button>
+      </div>
+    </div>
+  </section>
+</template>
+
+<template id="tpl-energy">
+  <section class="screen">
+    <div class="container narrow">
+      <div class="step-eyebrow">Step 5</div>
+      <h2 class="section-title">Energy Scan</h2>
+      <p class="instruction">There is no correct path. There is no right answer.<br/>Trust your first instinct, <em>the one that arrives before logic catches up.</em><br/>This is a sketch, not a commitment.</p>
+
+      <figure class="figure">
+        <img src="../images/g2/energy_scan.jpg" alt="" />
+      </figure>
+
+      <div class="energy-questions" id="energyQuestions"></div>
+
+      <details class="examples">
+        <summary>Show examples</summary>
+        <div class="example">
+          <strong>Pieter's example</strong>
+          <p><em>Most energy:</em> Future 2 (Courageous Path): becoming an owner and mentor.</p>
+          <p><em>Most peace:</em> Future 1 (Current Path Improved): feels more achievable.</p>
+          <p><em>Meaningfully scary:</em> Future 2: training others to lead and not needing to be involved in everything.</p>
+          <p><em>Most like approval-seeking:</em> Future 1: continuing to grow the business just to look successful.</p>
+          <p><em>Most aligned with who I want to become:</em> a combination of Future 1 and Future 2.</p>
+        </div>
+        <div class="example">
+          <strong>Marietjie's example</strong>
+          <p><em>Most energy:</em> Future 2 (Courageous Path): writing and facilitating.</p>
+          <p><em>Most peace:</em> Future 1 (Current Path Improved): better boundaries.</p>
+          <p><em>Meaningfully scary:</em> Future 3 (Unexpected Path): asking me to take my own voice seriously.</p>
+          <p><em>Most like approval-seeking:</em> staying exactly where I am, being known only as dependable.</p>
+          <p><em>Most aligned with who I want to become:</em> Future 2 (Courageous Path).</p>
+        </div>
+      </details>
+
+      <div class="actions split">
+        <button class="btn-secondary" data-action="prev"><span class="arrow">←</span> Back</button>
+        <button class="btn-primary" data-action="next">Continue <span class="arrow">→</span></button>
+      </div>
+    </div>
+  </section>
+</template>
+
+<template id="tpl-choose">
+  <section class="screen">
+    <div class="container narrow">
+      <div class="step-eyebrow">Step 6</div>
+      <h2 class="section-title">Choose One Future to Develop</h2>
+      <p class="instruction">You are not choosing forever.<br/>You are choosing the future you want to look at more closely <em>today.</em><br/>You may combine elements from the three futures, but choose one main direction.</p>
+
+      <figure class="figure">
+        <img src="../images/g2/choose_one.jpg" alt="" />
+      </figure>
+
+      <div class="field-group">
+        <label class="field-label" for="chosen_future">The future I want to look at more closely is: <span class="req">*</span></label>
+        <textarea id="chosen_future" class="textarea" data-key="chosen_future" data-photo rows="4" placeholder="Name and describe the future you want to develop."></textarea>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label" for="chosen_because">I am choosing this future because: <span class="req">*</span></label>
+        <textarea id="chosen_because" class="textarea long" data-key="chosen_because" data-photo rows="7" placeholder="What draws you to this future?"></textarea>
+      </div>
+
+      <details class="examples">
+        <summary>Show examples</summary>
+        <div class="example">
+          <strong>Pieter's example</strong>
+          <p>The future I want to look at more closely is becoming a healthier business owner who leads through people and systems instead of constant personal rescue.</p>
+          <p>I am choosing this future because I do not want to lose my family, health and joy while building something that was supposed to give us a better life.</p>
+        </div>
+        <div class="example">
+          <strong>Marietjie's example</strong>
+          <p>The future I want to look at more closely is becoming a woman who teaches, writes and facilitates from her own voice while still loving and caring for her family.</p>
+          <p>I am choosing this future because I do not want to disappear into usefulness. I want my life to include creativity, courage and honest expression.</p>
+        </div>
+      </details>
+
+      <h3 class="sub-title">Final Check</h3>
+      <p>Read the future you chose. Then ask:</p>
+      <ol class="final-check">
+        <li>Does this future feel chosen, not forced?</li>
+        <li>Does it create energy or peace?</li>
+        <li>Does it ask me to grow?</li>
+        <li>Does it connect to values that matter to me?</li>
+        <li>Does it feel like a direction worth taking seriously?</li>
+      </ol>
+      <p class="muted">If yes, take it into the next guide.<br/>If not, return to the three futures and choose the one with more life in it.</p>
+      <p><em>Three futures named. That takes courage.</em></p>
+      <p class="signoff">Much love,<br/><span class="signoff-name">Francois</span></p>
+
+      <div class="actions split">
+        <button class="btn-secondary" data-action="prev"><span class="arrow">←</span> Back</button>
+        <button class="btn-primary" data-action="next">See my insight document <span class="arrow">→</span></button>
+      </div>
+    </div>
+  </section>
+</template>
+
+<template id="tpl-summary">
+  <section class="screen summary">
+    <div class="summary-hero">
+      <img src="../images/g2/summary.jpg" alt="" class="summary-hero-img" />
+      <div class="summary-hero-overlay">
+        <div class="step-eyebrow light">Your reflection</div>
+        <h1 class="display"><span class="italic">Three Possible Futures</span></h1>
+        <p class="lede" id="summarySubtitle">An insight document for you to keep.</p>
+      </div>
+    </div>
+
+    <div class="container narrow summary-body" id="summaryBody">
+      <!-- populated by JS -->
+    </div>
+
+    <div class="container narrow">
+      <div class="actions split wrap">
+        <button class="btn-secondary" data-action="prev"><span class="arrow">←</span> Edit answers</button>
+        <button class="btn-primary" id="downloadPdf">Download PDF</button>
+        <button class="btn-ghost" id="startOver">Start over</button>
+      </div>
+      <p class="tiny-note">Your reflection is saved on this device. No one else can see it.</p>
+    </div>
+  </section>
+</template>
+
+<!-- Modal for confirmations -->
+<div class="modal" id="modal" hidden>
+  <div class="modal-card">
+    <h3 id="modalTitle">Are you sure?</h3>
+    <p id="modalBody"></p>
+    <div class="modal-actions">
+      <button class="btn-secondary" id="modalCancel">Cancel</button>
+      <button class="btn-primary" id="modalConfirm">Yes</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="../shared/photo-attach.js?v=27"></script>
+<script src="../shared/pdf-export.js?v=27"></script>
+<script src="../shared/step-validation.js?v=27"></script>
+<script src="../shared/nature-audio.js?v=27"></script>
+<script src="../shared/voice-input.js?v=27"></script>
+<script src="../shared/next-guide-cta.js?v=27"></script>
+<script src="../shared/email-self.js?v=27"></script>
+<script src="app.js?v=27"></script></body>
+</html>

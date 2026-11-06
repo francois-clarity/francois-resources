@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Big Dream Guide 1: Name the Drift</title>
+<meta name="description" content="An interactive guide to help you name the drift and create a future worth moving towards." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css?v=27" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='40' fill='%23a8d5d0'/%3E%3C/svg%3E">
+<script>
+  window.LEAD_CAPTURE_CONFIG = {
+    mailchimpUrl: "https://francoisesterhuizen.us5.list-manage.com/subscribe/post?u=097ed8fb3c6e3c943817d0d80&id=60456c1a4a&f_id=00a843edf0",
+    source: "big-dream-guides",
+    title: "Welcome",
+    subtitle: "Fill in your details once. That gives you access to all four guides, and lets you email your results to yourself or download a PDF insight document with what you discovered."
+  };
+</script>
+<script src="../shared/lead-capture.js?v=27" defer></script>
+</head>
+<body>
+
+<!-- Progress bar (sticky) -->
+<header class="topbar" id="topbar" hidden>
+  <div class="topbar-inner">
+    <a href="../index.html" class="brand brand-link" aria-label="Back to all guides">
+      <span class="brand-dot"></span>
+      <span class="brand-text">All guides</span>
+    </a>
+    <div class="progress-wrap">
+      <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+      <span class="progress-label" id="progressLabel">Step 1 of 8</span>
+    </div>
+  </div>
+</header>
+
+<main id="app" class="app"></main>
+
+<!-- Templates -->
+<template id="tpl-welcome">
+  <section class="screen welcome">
+    <div class="hero">
+      <img src="../images/g1/hero_walking.jpg" alt="" class="hero-img" />
+    </div>
+    <div class="container narrow">
+      <p class="back-link-wrap"><a href="../index.html" class="back-link">← All guides</a></p>
+      <h1 class="display">Big Dream Guide 1: <span class="italic">Name the Drift</span></h1>
+      <p class="lede">Before you can create a useful Big Dream, you need to see what you are no longer willing to drift towards.</p>
+
+      <div class="callout">
+        <h3 class="callout-title">THE BIG DREAD</h3>
+        <p>Your Big Dread is not there to shame you.<br/>It is there to help you tell the truth.</p>
+        <p>A Big Dread is the future you might be drifting towards if nothing meaningful changes.</p>
+        <p>It may come from avoidance, obligation, guilt, people-pleasing, overworking, distraction, fear, comfort, resentment or simply living on autopilot.</p>
+        <p>This guide helps you name the drift. Once you can name the future you do not want, it becomes easier to create a future that is worth moving towards.</p>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label" for="participant_name">Participant name <span class="req">*</span></label>
+        <input type="text" id="participant_name" class="text-input" data-key="participant_name" autocomplete="name" placeholder="Your name" />
+      </div>
+      <div class="field-group">
+        <label class="field-label" for="participant_email">Email <span class="req">*</span></label>
+        <input type="email" id="participant_email" class="text-input" data-key="participant_email" autocomplete="email" placeholder="you@example.com" />
+      </div>
+
+      <div class="actions">
+        <button class="btn-primary" data-action="next">Begin <span class="arrow">→</span></button>
+      </div>
+      <p class="tiny-note">Your answers are saved on your device as you go. You can leave and come back.</p>
+    </div>
+  </section>
+</template>
+
+<template id="tpl-examples">
+  <section class="screen">
+    <div class="container narrow">
+      <h2 class="section-title">Time to think...</h2>
+      <figure class="figure">
+        <img src="../images/g1/extra.jpg" alt="" />
+      </figure>
+
+      <h3 class="sub-title">Optional Example Characters</h3>
+      <p class="muted">Pieter and Marietjie are fictional example participants. Their examples are included only to help you if you feel stuck. You do not need to copy their style or answers. Use them only as a guide, then return to your own life and write what is true for you.</p>
+
+      <div class="character-block">
+        <h4>Pieter van der Merwe</h4>
+        <p>Pieter is 46. He runs a small business. He is responsible, capable and tired. He has built a life that works on paper, but he feels like he is slowly becoming emotionally absent, reactive and stuck in survival mode.</p>
+      </div>
+      <div class="character-block">
+        <h4>Marietjie Botha</h4>
+        <p>Marietjie is 39. She is a teacher and mother of two. She loves her family, but she feels she has disappeared into everyone else's needs. She wants a future with more honesty, energy, creative expression and personal direction.</p>
+      </div>
+
+      <figure class="figure">
+        <img src="../images/g1/characters.jpg" alt="" />
+      </figure>
+
+      <h3 class="sub-title">The Method Behind This Guide</h3>
+      <p>This guide uses three practical methods.</p>
+      <ol class="method-list">
+        <li>
+          <strong>Mental contrasting</strong>
+          <ul>
+            <li>Imagine the future you do not want.</li>
+            <li>Compare it with the life you are living now.</li>
+            <li>Notice the gap. The gap is where motion begins.</li>
+          </ul>
+        </li>
+        <li>
+          <strong>Values clarification</strong>
+          <p>You notice which areas of life feel misaligned, neglected or costly.</p>
+        </li>
+        <li>
+          <strong>Reflective writing</strong>
+          <p>You slow down and write honestly so hidden patterns become visible.</p>
+        </li>
+      </ol>
+      <p class="instruction">Do not try to sound wise.<br/>Do not try to impress anyone.<br/><em>Write what is true.</em></p>
+
+      <figure class="figure">
+        <img src="../images/g1/journaling.jpg" alt="" />
+      </figure>
+
+      <div class="actions split">
+        <button class="btn-secondary" data-action="prev"><span class="arrow">←</span> Back</button>
+        <button class="btn-primary" data-action="next">Continue <span class="arrow">→</span></button>
+      </div>
+    </div>
+  </section>
+</template>
+
+<template id="tpl-step1">
+  <section class="screen">
+    <div class="container narrow">
+      <div class="step-eyebrow">Step 1</div>
+      <h2 class="section-title">The Drift Question</h2>
+      <p class="instruction">Write freely for five minutes.<br/>Do not edit.<br/>Do not censor.<br/>Do not try to solve anything yet.</p>
+
+      <figure class="figure">
+        <img src="../images/g1/future_self.jpg" alt="" />
+      </figure>
+
+      <div class="field-group">
+        <label class="field-label" for="drift_question">If I continue living exactly as I am now, what am I afraid my life may look like three to five years from now?</label>
+        <textarea id="drift_question" class="textarea long" data-key="drift_question" data-photo rows="9" placeholder="Write freely. No one will read this but you."></textarea>
+      </div>
+
+      <details class="examples">
+        <summary>Show examples</summary>
+        <div class="example">
+          <strong>Pieter's example:</strong>
+          <p>If I continue like this, I am afraid I will be financially stable but emotionally empty. I will keep running the business, but with less joy and more pressure. My wife and children will know me as someone who provides, but not as someone who is really present. I will become more irritated, more tired and more difficult to reach.</p>
+        </div>
+        <div class="example">
+          <strong>Marietjie's example:</strong>
+          <p>If I continue like this, I am afraid I will keep putting everyone else first and slowly lose touch with what I want. I will be useful to many people, but not very alive in myself. I will become resentful and then feel guilty for being resentful. I am afraid I will wake up in a few years and realise I never chose my own life.</p>
+        </div>
+      </details>
+
+      <div class="actions split">
+        <button class="btn-secondary" data-action="prev"><span class="arrow">←</span> Back</button>
+        <button class="btn-primary" data-action="next">Continue <span class="arrow">→</span></button>
+      </div>
+    </div>
+  </section>
+</template>
+
+<template id="tpl-step2">
+  <section class="screen">
+    <div class="container">
+      <div class="step-eyebrow">Step 2</div>
+      <h2 class="section-title">Life-Domain Reality Check</h2>
+      <p class="instruction">Score each area from 1 to 10.<br/>1 means neglected, draining or misaligned.<br/>10 means alive, aligned and meaningful.<br/>Do not overthink the number. Your first honest instinct is usually enough.</p>
+
+      <figure class="figure center">
+        <img src="../images/g1/life_wheel.jpg" alt="" />
+      </figure>
+
+      <div class="domains" id="domainsGrid"></div>
+
+      <details class="examples">
+        <summary>Show example scores</summary>
+        <div class="example">
+          <strong>Pieter's example scores:</strong>
+          <ul class="example-list">
+            <li>Health and energy: 4</li>
+            <li>Marriage or intimate relationship: 5</li>
+            <li>Family and friendships: 5</li>
+            <li>Work, career or business: 7</li>
+            <li>Money and stewardship: 7</li>
+            <li>Spiritual life or inner life: 3</li>
+            <li>Personal growth and learning: 4</li>
+            <li>Fun, adventure and aliveness: 2</li>
+            <li>Contribution and impact: 6</li>
+            <li>Environment and lifestyle: 6</li>
+          </ul>
+        </div>
+        <div class="example">
+          <strong>Marietjie's example scores:</strong>
+          <ul class="example-list">
+            <li>Health and energy: 5</li>
+            <li>Marriage or intimate relationship: 6</li>
+            <li>Family and friendships: 7</li>
+            <li>Work, career or business: 5</li>
+            <li>Money and stewardship: 6</li>
+            <li>Spiritual life or inner life: 5</li>
+            <li>Personal growth and learning: 4</li>
+            <li>Fun, adventure and aliveness: 3</li>
+            <li>Contribution and impact: 7</li>
+            <li>Environment and lifestyle: 5</li>
+          </ul>
+        </div>
+      </details>
+
+      <div class="actions split">
+        <button class="btn-secondary" data-action="prev"><span class="arrow">←</span> Back</button>
+        <button class="btn-primary" data-action="next">Continue <span class="arrow">→</span></button>
+      </div>
+    </div>
+  </section>
+</template>
+
+<template id="tpl-step3">
+  <section class="screen">
+    <div class="container narrow">
+      <div class="step-eyebrow">Step 3</div>
+      <h2 class="section-title">What I Can No Longer Ignore</h2>
+      <p class="instruction"><em>Reflect on your insights.</em><br/>Don't judge yourself, just observe and understand.</p>
+
+      <figure class="figure">
+        <img src="../images/g1/burden.jpg" alt="" />
+      </figure>
+
+      <div class="field-group">
+        <label class="field-label" for="costing_most">The area costing me the most is:</label>
+        <textarea id="costing_most" class="textarea" data-key="costing_most" data-photo rows="4"></textarea>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label" for="pretending_fine">The area I have been pretending is fine is:</label>
+        <textarea id="pretending_fine" class="textarea" data-key="pretending_fine" data-photo rows="4"></textarea>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label" for="pattern_repeating">The pattern I am tired of repeating is:</label>
+        <textarea id="pattern_repeating" class="textarea" data-key="pattern_repeating" data-photo rows="4"></textarea>
+      </div>
+
+      <details class="examples">
+        <summary>Show examples</summary>
+        <div class="example">
+          <strong>Pieter's example:</strong>
+          <p>The area costing me the most is my health and inner life. I am always tired and always in my head.</p>
+          <p>The area I have been pretending is fine is my marriage. We function, but we do not really connect.</p>
+          <p>The pattern I am tired of repeating is saying yes to every problem in the business and then having nothing left at home.</p>
+        </div>
+        <div class="example">
+          <strong>Marietjie's example:</strong>
+          <p>The area costing me the most is fun, adventure and aliveness.</p>
+          <p>The area I have been pretending is fine is my own personal growth. I keep telling myself it is not the season for me.</p>
+          <p>The pattern I am tired of repeating is being available to everyone and then feeling invisible.</p>
+        </div>
+      </details>
+
+      <div class="actions split">
+        <button class="btn-secondary" data-action="prev"><span class="arrow">←</span> Back</button>
+        <button class="btn-primary" data-action="next">Continue <span class="arrow">→</span></button>
+      </div>
+    </div>
+  </section>
+</template>
+
+<template id="tpl-step4">
+  <section class="screen">
+    <div class="container narrow">
+      <div class="step-eyebrow">Step 4</div>
+      <h2 class="section-title">Big Dread Sentence Stems</h2>
+      <p class="instruction">Use the tick boxes to look around and then...<br/>Complete the sentences below honestly.<br/>Do not make them dramatic. Make them clear.</p>
+
+      <figure class="figure">
+        <img src="../images/g1/writing.jpg" alt="" />
+      </figure>
+
+      <fieldset class="check-group">
+        <legend class="field-label">Which of these futures scares you most? (Tick all that apply)</legend>
+        <div class="checks" id="dreadChecks"></div>
+        <label class="check-row">
+          <input type="checkbox" id="dread_other_box" data-key="dread_other_box" />
+          <span>Other:</span>
+          <input type="text" id="dread_other_text" class="text-input inline-text" data-key="dread_other_text" placeholder="Type your own…" />
+        </label>
+      </fieldset>
+
+      <div class="field-group">
+        <label class="field-label" for="afraid_tolerating">I am afraid I will keep tolerating…</label>
+        <textarea id="afraid_tolerating" class="textarea" data-key="afraid_tolerating" data-photo rows="4"></textarea>
+      </div>
+      <div class="field-group">
+        <label class="field-label" for="afraid_lose">I am afraid I will lose…</label>
+        <textarea id="afraid_lose" class="textarea" data-key="afraid_lose" data-photo rows="4"></textarea>
+      </div>
+      <div class="field-group">
+        <label class="field-label" for="afraid_relationships">I am afraid my relationships will become…</label>
+        <textarea id="afraid_relationships" class="textarea" data-key="afraid_relationships" data-photo rows="4"></textarea>
+      </div>
+
+      <div class="actions split">
+        <button class="btn-secondary" data-action="prev"><span class="arrow">←</span> Back</button>
+        <button class="btn-primary" data-action="next">Continue <span class="arrow">→</span></button>
+      </div>
+    </div>
+  </section>
+</template>
+
+<template id="tpl-step5">
+  <section class="screen">
+    <div class="container narrow">
+      <div class="step-eyebrow">Step 5</div>
+      <h2 class="section-title">My Big Dread Statement</h2>
+
+      <figure class="figure">
+        <img src="../images/g1/mirror.jpg" alt="" />
+      </figure>
+
+      <div class="field-group">
+        <label class="field-label" for="big_dread_paragraph">My Big Dread is that if nothing meaningful changes, I may slowly become someone who…</label>
+        <textarea id="big_dread_paragraph" class="textarea long" data-key="big_dread_paragraph" data-photo rows="8"></textarea>
+      </div>
+
+      <details class="examples">
+        <summary>Show examples</summary>
+        <div class="example">
+          <strong>Pieter's example:</strong>
+          <p>My Big Dread is that if nothing meaningful changes, I may slowly become someone who is respected for what he provides but barely known by the people closest to him. I may keep building a business while losing my health, my humour, my presence and my ability to enjoy the life I am supposedly working so hard to create.</p>
+        </div>
+        <div class="example">
+          <strong>Marietjie's example:</strong>
+          <p>My Big Dread is that if nothing meaningful changes, I may slowly become someone who is loved because she is useful, but unknown in what she actually wants. I may keep being dependable while feeling unseen, resentful and privately disappointed in the life I never gave myself permission to choose.</p>
+        </div>
+      </details>
+
+      <div class="actions split">
+        <button class="btn-secondary" data-action="prev"><span class="arrow">←</span> Back</button>
+        <button class="btn-primary" data-action="next">Continue <span class="arrow">→</span></button>
+      </div>
+    </div>
+  </section>
+</template>
+
+<template id="tpl-step6">
+  <section class="screen">
+    <div class="container narrow">
+      <div class="step-eyebrow">Step 6</div>
+      <h2 class="section-title">Clean Version</h2>
+      <p class="instruction">Now reduce the paragraph into one clear sentence.</p>
+
+      <figure class="figure">
+        <img src="../images/g1/energy.jpg" alt="" />
+      </figure>
+
+      <div class="field-group">
+        <label class="field-label" for="big_dread_clean">My Big Dread is: <span class="req">*</span></label>
+        <textarea id="big_dread_clean" class="textarea" data-key="big_dread_clean" data-photo rows="4" placeholder="One clear sentence."></textarea>
+      </div>
+
+      <details class="examples">
+        <summary>Show examples</summary>
+        <div class="example">
+          <strong>Pieter's example:</strong>
+          <p>My Big Dread is becoming a tired provider who loses his health, presence and joy while maintaining a life that looks successful from the outside.</p>
+        </div>
+        <div class="example">
+          <strong>Marietjie's example:</strong>
+          <p>My Big Dread is becoming a useful, dependable person who slowly loses her own voice, creativity and sense of aliveness.</p>
+        </div>
+      </details>
+
+      <h3 class="sub-title">Final Check</h3>
+      <p>Read your Big Dread sentence slowly, to yourself. Then ask:</p>
+      <ol class="final-check">
+        <li>Does this feel honest?</li>
+        <li>Does this name a future I do not want?</li>
+        <li>Does this create energy to choose differently?</li>
+      </ol>
+      <p class="muted">If yes, keep it. If not, rewrite it using simpler words.</p>
+      <p><em>Your Big Dread does not need to be dramatic. It needs to be true.</em></p>
+      <p>Naming the future you do not want is a brave start.</p>
+      <p class="signoff">Much love,<br/><span class="signoff-name">Francois</span></p>
+
+      <div class="actions split">
+        <button class="btn-secondary" data-action="prev"><span class="arrow">←</span> Back</button>
+        <button class="btn-primary" data-action="next">See my insight document <span class="arrow">→</span></button>
+      </div>
+    </div>
+  </section>
+</template>
+
+<template id="tpl-summary">
+  <section class="screen summary">
+    <div class="summary-hero">
+      <img src="../images/g1/extra.jpg" alt="" class="summary-hero-img" />
+      <div class="summary-hero-overlay">
+        <div class="step-eyebrow light">Your reflection</div>
+        <h1 class="display"><span class="italic">Naming the Drift</span></h1>
+        <p class="lede" id="summarySubtitle">An insight document for you to keep.</p>
+      </div>
+    </div>
+
+    <div class="container narrow summary-body" id="summaryBody">
+      <!-- populated by JS -->
+    </div>
+
+    <div class="container narrow">
+      <div class="actions split wrap">
+        <button class="btn-secondary" data-action="prev"><span class="arrow">←</span> Edit answers</button>
+        <button class="btn-primary" id="downloadPdf">Download PDF</button>
+        <button class="btn-ghost" id="startOver">Start over</button>
+      </div>
+      <p class="tiny-note">Your reflection is saved on this device. No one else can see it.</p>
+    </div>
+  </section>
+</template>
+
+<!-- Modal for confirmations -->
+<div class="modal" id="modal" hidden>
+  <div class="modal-card">
+    <h3 id="modalTitle">Are you sure?</h3>
+    <p id="modalBody"></p>
+    <div class="modal-actions">
+      <button class="btn-secondary" id="modalCancel">Cancel</button>
+      <button class="btn-primary" id="modalConfirm">Yes</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="../shared/photo-attach.js?v=27"></script>
+<script src="../shared/pdf-export.js?v=27"></script>
+<script src="../shared/step-validation.js?v=27"></script>
+<script src="../shared/nature-audio.js?v=27"></script>
+<script src="../shared/voice-input.js?v=27"></script>
+<script src="../shared/next-guide-cta.js?v=27"></script>
+<script src="../shared/email-self.js?v=27"></script>
+<script src="app.js?v=27"></script></body>
+</html>

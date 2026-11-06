@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Big Dream Guide 3: Clarify the Big Dream</title>
+<meta name="description" content="An interactive guide to help you choose a Big Dream clearly enough that it can begin to guide your life." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css?v=27" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='40' fill='%23a8d5d0'/%3E%3C/svg%3E">
+<script>
+  window.LEAD_CAPTURE_CONFIG = {
+    mailchimpUrl: "https://francoisesterhuizen.us5.list-manage.com/subscribe/post?u=097ed8fb3c6e3c943817d0d80&id=60456c1a4a&f_id=00a843edf0",
+    source: "big-dream-guides",
+    title: "Welcome",
+    subtitle: "Fill in your details once. That gives you access to all four guides, and lets you email your results to yourself or download a PDF insight document with what you discovered."
+  };
+</script>
+<script src="../shared/lead-capture.js?v=27" defer></script>
+</head>
+<body>
+
+<header class="topbar" id="topbar" hidden>
+  <div class="topbar-inner">
+    <a href="../index.html" class="brand brand-link" aria-label="Back to all guides">
+      <span class="brand-dot"></span>
+      <span class="brand-text">All guides</span>
+    </a>
+    <div class="progress-wrap">
+      <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+      <span class="progress-label" id="progressLabel">Step 1 of 10</span>
+    </div>
+  </div>
+</header>
+
+<main id="app" class="app"></main>
+
+<!-- ============================================================
+     Templates
+     ============================================================ -->
+
+<template id="tpl-welcome">
+  <section class="screen welcome">
+    <div class="hero">
+      <img src="../images/g3/hero_horizon.jpg" alt="" class="hero-img" />
+    </div>
+    <div class="container narrow">
+      <p class="back-link-wrap"><a href="../index.html" class="back-link">← All guides</a></p>
+      <h1 class="display">Big Dream Guide 3: <span class="italic">Clarify the Big Dream</span></h1>
+      <p class="lede">You have named the Big Dread. You have sketched possible futures. Now you choose a direction clearly enough that it can begin to guide your life.</p>
+
+      <div class="callout">
+        <h3 class="callout-title">A DIRECTION, NOT A FANTASY</h3>
+        <p>A Big Dream is not a fantasy.</p>
+        <p>It is a direction your life can move towards.</p>
+        <p>This guide helps you describe that direction in a way you can carry with you, return to and act on.</p>
+        <p>You will write it three times: first as a draft, then as a clean paragraph, then as <em>a single sentence you can remember.</em></p>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label" for="participant_name">Participant name <span class="req">*</span></label>
+        <input type="text" id="participant_name" class="text-input" data-key="participant_name" autocomplete="name" placeholder="Your name" />
+      </div>
+      <div class="field-group">
+        <label class="field-label" for="participant_email">Email <span class="req">*</span></label>
+        <input type="email" id="participant_email" class="text-input" data-key="participant_email" autocomplete="email" placeholder="you@example.com" />
+      </div>
+
+      <div class="actions">
+        <button class="btn-primary" data-action="next">Begin <span class="arrow">→</span></button>
+      </div>
+      <p class="tiny-note">Your answers are saved on your device as you go. You can leave and come back.</p>
+    </div>
+  </section>
+</template>
+
+<template id="tpl-examples">
+  <section class="screen">
+    <div class="container narrow">
+      <h2 class="section-title">Let's clarify your Big Dream...</h2>
+
+      <figure class="figure">
+        <img src="../images/g3/characters.jpg" alt="" />
+      </figure>
+
+      <h3 class="sub-title">Optional Example Characters</h3>
+      <p class="muted">Pieter and Marietjie are fictional example participants. Their examples are included only to help you if you feel stuck. Use them as a guide, then return to your own life and write what is true for you.</p>
+
+      <div class="character-block">
+        <h4>Pieter van der Merwe</h4>
+        <p>From Guide 2, Pieter chose to develop the future of becoming a healthier business owner who leads through people and systems instead of constant personal rescue.</p>
+      </div>
+      <div class="character-block">
+        <h4>Marietjie Botha</h4>
+        <p>From Guide 2, Marietjie chose to develop the future of becoming a woman who teaches, writes and facilitates from her own voice while still loving and caring for her family.</p>
+      </div>
+
+      <figure class="figure">
+        <img src="../images/g3/method.jpg" alt="" />
+      </figure>
+
+      <h3 class="sub-title">The Method Behind This Guide</h3>
+      <p>This guide uses four practical methods:</p>
+      <ol class="method-list">
+        <li>
+          <strong>Best Possible Self writing</strong>
+          <p>You describe a future version of your life in concrete, observable detail.</p>
+        </li>
+        <li>
+          <strong>Self-Determination Theory</strong>
+          <p>You check that your direction is genuinely your own, not borrowed or performed for approval.</p>
+        </li>
+        <li>
+          <strong>Values clarification</strong>
+          <p>You name the parts of yourself that come alive when you move in this direction.</p>
+        </li>
+        <li>
+          <strong>Identity-based reflection</strong>
+          <p>You describe the kind of person you are becoming as you live this dream.</p>
+        </li>
+      </ol>
+      <p class="instruction">A Big Dream is not just a result.<br/>It is a direction, a way of being and <em>a private promise to yourself.</em></p>
+
+      <div class="actions split">
+        <button class="btn-secondary" data-action="prev"><span class="arrow">←</span> Back</button>
+        <button class="btn-primary" data-action="next">Continue <span class="arrow">→</span></button>
+      </div>
+    </div>
+  </section>
+</template>
+
+<template id="tpl-direction">
+  <section class="screen">
+    <div class="container narrow">
+      <div class="step-eyebrow">Step 1</div>
+      <h2 class="section-title">Direction I Am Choosing</h2>
+      <p class="instruction">From Guide 2 you chose one future to develop. Write the Big Dream you want to clarify today.<br/><em>One sentence is enough.</em> You will refine it later.</p>
+
+      <figure class="figure">
+        <img src="../images/g3/direction.jpg" alt="" />
+      </figure>
+
+      <div class="field-group">
+        <label class="field-label" for="bigDream_v1">The Big Dream I want to develop today is: <span class="req">*</span></label>
+        <textarea id="bigDream_v1" class="textarea" data-key="bigDream_v1" data-photo rows="4" placeholder="One sentence is enough."></textarea>
+      </div>
+
+      <details class="examples">
+        <summary>Show examples</summary>
+        <div class="example">
+          <strong>Pieter's example</strong>
+          <p>To become a healthier business owner who leads through people and systems, with energy for my family, my health and my mentoring work.</p>
+        </div>
+        <div class="example">
+          <strong>Marietjie's example</strong>
+          <p>To become a woman who teaches, writes and facilitates from her own voice while loving and caring for her family.</p>
+        </div>
+      </details>
+
+      <div class="actions split">
+        <button class="btn-secondary" data-action="prev"><span class="arrow">←</span> Back</button>
+        <button class="btn-primary" data-action="next">Continue <span class="arrow">→</span></button>
+      </div>
+    </div>
+  </section>
+</template>
+
+<template id="tpl-domains">
+  <section class="screen">
+    <div class="container narrow">
+      <div class="step-eyebrow">Step 2</div>
+      <h2 class="section-title">My Big Dream Across Life Domains</h2>
+      <p class="instruction">A clear Big Dream is not only about work or achievement. It is about a way of living.<br/><em>Choose the three domains that matter most for this dream.</em><br/>Then describe how your Big Dream shows up in each.</p>
+
+      <figure class="figure">
+        <img src="../images/g3/domains.jpg" alt="" />
+      </figure>
+
+      <fieldset class="check-group">
+        <legend class="field-label">The three life domains that matter most for this Big Dream <span class="muted-inline">(choose up to 3)</span></legend>
+        <div class="checks" id="domainsChecks"></div>
+        <label class="check-row">
+          <input type="checkbox" id="domains_other_box" data-key="domains_other_box" />
+          <span>Other:</span>
+          <input type="text" id="domains_other_text" class="text-input inline-text" data-key="domains_other_text" placeholder="Type your own…" />
+        </label>
+        <p class="tiny-note left" id="domainsCounter">0 of 3 selected</p>
+      </fieldset>
+
+      <div class="field-group">
+        <label class="field-label" for="domain1_text">In domain one, my Big Dream shows up as:</label>
+        <textarea id="domain1_text" class="textarea" data-key="domain1_text" data-photo rows="3" placeholder="What does the dream look like in this part of life?"></textarea>
+      </div>
+      <div class="field-group">
+        <label class="field-label" for="domain2_text">In domain two, my Big Dream shows up as:</label>
+        <textarea id="domain2_text" class="textarea" data-key="domain2_text" data-photo rows="3"></textarea>
+      </div>
+      <div class="field-group">
+        <label class="field-label" for="domain3_text">In domain three, my Big Dream shows up as:</label>
+        <textarea id="domain3_text" class="textarea" data-key="domain3_text" data-photo rows="3"></textarea>
+      </div>
+
+      <details class="examples">
+        <summary>Show examples</summary>
+        <div class="example">
+          <strong>Pieter's example</strong>
+          <p><em>Work / business / calling:</em> leading the business through people and systems instead of personal rescue.</p>
+          <p><em>Health and energy:</em> rebuilding strength, sleep and stamina so I am not running on adrenaline.</p>
+          <p><em>Closest relationships:</em> being emotionally present, available and patient with my wife and children.</p>
+        </div>
+        <div class="example">
+          <strong>Marietjie's example</strong>
+          <p><em>Work / business / calling:</em> teaching, writing and facilitating from my own voice.</p>
+          <p><em>Inner life:</em> rebuilding a sense of selfhood that is not built on performing for others.</p>
+          <p><em>Closest relationships:</em> being a present mother who is also a whole person, not just a role.</p>
+        </div>
+      </details>
+
+      <div class="actions split">
+        <button class="btn-secondary" data-action="prev"><span class="arrow">←</span> Back</button>
+        <button class="btn-primary" data-action="next">Continue <span class="arrow">→</span></button>
+      </div>
+    </div>
+  </section>
+</template>
+
+<template id="tpl-observable">
+  <section class="screen">
+    <div class="container narrow">
+      <div class="step-eyebrow">Step 3</div>
+      <h2 class="section-title">Make the Dream Observable</h2>
+      <p class="instruction">A vague dream cannot guide you.<br/>An observable dream can. Describe what your life <em>actually looks like</em> when you are living this Big Dream.</p>
+
+      <figure class="figure">
+        <img src="../images/g3/observable.jpg" alt="" />
+      </figure>
+
+      <div class="field-group">
+        <label class="field-label" for="normal_week">A normal week in this Big Dream looks like:</label>
+        <textarea id="normal_week" class="textarea long" data-key="normal_week" data-photo rows="6" placeholder="Mornings, evenings, rhythms, people, work, rest…"></textarea>
+      </div>
+      <div class="field-group">
+        <label class="field-label" for="stop_tolerating">In this dream I have stopped tolerating:</label>
+        <textarea id="stop_tolerating" class="textarea" data-key="stop_tolerating" data-photo rows="4"></textarea>
+      </div>
+      <div class="field-group">
+        <label class="field-label" for="take_care">In this dream I take care of:</label>
+        <textarea id="take_care" class="textarea" data-key="take_care" data-photo rows="4" placeholder="My body, my work, my closest people, my inner life…"></textarea>
+      </div>
+
+      <details class="examples">
+        <summary>Show examples</summary>
+        <div class="example">
+          <strong>Pieter's example</strong>
+          <p><em>A normal week:</em> mornings start calmly, I move my body, I meet with my team weekly instead of rescuing every problem, evenings are with my family, weekends are protected.</p>
+          <p><em>I have stopped tolerating:</em> constant availability, rescuing every problem, scattered attention, my body being treated like a rented machine.</p>
+          <p><em>I take care of:</em> my body, my team, my family, my own thinking time.</p>
+        </div>
+        <div class="example">
+          <strong>Marietjie's example</strong>
+          <p><em>A normal week:</em> I teach with focus, I write two mornings a week, I rest properly on Sundays, I have one honest conversation with my husband each week.</p>
+          <p><em>I have stopped tolerating:</em> being last on my own list, performing for approval, resentment as my baseline.</p>
+          <p><em>I take care of:</em> my voice, my creative practice, my marriage, my friendships, my own rest.</p>
+        </div>
+      </details>
+
+      <div class="actions split">
+        <button class="btn-secondary" data-action="prev"><span class="arrow">←</span> Back</button>
+        <button class="btn-primary" data-action="next">Continue <span class="arrow">→</span></button>
+      </div>
+    </div>
+  </section>
+</template>
+
+<template id="tpl-meaning">
+  <section class="screen">
+    <div class="container narrow">
+      <div class="step-eyebrow">Step 4</div>
+      <h2 class="section-title">Meaning Filter</h2>
+      <p class="instruction">A Big Dream that does not connect to meaning becomes another performance.<br/><em>The meaning filter helps you find the values and identity underneath the dream.</em></p>
+
+      <figure class="figure">
+        <img src="../images/g3/meaning.jpg" alt="" />
+      </figure>
+
+      <fieldset class="check-group">
+        <legend class="field-label">When I move in this direction, what comes alive in me? <span class="muted-inline">(tick all that apply)</span></legend>
+        <div class="checks values-grid" id="comesAliveChecks"></div>
+        <label class="check-row">
+          <input type="checkbox" id="comes_alive_other_box" data-key="comes_alive_other_box" />
+          <span>Other:</span>
+          <input type="text" id="comes_alive_other_text" class="text-input inline-text" data-key="comes_alive_other_text" placeholder="Type your own…" />
+        </label>
+      </fieldset>
+
+      <fieldset class="check-group">
+        <legend class="field-label">What kind of person am I becoming as I live this dream? <span class="muted-inline">(tick all that apply)</span></legend>
+        <div class="checks values-grid" id="kindOfPersonChecks"></div>
+        <label class="check-row">
+          <input type="checkbox" id="kind_of_person_other_box" data-key="kind_of_person_other_box" />
+          <span>Other:</span>
+          <input type="text" id="kind_of_person_other_text" class="text-input inline-text" data-key="kind_of_person_other_text" placeholder="Type your own…" />
+        </label>
+      </fieldset>
+
+      <div class="field-group">
+        <label class="field-label" for="matters_because">This Big Dream matters to me because:</label>
+        <textarea id="matters_because" class="textarea" data-key="matters_because" data-photo rows="4"></textarea>
+      </div>
+      <div class="field-group">
+        <label class="field-label" for="people_benefit">The people who benefit when I live this dream are:</label>
+        <textarea id="people_benefit" class="textarea" data-key="people_benefit" data-photo rows="3"></textarea>
+      </div>
+
+      <details class="examples">
+        <summary>Show examples</summary>
+        <div class="example">
+          <strong>Pieter's example</strong>
+          <p><em>What comes alive:</em> leadership, courage, my role as father.</p>
+          <p><em>The person I am becoming:</em> calmer, more present, more disciplined, more rested.</p>
+          <p><em>Matters because:</em> I want to be a father my children remember as present, not absent.</p>
+          <p><em>Who benefits:</em> my family, my team, the young entrepreneurs I will mentor.</p>
+        </div>
+        <div class="example">
+          <strong>Marietjie's example</strong>
+          <p><em>What comes alive:</em> my voice, my creativity, my honesty.</p>
+          <p><em>The person I am becoming:</em> braver, more honest, more creative.</p>
+          <p><em>Matters because:</em> I do not want to disappear into usefulness.</p>
+          <p><em>Who benefits:</em> my marriage, my children, the women I will eventually teach.</p>
+        </div>
+      </details>
+
+      <div class="actions split">
+        <button class="btn-secondary" data-action="prev"><span class="arrow">←</span> Back</button>
+        <button class="btn-primary" data-action="next">Continue <span class="arrow">→</span></button>
+      </div>
+    </div>
+  </section>
+</template>
+
+<template id="tpl-alignment">
+  <section class="screen">
+    <div class="container narrow">
+      <div class="step-eyebrow">Step 5</div>
+      <h2 class="section-title">Alignment Test</h2>
+      <p class="instruction">Score each statement from 1 (not at all) to 5 (completely true).<br/><em>Trust your first instinct. There is no right answer.</em></p>
+
+      <figure class="figure">
+        <img src="../images/g3/alignment.jpg" alt="" />
+      </figure>
+
+      <div class="alignment-questions" id="alignmentQuestions"></div>
+
+      <div class="alignment-score-box">
+        <span class="alignment-score-label">My alignment score</span>
+        <span class="alignment-score-value"><span id="alignmentScore">0</span> <span class="alignment-score-max">/ 35</span></span>
+      </div>
+      <p class="muted">A score of 28 or more suggests the dream is well aligned with who you are becoming. A lower score is information, not a failure. You may want to adjust the dream, or notice which statements you scored low and ask why.</p>
+
+      <div class="actions split">
+        <button class="btn-secondary" data-action="prev"><span class="arrow">←</span> Back</button>
+        <button class="btn-primary" data-action="next">Continue <span class="arrow">→</span></button>
+      </div>
+    </div>
+  </section>
+</template>
+
+<template id="tpl-draft">
+  <section class="screen">
+    <div class="container narrow">
+      <div class="step-eyebrow">Step 6</div>
+      <h2 class="section-title">Draft the Big Dream Statement</h2>
+      <p class="instruction">Now bring it together. Write three short paragraphs.<br/><em>You will tidy these into a clean version on the next screen.</em></p>
+
+      <div class="field-group">
+        <label class="field-label" for="direction_text">The direction I am choosing:</label>
+        <textarea id="direction_text" class="textarea" data-key="direction_text" data-photo rows="4"></textarea>
+      </div>
+      <div class="field-group">
+        <label class="field-label" for="observable_text">What this looks like in my actual life:</label>
+        <textarea id="observable_text" class="textarea long" data-key="observable_text" data-photo rows="5"></textarea>
+      </div>
+      <div class="field-group">
+        <label class="field-label" for="meaning_text">Why this matters and who I am becoming:</label>
+        <textarea id="meaning_text" class="textarea" data-key="meaning_text" data-photo rows="4"></textarea>
+      </div>
+
+      <details class="examples">
+        <summary>Show examples</summary>
+        <div class="example">
+          <strong>Pieter's example</strong>
+          <p><em>Direction:</em> I am becoming a healthier business owner who leads through people and systems.</p>
+          <p><em>Observable life:</em> calm mornings, weekly leadership meetings instead of constant rescue, protected family evenings, regular exercise, real rest on weekends, time for mentoring.</p>
+          <p><em>Meaning:</em> this matters because I want to be present with my family and useful to others without losing my health, my joy or my faith.</p>
+        </div>
+        <div class="example">
+          <strong>Marietjie's example</strong>
+          <p><em>Direction:</em> I am becoming a woman who teaches, writes and facilitates from her own voice.</p>
+          <p><em>Observable life:</em> two writing mornings a week, focused teaching, real Sundays of rest, honest conversations with my husband, friendships with depth.</p>
+          <p><em>Meaning:</em> this matters because I do not want to disappear into usefulness; I want my children to see a mother who is alive, creative and honest.</p>
+        </div>
+      </details>
+
+      <div class="actions split">
+        <button class="btn-secondary" data-action="prev"><span class="arrow">←</span> Back</button>
+        <button class="btn-primary" data-action="next">Continue <span class="arrow">→</span></button>
+      </div>
+    </div>
+  </section>
+</template>
+
+<template id="tpl-clean">
+  <section class="screen">
+    <div class="container narrow">
+      <div class="step-eyebrow">Step 7</div>
+      <h2 class="section-title">Clean Version</h2>
+      <p class="instruction">Write your Big Dream as a single, clean paragraph in your own voice.<br/><em>Read it aloud once. If it feels stiff or borrowed, soften it.</em></p>
+
+      <div class="field-group">
+        <label class="field-label" for="big_dream_paragraph">My Big Dream, in one clean paragraph:</label>
+        <textarea id="big_dream_paragraph" class="textarea long" data-key="big_dream_paragraph" data-photo rows="7" placeholder="Write it as if you were telling a trusted friend, just the two of you."></textarea>
+      </div>
+
+      <details class="examples">
+        <summary>Show examples</summary>
+        <div class="example">
+          <strong>Pieter's example</strong>
+          <p>My Big Dream is to become a healthier business owner who leads through people and systems instead of personal rescue, so that my family, my health and my mentoring work all have space in my life. I want calm mornings, protected family evenings and a body and mind that can carry me into my fifties.</p>
+        </div>
+        <div class="example">
+          <strong>Marietjie's example</strong>
+          <p>My Big Dream is to become a woman who teaches, writes and facilitates from her own voice, while loving and caring for my family. I want to write each week, to teach with focus and joy, to be present in my marriage and motherhood, and to stop disappearing into other people's needs.</p>
+        </div>
+      </details>
+
+      <div class="actions split">
+        <button class="btn-secondary" data-action="prev"><span class="arrow">←</span> Back</button>
+        <button class="btn-primary" data-action="next">Continue <span class="arrow">→</span></button>
+      </div>
+    </div>
+  </section>
+</template>
+
+<template id="tpl-one-sentence">
+  <section class="screen">
+    <div class="container narrow">
+      <div class="step-eyebrow">Step 8</div>
+      <h2 class="section-title">One-Sentence Version</h2>
+      <p class="instruction">Reduce your Big Dream to a single sentence you can carry with you and return to.<br/><em>This is the sentence you will live with.</em></p>
+
+      <div class="field-group">
+        <label class="field-label" for="bigDream_one_sentence">My Big Dream, in one sentence: <span class="req">*</span></label>
+        <textarea id="bigDream_one_sentence" class="textarea" data-key="bigDream_one_sentence" data-photo rows="3" placeholder="Short. Honest. Yours."></textarea>
+      </div>
+
+      <details class="examples">
+        <summary>Show examples</summary>
+        <div class="example">
+          <strong>Pieter's example</strong>
+          <p>I am becoming a present father, a healthier owner and a calm leader of my own life.</p>
+        </div>
+        <div class="example">
+          <strong>Marietjie's example</strong>
+          <p>I am becoming a woman with her own voice, a teacher, a writer and a present mother.</p>
+        </div>
+      </details>
+
+      <h3 class="sub-title">Final Check</h3>
+      <p>Read your one-sentence Big Dream. Then ask:</p>
+      <ol class="final-check">
+        <li>Does this feel chosen, not forced?</li>
+        <li>Is it observable in my actual life?</li>
+        <li>Does it connect to values that matter to me?</li>
+        <li>Does it describe a person I want to become?</li>
+        <li>Could I read this sentence in five years and still want to live it?</li>
+      </ol>
+      <p class="muted">If yes, take it into Guide 4.<br/>If not, return to the previous steps and keep softening the language until the sentence feels true.</p>
+      <p><em>A clear Big Dream changes the shape of your day.</em></p>
+      <p class="signoff">Much love,<br/><span class="signoff-name">Francois</span></p>
+
+      <div class="actions split">
+        <button class="btn-secondary" data-action="prev"><span class="arrow">←</span> Back</button>
+        <button class="btn-primary" data-action="next">See my insight document <span class="arrow">→</span></button>
+      </div>
+    </div>
+  </section>
+</template>
+
+<template id="tpl-summary">
+  <section class="screen summary">
+    <div class="summary-hero">
+      <img src="../images/g3/summary.jpg" alt="" class="summary-hero-img" />
+      <div class="summary-hero-overlay">
+        <div class="step-eyebrow light">Your reflection</div>
+        <h1 class="display"><span class="italic">Clarify the Big Dream</span></h1>
+        <p class="lede" id="summarySubtitle">An insight document for you to keep.</p>
+      </div>
+    </div>
+
+    <div class="container narrow summary-body" id="summaryBody">
+      <!-- populated by JS -->
+    </div>
+
+    <div class="container narrow">
+      <div class="actions split wrap">
+        <button class="btn-secondary" data-action="prev"><span class="arrow">←</span> Edit answers</button>
+        <button class="btn-primary" id="downloadPdf">Download PDF</button>
+        <button class="btn-ghost" id="startOver">Start over</button>
+      </div>
+      <p class="tiny-note">Your reflection is saved on this device. No one else can see it.</p>
+    </div>
+  </section>
+</template>
+
+<div class="modal" id="modal" hidden>
+  <div class="modal-card">
+    <h3 id="modalTitle">Are you sure?</h3>
+    <p id="modalBody"></p>
+    <div class="modal-actions">
+      <button class="btn-secondary" id="modalCancel">Cancel</button>
+      <button class="btn-primary" id="modalConfirm">Yes</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="../shared/photo-attach.js?v=27"></script>
+<script src="../shared/pdf-export.js?v=27"></script>
+<script src="../shared/step-validation.js?v=27"></script>
+<script src="../shared/nature-audio.js?v=27"></script>
+<script src="../shared/voice-input.js?v=27"></script>
+<script src="../shared/next-guide-cta.js?v=27"></script>
+<script src="../shared/email-self.js?v=27"></script>
+<script src="app.js?v=27"></script></body>
+</html>
