@@ -95,6 +95,12 @@
   }
   .signoff{font-size:19px;font-weight:300;color:var(--muted);margin:40px 0 0}
   .signoff .teal{font-weight:600}
+  /* The tree behind the page (6 Nov 2026, his ask: "a tree in the background,
+     seeing as this is the Tree of Clarity AI key"). A lone acacia under a green
+     mountain, Unsplash photo-1778944683238-2cad4aca2653, under a warm dark wash. */
+  body::before{background:linear-gradient(180deg,rgba(21,24,15,.48) 0%,rgba(21,24,15,.55) 35%,rgba(21,24,15,.80) 62%,rgba(21,24,15,.88) 100%),url("/tree-of-clarity-key/bg.jpg") center 40%/cover no-repeat;filter:saturate(1.05) contrast(1.05)}
+  body{background:#15180f}
+  .orb{display:none}
   footer{position:relative;z-index:1;text-align:center;padding:0 24px 40px;font-size:14px;color:var(--muted-2)}
   footer a{color:var(--muted-2);text-decoration:none;border-bottom:1px solid var(--line-strong)}
   @media (max-width:600px){
