@@ -14,7 +14,7 @@
 <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300;400;600;700;800&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Cormorant+Garamond:ital,wght@1,500&display=swap" rel="stylesheet" />
 <style>
   :root {
     --navy:#262E3B; --navy-deep:#1B222D; --navy-elev:#35415A;
@@ -103,6 +103,18 @@
     .lede{font-size:18px}
   }
   @media (prefers-reduced-motion:reduce){main{animation:none}.btn{transition:none}}
+  /* Land Rover look (Francois, 6 Nov 2026): Montserrat light capitals for
+     headings, Cormorant Garamond italic under them, spaced labels, pill buttons. */
+  body{font-family:'Montserrat',system-ui,-apple-system,'Segoe UI',sans-serif}
+  .eyebrow{font-weight:500;letter-spacing:.32em}
+  h1{font-weight:300;text-transform:uppercase;letter-spacing:.12em;line-height:1.15;font-size:clamp(30px,5.4vw,48px)}
+  h1 .teal{font-weight:300}
+  .lede{font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-weight:500;font-size:clamp(21px,2.6vw,25px);line-height:1.4;color:rgba(255,255,255,.80)}
+  .btn{border-radius:999px;font-size:14px;font-weight:600;text-transform:uppercase;letter-spacing:.16em}
+  .open a{border-radius:999px;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.14em}
+  .then{font-size:16px}
+  .signoff{font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-weight:500;font-size:23px}
+  .signoff .teal{font-family:'Montserrat',sans-serif;font-style:normal;font-weight:500;font-size:15px;text-transform:uppercase;letter-spacing:.2em}
 </style>
 </head>
 <body>
